@@ -1,0 +1,27 @@
+name: Run evaluation
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  # TODO(@gussmith23) It would be nice if this wasn't necessary
+  cleaner:
+    runs-on: self-hosted
+    steps:
+      - name: Clean up previous runs
+        run: rm -rf "${{ github.workspace }}"
+
+  run-evaluation:
+    # Make sure we clean first.
+    needs: cleaner
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Docker image
+      run: docker build --no-cache=true --tag lakeroad-evaluation .
+    - name: Run
+      run: docker run lakeroad-evaluation ./run.sh
