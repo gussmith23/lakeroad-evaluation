@@ -5,4 +5,7 @@ RUN apt-get update \
       yosys
 
 WORKDIR /root
-ADD run.sh run.sh
+ADD . .
+
+WORKDIR /root
+CMD ["sh", "./run.sh"]
