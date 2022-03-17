@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: recursie
+        submodules: recursive
     - name: Build Docker image
       run: docker build --no-cache=true --tag lakeroad-evaluation .
     - name: Build the Docker image
