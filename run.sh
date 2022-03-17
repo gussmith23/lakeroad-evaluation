@@ -2,9 +2,10 @@
 set -e
 
 cd lakeroad
-./run-tests.sh
+# Note: ALWAYS use source! This lets us fail if any commands in these scripts fail.
+source run-tests.sh
 cd
 
 cd yosys-example
-./run.sh
+source run.sh
 cd
