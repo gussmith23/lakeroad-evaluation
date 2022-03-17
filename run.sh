@@ -2,10 +2,10 @@
 set -e
 
 cd lakeroad
-# Note: ALWAYS use source! This lets us fail if any commands in these scripts fail.
-source run-tests.sh
+# Note: ALWAYS use .! This lets us fail if any commands in these scripts fail.
+. run-tests.sh
 cd
 
 cd yosys-example
-source run.sh
+. run.sh
 cd
