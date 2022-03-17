@@ -27,4 +27,4 @@ ADD . .
 RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
 
 WORKDIR /root
-CMD ["sh", "./run.sh"]
+CMD ["/bin/bash", "./run.sh"]
