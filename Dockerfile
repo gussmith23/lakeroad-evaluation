@@ -10,7 +10,19 @@ RUN apt-get update \
       libssl-dev \
       racket \
       software-properties-common \
-      yosys
+      wget
+
+# Install Yosys and other OSS hardware tools from prebuilt binaries.
+#
+# If we get an error here, we likely just need to add other branches for other
+# architectures.
+WORKDIR /root
+RUN if [ "$(uname -m)" = "x86_64" ] ; then \
+    wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2022-03-23/oss-cad-suite-linux-x64-20220323.tgz -q -O oss-cad-suite.tgz; \
+  else \
+    exit 1; \
+  fi
+ENV PATH="/root/oss-cad-suite/bin:${PATH}"
 
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
