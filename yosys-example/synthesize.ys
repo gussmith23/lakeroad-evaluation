@@ -1,0 +1,6 @@
+# Script comes from Luis Vega.
+read -sv example.sv
+hierarchy -top example
+proc; opt; techmap; opt
+synth_xilinx -family xcup
+write_verilog -noattr synth.v
