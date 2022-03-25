@@ -2,5 +2,5 @@
 read -sv example.sv
 hierarchy -top example
 proc; opt; techmap; opt
-synth_xilinx -family xcup
+synth_xilinx -family xcup -noiopad
 write_verilog -noattr synth.v
