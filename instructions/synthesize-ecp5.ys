@@ -1,0 +1,6 @@
+read -sv module.sv
+hierarchy -top example
+proc; opt; techmap; opt
+synth_ecp5
+write_json synth-ecp5.json
+write_verilog synth-ecp5.sv
