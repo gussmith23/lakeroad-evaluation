@@ -1,4 +1,4 @@
 instructions/out/
-instructions/*.log
+instructions/logs
 instructions/synth-ecp5.sv
 instructions/synth-ecp5.json
