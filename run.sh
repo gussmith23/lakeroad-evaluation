@@ -1,11 +1,13 @@
+#!/bin/bash
+
 # Fail if any of these commands fail!
 set -e
 
-cd lakeroad
+pushd lakeroad
 # Note: ALWAYS use source! This lets us fail if any commands in these scripts fail.
 source run-tests.sh
-cd
+popd
 
-cd yosys-example
+pushd yosys-example
 source run.sh
-cd
+popd
