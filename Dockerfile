@@ -10,6 +10,7 @@ RUN apt-get update \
       libssl-dev \
       racket \
       software-properties-common \
+      verilator \
       wget
 
 # Install Yosys and other OSS hardware tools from prebuilt binaries.

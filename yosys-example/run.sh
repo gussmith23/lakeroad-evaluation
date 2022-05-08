@@ -13,9 +13,11 @@ if [ $(echo $NUM_LUTS | wc -l) -ne "1" ]; then exit 1; fi
 # There should be one LUT2.
 if [ $NUM_LUTS -ne "1" ]; then echo "wrong number of LUTs found"; exit 1; fi
 
-# Build with Verilator.
+# Build and test with Verilator.
 # TODO(@gussmith23) Write an actual testbench.
-verilator  -Wno-TIMESCALEMOD --cc synth-xilinx/example.v -I ../verilator-unisims/LUT2.v
+verilator -Wall -Wno-TIMESCALEMOD --cc synth-xilinx/example.v -I ../verilator-unisims/LUT2.v --build --exe testbench.cc
+./obj_dir/Vexample
+
 
 # Same thing, but now we synthesize for Lattice ECP5. We can also place and
 # route for ECP5 using nextpnr-ecp5.
