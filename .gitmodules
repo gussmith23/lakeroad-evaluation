@@ -1,3 +1,6 @@
 [submodule "lakeroad"]
 	path = lakeroad
 	url = git@github.com:gussmith23/lakeroad
+[submodule "verilator-unisims"]
+	path = verilator-unisims
+	url = https://github.com/oliverbunting/verilator-unisims
