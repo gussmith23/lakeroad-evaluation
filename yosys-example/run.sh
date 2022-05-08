@@ -14,7 +14,7 @@ if [ $(echo $NUM_LUTS | wc -l) -ne "1" ]; then exit 1; fi
 if [ $NUM_LUTS -ne "1" ]; then echo "wrong number of LUTs found"; exit 1; fi
 
 # Build and test with Verilator.
-# TODO(@gussmith23) Write an actual testbench.
+rm -r obj_dir # Clear existing build, if it exists.
 verilator -Wall -Wno-TIMESCALEMOD --cc synth-xilinx/example.v -I ../verilator-unisims/LUT2.v --build --exe testbench.cc
 ./obj_dir/Vexample
 

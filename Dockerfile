@@ -8,10 +8,17 @@ RUN apt-get update \
       build-essential \
       curl \
       libssl-dev \
+      python3-pip \
+      python3-venv \
       racket \
       software-properties-common \
       verilator \
       wget
+
+# Set up Python.
+WORKDIR /root
+ADD requirements.txt requirements.txt
+RUN pip3 install --requirement requirements.txt 
 
 # Install Yosys and other OSS hardware tools from prebuilt binaries.
 #
