@@ -132,7 +132,7 @@ function main {
         run_on_all_modules
     else
         for module in $@; do
-            run_on_module "$(basename "$module")"
+            run_on_module "$(basename "$module")" || :
         done
     fi
 
