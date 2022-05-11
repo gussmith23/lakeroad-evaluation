@@ -58,6 +58,30 @@ function expected_synthesized_luts {
         extract*)
             echo
             ;;
+        icmp_ge8)
+            echo 18
+            ;;
+        icmp_gt8)
+            echo 16
+            ;;
+        icmp_le8)
+            echo 16
+            ;;
+        icmp_lt8)
+            echo 18
+            ;;
+        icmp_ge16)
+            echo 33
+            ;;
+        icmp_gt16)
+            echo 33
+            ;;
+        icmp_le16)
+            echo 33
+            ;;
+        icmp_lt16)
+            echo 33
+            ;;
         mods16)
             echo 1161
             ;;
@@ -178,6 +202,30 @@ function expected_pnr_luts {
             ;;
         extract*)
             echo 0
+            ;;
+        icmp_le8)
+            echo 16
+            ;;
+        icmp_lt8)
+            echo 18
+            ;;
+        icmp_ge8)
+            echo 18
+            ;;
+        icmp_gt8)
+            echo 16
+            ;;
+        icmp_ge16)
+            echo 33
+            ;;
+        icmp_gt16)
+            echo 33
+            ;;
+        icmp_le16)
+            echo 33
+            ;;
+        icmp_lt16)
+            echo 33
             ;;
         mods16)
             echo 1161

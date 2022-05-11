@@ -4,6 +4,8 @@ set -e
 set -o pipefail   # Get exit code of `yosys .. | tee`
 
 THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# shellcheck source=expected_luts_lookup.sh
 source "$THISDIR/expected_luts_lookup.sh"
 
 errors=()
