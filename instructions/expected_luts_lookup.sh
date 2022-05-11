@@ -82,6 +82,18 @@ function expected_synthesized_luts {
         icmp_lt16)
             echo 33
             ;;
+        icmp_eq8)
+            echo 5
+            ;;
+        icmp_eq16)
+            echo 12
+            ;;
+        icmp_ne8)
+            echo 5
+            ;;
+        icmp_ne16)
+            echo 12
+            ;;
         mods16)
             echo 1161
             ;;
@@ -227,6 +239,19 @@ function expected_pnr_luts {
         icmp_lt16)
             echo 33
             ;;
+        icmp_eq8)
+            echo 5
+            ;;
+        icmp_eq16)
+            echo 12
+            ;;
+        icmp_ne8)
+            echo 5
+            ;;
+        icmp_ne16)
+            echo 12
+            ;;
+
         mods16)
             echo 1161
             ;;
