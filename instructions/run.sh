@@ -45,6 +45,13 @@ function run_on_module {
     echo "      -> Verilog: out/$base-synth-ecp5.sv"
 
     NUM_LUTS=$(sed -nr "s/[[:space:]]*LUT4[[:space:]]*([0-9]+)[[:space:]]*/\1/p" "logs/$base-synthesize-ecp5.log")
+
+    if [ -z "$NUM_LUTS" ] ; then
+        echo "[ ! ] No LUTs were detected"
+        echo "      ...continuing"
+        return 1
+    fi
+
     echo "[ + ] NUM_LUTS: $NUM_LUTS"
 
     if [ "$(echo "$NUM_LUTS" | wc -l)" -ne "1" ]; then
