@@ -4,3 +4,6 @@
 [submodule "verilator-unisims"]
 	path = verilator-unisims
 	url = https://github.com/oliverbunting/verilator-unisims
+[submodule "calyx"]
+	path = calyx
+	url = git@github.com:cucapra/calyx.git

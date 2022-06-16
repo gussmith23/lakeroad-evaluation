@@ -54,5 +54,14 @@ ADD . .
 # Build Lakeroad Rust package.
 RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
 
+# Set up Calyx.
+RUN cargo build --manifest-path ./calyx/Cargo.toml \
+  && cargo install runt \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production \
+  && mkdir /root/.config \
+  && fud config global.futil_directory /root/calyx \
+  && fud config stages.futil.exec /root/calyx/target/debug/futil
+
+
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]

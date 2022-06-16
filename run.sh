@@ -11,3 +11,11 @@ popd
 pushd yosys-example
 source run.sh
 popd
+
+# Run Calyx tests. Note that a lot of the tests won't work due to other missing
+# deps.
+runt -i core calyx/
+# Test compilation with Calyx.
+fud e calyx/examples/tutorial/language-tutorial-iterate.futil \
+  -s verilog.data calyx/examples/tutorial/data.json \
+  --to dat --through verilog -v
