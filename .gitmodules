@@ -1,12 +1,15 @@
 [submodule "lakeroad"]
 	path = lakeroad
 	url = git@github.com:gussmith23/lakeroad
+	ignore = dirty
 [submodule "verilator-unisims"]
 	path = verilator-unisims
 	url = git@github.com:oliverbunting/verilator-unisims
 [submodule "calyx"]
 	path = calyx
 	url = git@github.com:cucapra/calyx.git
+	ignore = dirty
 [submodule "calyx-xilinx-ultrascale-plus"]
 	path = calyx-xilinx-ultrascale-plus
 	url = git@github.com:cucapra/calyx.git
+	ignore = dirty
