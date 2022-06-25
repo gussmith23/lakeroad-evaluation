@@ -3,7 +3,7 @@
 	url = git@github.com:gussmith23/lakeroad
 [submodule "verilator-unisims"]
 	path = verilator-unisims
-	url = https://github.com/oliverbunting/verilator-unisims
+	url = git@github.com:oliverbunting/verilator-unisims
 [submodule "calyx"]
 	path = calyx
 	url = git@github.com:cucapra/calyx.git
