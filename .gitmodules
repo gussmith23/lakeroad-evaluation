@@ -7,3 +7,6 @@
 [submodule "calyx"]
 	path = calyx
 	url = git@github.com:cucapra/calyx.git
+[submodule "calyx-xilinx-ultrascale-plus"]
+	path = calyx-xilinx-ultrascale-plus
+	url = git@github.com:cucapra/calyx.git
