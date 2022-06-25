@@ -42,6 +42,9 @@ RUN raco setup --doc-index --force-user-docs \
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
+# Cargo dependencies.
+RUN cargo install runt
+
 # Add files. It's best to do this as late as possible in the Dockerfile, because
 # if the files change, everything after this line will not be cached. Note that
 # it may be better to add files only as needed, to optimize caching during
@@ -55,13 +58,21 @@ ADD . .
 RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
 
 # Set up Calyx.
-RUN cargo build --manifest-path ./calyx/Cargo.toml \
-  && cargo install runt \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production \
-  && mkdir /root/.config \
-  && fud config global.futil_directory /root/calyx \
-  && fud config stages.futil.exec /root/calyx/target/debug/futil
+RUN mkdir /root/.config 
 
+# Build vanilla, unmodified Calyx.
+RUN cargo build --manifest-path ./calyx/Cargo.toml \
+  && python3 -m venv ./calyx/ \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production --python ./calyx/bin/python \
+  && ./calyx/bin/fud config global.futil_directory /root/calyx \
+  && ./calyx/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
+
+# Build Xilinx UltraScale+ version of Calyx.
+RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
+  && python3 -m venv ./calyx-xilinx-ultrascale-plus/ \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
+  && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
+  && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
 
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]

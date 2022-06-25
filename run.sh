@@ -16,6 +16,11 @@ popd
 # missing deps.
 runt -i core calyx/
 # Test compilation with Calyx.
-fud e calyx/examples/tutorial/language-tutorial-iterate.futil \
+calyx/bin/fud e calyx/examples/tutorial/language-tutorial-iterate.futil \
   -s verilog.data calyx/examples/tutorial/data.json \
+  --to dat --through verilog -v
+# Now with Xilinx UltraScale+ version...
+runt -i core calyx-xilinx-ultrascale-plus/
+calyx/bin/fud e calyx-xilinx-ultrascale-plus/examples/tutorial/language-tutorial-iterate.futil \
+  -s verilog.data calyx-xilinx-ultrascale-plus/examples/tutorial/data.json \
   --to dat --through verilog -v
