@@ -26,6 +26,7 @@ jobs:
       with:
         submodules: recursive
         token: ${{ secrets.PAT }}
+        ssh-key: ${{ secrets.SSH_KEY }}
 
     - name: Build Docker image
       run: docker build --no-cache=true --tag lakeroad-evaluation .
