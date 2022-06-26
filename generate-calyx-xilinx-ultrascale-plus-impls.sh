@@ -13,6 +13,12 @@ $SCRIPT_DIR/lakeroad/racket/main.rkt \
   --architecture xilinx-ultrascale-plus \
   --module-name lakeroad_xilinx_ultrascale_plus_and8 \
   --instruction "(bvand (var a 8) (var b 8))" \
+  --module-name lakeroad_xilinx_ultrascale_plus_add2 \
+  --instruction "(bvadd (var a 2) (var b 2))" \
+  --module-name lakeroad_xilinx_ultrascale_plus_add3 \
+  --instruction "(bvadd (var a 3) (var b 3))" \
+  --module-name lakeroad_xilinx_ultrascale_plus_add4 \
+  --instruction "(bvadd (var a 4) (var b 4))" \
   --module-name lakeroad_xilinx_ultrascale_plus_add8 \
   --instruction "(bvadd (var a 8) (var b 8))" \
   --module-name lakeroad_xilinx_ultrascale_plus_not1 \
