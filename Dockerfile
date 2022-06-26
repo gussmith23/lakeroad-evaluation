@@ -4,21 +4,54 @@ FROM ubuntu:22.04
 # setup runs non-interactively.
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get install -y \
-      build-essential \
-      curl \
-      libssl-dev \
-      python3-pip \
-      python3-venv \
-      racket \
-      software-properties-common \
-      verilator \
-      wget
+  && apt-get install -y \
+  build-essential \
+  cmake \
+  curl \
+  gcc \
+  jq \
+  libedit-dev \
+  libtinfo-dev \
+  libssl-dev \
+  libxml2-dev \
+  python3 \
+  python3-dev \
+  python3-pip \
+  python3-setuptools \
+  python3-venv \
+  racket \
+  software-properties-common \
+  verilator \
+  wget \
+  zlib1g-dev 
 
 # Set up Python.
 WORKDIR /root
 ADD requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
+
+# Install TVM.
+ARG MAKE_JOBS=2
+RUN wget https://apt.llvm.org/llvm.sh \
+  && chmod +x llvm.sh \
+  && add-apt-repository -y 'deb http://apt.llvm.org/jammy/     llvm-toolchain-jammy-13 main' \
+  && ./llvm.sh 13 \
+  && git clone --recursive https://github.com/apache/tvm tvm \
+  && cd tvm \
+  && git fetch \
+  && git checkout 6d6e0705873b0b64576127fd6038720ef6c9c338 \
+  && git submodule update --recursive \
+  && mkdir build \
+  && cd build \
+  && cp ../cmake/config.cmake . \
+  && echo "set(USE_LLVM llvm-config-13)" >> config.cmake \
+  && cmake .. \
+  && make -j${MAKE_JOBS}
+ENV TVM_HOME=/root/tvm
+ENV PYTHONPATH=$TVM_HOME/python:${PYTHONPATH}
+
+
+
 
 # Install Yosys and other OSS hardware tools from prebuilt binaries.
 #
@@ -64,6 +97,7 @@ RUN mkdir /root/.config
 RUN cargo build --manifest-path ./calyx/Cargo.toml \
   && python3 -m venv ./calyx/ \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production --python ./calyx/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps production --python ./calyx/bin/python \
   && ./calyx/bin/fud config global.futil_directory /root/calyx \
   && ./calyx/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
 
@@ -71,6 +105,7 @@ RUN cargo build --manifest-path ./calyx/Cargo.toml \
 RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
   && python3 -m venv ./calyx-xilinx-ultrascale-plus/ \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
 
