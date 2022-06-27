@@ -31,6 +31,18 @@ WORKDIR /root
 ADD requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
 
+# Download old LLVM 11 for Calyx's TVM experiments.
+#
+# If we get an error here, we likely just need to add other branches for other
+# architectures.
+WORKDIR /root
+RUN if [ "$(uname -m)" = "x86_64" ] ; then \
+  wget https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz -q -O llvm-11.tar.xz; \
+  else \
+  exit 1; \
+  fi \
+  && mkdir llvm-11 && tar xf llvm-11.tar.xz -C llvm-11 --strip-components 1
+
 # Install TVM.
 ARG MAKE_JOBS=2
 RUN wget https://apt.llvm.org/llvm.sh \
@@ -40,12 +52,12 @@ RUN wget https://apt.llvm.org/llvm.sh \
   && git clone --recursive https://github.com/apache/tvm tvm \
   && cd tvm \
   && git fetch \
-  && git checkout 6d6e0705873b0b64576127fd6038720ef6c9c338 \
+  && git checkout ccacb1ec1 \
   && git submodule update --recursive \
   && mkdir build \
   && cd build \
   && cp ../cmake/config.cmake . \
-  && echo "set(USE_LLVM llvm-config-13)" >> config.cmake \
+  && echo "set(USE_LLVM /root/llvm-11/bin/llvm-config)" >> config.cmake \
   && cmake .. \
   && make -j${MAKE_JOBS}
 ENV TVM_HOME=/root/tvm
@@ -96,6 +108,11 @@ RUN mkdir /root/.config
 # Build vanilla, unmodified Calyx.
 RUN cargo build --manifest-path ./calyx/Cargo.toml \
   && python3 -m venv ./calyx/ \
+  && cd /root/tvm/python \
+  && /root/calyx/bin/python setup.py install \
+  && cd /root/tvm/topi/python \
+  && /root/calyx/bin/python setup.py install \
+  && cd /root/ \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production --python ./calyx/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps production --python ./calyx/bin/python \
   && ./calyx/bin/fud config global.futil_directory /root/calyx \
@@ -104,10 +121,17 @@ RUN cargo build --manifest-path ./calyx/Cargo.toml \
 # Build Xilinx UltraScale+ version of Calyx.
 RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
   && python3 -m venv ./calyx-xilinx-ultrascale-plus/ \
+  && cd /root/tvm/python \
+  && /root/calyx-xilinx-ultrascale-plus/bin/python setup.py install \
+  && cd /root/tvm/topi/python \
+  && /root/calyx-xilinx-ultrascale-plus/bin/python setup.py install \
+  && cd /root/ \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
+
+ENV LAKEROAD_DIR=/root/lakeroad
 
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]
