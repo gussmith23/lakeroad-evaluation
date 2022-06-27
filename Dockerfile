@@ -50,9 +50,6 @@ RUN wget https://apt.llvm.org/llvm.sh \
 ENV TVM_HOME=/root/tvm
 ENV PYTHONPATH=$TVM_HOME/python:${PYTHONPATH}
 
-
-
-
 # Install Yosys and other OSS hardware tools from prebuilt binaries.
 #
 # If we get an error here, we likely just need to add other branches for other
@@ -76,7 +73,9 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
 # Cargo dependencies.
-RUN cargo install runt
+RUN cargo install \
+  runt \
+  vcdump
 
 # Add files. It's best to do this as late as possible in the Dockerfile, because
 # if the files change, everything after this line will not be cached. Note that
