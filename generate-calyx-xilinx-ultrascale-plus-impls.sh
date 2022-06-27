@@ -21,6 +21,8 @@ $SCRIPT_DIR/lakeroad/racket/main.rkt \
   --instruction "(bvadd (var a 4) (var b 4))" \
   --module-name lakeroad_xilinx_ultrascale_plus_add8 \
   --instruction "(bvadd (var a 8) (var b 8))" \
+  --module-name lakeroad_xilinx_ultrascale_plus_add32 \
+  --instruction "(bvadd (var a 32) (var b 32))" \
   --module-name lakeroad_xilinx_ultrascale_plus_not1 \
   --instruction "(bvnot (var a 1))" \
   > $VERILOG_FILE

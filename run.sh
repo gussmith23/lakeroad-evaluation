@@ -24,3 +24,9 @@ runt -i core calyx-xilinx-ultrascale-plus/
 calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tutorial/language-tutorial-iterate.futil \
   -s verilog.data calyx-xilinx-ultrascale-plus/examples/tutorial/data.json \
   --to dat --through verilog -v
+
+# Run Calyx tests with our generated instruction impls.
+source calyx-xilinx-ultrascale-plus/bin/activate
+./generate-calyx-xilinx-ultrascale-plus-impls.sh
+runt  -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
+deactivate
