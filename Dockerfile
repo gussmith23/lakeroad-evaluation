@@ -9,6 +9,7 @@ RUN apt-get update \
   cmake \
   curl \
   gcc \
+  git \
   jq \
   libedit-dev \
   libtinfo-dev \
