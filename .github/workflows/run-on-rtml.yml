@@ -38,6 +38,7 @@ jobs:
         docker build \
           . \
           --file Dockerfile \
-          --tag $TAG
+          --tag $TAG \
+          --build-arg MAKE_JOBS=36
     - name: Run evaluation
       run: docker run ${{ steps.build.outputs.TAG }}
