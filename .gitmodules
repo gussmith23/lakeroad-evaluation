@@ -13,3 +13,6 @@
 	path = calyx-xilinx-ultrascale-plus
 	url = git@github.com:uwsampl/calyx.git
 	ignore = dirty
+[submodule "circt"]
+	path = circt
+	url = git@github.com:llvm/circt
