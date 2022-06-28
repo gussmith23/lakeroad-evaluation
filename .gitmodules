@@ -15,4 +15,4 @@
 	ignore = dirty
 [submodule "circt"]
 	path = circt
-	url = git@github.com:llvm/circt
+	url = git@github.com:uwsampl/circt

@@ -15,6 +15,7 @@ RUN apt-get update \
   libtinfo-dev \
   libssl-dev \
   libxml2-dev \
+  ninja-build \
   python3 \
   python3-dev \
   python3-pip \
@@ -25,6 +26,27 @@ RUN apt-get update \
   verilator \
   wget \
   zlib1g-dev 
+
+# Build CIRCT/MLIR.
+WORKDIR /root
+RUN cd circt \
+  && mkdir llvm/build \
+  && cd llvm/build \
+  && cmake -G Ninja ../llvm \
+  -DLLVM_ENABLE_PROJECTS="mlir" \
+  -DLLVM_TARGETS_TO_BUILD="host" \
+  -DLLVM_ENABLE_ASSERTIONS=ON \
+  -DCMAKE_BUILD_TYPE=DEBUG \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  && ninja -j${MAKE_JOBS} \
+  && cd ../.. \
+  && mkdir build && cd build && cmake -G Ninja .. \
+  -DMLIR_DIR=$PWD/../llvm/build/lib/cmake/mlir \
+  -DLLVM_DIR=$PWD/../llvm/build/lib/cmake/llvm \
+  -DLLVM_ENABLE_ASSERTIONS=ON \
+  -DCMAKE_BUILD_TYPE=DEBUG \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  && ninja -j${MAKE_JOBS}
 
 # Set up Python.
 WORKDIR /root
