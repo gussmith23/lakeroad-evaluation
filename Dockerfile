@@ -138,8 +138,8 @@ RUN cargo build --manifest-path ./calyx/Cargo.toml \
   && cd /root/tvm/topi/python \
   && /root/calyx/bin/python setup.py install \
   && cd /root/ \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps production --python ./calyx/bin/python \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps production --python ./calyx/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps all --python ./calyx/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps all --python ./calyx/bin/python \
   && ./calyx/bin/fud config global.futil_directory /root/calyx \
   && ./calyx/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
 
@@ -151,8 +151,8 @@ RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
   && cd /root/tvm/topi/python \
   && /root/calyx-xilinx-ultrascale-plus/bin/python setup.py install \
   && cd /root/ \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps production --python ./calyx-xilinx-ultrascale-plus/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/bin/python \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
 
