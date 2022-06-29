@@ -29,6 +29,7 @@ RUN apt-get update \
 
 # Build CIRCT/MLIR.
 WORKDIR /root
+ADD circt/ circt/
 RUN cd circt \
   && mkdir llvm/build \
   && cd llvm/build \
