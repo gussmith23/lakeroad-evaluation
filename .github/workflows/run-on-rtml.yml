@@ -28,8 +28,6 @@ jobs:
         token: ${{ secrets.PAT }}
         ssh-key: ${{ secrets.SSH_KEY }}
 
-    - name: Build Docker image
-      run: docker build --no-cache=true --tag lakeroad-evaluation .
     - name: Build the Docker image
       id: build
       run: |
@@ -40,5 +38,6 @@ jobs:
           --file Dockerfile \
           --tag $TAG \
           --build-arg MAKE_JOBS=36
+          
     - name: Run evaluation
       run: docker run ${{ steps.build.outputs.TAG }}
