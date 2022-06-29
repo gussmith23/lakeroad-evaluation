@@ -8,7 +8,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 VERILOG_FILE=$(mktemp)
 
 # Generate instructions.
-$SCRIPT_DIR/lakeroad/racket/main.rkt \
+racket $SCRIPT_DIR/lakeroad/racket/main.rkt \
   --out-format verilog \
   --architecture xilinx-ultrascale-plus \
   \
