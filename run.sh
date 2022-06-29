@@ -27,6 +27,5 @@ calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tut
 
 # Run Calyx tests with our generated instruction impls.
 source calyx-xilinx-ultrascale-plus/bin/activate
-./generate-calyx-xilinx-ultrascale-plus-impls.sh
 runt  -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
 deactivate
