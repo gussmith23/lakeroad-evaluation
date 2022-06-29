@@ -2,6 +2,8 @@
 
 # Fail if any of these commands fail!
 set -e
+# Fail if env var unset.
+set -u 
 
 pushd lakeroad
 # Note: ALWAYS use source! This lets us fail if any commands in these scripts fail.
@@ -26,6 +28,6 @@ calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tut
   --to dat --through verilog -v
 
 # Run Calyx tests with our generated instruction impls.
-source calyx-xilinx-ultrascale-plus/bin/activate
-runt  -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
+. calyx-xilinx-ultrascale-plus/bin/activate # Note: use . instead of source.
+runt -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
 deactivate
