@@ -24,14 +24,14 @@ report_timing_summary -file "$base-timing-summary-$stage.v"
 report_timing -file "$base-timing-$stage.v"
 
 set stage "place"
-place_design -directive Default -ultrathreads
+place_design -directive Default
 write_verilog -force -file "$base-$stage.v"
 report_utilization -force -file "$base-util-$stage.v"
 report_timing_summary -file "$base-timing-summary-$stage.v"
 report_timing -file "$base-timing-$stage.v"
 
 set stage "route"
-route_design -directive Default -ultrathreads
+route_design -directive Default
 write_verilog -force -file "$base-$stage.v"
 report_utilization -force -file "$base-util-$stage.v"
 report_timing_summary -file "$base-timing-summary-$stage.v"
