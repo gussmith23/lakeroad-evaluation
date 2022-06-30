@@ -14,7 +14,9 @@ mkdir -p $EVAL_OUTPUT_DIR
 # Fail if the .futil files between our two repos are different.
 diff <(find "$BASE_DIR/calyx/" -name '*.futil' -type f -printf "%f\n") <(find "$BASE_DIR/calyx-xilinx-ultrascale-plus/" -name '*.futil' -type f -printf "%f\n") || exit 1
 
-for futil_file in $(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil') ; do
+fud_resource_estimates () {
+  local futil_file="$1"
+
   echo "================================================"
   echo $futil_file
   echo "Running vanilla Calyx..."
@@ -27,4 +29,13 @@ for futil_file in $(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil'
   echo $ultrascale_calyx_output
   echo $ultrascale_calyx_output > "$EVAL_OUTPUT_DIR/$(basename $futil_file).xilinx-ultrascale-plus-calyx"
   echo "================================================"
+}
+
+futil_files=$(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil')
+num_files=$(echo "$futil_files" | wc -l)
+i=0
+for futil_file in $futil_files ; do
+  echo "$(($i+1)) of $num_files"
+  fud_resource_estimates "$futil_file"
+  ((i=i+1))
 done
