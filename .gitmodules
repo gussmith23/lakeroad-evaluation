@@ -16,3 +16,6 @@
 [submodule "circt"]
 	path = circt
 	url = git@github.com:uwsampl/circt
+[submodule "calyx-lattice-ecp5"]
+	path = calyx-lattice-ecp5
+	url = git@github.com:uwsampl/calyx
