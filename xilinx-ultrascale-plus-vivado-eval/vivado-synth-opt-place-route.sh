@@ -31,8 +31,8 @@ run_vivado () {
   vivado -mode batch -source "$SCRIPT_DIR/vivado-synth-opt-place-route.tcl" -tclargs "$ultrascale_calyx_verilog_source" "$ultrascale_calyx_filename_base"
 }
 
-# Ignore ref.futil, as it throws an error from FUD.
-futil_files=$(find $BASE_DIR/calyx/tests/correctness/ \( -name '*.futil' ! -wholename '*ref-cells/ref.futil' \) )
+# Ignore ref-cells files, as they throw errors from fud.
+futil_files=$(find $BASE_DIR/calyx/tests/correctness/ \( -name '*.futil' ! -wholename '*ref-cells/*' \) )
 num_files=$(echo "$futil_files" | wc -l)
 i=0
 for futil_file in $futil_files ; do
