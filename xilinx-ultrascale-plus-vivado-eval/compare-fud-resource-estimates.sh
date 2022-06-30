@@ -31,7 +31,7 @@ fud_resource_estimates () {
   echo "================================================"
 }
 
-futil_files=$(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil')
+futil_files=$(find $BASE_DIR/calyx/tests/correctness/ -name '*.futil')
 num_files=$(echo "$futil_files" | wc -l)
 i=0
 for futil_file in $futil_files ; do
