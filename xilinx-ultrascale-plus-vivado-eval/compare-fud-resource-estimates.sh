@@ -31,7 +31,8 @@ fud_resource_estimates () {
   echo "================================================"
 }
 
-futil_files=$(find $BASE_DIR/calyx/tests/correctness/ -name '*.futil')
+# Ignore ref.futil, as it throws an error from FUD.
+futil_files=$(find $BASE_DIR/calyx/tests/correctness/ \( -name '*.futil' ! -wholename '*ref-cells/ref.futil' \) )
 num_files=$(echo "$futil_files" | wc -l)
 i=0
 for futil_file in $futil_files ; do
