@@ -16,6 +16,7 @@ RUN apt-get update \
   libssl-dev \
   libxml2-dev \
   ninja-build \
+  opencl-headers \
   python3 \
   python3-dev \
   python3-pip \
