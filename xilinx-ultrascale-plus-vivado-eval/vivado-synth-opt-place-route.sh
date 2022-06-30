@@ -31,6 +31,11 @@ run_vivado () {
   vivado -mode batch -source "$SCRIPT_DIR/vivado-synth-opt-place-route.tcl" -tclargs "$ultrascale_calyx_verilog_source" "$ultrascale_calyx_filename_base"
 }
 
-for futil_file in $(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil') ; do
-  run_vivado $futil_file
+futil_files=$(find $BASE_DIR/calyx-xilinx-ultrascale-plus/ -name '*.futil')
+num_files=$(echo "$futil_files" | wc -l)
+i=0
+for futil_file in $futil_files ; do
+  echo "$(($i+1)) of $num_files"
+  run_vivado "$futil_file"
+  ((i=i+1))
 done
