@@ -27,7 +27,12 @@ calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tut
   -s verilog.data calyx-xilinx-ultrascale-plus/examples/tutorial/data.json \
   --to dat --through verilog -v
 
-# Run Calyx tests with our generated instruction impls.
+# Run Calyx tests with Xilinx generated instruction impls.
 . calyx-xilinx-ultrascale-plus/bin/activate # Note: use . instead of source.
 runt -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
+deactivate
+
+# Run Calyx tests with Lattice generated instruction impls.
+. calyx-lattice-ecp5/bin/activate # Note: use . instead of source.
+runt -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-lattice-ecp5/
 deactivate
