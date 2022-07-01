@@ -8,8 +8,8 @@ mkdir -p $EVAL_OUTPUT_DIR
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 BASE_DIR="$SCRIPT_DIR/../"
 
-# Exclude extract and replicate, as they are just wires.
-instr_files=$(find $BASE_DIR/instructions/src/ -type f \( ! -name "*extract*" ! -name "*replicate*" \))
+# Exclude concat, extract, and replicate, as they are just wires.
+instr_files=$(find $BASE_DIR/instructions/src/ -type f \( ! -name "*concat*" ! -name "*extract*" ! -name "*replicate*" \))
 num_files=$(echo "$instr_files" | wc -l)
 i=0
 for instr_file in $instr_files ; do
