@@ -19,3 +19,4 @@
 [submodule "calyx-lattice-ecp5"]
 	path = calyx-lattice-ecp5
 	url = git@github.com:uwsampl/calyx
+	ignore = dirty
