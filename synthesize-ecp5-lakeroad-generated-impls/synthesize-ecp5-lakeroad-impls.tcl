@@ -1,0 +1,2 @@
+# See https://github.com/uwsampl/lakeroad-evaluation/blob/d0a83ac138a6db95da264a3cd001bc27ee928fa4/xilinx-ultrascale-plus-vivado-eval/vivado-synth-opt-place-route-instrs.tcl
+# for an example script to copy.
