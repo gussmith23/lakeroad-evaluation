@@ -53,6 +53,15 @@ RUN apt-get update \
 #   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 #   && ninja -j${MAKE_JOBS}
 
+# Build and install latest boolector.
+WORKDIR /root
+RUN git clone https://github.com/boolector/boolector \
+  && cd boolector \
+  && git checkout 3.2.2 \
+  && ./contrib/setup-lingeling.sh \
+  && ./contrib/setup-btor2tools.sh \
+  && ./configure.sh && cd build && make install
+
 # Set up Python.
 WORKDIR /root
 ADD requirements.txt requirements.txt
