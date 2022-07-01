@@ -7,3 +7,4 @@ mkdir -p $EVAL_OUTPUT_DIR
 
 ./compare-fud-resource-estimates.sh
 ./vivado-synth-opt-place-route.sh
+./vivado-synth-opt-place-route-instrs.sh
