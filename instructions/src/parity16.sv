@@ -1,3 +1,3 @@
-module example(input [15:0] a, output [0:0] out);
-  assign out = a[15];
+module example(input [15:0] a, output out);
+  assign out = ~^a;
 endmodule
