@@ -1,0 +1,13 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Fri Jul  1 17:13:06 2022
+# Process ID: 17516
+# Current directory: /home/vega/test-add
+# Command line: vivado -mode batch -source run.tcl
+# Log file: /home/vega/test-add/vivado.log
+# Journal file: /home/vega/test-add/vivado.jou
+# Running On: boba, OS: Linux, CPU Frequency: 1883.171 MHz, CPU Physical cores: 32, Host memory: 67370 MB
+#-----------------------------------------------------------
+source run.tcl
