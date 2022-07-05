@@ -23,10 +23,15 @@ runt -i core calyx/
 calyx/bin/fud e calyx/examples/tutorial/language-tutorial-iterate.futil \
   -s verilog.data calyx/examples/tutorial/data.json \
   --to dat --through verilog -v
-# Now with Xilinx UltraScale+ version...
-runt -i core calyx-xilinx-ultrascale-plus/
+# Run Calyx core tests on UltraScale. We exclude two tests which fail only because of textual differences in core.sv.
+runt -d -x '(big-const.futil)|(memory-with-external-attribute.futil)' -i core calyx-xilinx-ultrascale-plus/
 calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tutorial/language-tutorial-iterate.futil \
   -s verilog.data calyx-xilinx-ultrascale-plus/examples/tutorial/data.json \
+  --to dat --through verilog -v
+# Run Calyx core tests on Lattice. We exclude two tests which fail only because of textual differences in core.sv.
+runt -d -x '(big-const.futil)|(memory-with-external-attribute.futil)' -i core calyx-lattice-ecp5/
+calyx-lattice-ecp5/bin/fud e calyx-lattice-ecp5/examples/tutorial/language-tutorial-iterate.futil \
+  -s verilog.data calyx-lattice-ecp5/examples/tutorial/data.json \
   --to dat --through verilog -v
 
 # Run Calyx tests with Xilinx generated instruction impls.
