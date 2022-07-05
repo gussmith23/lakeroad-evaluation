@@ -45,8 +45,8 @@ generate_instr lakeroad_xilinx_ultrascale_plus_or1_2 \
 # generate_instr lakeroad_xilinx_ultrascale_plus_add32_2 \
 #   "(bvadd (var a 32) (var b 32))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_add32_2.v"
   
-generate_instr lakeroad_xilinx_ultrascale_plus_not1_2 \
-  "(bvnot (var a 1))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_not1_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_not1_1 \
+  "(bvnot (var a 1))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_not1_1.v"
 
 # generate_instr lakeroad_xilinx_ultrascale_plus_sub5_2 \
 #   "(bvsub (var a 5) (var b 5))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_sub5_2.v"
