@@ -4,6 +4,8 @@
 set -e
 # Fail if env var unset.
 set -u 
+# Verbose/debug.
+set -x
 
 pushd lakeroad
 # Note: ALWAYS use source! This lets us fail if any commands in these scripts fail.
