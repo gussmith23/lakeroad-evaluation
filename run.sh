@@ -29,10 +29,10 @@ calyx-xilinx-ultrascale-plus/bin/fud e calyx-xilinx-ultrascale-plus/examples/tut
 
 # Run Calyx tests with Xilinx generated instruction impls.
 . calyx-xilinx-ultrascale-plus/bin/activate # Note: use . instead of source.
-runt -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
+runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-xilinx-ultrascale-plus/
 deactivate
 
 # Run Calyx tests with Lattice generated instruction impls.
 . calyx-lattice-ecp5/bin/activate # Note: use . instead of source.
-runt -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-lattice-ecp5/
+runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-lattice-ecp5/
 deactivate
