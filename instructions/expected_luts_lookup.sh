@@ -19,6 +19,9 @@
 # Auto-generated to check against regressions
 function expected_synthesized_luts {
     case "$1" in
+        add1)
+            echo 1
+            ;;
         add16)
             echo 66
             ;;
