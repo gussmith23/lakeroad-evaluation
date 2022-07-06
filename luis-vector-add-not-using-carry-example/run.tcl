@@ -5,10 +5,13 @@ if { $argc != 2 } {
 set sv_source_file [ lindex $argv 0 ]
 set base [ lindex $argv 1 ]
 
+variable script_dir [file dirname [file normalize [info script]]]
+
+
 create_project -force "add" "out" -part "xczu3eg-sbva484-1-e"
 
 read_verilog -sv $sv_source_file
-read_xdc -mode "out_of_context" constraints.xdc
+read_xdc -mode "out_of_context" $script_dir/constraints.xdc
 
 synth_design -mode "out_of_context" -top "main"
 write_verilog "$base-netlist.v"
