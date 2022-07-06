@@ -54,3 +54,25 @@ generate_instr lakeroad_xilinx_ultrascale_plus_sub6_2 \
   "(bvsub (var a 6) (var b 6))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_sub6_2.v"
 generate_instr lakeroad_xilinx_ultrascale_plus_sub32_2 \
   "(bvsub (var a 32) (var b 32))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_sub32_2.v"
+
+generate_instr lakeroad_xilinx_ultrascale_plus_eq1_2 \
+  "(bool->bitvector (bveq (var a 1) (var b 1)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_eq1_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_eq5_2 \
+  "(bool->bitvector (bveq (var a 5) (var b 5)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_eq5_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_eq6_2 \
+  "(bool->bitvector (bveq (var a 6) (var b 6)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_eq6_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_eq32_2 \
+  "(bool->bitvector (bveq (var a 32) (var b 32)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_eq32_2.v"
+
+generate_instr lakeroad_xilinx_ultrascale_plus_ugt5_2 \
+  "(bool->bitvector (bvugt (var a 5) (var b 5)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_ugt5_2.v"
+
+generate_instr lakeroad_xilinx_ultrascale_plus_ult3_2 \
+  "(bool->bitvector (bvult (var a 3) (var b 3)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_ult3_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_ult4_2 \
+  "(bool->bitvector (bvult (var a 4) (var b 4)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_ult4_2.v"
+generate_instr lakeroad_xilinx_ultrascale_plus_ult32_2 \
+  "(bool->bitvector (bvult (var a 32) (var b 32)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_ult32_2.v"
+
+generate_instr lakeroad_xilinx_ultrascale_plus_ule4_2 \
+  "(bool->bitvector (bvule (var a 4) (var b 4)))" > "$IMPLS_DIR/lakeroad_xilinx_ultrascale_plus_ule4_2.v"

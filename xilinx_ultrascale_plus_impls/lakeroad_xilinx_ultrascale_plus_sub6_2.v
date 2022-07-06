@@ -12,7 +12,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
   output [5:0] out0;
   wire [5:0] out0;
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) A_LUT_0 (
     .I0(a[0]),
     .I1(b[0]),
@@ -24,7 +24,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[0])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) B_LUT_1 (
     .I0(a[1]),
     .I1(b[1]),
@@ -36,7 +36,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[1])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) C_LUT_2 (
     .I0(a[2]),
     .I1(b[2]),
@@ -48,7 +48,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[2])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) D_LUT_3 (
     .I0(a[3]),
     .I1(b[3]),
@@ -60,7 +60,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[3])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) E_LUT_4 (
     .I0(a[4]),
     .I1(b[4]),
@@ -72,7 +72,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[4])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) F_LUT_5 (
     .I0(a[5]),
     .I1(b[5]),
@@ -84,7 +84,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[5])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) G_LUT_6 (
     .I0(1'h0),
     .I1(1'h0),
@@ -96,7 +96,7 @@ module lakeroad_xilinx_ultrascale_plus_sub6_2(a, b, out0);
     .O6(luts_O6_1[6])
   );
   LUT6_2 #(
-    .INIT(64'h9fffffffbfffffff)
+    .INIT(64'h9fffffff3fffffff)
   ) H_LUT_7 (
     .I0(1'h0),
     .I1(1'h0),
