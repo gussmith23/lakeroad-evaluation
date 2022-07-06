@@ -29,3 +29,6 @@ These versions of Calyx
   rather than the behavioral SystemVerilog
   which Calyx usually compiles to.
 
+## [./runs](./runs)
+
+This folder contains our output runs.
