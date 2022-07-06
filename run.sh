@@ -46,5 +46,5 @@ deactivate
 
 # Generate Yosys
 pushd instructions
-./run.sh
+source run.sh
 popd
