@@ -5,7 +5,9 @@ set -u
 export EVAL_OUTPUT_DIR="$EVAL_OUTPUT_DIR/xilinx-ultrascale-plus-vivado-eval/"
 mkdir -p $EVAL_OUTPUT_DIR
 
-./compare-fud-resource-estimates.sh
-./vivado-synth-opt-place-route.sh
-./vivado-synth-opt-place-route-lakeroad-ultrascale-instrs.sh
-./vivado-synth-opt-place-route-lakeroad-behavioral-instrs.sh
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+$SCRIPT_DIR/compare-fud-resource-estimates.sh
+$SCRIPT_DIR/vivado-synth-opt-place-route.sh
+$SCRIPT_DIR/vivado-synth-opt-place-route-lakeroad-ultrascale-instrs.sh
+$SCRIPT_DIR/vivado-synth-opt-place-route-lakeroad-behavioral-instrs.sh
