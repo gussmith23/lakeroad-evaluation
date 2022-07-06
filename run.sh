@@ -55,6 +55,6 @@ source run.sh
 popd
 
 # Run Vivado eval (maybe)
-if [ -v RUN_VIVADO_EVAL ]; do
+if [ -v RUN_VIVADO_EVAL ]; then
   source run-vivado.sh
-done
+fi
