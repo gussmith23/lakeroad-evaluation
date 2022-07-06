@@ -48,3 +48,8 @@ deactivate
 pushd instructions
 source run.sh
 popd
+
+# Run Vivado eval (maybe)
+if [ -v RUN_VIVADO_EVAL ]; do
+  source run-vivado.sh
+done
