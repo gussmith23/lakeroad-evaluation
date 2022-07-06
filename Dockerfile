@@ -167,6 +167,19 @@ RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
   && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
 
+# Build Lattice ECP5 version of Calyx.
+RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
+  && python3 -m venv ./calyx-lattice-ecp5/ \
+  && cd /root/tvm/python \
+  && /root/calyx-lattice-ecp5/bin/python setup.py install \
+  && cd /root/tvm/topi/python \
+  && /root/calyx-lattice-ecp5/bin/python setup.py install \
+  && cd /root/ \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/fud/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/calyx-py/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/bin/python \
+  && ./calyx-lattice-ecp5/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
+  && ./calyx-lattice-ecp5/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
+
 ENV LAKEROAD_DIR=/root/lakeroad
 
 WORKDIR /root
