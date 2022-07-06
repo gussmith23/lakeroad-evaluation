@@ -1,0 +1,70 @@
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
+| Date              : Wed Jul  6 23:25:36 2022
+| Host              : boba running 64-bit Ubuntu 20.04.3 LTS
+| Command           : report_timing -file runs/2022-07-06-vector-add//vivado-vector-add-motivating-example//manual-in-out-reg.v-timing.txt
+| Design            : main
+| Device            : xczu3eg-sbva484
+| Speed File        : -1  PRODUCTION 1.29 08-03-2020
+| Temperature Grade : E
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             9.099ns  (required time - arrival time)
+  Source:                 genblk1[0].a_r_reg[0][0]/C
+                            (rising edge-triggered cell FDRE clocked by clock  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Destination:            genblk1[0].r_reg[0][7]/D
+                            (rising edge-triggered cell FDRE clocked by clock  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             clock
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clock rise@10.000ns - clock rise@0.000ns)
+  Data Path Delay:        0.882ns  (logic 0.513ns (58.163%)  route 0.369ns (41.837%))
+  Logic Levels:           2  (CARRY8=1 LUT2=1)
+  Clock Path Skew:        -0.011ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.026ns = ( 10.026 - 10.000 ) 
+    Source Clock Delay      (SCD):    0.037ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clock rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  clock (IN)
+                         net (fo=95, unset)           0.037     0.037    clock
+    SLICE_X24Y89         FDRE                                         r  genblk1[0].a_r_reg[0][0]/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X24Y89         FDRE (Prop_EFF2_SLICEM_C_Q)
+                                                      0.098     0.135 r  genblk1[0].a_r_reg[0][0]/Q
+                         net (fo=2, routed)           0.324     0.459    genblk1[0].inst/O5[0]
+    SLICE_X24Y89         LUT2 (Prop_A6LUT_SLICEM_I0_O)
+                                                      0.116     0.575 r  genblk1[0].inst/l0/O
+                         net (fo=1, routed)           0.014     0.589    genblk1[0].inst/p[0]
+    SLICE_X24Y89         CARRY8 (Prop_CARRY8_SLICEM_S[0]_O[7])
+                                                      0.299     0.888 r  genblk1[0].inst/carry0/O[7]
+                         net (fo=1, routed)           0.031     0.919    s[0][7]
+    SLICE_X24Y89         FDRE                                         r  genblk1[0].r_reg[0][7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clock rise edge)     10.000    10.000 r  
+                                                      0.000    10.000 r  clock (IN)
+                         net (fo=95, unset)           0.026    10.026    clock
+    SLICE_X24Y89         FDRE                                         r  genblk1[0].r_reg[0][7]/C
+                         clock pessimism              0.000    10.026    
+                         clock uncertainty           -0.035     9.991    
+    SLICE_X24Y89         FDRE (Setup_HFF_SLICEM_C_D)
+                                                      0.027    10.018    genblk1[0].r_reg[0][7]
+  -------------------------------------------------------------------
+                         required time                         10.018    
+                         arrival time                          -0.919    
+  -------------------------------------------------------------------
+                         slack                                  9.099    
+
+
+
+

@@ -1,0 +1,43 @@
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
+| Date              : Wed Jul  6 23:26:56 2022
+| Host              : boba running 64-bit Ubuntu 20.04.3 LTS
+| Command           : report_timing -file runs/2022-07-06-vector-add//vivado-vector-add-motivating-example//manual-in-reg.v-timing.txt
+| Design            : main
+| Device            : xczu3eg-sbva484
+| Speed File        : -1  PRODUCTION 1.29 08-03-2020
+| Temperature Grade : E
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack:                    inf
+  Source:                 b[0][2]
+                            (input port)
+  Destination:            genblk1[0].b_r_reg[0][2]/D
+                            (rising edge-triggered cell FDRE clocked by clock  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             (none)
+  Path Type:              Setup (Max at Slow Process Corner)
+  Data Path Delay:        0.069ns  (logic 0.000ns (0.000%)  route 0.069ns (100.000%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.026ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.026ns
+    Source Clock Delay      (SCD):    0.000ns
+    Clock Pessimism Removal (CPR):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                                                      0.000     0.000 r  b[0][2] (IN)
+                         net (fo=0)                   0.069     0.069    b[0][2]
+    SLICE_X24Y88         FDRE                                         r  genblk1[0].b_r_reg[0][2]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clock rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  clock (IN)
+                         net (fo=63, unset)           0.026     0.026    clock
+    SLICE_X24Y88         FDRE                                         r  genblk1[0].b_r_reg[0][2]/C
+
+
+
+
