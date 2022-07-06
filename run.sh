@@ -43,3 +43,8 @@ deactivate
 . calyx-lattice-ecp5/bin/activate # Note: use . instead of source.
 runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' calyx-lattice-ecp5/
 deactivate
+
+# Generate Yosys
+pushd instructions
+./run.sh
+popd
