@@ -3,6 +3,7 @@
 set -e
 set -o pipefail   # Get exit code of `yosys .. | tee`
 
+ENFORCE_EXPECTED_LUTS=false
 THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # shellcheck source=expected_luts_lookup.sh
@@ -37,7 +38,7 @@ function run_on_module {
     # Same thing, but now we synthesize for Lattice ECP5. We can also place and
     # route for ECP5 using nextpnr-ecp5.
     echo "[ + ] Running yosys -s synthesize-ecp5.ys"
-    yosys -s synthesize-ecp5.ys > "logs/$inst-synthesize-ecp5.log"
+    time (yosys -s synthesize-ecp5.ys > "logs/$inst-synthesize-ecp5.log") 2> "logs/$inst-synthesize-ecp5.time"
     yosys_result=$?
 
     if [ $yosys_result -ne 0 ]; then 
@@ -67,7 +68,7 @@ function run_on_module {
     echo "[ + ] # Synthesized LUTS: $NUM_LUTS"
 
     expected_luts="$(expected_synthesized_luts "$inst")"
-    if [ "$NUM_LUTS" != "$expected_luts" ]; then 
+    if $ENFORCE_EXPECTED_LUTS && [ "$NUM_LUTS" != "$expected_luts" ]; then 
         printf "\033[31;1m[ ! ] Wrong number of LUTs found: expected %s but found %s\033[0m\n" "$expected_luts" "$NUM_LUTS"
         echo "      ...continuing"
         errors+=( "$inst" )
@@ -75,7 +76,7 @@ function run_on_module {
     fi
 
     echo "[ + ] Running nextpnr-ecp5 --json out/$inst-synth-ecp5.json"
-    nextpnr-ecp5 --json "out/$inst-synth-ecp5.json" > "logs/$inst-nextpnr-ecp5.log" 2>&1
+    time (nextpnr-ecp5 --json "out/$inst-synth-ecp5.json" > "logs/$inst-nextpnr-ecp5.log" 2>&1) 2> "logs/$inst-nextpnr-ecp5.time"
     nextpnr_result=$?
     echo "      -> Nextprn complete."
     echo "      -> Summary can be found at logs/$inst-nextpnr-ecp5.log"
@@ -99,7 +100,7 @@ function run_on_module {
     echo "[ + ] # PNR LUTS: $NUM_LUTS"
 
     expected_luts="$(expected_pnr_luts "$inst")"
-    if [ "$NUM_LUTS" != "$expected_luts" ]; then 
+    if $ENFORCE_EXPECTED_LUTS && [ "$NUM_LUTS" != "$expected_luts" ]; then 
         printf "\033[31;1m[ ! ] Error: wrong number of PNR LUTs found: expected %s but found %s\033[0m\n" "$expected_luts" "$NUM_LUTS"
         echo "      ...continuing"
         errors+=( "$inst" )
