@@ -1,4 +1,6 @@
 set -e
+set -x
+set -u
 
 # TODO(@gussmith23) We need to run twice to produce LUTs, for some reason.
 mkdir -p synth-xilinx
