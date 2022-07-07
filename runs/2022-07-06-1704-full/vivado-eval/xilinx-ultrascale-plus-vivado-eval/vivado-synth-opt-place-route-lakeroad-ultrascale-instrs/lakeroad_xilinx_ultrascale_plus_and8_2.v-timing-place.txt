@@ -1,0 +1,37 @@
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
+| Date              : Thu Jul  7 03:49:07 2022
+| Host              : boba running 64-bit Ubuntu 20.04.3 LTS
+| Command           : report_timing -file runs/2022-07-06-1704-full/vivado-eval/xilinx-ultrascale-plus-vivado-eval//vivado-synth-opt-place-route-lakeroad-ultrascale-instrs//lakeroad_xilinx_ultrascale_plus_and8_2.v-timing-place.txt
+| Design            : lakeroad_xilinx_ultrascale_plus_and8_2
+| Device            : xczu3eg-sbva484
+| Speed File        : -1  PRODUCTION 1.29 08-03-2020
+| Temperature Grade : E
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack:                    inf
+  Source:                 a[0]
+                            (input port)
+  Destination:            out0[0]
+                            (output port)
+  Path Group:             (none)
+  Path Type:              Max at Slow Process Corner
+  Data Path Delay:        0.064ns  (logic 0.064ns (100.000%)  route 0.000ns (0.000%))
+  Logic Levels:           1  (LUT2=1)
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                                                      0.000     0.000 r  a[0] (IN)
+                         net (fo=0)                   0.000     0.000    a[0]
+    SLICE_X26Y90         LUT2 (Prop_H6LUT_SLICEL_I0_O)
+                                                      0.064     0.064 r  lut2_0/O
+                         net (fo=0)                   0.000     0.064    out0[0]
+                                                                      r  out0[0] (OUT)
+  -------------------------------------------------------------------    -------------------
+
+
+
+

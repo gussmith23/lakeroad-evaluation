@@ -1,0 +1,1 @@
+{ "lut": 220, "dsp": 3, "meet_timing": 1, "registers": 42, "muxes": 34, "clb_registers": 179, "carry8": 6, "f7_muxes": 0, "f8_muxes": 0, "f9_muxes": 0, "clb": 405, "cell_lut1": -1, "cell_lut2": 38, "cell_lut3": 39, "cell_lut4": 10, "cell_lut5": 117, "cell_lut6": 81, "cell_fdre": 179 }
