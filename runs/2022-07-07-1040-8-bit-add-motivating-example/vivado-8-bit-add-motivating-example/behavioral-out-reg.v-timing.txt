@@ -1,0 +1,49 @@
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version      : Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
+| Date              : Thu Jul  7 17:43:04 2022
+| Host              : boba running 64-bit Ubuntu 20.04.3 LTS
+| Command           : report_timing -file runs/2022-07-07-1040-8-bit-add-motivating-example/vivado-8-bit-add-motivating-example//behavioral-out-reg.v-timing.txt
+| Design            : main
+| Device            : xczu3eg-sbva484
+| Speed File        : -1  PRODUCTION 1.29 08-03-2020
+| Temperature Grade : E
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack:                    inf
+  Source:                 a[0]
+                            (input port)
+  Destination:            r_reg[7]/D
+                            (rising edge-triggered cell FDRE clocked by clock  {rise@0.000ns fall@5.000ns period=10.000ns})
+  Path Group:             (none)
+  Path Type:              Setup (Max at Slow Process Corner)
+  Data Path Delay:        0.403ns  (logic 0.361ns (89.578%)  route 0.042ns (10.422%))
+  Logic Levels:           2  (CARRY8=1 LUT2=1)
+  Clock Path Skew:        0.025ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.025ns
+    Source Clock Delay      (SCD):    0.000ns
+    Clock Pessimism Removal (CPR):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                                                      0.000     0.000 r  a[0] (IN)
+                         net (fo=1, unset)            0.000     0.000    a[0]
+    SLICE_X26Y90         LUT2 (Prop_A6LUT_SLICEL_I0_O)
+                                                      0.064     0.064 r  r[7]_i_9/O
+                         net (fo=1, routed)           0.011     0.075    r[7]_i_9_n_0
+    SLICE_X26Y90         CARRY8 (Prop_CARRY8_SLICEL_S[0]_O[7])
+                                                      0.297     0.372 r  r_reg[7]_i_1/O[7]
+                         net (fo=1, routed)           0.031     0.403    s[7]
+    SLICE_X26Y90         FDRE                                         r  r_reg[7]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clock rise edge)      0.000     0.000 r  
+                                                      0.000     0.000 r  clock (IN)
+                         net (fo=7, unset)            0.025     0.025    clock
+    SLICE_X26Y90         FDRE                                         r  r_reg[7]/C
+
+
+
+
