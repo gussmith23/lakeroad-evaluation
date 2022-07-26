@@ -11,6 +11,16 @@ IMPLS_DIR="$BASE_DIR/lattice_ecp5_impls"
 [ -e "$IMPLS_DIR" ] && rm -rf "$IMPLS_DIR"
 mkdir -p "$IMPLS_DIR"
 
+generate_comp_instr () {
+  instr_name="$1"
+  op="$2"
+  bw="$3"
+  instr="(bool->bitvector ($op (var a ${bw}) (var b ${bw})))"
+  modname="lakeroad_lattice_ecp5_${instr_name}${bw}_2"
+  filename="$IMPLS_DIR/$modname.v"
+  generate_instr "$modname" "$instr" > "$filename"
+}
+
 generate_binary_instr () {
   instr_name="$1"
   op="$2"
@@ -47,12 +57,25 @@ generate_instr () {
 
 # generate_instr lakeroad_lattice_ecp5_and1_2 \
 #   "(bvand (var a 1) (var b 1))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_and1_2.v"
-for bw in $(seq 1 8) 16 24 32; do
+for bw in $(seq 1 8) 16 24 32 64 128; do
   generate_binary_instr and bvand $bw
   generate_binary_instr or bvor $bw
   generate_binary_instr add bvadd $bw
   generate_binary_instr sub bvsub $bw
   generate_unary_instr not bvnot $bw
+
+  generate_comp_instr lt bvult $bw
+  generate_comp_instr le bvule $bw
+  generate_comp_instr gt bvugt $bw
+  generate_comp_instr ge bvuge $bw
+  generate_comp_instr eq bveq $bw
+
+  generate_instr "lakeroad_lattice_ecp5_neq${bw}_2" \
+    "(bool->bitvector (not (bveq (var a ${bw}) (var b ${bw}))))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_neq${bw}_2.v"
+  generate_instr "lakeroad_lattice_ecp5_mux${bw}_3" \
+    "(bool->bitvector (circt-comb-mux (var a ${bw}) (var b ${bw}) (var c ${bw})))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_mux${bw}_3.v"
+
+  # todo: not, mux
 done
 
 # generate_instr lakeroad_lattice_ecp5_and8_2 \
