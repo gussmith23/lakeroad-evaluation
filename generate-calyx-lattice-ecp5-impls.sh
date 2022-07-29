@@ -1,14 +1,15 @@
 #!/bin/bash
 # Generate implementations of various instructions for Lattice ECP5 and
 # put them into Calyx.
+#
+# Expects IMPLS_DIR to be set to the directory where you want the impls to be created.
 
 set -e
 set -u
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 BASE_DIR="$SCRIPT_DIR"
-IMPLS_DIR="$BASE_DIR/lattice_ecp5_impls"
-[ -e "$IMPLS_DIR" ] && rm -rf "$IMPLS_DIR"
+: "$IMPLS_DIR"
 mkdir -p "$IMPLS_DIR"
 
 generate_comp_instr () {
