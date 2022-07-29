@@ -73,9 +73,7 @@ for bw in $(seq 1 8) 16 24 32 64 128; do
   generate_instr "lakeroad_lattice_ecp5_neq${bw}_2" \
     "(bool->bitvector (not (bveq (var a ${bw}) (var b ${bw}))))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_neq${bw}_2.v"
   generate_instr "lakeroad_lattice_ecp5_mux${bw}_3" \
-    "(bool->bitvector (circt-comb-mux (var a ${bw}) (var b ${bw}) (var c ${bw})))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_mux${bw}_3.v"
-
-  # todo: not, mux
+    "(bool->bitvector (circt-comb-mux (var a 1) (var b ${bw}) (var c ${bw})))" > "$IMPLS_DIR/lakeroad_lattice_ecp5_mux${bw}_3.v"
 done
 
 # generate_instr lakeroad_lattice_ecp5_and8_2 \

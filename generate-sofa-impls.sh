@@ -51,7 +51,7 @@ for bw in 1 2 4 8 16 32 64 128; do
   #   "(bool->bitvector (bvule (var a ${bw}) (var b ${bw})))" > "$IMPLS_DIR/lakeroad_sofa_ule${bw}_2.v"
 
   generate_instr "lakeroad_sofa_mux${bw}_3" \
-    "(bool->bitvector (circt-comb-mux (var a ${bw}) (var b ${bw}) (var c ${bw})))" > "$IMPLS_DIR/lakeroad_sofa_mux${bw}_3.v"
+    "(bool->bitvector (circt-comb-mux (var a 1) (var b ${bw}) (var c ${bw})))" > "$IMPLS_DIR/lakeroad_sofa_mux${bw}_3.v"
 done
 
   
