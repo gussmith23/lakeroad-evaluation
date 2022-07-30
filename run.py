@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Top-level experiment run script."""
 
-from abc import abstractmethod
 import argparse
 from pathlib import Path
-from types import Union
-from typing import Any
+from experiment import Experiment
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -14,27 +12,31 @@ parser.add_argument(
     default=True,
     action=argparse.BooleanOptionalAction,
 )
+parser.add_argument(
+    "--output-dir",
+    help="Output path for results.",
+    type=Path,
+)
+parser.add_argument(
+    "--overwrite-output-dir",
+    help="Whether or not to overwrite the output dir, if it exists.",
+    default=False,
+    action=argparse.BooleanOptionalAction,
+)
 args = parser.parse_args()
 
+args.output_dir.mkdir(parents=True, exist_ok=args.overwrite_output_dir)
 
-class Experiment(object):
-    """Base class for experiments.
+# The top-level experiment.
+lakeroad_eval = Experiment(output_dir=args.output_dir)
 
-    Experiments are objects which can be run (via run(), or by calling directly).
-    """
+# Demo: adding a sub-experiment. See the experiment template's definition for
+# more information.
+# import experiment_template
+# lakeroad_eval.register(experiment_template.ExperimentTemplate(
+#     23, output_dir=args.output_dir / "example_experiment_1"))
+# lakeroad_eval.register(experiment_template.ExperimentTemplate(
+#     42, output_dir=args.output_dir / "example_experiment_2"))
+# lakeroad_eval.run()
 
-    def __init__(self, output_dir: Union[str, Path]):
-        self._experiments = []
-        self._output_dir = Path(output_dir)
-
-    @abstractmethod
-    def run(self):
-        """Run the experiment."""
-        pass
-
-    def register(self, experiment):
-        """Register a sub-experiment."""
-        self._experiments.push(experiment)
-
-    def __call__(self) -> Any:
-        return self.run()
+lakeroad_eval.register()
