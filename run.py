@@ -4,6 +4,11 @@
 import argparse
 from pathlib import Path
 from experiment import Experiment
+from generate_impls import GenerateImpls
+import logging 
+import os
+
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING"))
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -15,6 +20,7 @@ parser.add_argument(
 parser.add_argument(
     "--output-dir",
     help="Output path for results.",
+    required=True,
     type=Path,
 )
 parser.add_argument(
@@ -39,4 +45,7 @@ lakeroad_eval = Experiment(output_dir=args.output_dir)
 #     42, output_dir=args.output_dir / "example_experiment_2"))
 # lakeroad_eval.run()
 
-lakeroad_eval.register()
+# Register sub-experiments.
+lakeroad_eval.register(GenerateImpls(output_dir=Path("instruction_impls")))
+
+lakeroad_eval.run()

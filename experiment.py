@@ -31,9 +31,9 @@ class Experiment(object):
 
     def run(self):
         """Run the experiment and all sub-experiments."""
+        self._run_experiment()
         for sub_experiment in self._experiments:
             sub_experiment.run()
-        self._run_experiment()
 
     def register(self, experiment):
         """Register a sub-experiment."""

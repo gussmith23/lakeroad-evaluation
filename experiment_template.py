@@ -36,8 +36,10 @@ class ExperimentTemplate(Experiment):
 
         self._value = value
 
-    def run(self):
+    def _run_experiment(self):
         """Run the experiment!
+
+        NOTE: you should most likely be overriding _run_experiment, not run()!
         
         Generally, this will do some kind of complex operation and write some
         output files."""
