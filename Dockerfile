@@ -15,6 +15,7 @@ RUN apt-get update \
   libtinfo-dev \
   libssl-dev \
   libxml2-dev \
+  llvm-14 \
   ninja-build \
   ocl-icd-opencl-dev \
   opencl-headers \
@@ -28,6 +29,21 @@ RUN apt-get update \
   verilator \
   wget \
   zlib1g-dev 
+
+# Point to llvm-config binary. Alternatively, make sure you have a binary called
+# `llvm-config` on your PATH.
+ENV LLVM_CONFIG=llvm-config-14
+
+# Make a binary for `lit`. If you're on Mac, you can install lit via Brew.
+# Ubuntu doesn't have a binary for it, but it is available on pip and is
+# installed later in this Dockerfile.
+WORKDIR /root
+RUN mkdir -p /root/.local/bin \
+  && echo "#!/usr/bin/env python3" >> /root/.local/bin/lit \
+  && echo "from lit.main import main" >> /root/.local/bin/lit \
+  && echo "if __name__ == '__main__': main()" >> /root/.local/bin/lit \
+  && chmod +x /root/.local/bin/lit
+ENV PATH="/root/.local/bin:${PATH}"
 
 # Build CIRCT/MLIR.
 # Disabled for now, as we're not using MLIR yet. The build is slow.
