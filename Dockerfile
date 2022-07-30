@@ -13,9 +13,12 @@ RUN apt-get update \
   jq \
   libedit-dev \
   libtinfo-dev \
+  libtinfo5 \
   libssl-dev \
+  libx11-6 \
   libxml2-dev \
   llvm-14 \
+  locales \
   ninja-build \
   ocl-icd-opencl-dev \
   opencl-headers \
@@ -29,6 +32,13 @@ RUN apt-get update \
   verilator \
   wget \
   zlib1g-dev 
+
+# Set the locale. Necessary for Vivado.
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+  locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8     
 
 # Point to llvm-config binary. Alternatively, make sure you have a binary called
 # `llvm-config` on your PATH.
