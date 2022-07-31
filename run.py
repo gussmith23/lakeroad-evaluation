@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Top-level experiment run script."""
+"""Top-level experiment run script.
+
+Lakeroad's experiments are all Python scripts that should be able to be run
+individually, as well as being run from this main run file."""
 
 import argparse
 from pathlib import Path
 from experiment import Experiment
 from generate_impls import GenerateImpls
-import logging 
+import logging
 import os
 
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING"))
