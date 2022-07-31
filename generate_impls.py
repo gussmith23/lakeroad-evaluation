@@ -1,9 +1,8 @@
+#!/usr/bin/env python3
 """Generate instruction implementations."""
 
 import os
 from pathlib import Path
-
-from pkg_resources import require
 from experiment import Experiment
 import subprocess
 import logging
@@ -78,7 +77,7 @@ class GenerateXilinxUltrascalePlusImpls(Experiment):
             generate_instr("ule", bw, 2,
                            f"(bool->bitvector (bvule (var a {bw}) (var b {bw})))", "xilinx-ultrascale-plus", self._output_dir)
             generate_instr("mux", bw, 3,
-                           f"(bool->bitvector (circt-comb-mux (var a 1) (var b {bw}) (var c {bw})))", "xilinx-ultrascale-plus", self._output_dir)
+                           f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))", "xilinx-ultrascale-plus", self._output_dir)
 
 
 class GenerateLatticeECP5Impls(Experiment):
@@ -114,7 +113,7 @@ class GenerateLatticeECP5Impls(Experiment):
             generate_instr("ule", bw, 2,
                            f"(bool->bitvector (bvule (var a {bw}) (var b {bw})))", "lattice-ecp5", self._output_dir)
             generate_instr("mux", bw, 3,
-                           f"(bool->bitvector (circt-comb-mux (var a 1) (var b {bw}) (var c {bw})))", "lattice-ecp5", self._output_dir)
+                           f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))", "lattice-ecp5", self._output_dir)
 
 
 class GenerateSOFAImpls(Experiment):
@@ -134,7 +133,7 @@ class GenerateSOFAImpls(Experiment):
             generate_instr("not", bw, 1,
                            f"(bvnot (var a {bw}))", "lattice-ecp5", self._output_dir)
             generate_instr("mux", bw, 3,
-                           f"(bool->bitvector (circt-comb-mux (var a 1) (var b {bw}) (var c {bw})))", "lattice-ecp5", self._output_dir)
+                           f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))", "lattice-ecp5", self._output_dir)
             # generate_instr("add", bw, 2,
             #                f"(bvadd (var a {bw}) (var b {bw}))", "lattice-ecp5", self._output_dir)
             # generate_instr("sub", bw, 2,
@@ -161,8 +160,23 @@ if __name__ == "__main__":
         required=True,
         type=Path
     )
+    parser.add_argument(
+        "--architecture",
+        type=str,
+        default="all",
+        help="Which architecture to generate for. 'all', 'xilinx-ultrascale-plus', 'lattice-ecp5', 'sofa'."
+    )
     args = parser.parse_args()
 
-    logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), )
 
-    GenerateImpls(output_dir=args.output_dir).run()
+    if args.architecture == "all":
+        GenerateImpls(output_dir=args.output_dir).run()
+    elif args.architecture == "xilinx-ultrascale-plus":
+        GenerateXilinxUltrascalePlusImpls(output_dir=args.output_dir).run()
+    elif args.architecture == "lattice-ecp5":
+        GenerateLatticeECP5Impls(output_dir=args.output_dir).run()
+    elif args.architecture == "sofa":
+        GenerateSOFAImpls(output_dir=args.output_dir).run()
+    else:
+        raise Exception(f"Invalid architecture {args.architecture}")
