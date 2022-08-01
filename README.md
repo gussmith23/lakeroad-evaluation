@@ -6,6 +6,36 @@ docker build . -t lakeroad-evaluation
 docker run lakeroad-evaluation
 ```
 
+## Python Utilities
+
+This evaluation uses some Python utilities.
+If you would like to run some or all of the evaluation,
+  you will need to make sure
+  these utilities are visible
+  by our scripts.
+You can either do this the correct way,
+  via installing the utilities packages
+  (using a virual environment, to keep your global Python install clean):
+
+```sh
+python3 -m venv .
+source bin/activate
+pip install python/
+```
+
+Now, the utilities will be visible
+  as long as your virtual environment
+  is activated.
+To deactivate your virtual environment,
+  use the command `deactivate`.
+
+You can also do this the quick and dirty way,
+  and add the Python directory to your `PYTHONPATH` directly:
+
+```sh
+export PYTHONPATH="$PWD/python:$PYTHONPATH"
+```
+
 ## Dependencies
 
 See the Dockerfile for a definitive list of dependencies. We give some additional detail here.

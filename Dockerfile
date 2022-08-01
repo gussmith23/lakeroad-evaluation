@@ -93,6 +93,10 @@ WORKDIR /root
 ADD requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
 
+# Install Python utilities globally.
+ADD python/ /root/python/
+RUN pip install /root/python/
+
 # # Download old LLVM 11 for Calyx's TVM experiments.
 # #
 # # If we get an error here, we likely just need to add other branches for other
