@@ -1,0 +1,62 @@
+name: Run evaluation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # TODO(@gussmith23) It would be nice if this wasn't necessary
+  cleaner:
+    runs-on: self-hosted
+    steps:
+      - name: Clean up previous runs
+        run: rm -rf "${{ github.workspace }}"
+
+  build-docker-image:
+    # Make sure we clean first.
+    needs: cleaner
+    runs-on: self-hosted
+
+    outputs:
+      tag: ${{ steps.generate-tag.outputs.tag }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+        token: ${{ secrets.PAT }}
+        ssh-key: ${{ secrets.SSH_KEY }}
+
+    - name: Generate Docker image tag
+      id: generate-tag
+      run: |
+        export TAG=lakeroad-evaluation:$(date +%s)
+        echo "Docker image tag: $TAG"
+        echo "::set-output name=tag::$TAG"
+
+    - name: Build Docker image
+      run: |
+        docker build \
+          . \
+          --file Dockerfile \
+          --tag ${{ steps.generate-tag.outputs.tag }} \
+          --build-arg MAKE_JOBS=36
+
+  run-evaluation:
+    needs: build-docker-image
+    runs-on: self-hosted
+    steps:
+    - run: docker run -v results/:results/ ${{ needs.build-docker-image.outputs.tag }} python3 run.py --output-dir results
+
+  upload-artifact:
+    needs: run-evaluation
+    runs-on: self-hosted
+    steps:
+    - uses: actions/upload-artifact@v3
+      with:
+        name: evaluation-results
+        path: results/
+
