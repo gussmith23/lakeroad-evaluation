@@ -47,7 +47,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     logging.basicConfig(
-        level=os.environ.get("LOGLEVEL", "INFO"),
+        level=os.environ.get("LOGLEVEL", "WARNING"),
     )
 
     MotivatingExample8BitAdd(**vars(args)).run()
