@@ -13,28 +13,15 @@ If you would like to run some or all of the evaluation,
   you will need to make sure
   these utilities are visible
   by our scripts.
-You can either do this the correct way,
-  via installing the utilities packages
-  (using a virual environment, to keep your global Python install clean):
-
-```sh
-python3 -m venv .
-source bin/activate
-pip install .
-```
-
-Now, the utilities will be visible
-  as long as your virtual environment
-  is activated.
-To deactivate your virtual environment,
-  use the command `deactivate`.
-
-You can also do this the quick and dirty way,
-  and add the Python directory to your `PYTHONPATH` directly:
+This can be achieved by
+  adding the Python directory to your `PYTHONPATH` directly:
 
 ```sh
 export PYTHONPATH="$PWD/python:$PYTHONPATH"
 ```
+
+TODO: Figure out how to use Python packaging, so we could install
+  the utilities as a package within a virtual environment.
 
 ## Dependencies
 
