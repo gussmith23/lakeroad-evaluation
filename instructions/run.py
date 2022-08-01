@@ -43,6 +43,7 @@ class BaselineXilinxUltraScalePlusSynthesis(Experiment):
                 f.write(
                     f"""
 read_verilog -sv {instr_src_file}
+set_property top {module_name} [current_fileset]
 synth_design
 place_design
 route_design
