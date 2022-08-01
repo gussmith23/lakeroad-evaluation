@@ -7,6 +7,47 @@ import subprocess
 import logging
 
 
+class Baseline(Experiment):
+    """Run synthesis/place/route on baseline instruction implementations."""
+
+    def __init__(
+        self,
+        output_dir: Union[str, Path],
+        instructions_dir: Union[str, Path],
+        overwrite_output_dir: bool = False,
+        lattice_ecp5: bool = True,
+        xilinx_ultrascale_plus: bool = True,
+    ) -> None:
+        """Constructor.
+
+        lattice_ecp5/xilinx_ultrascale_plus: whether to run the various sub-experiments.
+        """
+        super().__init__()
+
+        self._output_dir = output_dir
+        self._overwrite_output_dir = overwrite_output_dir
+
+        if lattice_ecp5:
+            self.register(
+                BaselineLatticeECP5Synthesis(
+                    output_dir=output_dir / "lattice-ecp5",
+                    instructions_dir=instructions_dir,
+                    overwrite_output_dir=overwrite_output_dir,
+                )
+            )
+        if xilinx_ultrascale_plus:
+            self.register(
+                BaselineXilinxUltraScalePlusSynthesis(
+                    output_dir=output_dir / "xilinx-ultrascale-plus",
+                    instructions_dir=instructions_dir,
+                    overwrite_output_dir=overwrite_output_dir,
+                )
+            )
+
+    def _run_experiment(self):
+        self._output_dir.mkdir(parents=True, exist_ok=self._overwrite_output_dir)
+
+
 class BaselineXilinxUltraScalePlusSynthesis(Experiment):
     """Xilinx UltraScale+ baseline.
 
@@ -53,7 +94,9 @@ write_verilog {synth_out_sv}
 
             # Synthesis with Vivado.
             with open(self._output_dir / f"{module_name}.log", "w") as logfile:
-                logging.info("Running Yosys synthesis on %s", instr_src_file)
+                logging.info(
+                    "Running Vivado synthesis/place/route on %s", instr_src_file
+                )
                 subprocess.run(
                     ["vivado", "-mode", "batch", "-source", tcl_file],
                     check=True,
@@ -161,15 +204,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if args.lattice_ecp5:
-        BaselineLatticeECP5Synthesis(
-            output_dir=args.output_dir / "lattice-ecp5",
-            instructions_dir=args.instructions_dir,
-            overwrite_output_dir=args.overwrite_output_dir,
-        ).run()
-    if args.xilinx_ultrascale_plus:
-        BaselineXilinxUltraScalePlusSynthesis(
-            output_dir=args.output_dir / "xilinx-ultrascale-plus",
-            instructions_dir=args.instructions_dir,
-            overwrite_output_dir=args.overwrite_output_dir,
-        ).run()
+    Baseline(**vars(args)).run()
