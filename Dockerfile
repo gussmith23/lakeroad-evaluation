@@ -207,11 +207,9 @@ RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
   && ./calyx-lattice-ecp5/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
 
 WORKDIR /root
-ADD generate-calyx-lattice-ecp5-impls.sh generate-calyx-lattice-ecp5-impls.sh 
-ADD generate-xilinx-ultrascale-plus-impls.sh generate-xilinx-ultrascale-plus-impls.sh 
-ADD generate-sofa-impls.sh generate-sofa-impls.sh 
-ADD instructions/ instructions/
-ADD run.sh run.sh
+# Add the rest of the stuff. This might be a bad idea, I'm still not sure on
+# Docker best practices.
+ADD . .
 
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]
