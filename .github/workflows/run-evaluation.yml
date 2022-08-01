@@ -49,7 +49,7 @@ jobs:
     needs: build-docker-image
     runs-on: self-hosted
     steps:
-    - run: docker run -v "$PWD/results/:/root/results/" ${{ needs.build-docker-image.outputs.tag }} python3 run.py --output-dir /root/results --instructions-dir /root/instructions/src
+    - run: docker run -v "$PWD/output/:/root/output/" ${{ needs.build-docker-image.outputs.tag }} python3 run.py --output-dir "/root/output/results-$(date +%s)" --instructions-dir /root/instructions/src
 
   upload-artifact:
     needs: run-evaluation
@@ -58,5 +58,5 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: evaluation-results
-        path: results/
+        path: output/
 
