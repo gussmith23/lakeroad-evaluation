@@ -36,7 +36,7 @@ class MotivatingExample8BitAdd(Experiment):
     def _run_experiment(self):
         self.run_vivado(Path(__file__).parent.resolve() / "manual-no-reg.v")
         self.run_vivado(Path(__file__).parent.resolve() / "behavioral-out-reg.v")
-        self.run_vivado(Path(__file__).parent.resolve() / "behavioral-no-reg.")
+        self.run_vivado(Path(__file__).parent.resolve() / "behavioral-no-reg.v")
 
 
 if __name__ == "__main__":
