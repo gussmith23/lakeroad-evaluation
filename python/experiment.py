@@ -38,4 +38,4 @@ class ShellCommandExperiment(Experiment):
         self._cmd = cmd
 
     def _run_experiment(self):
-        os.system(self._cmd)
+        assert os.system(self._cmd) == 0
