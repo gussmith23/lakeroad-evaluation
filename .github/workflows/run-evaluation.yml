@@ -49,7 +49,12 @@ jobs:
     needs: build-docker-image
     runs-on: self-hosted
     steps:
-    - run: docker run -v "$PWD/output/:/root/output/" ${{ needs.build-docker-image.outputs.tag }} python3 run.py --output-dir "/root/output/results-$(date +%s)" --instructions-dir /root/instructions/src
+    - run: |
+        docker run \
+        -v "$PWD/output/:/root/output/" \
+        -env LOGLEVEL=INFO \
+        ${{ needs.build-docker-image.outputs.tag }} \
+        python3 run.py --output-dir "/root/output/results-$(date +%s)" --instructions-dir /root/instructions/src
 
   upload-artifact:
     needs: run-evaluation
