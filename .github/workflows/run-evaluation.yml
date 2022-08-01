@@ -48,19 +48,24 @@ jobs:
   run-evaluation:
     needs: build-docker-image
     runs-on: self-hosted
+    outputs:
+      container-name: ${{ steps.generate-tag.outputs.tag }}
     steps:
-    - run: |
+    - id: run-evaluation
+      run: |
+        CONTAINER_NAME=lakeroad-evaluation-run-$(date +%s)
+        echo "Docker container name: $CONTAINER_NAME"
+        echo "::set-output name=container-name::$CONTAINER_NAME"
         docker run \
-        -v "$PWD/output/:/root/output/" \
-        -env LOGLEVEL=INFO \
-        --user $(id -u):$(id -g) \
-        ${{ needs.build-docker-image.outputs.tag }} \
-        python3 run.py --output-dir "/root/output/results-$(date +%s)" --instructions-dir /root/instructions/src
+          -env LOGLEVEL=INFO \
+          ${{ needs.build-docker-image.outputs.tag }} \
+          python3 run.py --output-dir "/root/results" --instructions-dir /root/instructions/src
 
   upload-artifact:
     needs: run-evaluation
     runs-on: self-hosted
     steps:
+    - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
     - uses: actions/upload-artifact@v3
       with:
         name: evaluation-results
