@@ -95,7 +95,8 @@ RUN pip3 install --requirement requirements.txt
 
 # Install Python utilities globally.
 ADD python/ /root/python/
-RUN pip install /root/python/
+ADD setup.py /root/setup.py
+RUN pip install .
 
 # # Download old LLVM 11 for Calyx's TVM experiments.
 # #

@@ -20,7 +20,7 @@ You can either do this the correct way,
 ```sh
 python3 -m venv .
 source bin/activate
-pip install python/
+pip install .
 ```
 
 Now, the utilities will be visible
