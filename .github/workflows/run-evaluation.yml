@@ -53,6 +53,7 @@ jobs:
         docker run \
         -v "$PWD/output/:/root/output/" \
         -env LOGLEVEL=INFO \
+        --user $(id -u):$(id -g) \
         ${{ needs.build-docker-image.outputs.tag }} \
         python3 run.py --output-dir "/root/output/results-$(date +%s)" --instructions-dir /root/instructions/src
 
