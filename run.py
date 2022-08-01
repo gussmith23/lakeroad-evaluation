@@ -6,6 +6,7 @@ able to be run directly from the command line, as well as being imported and run
 programmatically."""
 
 from pathlib import Path
+from typing import Union
 from experiment import Experiment
 from generate_impls import GenerateImpls
 import logging
@@ -15,16 +16,28 @@ import os
 class LakeroadEvaluation(Experiment):
     """Top-level Experiment for the Lakeroad eval."""
 
-    def __init__(self, output_dir: Path = Path(os.getcwd()), overwrite_output_dir: bool = False):
+    def __init__(
+        self,
+        output_dir: Union[str, Path] = Path(os.getcwd()),
+        overwrite_output_dir: bool = False,
+        **kwargs
+    ):
+        super().__init__()
+
+        self._output_dir = Path(output_dir)
         self._overwrite_output_dir = overwrite_output_dir
-        self._output_dir = output_dir
 
         # Register sub-experiments.
         #
         # Note that we change the output directory to sub-folders of the current output
         # folder, in order to provide structure to the output files.
-        self.register(GenerateImpls(
-            output_dir=output_dir/Path("instruction_impls")))
+        self.register(GenerateImpls(output_dir=output_dir / Path("instruction_impls")))
+
+    def _run_experiment(self):
+        # The top-level experiment doesn't do much, other than to create the
+        # output directory and error if it already exists (if
+        # overwrite_output_dir is False).
+        self._output_dir.mkdir(parents=True, exist_ok=self._overwrite_output_dir)
 
 
 if __name__ == "__main__":
@@ -53,15 +66,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # Extra config values that may be used by sub-experiments.
-    #
-    # These are values that aren't necessarily taken directly by the constructor
-    # of the top-level experiment, but are used by sub-experiments and thus need
-    # to be passed down from the top level.
-    extra_config = {
-        'run_vivado': args.run_vivado,
-    }
-
     # Construct and run the top-level experiment.
-    LakeroadEvaluation(
-        output_dir=args.output_dir, overwrite_output_dir=args.overwrite_output_dir, **extra_config).run()
+    LakeroadEvaluation(**vars(args)).run()
