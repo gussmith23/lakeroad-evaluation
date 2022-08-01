@@ -19,14 +19,15 @@ class LakeroadEvaluation(Experiment):
 
     def __init__(
         self,
+        instructions_dir: Union[str, Path],
         output_dir: Union[str, Path] = Path(os.getcwd()),
         overwrite_output_dir: bool = False,
         run_vivado: bool = True,
-        **kwargs
     ):
         """Constructor.
         
         Args:
+          instructions_dir: Directory of baseline instruction implementations.
           output_dir: Where to write evaluation output files. All sub-experiment
             outputs will also end up in subdirectories of this directory.
           overwrite_output_dir: Whether or not to overwrite the output
@@ -49,6 +50,7 @@ class LakeroadEvaluation(Experiment):
                 output_dir=output_dir / "baseline",
                 overwrite_output_dir=overwrite_output_dir,
                 xilinx_ultrascale_plus=run_vivado,
+                instructions_dir=instructions_dir
             )
         )
 
@@ -82,6 +84,12 @@ if __name__ == "__main__":
         help="Whether or not to overwrite the output dir, if it exists.",
         default=False,
         action=argparse.BooleanOptionalAction,
+    )
+    parser.add_argument(
+        "--instructions-dir",
+        help="Directory of baseline instruction implementations.",
+        required=True,
+        type=Path,
     )
     args = parser.parse_args()
 
