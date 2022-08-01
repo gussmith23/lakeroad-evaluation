@@ -24,6 +24,14 @@ class LakeroadEvaluation(Experiment):
         run_vivado: bool = True,
         **kwargs
     ):
+        """Constructor.
+        
+        Args:
+          output_dir: Where to write evaluation output files. All sub-experiment
+            outputs will also end up in subdirectories of this directory.
+          overwrite_output_dir: Whether or not to overwrite the output
+            directory, if it already exists.
+          run_vivado: Whether or not to attempt to run Vivado."""
         super().__init__()
 
         self._output_dir = Path(output_dir)
