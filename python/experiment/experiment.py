@@ -1,5 +1,7 @@
 """Definition of the Experiment class."""
 
+import os
+
 
 class Experiment(object):
     """Base class for experiments.
@@ -26,3 +28,14 @@ class Experiment(object):
     def register(self, experiment):
         """Register a sub-experiment."""
         self._experiments.append(experiment)
+
+
+class ShellCommandExperiment(Experiment):
+    """An Experiment which simply runs a command."""
+
+    def __init__(self, cmd: str):
+        super().__init__()
+        self._cmd = cmd
+
+    def _run_experiment(self):
+        os.system(self._cmd)
