@@ -1,54 +1,67 @@
 #!/usr/bin/env python3
-"""Top-level experiment run script.
+"""Top-level experiment definition and run script.
 
-Lakeroad's experiments are all Python scripts that should be able to be run
-individually, as well as being run from this main run file."""
+Lakeroad's experiments (this one included) are all Python scripts that should be
+able to be run directly from the command line, as well as being imported and run
+programmatically."""
 
-import argparse
 from pathlib import Path
 from experiment import Experiment
 from generate_impls import GenerateImpls
 import logging
 import os
 
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING"))
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--run-vivado",
-    help="Whether or not to run the Vivado-based sections of the eval.",
-    default=True,
-    action=argparse.BooleanOptionalAction,
-)
-parser.add_argument(
-    "--output-dir",
-    help="Output path for results.",
-    required=True,
-    type=Path,
-)
-parser.add_argument(
-    "--overwrite-output-dir",
-    help="Whether or not to overwrite the output dir, if it exists.",
-    default=False,
-    action=argparse.BooleanOptionalAction,
-)
-args = parser.parse_args()
+class LakeroadEvaluation(Experiment):
+    """Top-level Experiment for the Lakeroad eval."""
 
-args.output_dir.mkdir(parents=True, exist_ok=args.overwrite_output_dir)
+    def __init__(self, output_dir: Path = Path(os.getcwd()), overwrite_output_dir: bool = False):
+        self._overwrite_output_dir = overwrite_output_dir
+        self._output_dir = output_dir
 
-# The top-level experiment.
-lakeroad_eval = Experiment(output_dir=args.output_dir)
+        # Register sub-experiments.
+        #
+        # Note that we change the output directory to sub-folders of the current output
+        # folder, in order to provide structure to the output files.
+        self.register(GenerateImpls(
+            output_dir=output_dir/Path("instruction_impls")))
 
-# Demo: adding a sub-experiment. See the experiment template's definition for
-# more information.
-# import experiment_template
-# lakeroad_eval.register(experiment_template.ExperimentTemplate(
-#     23, output_dir=args.output_dir / "example_experiment_1"))
-# lakeroad_eval.register(experiment_template.ExperimentTemplate(
-#     42, output_dir=args.output_dir / "example_experiment_2"))
-# lakeroad_eval.run()
 
-# Register sub-experiments.
-lakeroad_eval.register(GenerateImpls(output_dir=Path("instruction_impls")))
+if __name__ == "__main__":
+    import argparse
 
-lakeroad_eval.run()
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "WARNING"))
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--run-vivado",
+        help="Whether or not to run the Vivado-based sections of the eval.",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser.add_argument(
+        "--output-dir",
+        help="Output path for results.",
+        required=True,
+        type=Path,
+    )
+    parser.add_argument(
+        "--overwrite-output-dir",
+        help="Whether or not to overwrite the output dir, if it exists.",
+        default=False,
+        action=argparse.BooleanOptionalAction,
+    )
+    args = parser.parse_args()
+
+    # Extra config values that may be used by sub-experiments.
+    #
+    # These are values that aren't necessarily taken directly by the constructor
+    # of the top-level experiment, but are used by sub-experiments and thus need
+    # to be passed down from the top level.
+    extra_config = {
+        'run_vivado': args.run_vivado,
+    }
+
+    # Construct and run the top-level experiment.
+    LakeroadEvaluation(
+        output_dir=args.output_dir, overwrite_output_dir=args.overwrite_output_dir, **extra_config).run()

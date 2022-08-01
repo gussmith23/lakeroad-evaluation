@@ -1,8 +1,7 @@
 """Definition of the Experiment class."""
 
-from abc import abstractmethod
 from pathlib import Path
-from typing import  Union
+from typing import Union
 import os
 
 
@@ -12,7 +11,6 @@ class Experiment(object):
     Experiments are objects which can be run (via run(), or by calling directly).
     """
 
-    @abstractmethod
     def _run_experiment(self):
         """Run this experiment, but not its sub-experiments. run() is preferred.
 
@@ -20,14 +18,20 @@ class Experiment(object):
         not be run directly, but instead be run via run()."""
         pass
 
-    def __init__(self, output_dir: Union[str, Path] = Path(os.getcwd())):
+    def __init__(self, output_dir: Union[str, Path] = Path(os.getcwd()), **kwargs):
         """Constructor.
+
+        Any extra keyword arguments are collected in a config dictionary. These
+        can be passed on to sub-experiments (though the user needs to make sure
+        to pass in **self._config when constructing sub-experiments, which is a
+        little clunky.)
 
         Args:
           output_dir: Results of this experiment (and its sub-experiments) will
           be written to this folder."""
         self._experiments = []
         self._output_dir = Path(output_dir)
+        self._config = kwargs
 
     def run(self):
         """Run the experiment and all sub-experiments."""
