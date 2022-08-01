@@ -57,7 +57,7 @@ jobs:
         echo "Docker container name: $CONTAINER_NAME"
         echo "::set-output name=container-name::$CONTAINER_NAME"
         docker run \
-          -env LOGLEVEL=INFO \
+          --env LOGLEVEL=INFO \
           ${{ needs.build-docker-image.outputs.tag }} \
           python3 run.py --output-dir "/root/results" --instructions-dir /root/instructions/src
 
