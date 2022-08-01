@@ -19,7 +19,7 @@ See the Dockerfile for a definitive list of dependencies. We give some additiona
 We have multiple versions of Calyx in the repository.
 [`calyx/`](./calyx/) is "vanilla", unmodified Calyx.
 We also have versions of Calyx which use our implementations of their ISA:
-  e.g. 
+  e.g.
   [`calyx-xilinx-ultrascale-plus/`](./calyx-xilinx-ultrascale-plus/), for UltraScale+.
 These versions of Calyx
   work the same as Calyx on the surface,
