@@ -43,6 +43,7 @@ jobs:
           . \
           --file Dockerfile \
           --tag ${{ steps.generate-tag.outputs.tag }} \
+          --build-arg VIVADO_SETTINGS64_SH=/tools/Xilinx/Vivado/2021.2/settings64.sh \
           --build-arg MAKE_JOBS=36
 
   run-evaluation:
@@ -57,6 +58,7 @@ jobs:
         echo "Docker container name: $CONTAINER_NAME"
         echo "::set-output name=container-name::$CONTAINER_NAME"
         docker run \
+          -v /tools/Xilinx:/tools/Xilinx \
           --env LOGLEVEL=INFO \
           ${{ needs.build-docker-image.outputs.tag }} \
           python3 run.py --output-dir "/root/results" --instructions-dir /root/instructions/src
