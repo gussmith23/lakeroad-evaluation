@@ -2,9 +2,34 @@
 from pathlib import Path
 import logging
 import os
+from typing import Union
 from experiment import Experiment
-import tempfile
-import subprocess
+
+
+def _insert_instructions_and_run_tests(
+    calyx_dir: Union[str, Path], impls_dir: Union[str, Path]
+):
+    """Insert instruction implementations into (modified) Calyx and run tests."""
+
+    core_sv_file = (calyx_dir / "primitives" / "core.sv",)
+
+    logging.info("Clearing previous instruction implementations from %s", core_sv_file)
+    assert not os.system(
+        f"sed -i -n '1,/BEGIN GENERATED LAKEROAD CODE/p;/END GENERATED LAKEROAD CODE/,$p' {core_sv_file}"
+    )
+
+    logging.info(
+        "Inserting new implementations from %s into %s", impls_dir, core_sv_file
+    )
+    assert not os.system(
+        f'for f in {impls_dir}/* ; do sed -i -e "/^\/\/ BEGIN GENERATED LAKEROAD CODE$/r $f" {core_sv_file}; done'
+    )
+
+    # Run Calyx tests.
+    logging.info("Running Calyx tests in %d", calyx_dir)
+    assert not os.system(
+        f"bash -c \"source {calyx_dir /'bin'/'activate'};runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' {calyx_dir}\""
+    )
 
 
 class RunCalyxTests(Experiment):
@@ -23,19 +48,12 @@ class RunCalyxTests(Experiment):
         self._xilinx_ultrascale_plus_calyx_dir = xilinx_ultrascale_plus_calyx_dir
 
     def _run_experiment(self):
-        # Insert impls into calyx.
-        # Clear any existing code in the file.
-        assert not os.system(
-            f"sed -i -n '1,/BEGIN GENERATED LAKEROAD CODE/p;/END GENERATED LAKEROAD CODE/,$p' {self._lattice_ecp5_calyx_dir / 'primitives'/'core.sv'}"
+        _insert_instructions_and_run_tests(
+            self._lattice_ecp5_calyx_dir, self._lattice_ecp5_impls_dir
         )
-        # Insert implementations into file.
-        assert not os.system(
-            f"for f in {self._lattice_ecp5_impls_dir}/* ; do sed -i -e \"/^\/\/ BEGIN GENERATED LAKEROAD CODE$/r $f\" {self._lattice_ecp5_calyx_dir / 'primitives'/'core.sv'}; done"
-        )
-
-        # Run Calyx tests.
-        assert not os.system(
-            f"bash -c \"source {self._lattice_ecp5_calyx_dir /'bin'/'activate'};runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' {self._lattice_ecp5_calyx_dir}\""
+        _insert_instructions_and_run_tests(
+            self._xilinx_ultrascale_plus_calyx_dir,
+            self._xilinx_ultrascale_plus_impls_dir,
         )
 
 
