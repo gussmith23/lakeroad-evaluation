@@ -214,6 +214,7 @@ ADD . .
 ARG VIVADO_SETTINGS64_SH
 RUN if [ -n "${VIVADO_SETTINGS64_SH}" ] ; then echo ". ${VIVADO_SETTINGS64_SH}" >> /root/.profile ; fi
 RUN if [ -n "${VIVADO_SETTINGS64_SH}" ] ; then echo ". ${VIVADO_SETTINGS64_SH}" >> /root/.bash_profile ; fi
+RUN if [ -n "${VIVADO_SETTINGS64_SH}" ] ; then echo ". ${VIVADO_SETTINGS64_SH}" >> /root/.bashrc ; fi
 
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]
