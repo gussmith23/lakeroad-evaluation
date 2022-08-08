@@ -57,13 +57,12 @@ The [`run.sh`](/run.sh) script
 The Docker image can use the Vivado installed on your system.
 There are two steps to this process:
 
-1. Pass `--build-arg VIVADO_SETTINGS64_SH=</absolute/path/to/settings64.sh>`
+1. Pass `--build-arg VIVADO_BIN_DIR=</absolute/path/to/vivado/bin>`
     to `docker build`.
     The absolute path should be the path on the container,
       not on the host, though we recommend that you ensure
       that the paths are the same. See step 2.
-    This will ensure that`settings64.sh` is sourced in the Docker image's `.bashrc`.
-    You can also manually source this file yourself when running in a container.
+    This will add the bin directory to the path.
 2. During `docker run`, mount your entire Xilinx software directory. For example, our
     directory looks like:
 

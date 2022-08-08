@@ -43,7 +43,7 @@ jobs:
           . \
           --file Dockerfile \
           --tag ${{ steps.generate-tag.outputs.tag }} \
-          --build-arg VIVADO_SETTINGS64_SH=/tools/Xilinx/Vivado/2021.2/settings64.sh \
+          --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2021.2/bin \
           --build-arg MAKE_JOBS=36
 
   run-evaluation:
