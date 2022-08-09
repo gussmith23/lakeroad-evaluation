@@ -1,10 +1,15 @@
 name: Run evaluation
 
+# Run on push, pull request, and nightly.
+# TODO(@gussmith23) We likely don't want to run the full eval each time.
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    # 1am PDT.
+    - cron: '0 11 * * *'
 
 jobs:
 
