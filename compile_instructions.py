@@ -29,6 +29,7 @@ class InstructionSynthesis(Experiment):
         ] = None,
         lattice_ecp5_baseline_instructions_dir: Optional[Union[str, Path]] = None,
         lattice_ecp5_lakeroad_instructions_dir: Optional[Union[str, Path]] = None,
+        run_vivado: bool = True,
     ) -> None:
         """Constructor.
 
@@ -56,22 +57,23 @@ class InstructionSynthesis(Experiment):
                     overwrite_output_dir=overwrite_output_dir,
                 )
             )
-        if xilinx_ultrascale_plus_baseline_instructions_dir:
-            self.register(
-                XilinxUltraScalePlusSynthesis(
-                    output_dir=output_dir / "xilinx_ultrascale_plus_baseline",
-                    instructions_dir=xilinx_ultrascale_plus_baseline_instructions_dir,
-                    overwrite_output_dir=overwrite_output_dir,
+        if run_vivado:
+            if xilinx_ultrascale_plus_baseline_instructions_dir:
+                self.register(
+                    XilinxUltraScalePlusSynthesis(
+                        output_dir=output_dir / "xilinx_ultrascale_plus_baseline",
+                        instructions_dir=xilinx_ultrascale_plus_baseline_instructions_dir,
+                        overwrite_output_dir=overwrite_output_dir,
+                    )
                 )
-            )
-        if xilinx_ultrascale_plus_lakeroad_instructions_dir:
-            self.register(
-                XilinxUltraScalePlusSynthesis(
-                    output_dir=output_dir / "xilinx_ultrascale_plus_lakeroad",
-                    instructions_dir=xilinx_ultrascale_plus_lakeroad_instructions_dir,
-                    overwrite_output_dir=overwrite_output_dir,
+            if xilinx_ultrascale_plus_lakeroad_instructions_dir:
+                self.register(
+                    XilinxUltraScalePlusSynthesis(
+                        output_dir=output_dir / "xilinx_ultrascale_plus_lakeroad",
+                        instructions_dir=xilinx_ultrascale_plus_lakeroad_instructions_dir,
+                        overwrite_output_dir=overwrite_output_dir,
+                    )
                 )
-            )
 
     def _run_experiment(self):
         self._output_dir.mkdir(parents=True, exist_ok=self._overwrite_output_dir)

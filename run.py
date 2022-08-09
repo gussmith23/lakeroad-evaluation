@@ -64,6 +64,7 @@ class LakeroadEvaluation(Experiment):
                 / "instructions"
                 / "src",
                 lattice_ecp5_lakeroad_instructions_dir=generate_impls_experiment.lattice_ecp5_dir,
+                run_vivado=run_vivado,
             )
         )
 
