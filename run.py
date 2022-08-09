@@ -25,7 +25,7 @@ class LakeroadEvaluation(Experiment):
         run_vivado: bool = True,
     ):
         """Constructor.
-        
+
         Args:
           instructions_dir: Directory of baseline instruction implementations.
           output_dir: Where to write evaluation output files. All sub-experiment
