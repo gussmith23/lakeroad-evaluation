@@ -42,6 +42,8 @@ class LakeroadEvaluation(Experiment):
         #
         # Note that we change the output directory to sub-folders of the current output
         # folder, in order to provide structure to the output files.
+        #
+        # Generate instruction impls.
         self.register(GenerateImpls(output_dir=output_dir / Path("instruction_impls")))
         # Baseline synthesis experiments. We disable the Xilinx UltraScale+
         # baseline if run_vivado is false.
