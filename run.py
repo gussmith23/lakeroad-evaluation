@@ -54,15 +54,9 @@ class LakeroadEvaluation(Experiment):
             InstructionSynthesis(
                 output_dir=output_dir / "instruction_synthesis",
                 overwrite_output_dir=overwrite_output_dir,
-                xilinx_ultrascale_plus_baseline_instructions_dir=Path(__file__)
-                .resolve()
-                .parent()
-                / "instructions"
-                / "src",
+                xilinx_ultrascale_plus_baseline_instructions_dir=instructions_dir,
                 xilinx_ultrascale_plus_lakeroad_instructions_dir=generate_impls_experiment.xilinx_ultrascale_plus_dir,
-                lattice_ecp5_baseline_instructions_dir=Path(__file__).resolve().parent()
-                / "instructions"
-                / "src",
+                lattice_ecp5_baseline_instructions_dir=instructions_dir,
                 lattice_ecp5_lakeroad_instructions_dir=generate_impls_experiment.lattice_ecp5_dir,
                 run_vivado=run_vivado,
             )
