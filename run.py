@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Union
 from experiment import Experiment
 from generate_impls import GenerateImpls
-from instructions.run import Baseline
+from compile_instructions import InstructionSynthesis
 import logging
 import os
 
@@ -44,15 +44,26 @@ class LakeroadEvaluation(Experiment):
         # folder, in order to provide structure to the output files.
         #
         # Generate instruction impls.
-        self.register(GenerateImpls(output_dir=output_dir / Path("instruction_impls")))
+        generate_impls_experiment = GenerateImpls(
+            output_dir=output_dir / Path("instruction_impls")
+        )
+        self.register(generate_impls_experiment)
         # Baseline synthesis experiments. We disable the Xilinx UltraScale+
         # baseline if run_vivado is false.
         self.register(
-            Baseline(
-                output_dir=output_dir / "baseline",
+            InstructionSynthesis(
+                output_dir=output_dir / "instruction_synthesis",
                 overwrite_output_dir=overwrite_output_dir,
-                xilinx_ultrascale_plus=run_vivado,
-                instructions_dir=instructions_dir
+                xilinx_ultrascale_plus_baseline_instructions_dir=Path(__file__)
+                .resolve()
+                .parent()
+                / "instructions"
+                / "src",
+                xilinx_ultrascale_plus_lakeroad_instructions_dir=generate_impls_experiment.xilinx_ultrascale_plus_dir,
+                lattice_ecp5_baseline_instructions_dir=Path(__file__).resolve().parent()
+                / "instructions"
+                / "src",
+                lattice_ecp5_lakeroad_instructions_dir=generate_impls_experiment.lattice_ecp5_dir,
             )
         )
 

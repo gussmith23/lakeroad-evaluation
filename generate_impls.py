@@ -54,16 +54,35 @@ def generate_instr(
 
 
 class GenerateImpls(Experiment):
-    def __init__(self, output_dir=Path(os.getcwd())):
+    def __init__(
+        self,
+        output_dir=Path(os.getcwd()),
+        xilinx_ultrascale_plus: bool = True,
+        lattice_ecp5: bool = True,
+        sofa: bool = True,
+    ):
+        """Constructor.
+
+        Args:
+          xilinx_ultrascale_plus/lattice_ecp5/sofa: flags indicating which
+            architectures to generate."""
         super().__init__()
         self._output_dir = output_dir
-        self.register(
-            GenerateXilinxUltrascalePlusImpls(
-                output_dir=output_dir / "xilinx_ultrascale_plus"
+        if xilinx_ultrascale_plus:
+            self.xilinx_ultrascale_plus_dir: Path = (
+                output_dir / "xilinx_ultrascale_plus"
             )
-        )
-        self.register(GenerateLatticeECP5Impls(output_dir=output_dir / "lattice_ecp5"))
-        self.register(GenerateSOFAImpls(output_dir=output_dir / "sofa"))
+            self.register(
+                GenerateXilinxUltrascalePlusImpls(
+                    output_dir=self.xilinx_ultrascale_plus_dir
+                )
+            )
+        if lattice_ecp5:
+            self.lattice_ecp5_dir = output_dir / "lattice_ecp5"
+            self.register(GenerateLatticeECP5Impls(output_dir=self.lattice_ecp5_dir))
+        if sofa:
+            self.sofa_dir = output_dir / "sofa"
+            self.register(GenerateSOFAImpls(output_dir=self.sofa_dir))
 
 
 class GenerateXilinxUltrascalePlusImpls(Experiment):
@@ -359,10 +378,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument(
-        "--architecture",
-        type=str,
-        default="all",
-        help="Which architecture to generate for. 'all', 'xilinx-ultrascale-plus', 'lattice-ecp5', 'sofa'.",
+        "--xilinx-ultrascale-plus",
+        help="Generate Xilinx UltraScale+ instructions.",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser.add_argument(
+        "--lattice-ecp5",
+        help="Generate Lattice ECP5 instructions.",
+        default=True,
+        action=argparse.BooleanOptionalAction,
+    )
+    parser.add_argument(
+        "--sofa",
+        help="Generate SOFA instructions.",
+        default=True,
+        action=argparse.BooleanOptionalAction,
     )
     args = parser.parse_args()
 
@@ -370,13 +401,4 @@ if __name__ == "__main__":
         level=os.environ.get("LOGLEVEL", "INFO"),
     )
 
-    if args.architecture == "all":
-        GenerateImpls(output_dir=args.output_dir).run()
-    elif args.architecture == "xilinx-ultrascale-plus":
-        GenerateXilinxUltrascalePlusImpls(output_dir=args.output_dir).run()
-    elif args.architecture == "lattice-ecp5":
-        GenerateLatticeECP5Impls(output_dir=args.output_dir).run()
-    elif args.architecture == "sofa":
-        GenerateSOFAImpls(output_dir=args.output_dir).run()
-    else:
-        raise Exception(f"Invalid architecture {args.architecture}")
+    GenerateImpls(**vars(args))
