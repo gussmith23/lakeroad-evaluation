@@ -1,60 +1,56 @@
 #!/usr/bin/env python3
+import io
 from pathlib import Path
 import logging
 import os
+import subprocess
 from typing import Union
 from experiment import Experiment
 
 
-def _insert_instructions_and_run_tests(
-    calyx_dir: Union[str, Path], impls_dir: Union[str, Path]
-):
-    """Insert instruction implementations into (modified) Calyx and run tests."""
+def compile_with_fud(
+    fud_path: Union[str, Path],
+    futil_filepath: Union[str, Path],
+) -> str:
+    """Compile the given futil file with the fud at the given path.
 
-    core_sv_file = (calyx_dir / "primitives" / "core.sv",)
+    Returns the resulting SystemVerilog as a string."""
 
-    logging.info("Clearing previous instruction implementations from %s", core_sv_file)
-    assert not os.system(
-        f"sed -i -n '1,/BEGIN GENERATED LAKEROAD CODE/p;/END GENERATED LAKEROAD CODE/,$p' {core_sv_file}"
+    out = io.StringIO()
+    subprocess.run(
+        args=[fud_path, "e", "--to", "synth-verilog", futil_filepath],
+        check=True,
+        stdout=out,
     )
-
-    logging.info(
-        "Inserting new implementations from %s into %s", impls_dir, core_sv_file
-    )
-    assert not os.system(
-        f'for f in {impls_dir}/* ; do sed -i -e "/^\/\/ BEGIN GENERATED LAKEROAD CODE$/r $f" {core_sv_file}; done'
-    )
-
-    # Run Calyx tests.
-    logging.info("Running Calyx tests in %d", calyx_dir)
-    assert not os.system(
-        f"bash -c \"source {calyx_dir /'bin'/'activate'};runt -d -x '(relay)|(mrxl)|(ntt)|(dahlia)|(NTT)|(\[frontend\] dahlia)|(\[core\] backend)' {calyx_dir}\""
-    )
+    return out.getvalue()
 
 
-class RunCalyxTests(Experiment):
+class CompileCalyxFutilFiles(Experiment):
     def __init__(
         self,
-        lattice_ecp5_impls_dir,
-        lattice_ecp5_calyx_dir,
-        xilinx_ultrascale_plus_impls_dir,
-        xilinx_ultrascale_plus_calyx_dir,
+        output_dir: Union[str, Path],
+        calyx_path: Union[str, Path],
+        fud_path: Union[str, Path],
+        overwrite_output_dir: bool = False,
     ) -> None:
         super().__init__()
-
-        self._lattice_ecp5_impls_dir = lattice_ecp5_impls_dir
-        self._lattice_ecp5_calyx_dir = lattice_ecp5_calyx_dir
-        self._xilinx_ultrascale_plus_impls_dir = xilinx_ultrascale_plus_impls_dir
-        self._xilinx_ultrascale_plus_calyx_dir = xilinx_ultrascale_plus_calyx_dir
+        self._output_dir = output_dir
+        self._overwrite_output_dir = overwrite_output_dir
+        self._calyx_path = calyx_path
+        self._fud_path = fud_path
 
     def _run_experiment(self):
-        _insert_instructions_and_run_tests(
-            self._lattice_ecp5_calyx_dir, self._lattice_ecp5_impls_dir
-        )
-        _insert_instructions_and_run_tests(
-            self._xilinx_ultrascale_plus_calyx_dir,
-            self._xilinx_ultrascale_plus_impls_dir,
-        )
+        self._output_dir.mkdir(parents=True, exist_ok=self._overwrite_output_dir)
+
+        # TODO(@gussmith23): ignore ref-cells.
+        # futil_files=$(find $BASE_DIR/calyx/tests/correctness/ \( -name '*.futil' ! -wholename '*ref-cells/*' \) )
+        for futil_file in (self._calyx_path / "tests" / "correctness").glob(
+            "**/*.futil"
+        ):
+            with open(self._output_dir / f"{futil_file.name}.sv", "w") as f:
+                f.write(
+                    compile_with_fud(fud_path=self._fud_path, futil_filepath=futil_file)
+                )
 
 
 if __name__ == "__main__":
@@ -64,20 +60,20 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--lattice-ecp5-impls-dir",
-        help="Directory of Lattice ECP5 instruction implementations.",
+        "--output-dir",
+        help="Output directory.",
         required=True,
         type=Path,
     )
     parser.add_argument(
-        "--lattice-ecp5-calyx-dir",
-        help="Directory of the Lattice ECP5 Calyx instance.",
+        "--calyx-dir",
+        help="Directory of Calyx.",
         required=True,
         type=Path,
     )
     parser.add_argument(
-        "--xilinx-ultrascale-plus-impls-dir",
-        help="Directory of Xilinx UltraScale+ instruction implementations.",
+        "--fud-path",
+        help="Path to fud binary",
         required=True,
         type=Path,
     )
@@ -87,7 +83,13 @@ if __name__ == "__main__":
         required=True,
         type=Path,
     )
+    parser.add_argument(
+        "--overwrite-output-dir",
+        help="Whether or not to overwrite the output dir, if it exists.",
+        default=False,
+        action=argparse.BooleanOptionalAction,
+    )
     args = parser.parse_args()
 
     # Construct and run the top-level experiment.
-    RunCalyxTests(**vars(args)).run()
+    CompileCalyxFutilFiles(**vars(args)).run()
