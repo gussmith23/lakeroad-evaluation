@@ -8,8 +8,8 @@ programmatically."""
 from pathlib import Path
 from typing import Union
 from experiment import Experiment
-from generate_impls import GenerateImpls
-from compile_instructions import InstructionSynthesis
+from experiments.generate_impls import GenerateImpls
+from experiments.compile_instructions import InstructionSynthesis
 import logging
 import os
 
