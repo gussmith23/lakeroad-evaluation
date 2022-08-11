@@ -67,6 +67,8 @@ jobs:
           python3 run.py --output-dir "/root/results" --instructions-dir /root/instructions/src
 
   upload-artifact:
+    # Runs even if evaluation failed. Lets us inspect partial results and logs.
+    if: always()
     needs: run-evaluation
     runs-on: self-hosted
     steps:
