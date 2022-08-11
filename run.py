@@ -6,10 +6,12 @@ able to be run directly from the command line, as well as being imported and run
 programmatically."""
 
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 from experiment import Experiment
 from experiments.generate_impls import GenerateImpls
 from experiments.compile_instructions import InstructionSynthesis
+from experiments.calyx_end_to_end import CalyxEndToEnd
+from experiments.run_calyx_tests import RunCalyxTests
 import logging
 import os
 
@@ -21,6 +23,12 @@ class LakeroadEvaluation(Experiment):
         self,
         instructions_dir: Union[str, Path],
         output_dir: Union[str, Path] = Path(os.getcwd()),
+        vanilla_calyx_dir: Optional[Union[str, Path]] = None,
+        vanilla_fud_path: Optional[Union[str, Path]] = None,
+        xilinx_ultrascale_plus_calyx_dir: Optional[Union[str, Path]] = None,
+        xilinx_ultrascale_plus_fud_path: Optional[Union[str, Path]] = None,
+        lattice_ecp5_calyx_dir: Optional[Union[str, Path]] = None,
+        lattice_ecp5_fud_path: Optional[Union[str, Path]] = None,
         overwrite_output_dir: bool = False,
         run_vivado: bool = True,
     ):
@@ -42,12 +50,13 @@ class LakeroadEvaluation(Experiment):
         #
         # Note that we change the output directory to sub-folders of the current output
         # folder, in order to provide structure to the output files.
-        #
+
         # Generate instruction impls.
         generate_impls_experiment = GenerateImpls(
             output_dir=output_dir / Path("instruction_impls")
         )
         self.register(generate_impls_experiment)
+
         # Baseline synthesis experiments. We disable the Xilinx UltraScale+
         # baseline if run_vivado is false.
         self.register(
@@ -60,6 +69,28 @@ class LakeroadEvaluation(Experiment):
                 lattice_ecp5_lakeroad_instructions_dir=generate_impls_experiment.lattice_ecp5_dir,
                 run_vivado=run_vivado,
             )
+        )
+
+        # Run Calyx tests with Lakeroad-generated instruction implementations.
+        RunCalyxTests(
+            lattice_ecp5_calyx_dir=lattice_ecp5_calyx_dir,
+            lattice_ecp5_impls_dir=generate_impls_experiment.lattice_ecp5_dir,
+            xilinx_ultrascale_plus_calyx_dir=xilinx_ultrascale_plus_calyx_dir,
+            xilinx_ultrascale_plus_impls_dir=generate_impls_experiment.xilinx_ultrascale_plus_dir,
+        )
+
+        # Calyx "end-to-end" experiments: use Lakeroad-generated instructions in
+        # Calyx to compile .futil files found in Calyx, run hardware synthesis
+        # on the results.
+        CalyxEndToEnd(
+            output_dir=output_dir / "calyx_end_to_end",
+            vanilla_calyx_dir=vanilla_calyx_dir,
+            vanilla_fud_path=vanilla_fud_path,
+            xilinx_ultrascale_plus_calyx_dir=xilinx_ultrascale_plus_calyx_dir,
+            xilinx_ultrascale_plus_fud_path=xilinx_ultrascale_plus_fud_path,
+            lattice_ecp5_calyx_dir=lattice_ecp5_calyx_dir,
+            lattice_ecp5_fud_path=lattice_ecp5_fud_path,
+            overwrite_output_dir=overwrite_output_dir,
         )
 
     def _run_experiment(self):
@@ -97,6 +128,42 @@ if __name__ == "__main__":
         "--instructions-dir",
         help="Directory of baseline instruction implementations.",
         required=True,
+        type=Path,
+    )
+    parser.add_argument(
+        "--vanilla-calyx-dir",
+        help='Directory of "vanilla", i.e. unmodified, Calyx.',
+        required=False,
+        type=Path,
+    )
+    parser.add_argument(
+        "--vanilla-fud-path",
+        help="Path to vanilla fud binary",
+        required=False,
+        type=Path,
+    )
+    parser.add_argument(
+        "--xilinx-ultrascale-plus-calyx-dir",
+        help="Directory of the Xilinx UltraScale+ Calyx instance.",
+        required=False,
+        type=Path,
+    )
+    parser.add_argument(
+        "--xilinx-ultrascale-plus-fud-path",
+        help="Path to Xilinx UltraScale+ Calyx instance's fud binary",
+        required=False,
+        type=Path,
+    )
+    parser.add_argument(
+        "--lattice-ecp5-calyx-dir",
+        help="Directory of the Lattice ECP5 Calyx instance.",
+        required=False,
+        type=Path,
+    )
+    parser.add_argument(
+        "--lattice-ecp5-fud-path",
+        help="Path to Lattice ECP5 Calyx instance's fud binary",
+        required=False,
         type=Path,
     )
     args = parser.parse_args()
