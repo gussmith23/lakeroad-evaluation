@@ -61,6 +61,7 @@ jobs:
         echo "Docker container name: $CONTAINER_NAME"
         echo "::set-output name=container-name::$CONTAINER_NAME"
         docker run \
+          --name $CONTAINER_NAME \
           -v /tools/Xilinx:/tools/Xilinx \
           --env LOGLEVEL=INFO \
           ${{ needs.build-docker-image.outputs.tag }} \
