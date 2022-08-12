@@ -53,7 +53,7 @@ jobs:
     needs: build-docker-image
     runs-on: self-hosted
     outputs:
-      container-name: ${{ steps.generate-tag.outputs.tag }}
+      container-name: ${{ steps.run-evaluation.outputs.container-name }}
     steps:
     - id: run-evaluation
       run: |
