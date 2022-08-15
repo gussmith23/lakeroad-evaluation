@@ -24,7 +24,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
                 "-mode",
                 "batch",
                 "-source",
-                Path(__file__).resolve().parent() / "synthesize_instruction_vivado.tcl",
+                Path(__file__).resolve().parent / "synthesize_instruction_vivado.tcl",
                 "-tclargs",
                 instr_src_file,
                 output_files_filename_base,
