@@ -68,10 +68,11 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
         )
 
     # Place and route with nextpnr.
+    # Runs in out-of-context mode, which doesn't insert I/O cells.
     with open(nextpnr_log_path, "w") as logfile:
         logging.info("Running nextpnr place-and-route on %s", instr_src_file)
         subprocess.run(
-            ["nextpnr-ecp5", "--json", synth_out_json],
+            ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
             check=True,
             stdout=logfile,
             stderr=logfile,
