@@ -21,6 +21,10 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         subprocess.run(
             [
                 "vivado",
+                # -stack 2000 is a way to sometimes prevent mysterious Vivado
+                # crashes...
+                "-stack",
+                "2000",
                 "-mode",
                 "batch",
                 "-source",
