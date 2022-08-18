@@ -8,7 +8,7 @@ set modname [ lindex $argv 2 ]
 
 read_verilog -sv ${sv_source_file}
 set_property top ${modname} [current_fileset]
-synth_design
+synth_design -mode out_of_context
 opt_design
 place_design
 route_design
