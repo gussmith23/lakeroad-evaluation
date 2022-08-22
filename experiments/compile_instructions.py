@@ -104,6 +104,18 @@ class XilinxUltraScalePlusSynthesis(Experiment):
         assert self._instructions_dir.exists(), "Directory of instructions not found."
 
         for instr_src_file in self._instructions_dir.glob("*"):
+
+            # Ignore some verilog files.
+            if instr_src_file.name in [
+                # Ignore extract instructions, as they are "empty" after
+                # synthesis and so they result in errors in Vivado.
+                "extract4_3_0.sv",
+                "extract4_3_1.sv",
+                "extract8_4_0.sv",
+                "extract8_4_2.sv",
+            ]:
+                continue
+
             module_name = instr_src_file.stem
             out_file_base = self._output_dir / module_name
             xilinx_ultrascale_plus_vivado_synthesis(
