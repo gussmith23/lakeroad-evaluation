@@ -107,12 +107,15 @@ class XilinxUltraScalePlusSynthesis(Experiment):
 
             # Ignore some verilog files.
             if instr_src_file.name in [
-                # Ignore extract instructions, as they are "empty" after
+                # Ignore extract and replicate instructions, as they are "empty" after
                 # synthesis and so they result in errors in Vivado.
                 "extract4_3_0.sv",
                 "extract4_3_1.sv",
                 "extract8_4_0.sv",
                 "extract8_4_2.sv",
+                "replicate2_8.sv",
+                "replicate2_16.sv",
+                "replicate3_8.sv",
             ]:
                 continue
 
