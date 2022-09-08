@@ -15,5 +15,5 @@ set_property top ${modname} [current_fileset]
 synth_design -mode out_of_context
 opt_design
 place_design
-route_design
+route_design -release_memory
 write_verilog ${modname}_synth_opt_place_route_TODO_NOT_ACTUALLY_ROUTED.sv
