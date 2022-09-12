@@ -1,0 +1,2340 @@
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bvand (var a 1) (var b 1))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bvor (var a 1) (var b 1))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bvxor (var a 1) (var b 1))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 1
+  instruction: (bvnot (var a 1))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bvadd (var a 1) (var b 1))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bvsub (var a 1) (var b 1))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bveq (var a 1) (var b 1)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (not (bveq (var a 1) (var b 1))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvugt (var a 1) (var b 1)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvult (var a 1) (var b 1)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvuge (var a 1) (var b 1)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvule (var a 1) (var b 1)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 1
+  instruction: (circt-comb-mux (var a 1) (var b 1) (var c 1))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bvand (var a 1) (var b 1))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bvor (var a 1) (var b 1))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bvxor (var a 1) (var b 1))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 1
+  instruction: (bvnot (var a 1))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bvadd (var a 1) (var b 1))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bvsub (var a 1) (var b 1))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bveq (var a 1) (var b 1)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (not (bveq (var a 1) (var b 1))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvugt (var a 1) (var b 1)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvult (var a 1) (var b 1)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvuge (var a 1) (var b 1)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvule (var a 1) (var b 1)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 1
+  instruction: (circt-comb-mux (var a 1) (var b 1) (var c 1))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bvand (var a 1) (var b 1))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bvor (var a 1) (var b 1))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bvxor (var a 1) (var b 1))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 1
+  instruction: (bvnot (var a 1))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 1
+  instruction: (circt-comb-mux (var a 1) (var b 1) (var c 1))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bvadd (var a 1) (var b 1))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bvsub (var a 1) (var b 1))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bveq (var a 1) (var b 1)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (not (bveq (var a 1) (var b 1))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvugt (var a 1) (var b 1)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvult (var a 1) (var b 1)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvuge (var a 1) (var b 1)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 1
+  instruction: (bool->bitvector (bvule (var a 1) (var b 1)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bvand (var a 2) (var b 2))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bvor (var a 2) (var b 2))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bvxor (var a 2) (var b 2))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 2
+  instruction: (bvnot (var a 2))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bvadd (var a 2) (var b 2))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bvsub (var a 2) (var b 2))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bveq (var a 2) (var b 2)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (not (bveq (var a 2) (var b 2))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvugt (var a 2) (var b 2)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvult (var a 2) (var b 2)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvuge (var a 2) (var b 2)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvule (var a 2) (var b 2)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 2
+  instruction: (circt-comb-mux (var a 1) (var b 2) (var c 2))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bvand (var a 2) (var b 2))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bvor (var a 2) (var b 2))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bvxor (var a 2) (var b 2))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 2
+  instruction: (bvnot (var a 2))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bvadd (var a 2) (var b 2))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bvsub (var a 2) (var b 2))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bveq (var a 2) (var b 2)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (not (bveq (var a 2) (var b 2))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvugt (var a 2) (var b 2)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvult (var a 2) (var b 2)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvuge (var a 2) (var b 2)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvule (var a 2) (var b 2)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 2
+  instruction: (circt-comb-mux (var a 1) (var b 2) (var c 2))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bvand (var a 2) (var b 2))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bvor (var a 2) (var b 2))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bvxor (var a 2) (var b 2))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 2
+  instruction: (bvnot (var a 2))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 2
+  instruction: (circt-comb-mux (var a 1) (var b 2) (var c 2))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bvadd (var a 2) (var b 2))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bvsub (var a 2) (var b 2))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bveq (var a 2) (var b 2)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (not (bveq (var a 2) (var b 2))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvugt (var a 2) (var b 2)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvult (var a 2) (var b 2)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvuge (var a 2) (var b 2)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 2
+  instruction: (bool->bitvector (bvule (var a 2) (var b 2)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bvand (var a 3) (var b 3))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bvor (var a 3) (var b 3))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bvxor (var a 3) (var b 3))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 3
+  instruction: (bvnot (var a 3))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bvadd (var a 3) (var b 3))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bvsub (var a 3) (var b 3))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bveq (var a 3) (var b 3)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (not (bveq (var a 3) (var b 3))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvugt (var a 3) (var b 3)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvult (var a 3) (var b 3)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvuge (var a 3) (var b 3)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvule (var a 3) (var b 3)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 3
+  instruction: (circt-comb-mux (var a 1) (var b 3) (var c 3))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bvand (var a 3) (var b 3))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bvor (var a 3) (var b 3))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bvxor (var a 3) (var b 3))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 3
+  instruction: (bvnot (var a 3))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bvadd (var a 3) (var b 3))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bvsub (var a 3) (var b 3))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bveq (var a 3) (var b 3)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (not (bveq (var a 3) (var b 3))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvugt (var a 3) (var b 3)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvult (var a 3) (var b 3)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvuge (var a 3) (var b 3)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvule (var a 3) (var b 3)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 3
+  instruction: (circt-comb-mux (var a 1) (var b 3) (var c 3))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bvand (var a 3) (var b 3))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bvor (var a 3) (var b 3))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bvxor (var a 3) (var b 3))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 3
+  instruction: (bvnot (var a 3))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 3
+  instruction: (circt-comb-mux (var a 1) (var b 3) (var c 3))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bvadd (var a 3) (var b 3))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bvsub (var a 3) (var b 3))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bveq (var a 3) (var b 3)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (not (bveq (var a 3) (var b 3))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvugt (var a 3) (var b 3)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvult (var a 3) (var b 3)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvuge (var a 3) (var b 3)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 3
+  instruction: (bool->bitvector (bvule (var a 3) (var b 3)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bvand (var a 4) (var b 4))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bvor (var a 4) (var b 4))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bvxor (var a 4) (var b 4))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 4
+  instruction: (bvnot (var a 4))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bvadd (var a 4) (var b 4))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bvsub (var a 4) (var b 4))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bveq (var a 4) (var b 4)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (not (bveq (var a 4) (var b 4))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvugt (var a 4) (var b 4)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvult (var a 4) (var b 4)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvuge (var a 4) (var b 4)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvule (var a 4) (var b 4)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 4
+  instruction: (circt-comb-mux (var a 1) (var b 4) (var c 4))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bvand (var a 4) (var b 4))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bvor (var a 4) (var b 4))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bvxor (var a 4) (var b 4))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 4
+  instruction: (bvnot (var a 4))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bvadd (var a 4) (var b 4))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bvsub (var a 4) (var b 4))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bveq (var a 4) (var b 4)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (not (bveq (var a 4) (var b 4))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvugt (var a 4) (var b 4)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvult (var a 4) (var b 4)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvuge (var a 4) (var b 4)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvule (var a 4) (var b 4)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 4
+  instruction: (circt-comb-mux (var a 1) (var b 4) (var c 4))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bvand (var a 4) (var b 4))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bvor (var a 4) (var b 4))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bvxor (var a 4) (var b 4))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 4
+  instruction: (bvnot (var a 4))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 4
+  instruction: (circt-comb-mux (var a 1) (var b 4) (var c 4))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bvadd (var a 4) (var b 4))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bvsub (var a 4) (var b 4))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bveq (var a 4) (var b 4)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (not (bveq (var a 4) (var b 4))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvugt (var a 4) (var b 4)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvult (var a 4) (var b 4)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvuge (var a 4) (var b 4)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 4
+  instruction: (bool->bitvector (bvule (var a 4) (var b 4)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bvand (var a 5) (var b 5))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bvor (var a 5) (var b 5))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bvxor (var a 5) (var b 5))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 5
+  instruction: (bvnot (var a 5))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bvadd (var a 5) (var b 5))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bvsub (var a 5) (var b 5))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bveq (var a 5) (var b 5)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (not (bveq (var a 5) (var b 5))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvugt (var a 5) (var b 5)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvult (var a 5) (var b 5)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvuge (var a 5) (var b 5)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvule (var a 5) (var b 5)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 5
+  instruction: (circt-comb-mux (var a 1) (var b 5) (var c 5))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bvand (var a 5) (var b 5))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bvor (var a 5) (var b 5))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bvxor (var a 5) (var b 5))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 5
+  instruction: (bvnot (var a 5))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bvadd (var a 5) (var b 5))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bvsub (var a 5) (var b 5))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bveq (var a 5) (var b 5)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (not (bveq (var a 5) (var b 5))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvugt (var a 5) (var b 5)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvult (var a 5) (var b 5)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvuge (var a 5) (var b 5)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvule (var a 5) (var b 5)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 5
+  instruction: (circt-comb-mux (var a 1) (var b 5) (var c 5))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bvand (var a 5) (var b 5))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bvor (var a 5) (var b 5))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bvxor (var a 5) (var b 5))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 5
+  instruction: (bvnot (var a 5))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 5
+  instruction: (circt-comb-mux (var a 1) (var b 5) (var c 5))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bvadd (var a 5) (var b 5))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bvsub (var a 5) (var b 5))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bveq (var a 5) (var b 5)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (not (bveq (var a 5) (var b 5))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvugt (var a 5) (var b 5)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvult (var a 5) (var b 5)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvuge (var a 5) (var b 5)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 5
+  instruction: (bool->bitvector (bvule (var a 5) (var b 5)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bvand (var a 6) (var b 6))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bvor (var a 6) (var b 6))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bvxor (var a 6) (var b 6))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 6
+  instruction: (bvnot (var a 6))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bvadd (var a 6) (var b 6))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bvsub (var a 6) (var b 6))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bveq (var a 6) (var b 6)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (not (bveq (var a 6) (var b 6))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvugt (var a 6) (var b 6)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvult (var a 6) (var b 6)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvuge (var a 6) (var b 6)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvule (var a 6) (var b 6)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 6
+  instruction: (circt-comb-mux (var a 1) (var b 6) (var c 6))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bvand (var a 6) (var b 6))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bvor (var a 6) (var b 6))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bvxor (var a 6) (var b 6))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 6
+  instruction: (bvnot (var a 6))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bvadd (var a 6) (var b 6))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bvsub (var a 6) (var b 6))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bveq (var a 6) (var b 6)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (not (bveq (var a 6) (var b 6))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvugt (var a 6) (var b 6)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvult (var a 6) (var b 6)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvuge (var a 6) (var b 6)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvule (var a 6) (var b 6)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 6
+  instruction: (circt-comb-mux (var a 1) (var b 6) (var c 6))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bvand (var a 6) (var b 6))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bvor (var a 6) (var b 6))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bvxor (var a 6) (var b 6))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 6
+  instruction: (bvnot (var a 6))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 6
+  instruction: (circt-comb-mux (var a 1) (var b 6) (var c 6))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bvadd (var a 6) (var b 6))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bvsub (var a 6) (var b 6))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bveq (var a 6) (var b 6)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (not (bveq (var a 6) (var b 6))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvugt (var a 6) (var b 6)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvult (var a 6) (var b 6)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvuge (var a 6) (var b 6)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 6
+  instruction: (bool->bitvector (bvule (var a 6) (var b 6)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bvand (var a 7) (var b 7))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bvor (var a 7) (var b 7))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bvxor (var a 7) (var b 7))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 7
+  instruction: (bvnot (var a 7))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bvadd (var a 7) (var b 7))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bvsub (var a 7) (var b 7))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bveq (var a 7) (var b 7)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (not (bveq (var a 7) (var b 7))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvugt (var a 7) (var b 7)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvult (var a 7) (var b 7)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvuge (var a 7) (var b 7)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvule (var a 7) (var b 7)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 7
+  instruction: (circt-comb-mux (var a 1) (var b 7) (var c 7))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bvand (var a 7) (var b 7))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bvor (var a 7) (var b 7))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bvxor (var a 7) (var b 7))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 7
+  instruction: (bvnot (var a 7))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bvadd (var a 7) (var b 7))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bvsub (var a 7) (var b 7))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bveq (var a 7) (var b 7)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (not (bveq (var a 7) (var b 7))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvugt (var a 7) (var b 7)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvult (var a 7) (var b 7)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvuge (var a 7) (var b 7)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvule (var a 7) (var b 7)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 7
+  instruction: (circt-comb-mux (var a 1) (var b 7) (var c 7))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bvand (var a 7) (var b 7))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bvor (var a 7) (var b 7))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bvxor (var a 7) (var b 7))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 7
+  instruction: (bvnot (var a 7))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 7
+  instruction: (circt-comb-mux (var a 1) (var b 7) (var c 7))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bvadd (var a 7) (var b 7))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bvsub (var a 7) (var b 7))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bveq (var a 7) (var b 7)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (not (bveq (var a 7) (var b 7))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvugt (var a 7) (var b 7)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvult (var a 7) (var b 7)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvuge (var a 7) (var b 7)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 7
+  instruction: (bool->bitvector (bvule (var a 7) (var b 7)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bvand (var a 8) (var b 8))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bvor (var a 8) (var b 8))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bvxor (var a 8) (var b 8))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 8
+  instruction: (bvnot (var a 8))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bvadd (var a 8) (var b 8))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bvsub (var a 8) (var b 8))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bveq (var a 8) (var b 8)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (not (bveq (var a 8) (var b 8))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvugt (var a 8) (var b 8)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvult (var a 8) (var b 8)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvuge (var a 8) (var b 8)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvule (var a 8) (var b 8)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 8
+  instruction: (circt-comb-mux (var a 1) (var b 8) (var c 8))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bvand (var a 8) (var b 8))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bvor (var a 8) (var b 8))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bvxor (var a 8) (var b 8))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 8
+  instruction: (bvnot (var a 8))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bvadd (var a 8) (var b 8))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bvsub (var a 8) (var b 8))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bveq (var a 8) (var b 8)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (not (bveq (var a 8) (var b 8))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvugt (var a 8) (var b 8)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvult (var a 8) (var b 8)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvuge (var a 8) (var b 8)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvule (var a 8) (var b 8)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 8
+  instruction: (circt-comb-mux (var a 1) (var b 8) (var c 8))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bvand (var a 8) (var b 8))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bvor (var a 8) (var b 8))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bvxor (var a 8) (var b 8))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 8
+  instruction: (bvnot (var a 8))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 8
+  instruction: (circt-comb-mux (var a 1) (var b 8) (var c 8))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bvadd (var a 8) (var b 8))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bvsub (var a 8) (var b 8))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bveq (var a 8) (var b 8)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (not (bveq (var a 8) (var b 8))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvugt (var a 8) (var b 8)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvult (var a 8) (var b 8)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvuge (var a 8) (var b 8)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 8
+  instruction: (bool->bitvector (bvule (var a 8) (var b 8)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bvand (var a 16) (var b 16))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bvor (var a 16) (var b 16))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bvxor (var a 16) (var b 16))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 16
+  instruction: (bvnot (var a 16))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bvadd (var a 16) (var b 16))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bvsub (var a 16) (var b 16))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bveq (var a 16) (var b 16)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (not (bveq (var a 16) (var b 16))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvugt (var a 16) (var b 16)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvult (var a 16) (var b 16)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvuge (var a 16) (var b 16)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvule (var a 16) (var b 16)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 16
+  instruction: (circt-comb-mux (var a 1) (var b 16) (var c 16))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bvand (var a 16) (var b 16))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bvor (var a 16) (var b 16))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bvxor (var a 16) (var b 16))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 16
+  instruction: (bvnot (var a 16))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bvadd (var a 16) (var b 16))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bvsub (var a 16) (var b 16))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bveq (var a 16) (var b 16)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (not (bveq (var a 16) (var b 16))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvugt (var a 16) (var b 16)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvult (var a 16) (var b 16)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvuge (var a 16) (var b 16)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvule (var a 16) (var b 16)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 16
+  instruction: (circt-comb-mux (var a 1) (var b 16) (var c 16))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bvand (var a 16) (var b 16))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bvor (var a 16) (var b 16))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bvxor (var a 16) (var b 16))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 16
+  instruction: (bvnot (var a 16))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 16
+  instruction: (circt-comb-mux (var a 1) (var b 16) (var c 16))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bvadd (var a 16) (var b 16))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bvsub (var a 16) (var b 16))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bveq (var a 16) (var b 16)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (not (bveq (var a 16) (var b 16))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvugt (var a 16) (var b 16)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvult (var a 16) (var b 16)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvuge (var a 16) (var b 16)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 16
+  instruction: (bool->bitvector (bvule (var a 16) (var b 16)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bvand (var a 32) (var b 32))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bvor (var a 32) (var b 32))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bvxor (var a 32) (var b 32))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 32
+  instruction: (bvnot (var a 32))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bvadd (var a 32) (var b 32))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bvsub (var a 32) (var b 32))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bveq (var a 32) (var b 32)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (not (bveq (var a 32) (var b 32))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvugt (var a 32) (var b 32)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvult (var a 32) (var b 32)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvuge (var a 32) (var b 32)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvule (var a 32) (var b 32)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 32
+  instruction: (circt-comb-mux (var a 1) (var b 32) (var c 32))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bvand (var a 32) (var b 32))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bvor (var a 32) (var b 32))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bvxor (var a 32) (var b 32))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 32
+  instruction: (bvnot (var a 32))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bvadd (var a 32) (var b 32))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bvsub (var a 32) (var b 32))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bveq (var a 32) (var b 32)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (not (bveq (var a 32) (var b 32))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvugt (var a 32) (var b 32)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvult (var a 32) (var b 32)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvuge (var a 32) (var b 32)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvule (var a 32) (var b 32)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 32
+  instruction: (circt-comb-mux (var a 1) (var b 32) (var c 32))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bvand (var a 32) (var b 32))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bvor (var a 32) (var b 32))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bvxor (var a 32) (var b 32))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 32
+  instruction: (bvnot (var a 32))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 32
+  instruction: (circt-comb-mux (var a 1) (var b 32) (var c 32))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bvadd (var a 32) (var b 32))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bvsub (var a 32) (var b 32))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bveq (var a 32) (var b 32)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (not (bveq (var a 32) (var b 32))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvugt (var a 32) (var b 32)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvult (var a 32) (var b 32)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvuge (var a 32) (var b 32)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 32
+  instruction: (bool->bitvector (bvule (var a 32) (var b 32)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bvand (var a 64) (var b 64))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bvor (var a 64) (var b 64))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bvxor (var a 64) (var b 64))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 64
+  instruction: (bvnot (var a 64))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bvadd (var a 64) (var b 64))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bvsub (var a 64) (var b 64))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bveq (var a 64) (var b 64)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (not (bveq (var a 64) (var b 64))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvugt (var a 64) (var b 64)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvult (var a 64) (var b 64)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvuge (var a 64) (var b 64)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvule (var a 64) (var b 64)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 64
+  instruction: (circt-comb-mux (var a 1) (var b 64) (var c 64))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bvand (var a 64) (var b 64))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bvor (var a 64) (var b 64))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bvxor (var a 64) (var b 64))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 64
+  instruction: (bvnot (var a 64))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bvadd (var a 64) (var b 64))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bvsub (var a 64) (var b 64))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bveq (var a 64) (var b 64)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (not (bveq (var a 64) (var b 64))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvugt (var a 64) (var b 64)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvult (var a 64) (var b 64)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvuge (var a 64) (var b 64)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvule (var a 64) (var b 64)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 64
+  instruction: (circt-comb-mux (var a 1) (var b 64) (var c 64))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bvand (var a 64) (var b 64))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bvor (var a 64) (var b 64))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bvxor (var a 64) (var b 64))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 64
+  instruction: (bvnot (var a 64))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 64
+  instruction: (circt-comb-mux (var a 1) (var b 64) (var c 64))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bvadd (var a 64) (var b 64))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bvsub (var a 64) (var b 64))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bveq (var a 64) (var b 64)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (not (bveq (var a 64) (var b 64))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvugt (var a 64) (var b 64)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvult (var a 64) (var b 64)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvuge (var a 64) (var b 64)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 64
+  instruction: (bool->bitvector (bvule (var a 64) (var b 64)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bvand (var a 128) (var b 128))
+  instruction_name: and
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bvor (var a 128) (var b 128))
+  instruction_name: or
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bvxor (var a 128) (var b 128))
+  instruction_name: xor
+- architecture: xilinx-ultrascale-plus
+  arity: 1
+  bitwidth: 128
+  instruction: (bvnot (var a 128))
+  instruction_name: not
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bvadd (var a 128) (var b 128))
+  instruction_name: add
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bvsub (var a 128) (var b 128))
+  instruction_name: sub
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bveq (var a 128) (var b 128)))
+  instruction_name: eq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (not (bveq (var a 128) (var b 128))))
+  instruction_name: neq
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvugt (var a 128) (var b 128)))
+  instruction_name: ugt
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvult (var a 128) (var b 128)))
+  instruction_name: ult
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvuge (var a 128) (var b 128)))
+  instruction_name: uge
+- architecture: xilinx-ultrascale-plus
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvule (var a 128) (var b 128)))
+  instruction_name: ule
+- architecture: xilinx-ultrascale-plus
+  arity: 3
+  bitwidth: 128
+  instruction: (circt-comb-mux (var a 1) (var b 128) (var c 128))
+  instruction_name: mux
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bvand (var a 128) (var b 128))
+  instruction_name: and
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bvor (var a 128) (var b 128))
+  instruction_name: or
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bvxor (var a 128) (var b 128))
+  instruction_name: xor
+- architecture: lattice-ecp5
+  arity: 1
+  bitwidth: 128
+  instruction: (bvnot (var a 128))
+  instruction_name: not
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bvadd (var a 128) (var b 128))
+  instruction_name: add
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bvsub (var a 128) (var b 128))
+  instruction_name: sub
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bveq (var a 128) (var b 128)))
+  instruction_name: eq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (not (bveq (var a 128) (var b 128))))
+  instruction_name: neq
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvugt (var a 128) (var b 128)))
+  instruction_name: ugt
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvult (var a 128) (var b 128)))
+  instruction_name: ult
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvuge (var a 128) (var b 128)))
+  instruction_name: uge
+- architecture: lattice-ecp5
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvule (var a 128) (var b 128)))
+  instruction_name: ule
+- architecture: lattice-ecp5
+  arity: 3
+  bitwidth: 128
+  instruction: (circt-comb-mux (var a 1) (var b 128) (var c 128))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bvand (var a 128) (var b 128))
+  instruction_name: and
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bvor (var a 128) (var b 128))
+  instruction_name: or
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bvxor (var a 128) (var b 128))
+  instruction_name: xor
+- architecture: sofa
+  arity: 1
+  bitwidth: 128
+  instruction: (bvnot (var a 128))
+  instruction_name: not
+- architecture: sofa
+  arity: 3
+  bitwidth: 128
+  instruction: (circt-comb-mux (var a 1) (var b 128) (var c 128))
+  instruction_name: mux
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bvadd (var a 128) (var b 128))
+  instruction_name: add
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bvsub (var a 128) (var b 128))
+  instruction_name: sub
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bveq (var a 128) (var b 128)))
+  instruction_name: eq
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (not (bveq (var a 128) (var b 128))))
+  instruction_name: neq
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvugt (var a 128) (var b 128)))
+  instruction_name: ugt
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvult (var a 128) (var b 128)))
+  instruction_name: ult
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvuge (var a 128) (var b 128)))
+  instruction_name: uge
+- architecture: sofa
+  arity: 2
+  bitwidth: 128
+  instruction: (bool->bitvector (bvule (var a 128) (var b 128)))
+  instruction_name: ule
