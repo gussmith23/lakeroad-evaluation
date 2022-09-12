@@ -1,10 +1,10 @@
 if { $argc != 3 } {
-  error "Incorrect number of arguments. Expects <sv_source_file>, <output_files_filename_base>, <module name>"
+  error "Incorrect number of arguments. Expects <sv_source_file>, <module name>, <synth_opt_place_route_output_filepath>"
 }
 
 set sv_source_file [ lindex $argv 0 ]
-set base [ lindex $argv 1 ]
-set modname [ lindex $argv 2 ]
+set modname [ lindex $argv 1 ]
+set synth_opt_place_route_output_filepath [ lindex $argv 2 ]
 
 # Part number chosen at Luis's suggestion. Can be changed to another UltraScale+
 # part.
@@ -18,4 +18,4 @@ place_design
 # -release_memory seems to fix a bug where routing crashes when used inside the
 # Docker container.
 route_design -release_memory
-write_verilog ${modname}_synth_opt_place_route.sv
+write_verilog ${synth_opt_place_route_filepath}

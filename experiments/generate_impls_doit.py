@@ -3,7 +3,7 @@
 
 import os
 from pathlib import Path
-from typing import Union
+from typing import Dict, Union
 import subprocess
 import logging
 from doit import task_params
@@ -64,19 +64,25 @@ def task_generate_impls(output_dir: str, instructions_file: str):
     """Doit task creator for generating instruction impls. with Lakeroad."""
 
     def _make_task(
-        instruction: str,
-        architecture: str,
-        verilog_module_name: str,
-        relative_output_filepath: str,
-        **kwargs, # type: ignore
+        instruction: Dict,
     ):
+        instruction_str = instruction["instruction"]
+        architecture = instruction["architecture"]
+        verilog_module_name = instruction["verilog_module_name"]
+        relative_output_filepath = instruction["relative_verilog_filepath"]
+
         output_filepath = Path(output_dir) / relative_output_filepath
 
         return {
             "actions": [
                 (
                     generate_instr,
-                    [verilog_module_name, instruction, architecture, output_filepath],
+                    [
+                        verilog_module_name,
+                        instruction_str,
+                        architecture,
+                        output_filepath,
+                    ],
                 )
             ],
             # If I'm understanding DoIt correctly, then I think
@@ -98,4 +104,4 @@ def task_generate_impls(output_dir: str, instructions_file: str):
         instructions = yaml.safe_load(f)
 
         for instruction in instructions:
-            yield _make_task(**instruction)
+            yield _make_task(instruction)
