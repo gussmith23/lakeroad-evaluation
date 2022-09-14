@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""Generate instruction implementations."""
+"""DoIt task definition for implementing instructions with Lakeroad."""
 
-import os
 from pathlib import Path
 from typing import Dict, Union
 import subprocess
@@ -9,8 +8,6 @@ import logging
 from doit import task_params
 import utils
 import yaml
-
-LAKEROAD_DIR = Path(os.environ["LAKEROAD_DIR"])
 
 
 def generate_instr(
@@ -35,7 +32,9 @@ def generate_instr(
         subprocess.run(
             [
                 "racket",
-                f"{LAKEROAD_DIR}/racket/main.rkt",
+                str(
+                    utils.lakeroad_evaluation_dir() / "lakeroad" / "racket" / "main.rkt"
+                ),
                 "--out-format",
                 "verilog",
                 "--architecture",
