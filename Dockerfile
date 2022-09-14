@@ -22,6 +22,7 @@ RUN apt-get update \
   ninja-build \
   ocl-icd-opencl-dev \
   opencl-headers \
+  parallel \
   python3 \
   python3-dev \
   python3-pip \
@@ -216,3 +217,6 @@ ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
 
 WORKDIR /root
 CMD ["/bin/bash", "/root/run.sh"]
+
+WORKDIR /root
+ADD calyx-evaluation/ calyx-evaluation/
