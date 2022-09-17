@@ -392,9 +392,10 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end(output_dir):
             "file_dep": [compiled_sv_filepath],
         }
 
+
 @doit.task_params(
     [
-        {"name": "output_dir", "default": "out", "type": str},
+        {"name": "output_dir", "long": "output_dir", "default": "out", "type": str},
     ]
 )
 def task_vanilla_calyx_end_to_end(output_dir):
@@ -402,11 +403,19 @@ def task_vanilla_calyx_end_to_end(output_dir):
 
     calyx_path = utils.lakeroad_evaluation_dir() / "calyx"
     output_base_dir = output_dir / "calyx_end_to_end" / "vanilla_calyx"
-    fud_filepath = (
-        utils.lakeroad_evaluation_dir() / "calyx" / "bin" / "fud"
+    fud_filepath = utils.lakeroad_evaluation_dir() / "calyx" / "bin" / "fud"
+
+    futil_files = (
+        list((calyx_path / "tests" / "correctness" / "exp").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "ntt-pipeline").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "numeric-types").glob("**/*.futil"))
+        # + list((calyx_path / "tests" / "correctness" / "ref-cells").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "relay").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "systolic").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "tcam").glob("**/*.futil"))
     )
 
-    for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
+    for futil_filepath in futil_files:
         relative_dir_in_calyx = futil_filepath.parent.relative_to(calyx_path)
         compiled_sv_filepath = (
             output_base_dir
@@ -428,55 +437,86 @@ def task_vanilla_calyx_end_to_end(output_dir):
         )
         yosys_log_filepath = (
             output_base_dir
-            / "synthesis_results"
+            / "yosys_synthesis_results"
             / relative_dir_in_calyx
             / f"{futil_filepath.stem}_yosys.log"
         )
         nextpnr_log_filepath = (
             output_base_dir
-            / "synthesis_results"
+            / "yosys_synthesis_results"
             / relative_dir_in_calyx
             / f"{futil_filepath.stem}_nextpnr.log"
         )
 
-    # Filepath with / replaced with _
-    file_identifier = str(futil_filepath.relative_to(calyx_path)).replace("/", "_")
+        # Filepath with / replaced with _
+        file_identifier = str(futil_filepath.relative_to(calyx_path)).replace("/", "_")
 
-    # Task to build the file with fud. (.futil -> .sv)
-    yield {
-        "name": f"futil_build_{file_identifier}",
-        "file_dep": [futil_filepath],
-        "targets": [compiled_sv_filepath],
-        "actions": [
-            (compile_with_fud, [fud_filepath, futil_filepath, compiled_sv_filepath])
-        ],
-    }
+        # Task to build the file with fud. (.futil -> .sv)
+        yield {
+            "name": f"futil_build_{file_identifier}",
+            "file_dep": [futil_filepath],
+            "targets": [compiled_sv_filepath],
+            "actions": [
+                (compile_with_fud, [fud_filepath, futil_filepath, compiled_sv_filepath])
+            ],
+        }
 
-    # Task to synthesize the file with Yosys. (.sv -> .sv, synthesized)
-    yield {
-        "name": f"synthesize_{file_identifier}",
-        "actions": [
-            (
-                lattice_ecp5_yosys_nextpnr_synthesis,
-                [
-                    compiled_sv_filepath,
-                    "main",
-                    synth_opt_place_route_sv_output_filepath,
-                    synth_opt_place_route_json_output_filepath,
-                    yosys_log_filepath,
-                    nextpnr_log_filepath,
-                ],
-            )
-        ],
-        "targets": [
-            synth_opt_place_route_sv_output_filepath,
-            synth_opt_place_route_json_output_filepath,
-            yosys_log_filepath,
-            nextpnr_log_filepath,
-        ],
-        "file_dep": [compiled_sv_filepath],
-    }
+        # Task to synthesize the file with Yosys. (.sv -> .sv, synthesized)
+        # Yosys synthesis is broken right now.
+        # yield {
+        #     "name": f"synthesize_yosys_{file_identifier}",
+        #     "actions": [
+        #         (
+        #             lattice_ecp5_yosys_nextpnr_synthesis,
+        #             [
+        #                 compiled_sv_filepath,
+        #                 "main",
+        #                 synth_opt_place_route_sv_output_filepath,
+        #                 synth_opt_place_route_json_output_filepath,
+        #                 yosys_log_filepath,
+        #                 nextpnr_log_filepath,
+        #             ],
+        #         )
+        #     ],
+        #     "targets": [
+        #         synth_opt_place_route_sv_output_filepath,
+        #         synth_opt_place_route_json_output_filepath,
+        #         yosys_log_filepath,
+        #         nextpnr_log_filepath,
+        #     ],
+        #     "file_dep": [compiled_sv_filepath],
+        # }
 
+        vivado_synth_opt_place_route_output_filepath = (
+            output_base_dir
+            / "vivado_synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}.sv"
+        )
+        vivado_log_filepath = (
+            output_base_dir
+            / "vivado_synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}.log"
+        )
+
+        # Task to synthesize the file with Vivado. (.sv -> .sv, synthesized)
+        yield {
+            "name": f"synthesize_{file_identifier}",
+            "actions": [
+                (
+                    xilinx_ultrascale_plus_vivado_synthesis,
+                    [
+                        compiled_sv_filepath,
+                        vivado_synth_opt_place_route_output_filepath,
+                        "main",
+                        vivado_log_filepath,
+                    ],
+                )
+            ],
+            "targets": [vivado_synth_opt_place_route_output_filepath, vivado_log_filepath],
+            "file_dep": [compiled_sv_filepath],
+        }
 
 
 if __name__ == "__main__":
