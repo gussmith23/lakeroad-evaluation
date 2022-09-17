@@ -18,4 +18,4 @@ place_design
 # -release_memory seems to fix a bug where routing crashes when used inside the
 # Docker container.
 route_design -release_memory
-write_verilog ${synth_opt_place_route_filepath}
+write_verilog ${synth_opt_place_route_output_filepath}
