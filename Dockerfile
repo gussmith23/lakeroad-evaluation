@@ -168,44 +168,44 @@ RUN mkdir /root/.config
 # Build vanilla, unmodified Calyx.
 ADD calyx /root/calyx
 RUN cargo build --manifest-path ./calyx/Cargo.toml \
-  && python3 -m venv ./calyx/ \
+  && python3 -m venv --clear ./calyx/venv/ \
   # && cd /root/tvm/python \
   # && /root/calyx/bin/python setup.py install \
   # && cd /root/tvm/topi/python \
   # && /root/calyx/bin/python setup.py install \
   && cd /root/ \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps all --python ./calyx/bin/python \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps all --python ./calyx/bin/python \
-  && ./calyx/bin/fud config global.futil_directory /root/calyx \
-  && ./calyx/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps all --python ./calyx/venv/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps all --python ./calyx/venv/bin/python \
+  && ./calyx/venv/bin/fud config global.futil_directory /root/calyx \
+  && ./calyx/venv/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
 
 # Build Xilinx UltraScale+ version of Calyx.
 ADD calyx-xilinx-ultrascale-plus /root/calyx-xilinx-ultrascale-plus
 RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
-  && python3 -m venv ./calyx-xilinx-ultrascale-plus/ \
+  && python3 -m venv --clear ./calyx-xilinx-ultrascale-plus/venv/ \
   # && cd /root/tvm/python \
   # && /root/calyx-xilinx-ultrascale-plus/bin/python setup.py install \
   # && cd /root/tvm/topi/python \
   # && /root/calyx-xilinx-ultrascale-plus/bin/python setup.py install \
   && cd /root/ \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/bin/python \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/bin/python \
-  && ./calyx-xilinx-ultrascale-plus/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
-  && ./calyx-xilinx-ultrascale-plus/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/venv/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/venv/bin/python \
+  && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
+  && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
 
 # Build Lattice ECP5 version of Calyx.
 ADD calyx-lattice-ecp5 /root/calyx-lattice-ecp5
 RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
-  && python3 -m venv ./calyx-lattice-ecp5/ \
+  && python3 -m venv --clear ./calyx-lattice-ecp5/venv/ \
   # && cd /root/tvm/python \
   # && /root/calyx-lattice-ecp5/bin/python setup.py install \
   # && cd /root/tvm/topi/python \
   # && /root/calyx-lattice-ecp5/bin/python setup.py install \
   && cd /root/ \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/fud/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/bin/python \
-  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/calyx-py/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/bin/python \
-  && ./calyx-lattice-ecp5/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
-  && ./calyx-lattice-ecp5/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/fud/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/venv/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/calyx-py/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/venv/bin/python \
+  && ./calyx-lattice-ecp5/venv/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
+  && ./calyx-lattice-ecp5/venv/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
 
 WORKDIR /root
 # Add the rest of the stuff. This might be a bad idea, I'm still not sure on
