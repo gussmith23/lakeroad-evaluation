@@ -216,7 +216,7 @@ ARG VIVADO_BIN_DIR
 ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
 
 WORKDIR /root
-CMD ["/bin/bash", "/root/run.sh"]
+ADD calyx-evaluation/ calyx-evaluation/
 
 WORKDIR /root
-ADD calyx-evaluation/ calyx-evaluation/
+CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]
