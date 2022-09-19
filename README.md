@@ -55,15 +55,8 @@ We give some additional detail here.
 
 The location of the experiment output
   can be controlled
-  via two methods.
-The preferred method
-  is by setting the
+  by setting the
   `OUTPUT_DIR` environment variable.
-You can also use a DoIt
-  command line arg,
-  e.g. `doit output_dir=...`,
-  however, this syntax
-  is likely less familiar.
 By default, the experiment results
   write to `out/`.
 

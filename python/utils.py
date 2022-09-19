@@ -1,5 +1,4 @@
 from pathlib import Path
-import doit
 import os
 
 
@@ -22,15 +21,11 @@ def output_dir() -> Path:
 
     Output directory is set (in order of precedence)
     1. from the OUTPUT_DIR environment variable, if set;
-    2. from the output_dir DoIt command line arg, if set (e.g. `doit
-       output_dir=$PWD/out`),
-    3. from a default value.
+    2. from a default value.
     """
     DEFAULT_VALUE = lakeroad_evaluation_dir() / "out"
     
     out = DEFAULT_VALUE
-
-    out =  Path(doit.get_var("output_dir", out))
 
     if "OUTPUT_DIR" in os.environ:
         out = Path(os.environ["OUTPUT_DIR"])
