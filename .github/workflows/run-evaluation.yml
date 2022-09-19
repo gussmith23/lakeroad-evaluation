@@ -32,6 +32,18 @@ jobs:
         submodules: true
         token: ${{ secrets.PAT }}
         ssh-key: ${{ secrets.SSH_KEY }}
+    
+    # We don't use `submodules: recursive` above because some of the submodules
+    # we point to have many, many submodules themselves. Thus, we check out the
+    # submodules we need individually.
+    #
+    # TODO(@gussmith23): Depend less on submodules, or at least, depend on
+    # cleaner submodules with less branching.
+    - name: Checkout specific submodules
+      run: |
+        cd lakeroad
+        git submodule init
+        git submodule update f4pga-arch-defs/ Nitro-Parts-lib-Xilinx/ skywater-pdk-libs-sky130_fd_sc_hd/ SOFA/ verilator-unisims/ verilator_xilinx/
 
     - name: Generate Docker image tag
       id: generate-tag
