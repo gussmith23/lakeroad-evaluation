@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 import utils
 from pathlib import Path
-import logging
-import os
 import subprocess
-from typing import Literal, Optional, Union
+from typing import  Optional, Union
 from hardware_compilation import (
     lattice_ecp5_yosys_nextpnr_synthesis,
     xilinx_ultrascale_plus_vivado_synthesis,
