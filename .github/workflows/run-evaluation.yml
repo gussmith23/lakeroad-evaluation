@@ -64,8 +64,9 @@ jobs:
           --name $CONTAINER_NAME \
           -v /tools/Xilinx:/tools/Xilinx \
           --env LOGLEVEL=INFO \
+          --env OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
-          OUTPUT_DIR=/root/results doit -f experiments/dodo.py -n `nproc`
+          doit --continue --file experiments/dodo.py -n `nproc`
 
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
