@@ -10,7 +10,6 @@ import utils
 
 @doit.task_params(
     [
-        {"name": "output_dir", "default": "out", "type": str},
         {
             "name": "instructions_file",
             "default": str(utils.lakeroad_evaluation_dir() / "instructions.yaml"),
@@ -18,7 +17,7 @@ import utils
         },
     ]
 )
-def task_compile_instrs(output_dir: str, instructions_file: str):
+def task_compile_instrs( instructions_file: str):
     """DoIt task creator for compiling instructions with various backends.
 
     TODO We may want to support compiling instructions for the same architecture
@@ -33,16 +32,16 @@ def task_compile_instrs(output_dir: str, instructions_file: str):
         We may want to split this into "make_vivado_task" and "make_yosys_task"
         etc."""
         module_name = instruction["verilog_module_name"]
-        verilog_filepath = Path(output_dir) / instruction["relative_verilog_filepath"]
+        verilog_filepath = utils.output_dir() / instruction["relative_verilog_filepath"]
 
         actions, file_dep, targets = [], [], []
 
         if "vivado" in instruction:
             synth_opt_place_route_output_filepath = (
-                Path(output_dir)
+                utils.output_dir()
                 / instruction["vivado"]["synth_opt_place_route_relative_filepath"]
             )
-            log_filepath = Path(output_dir) / instruction["vivado"]["log_filepath"]
+            log_filepath = utils.output_dir() / instruction["vivado"]["log_filepath"]
             actions = [
                 (
                     xilinx_ultrascale_plus_vivado_synthesis,
@@ -59,16 +58,16 @@ def task_compile_instrs(output_dir: str, instructions_file: str):
         # TODO(@gussmith23) This is wrong; we should be switching based off architecture, I think.
         elif "yosys" in instruction:
             synth_out_sv = (
-                Path(output_dir) / instruction["yosys"]["synth_sv_relative_filepath"]
+                utils.output_dir() / instruction["yosys"]["synth_sv_relative_filepath"]
             )
             synth_out_json = (
-                Path(output_dir) / instruction["yosys"]["synth_json_relative_filepath"]
+                utils.output_dir() / instruction["yosys"]["synth_json_relative_filepath"]
             )
             yosys_log_path = (
-                Path(output_dir) / instruction["yosys"]["yosys_log_filepath"]
+                utils.output_dir() / instruction["yosys"]["yosys_log_filepath"]
             )
             nextpnr_log_path = (
-                Path(output_dir) / instruction["yosys"]["nextpnr_log_filepath"]
+                utils.output_dir() / instruction["yosys"]["nextpnr_log_filepath"]
             )
 
             actions = [

@@ -4,22 +4,23 @@ import logging
 import os
 from typing import Optional, Union
 from experiment import Experiment
-import doit
 import utils
 import subprocess
 
 
 def _insert_instructions_and_run_tests(
-    calyx_dir: Union[str, Path], 
+    calyx_dir: Union[str, Path],
     log_file: Union[str, Path],
-    impls_dir: Optional[Union[str, Path]] = None, 
+    impls_dir: Optional[Union[str, Path]] = None,
 ):
     """(Optionally) insert instruction implementations into (modified) Calyx and run tests."""
 
     if impls_dir is not None:
         core_sv_file = calyx_dir / "primitives" / "core.sv"
 
-        logging.info("Clearing previous instruction implementations from %s", core_sv_file)
+        logging.info(
+            "Clearing previous instruction implementations from %s", core_sv_file
+        )
         assert not os.system(
             f"sed -i -n '1,/BEGIN GENERATED LAKEROAD CODE/p;/END GENERATED LAKEROAD CODE/,$p' {str(core_sv_file)}"
         )
@@ -47,12 +48,7 @@ def _insert_instructions_and_run_tests(
         )
 
 
-@doit.task_params(
-    [
-        {"name": "output_dir", "default": "out", "type": str},
-    ]
-)
-def task_run_calyx_tests(output_dir):
+def task_run_calyx_tests():
 
     yield {
         "name": "vanilla_calyx",
@@ -61,7 +57,7 @@ def task_run_calyx_tests(output_dir):
                 _insert_instructions_and_run_tests,
                 [
                     utils.lakeroad_evaluation_dir() / "calyx",
-                    Path(output_dir) / "run_calyx_tests" / "vanilla_calyx.log",
+                    utils.output_dir() / "run_calyx_tests" / "vanilla_calyx.log",
                 ],
             )
         ],
@@ -73,8 +69,10 @@ def task_run_calyx_tests(output_dir):
                 _insert_instructions_and_run_tests,
                 [
                     utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus",
-                    Path(output_dir) / "run_calyx_tests" / "xilinx_ultrascale_plus.log",
-                    Path(output_dir) / "lakeroad_impls" / "xilinx_ultrascale_plus",
+                    utils.output_dir()
+                    / "run_calyx_tests"
+                    / "xilinx_ultrascale_plus.log",
+                    utils.output_dir() / "lakeroad_impls" / "xilinx_ultrascale_plus",
                 ],
             )
         ],
@@ -87,8 +85,8 @@ def task_run_calyx_tests(output_dir):
                 _insert_instructions_and_run_tests,
                 [
                     utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5",
-                    Path(output_dir) / "run_calyx_tests" / "lattice_ecp5.log",
-                    Path(output_dir) / "lakeroad_impls" / "lattice_ecp5",
+                    utils.output_dir() / "run_calyx_tests" / "lattice_ecp5.log",
+                    utils.output_dir() / "lakeroad_impls" / "lattice_ecp5",
                 ],
             )
         ],

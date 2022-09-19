@@ -51,6 +51,22 @@ We give some additional detail here.
   TODO(@gussmith23): Figure out how to use Python packaging, so we could install
     the utilities as a package within a virtual environment.
 
+## Output Location
+
+The location of the experiment output
+  can be controlled
+  via two methods.
+The preferred method
+  is by setting the
+  `OUTPUT_DIR` environment variable.
+You can also use a DoIt
+  command line arg,
+  e.g. `doit output_dir=...`,
+  however, this syntax
+  is likely less familiar.
+By default, the experiment results
+  write to `out/`.
+
 ## Design
 
 Conceptually, our evaluation is
