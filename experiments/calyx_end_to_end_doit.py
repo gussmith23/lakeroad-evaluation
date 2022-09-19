@@ -2,7 +2,7 @@
 import utils
 from pathlib import Path
 import subprocess
-from typing import  Optional, Union
+from typing import Optional, Union
 from hardware_compilation import (
     lattice_ecp5_yosys_nextpnr_synthesis,
     xilinx_ultrascale_plus_vivado_synthesis,
@@ -59,7 +59,7 @@ def task_lattice_ecp5_calyx_end_to_end():
     calyx_path = utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"
     output_base_dir = utils.output_dir() / "calyx_end_to_end" / "lattice_ecp5"
     fud_filepath = (
-        utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5" / "bin" / "fud"
+        utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5" / "venv" / "bin" / "fud"
     )
 
     for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
@@ -138,7 +138,11 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
     calyx_path = utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus"
     output_base_dir = utils.output_dir() / "calyx_end_to_end" / "xilinx_ultrascale_plus"
     fud_filepath = (
-        utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus" / "bin" / "fud"
+        utils.lakeroad_evaluation_dir()
+        / "calyx-xilinx-ultrascale-plus"
+        / "venv"
+        / "bin"
+        / "fud"
     )
 
     for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
@@ -197,7 +201,7 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
 def task_vanilla_calyx_end_to_end():
     calyx_path = utils.lakeroad_evaluation_dir() / "calyx"
     output_base_dir = utils.output_dir() / "calyx_end_to_end" / "vanilla_calyx"
-    fud_filepath = utils.lakeroad_evaluation_dir() / "calyx" / "bin" / "fud"
+    fud_filepath = utils.lakeroad_evaluation_dir() / "calyx" / "venv" / "bin" / "fud"
 
     futil_files = (
         list((calyx_path / "tests" / "correctness" / "exp").glob("**/*.futil"))
