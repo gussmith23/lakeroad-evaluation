@@ -35,7 +35,9 @@ def task_compile_instrs(instructions_file: str):
         # TODO(@gussmith23): Right now, Lakeroad spits the module out with _1
         # appended to the end of the filename. I understand why we did it (to
         # support multiple outputs) but we should clean up that API.
-        verilog_filepath = utils.output_dir() / (str(instruction["relative_verilog_filepath"]) + "_1")
+        verilog_filepath = utils.output_dir() / (
+            str(instruction["relative_verilog_filepath"])[:-2] + "_1.sv"
+        )
 
         actions, file_dep, targets = [], [], []
 
@@ -64,7 +66,8 @@ def task_compile_instrs(instructions_file: str):
                 utils.output_dir() / instruction["yosys"]["synth_sv_relative_filepath"]
             )
             synth_out_json = (
-                utils.output_dir() / instruction["yosys"]["synth_json_relative_filepath"]
+                utils.output_dir()
+                / instruction["yosys"]["synth_json_relative_filepath"]
             )
             yosys_log_path = (
                 utils.output_dir() / instruction["yosys"]["yosys_log_filepath"]

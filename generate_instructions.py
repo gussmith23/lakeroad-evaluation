@@ -21,7 +21,7 @@ def _make_instruction(instruction_name, bitwidth, arity, instruction, architectu
     relative_verilog_filepath = (
         Path("lakeroad_impls")
         / architecture_with_underscores
-        / f"{verilog_module_name}.v"
+        / f"{verilog_module_name}.sv"
     )
 
     out = {
