@@ -31,13 +31,11 @@ def task_compile_instrs(instructions_file: str):
 
         We may want to split this into "make_vivado_task" and "make_yosys_task"
         etc."""
-        module_name = instruction["verilog_module_name"]
         # TODO(@gussmith23): Right now, Lakeroad spits the module out with _1
-        # appended to the end of the filename. I understand why we did it (to
+        # appended to the end of the modulename. I understand why we did it (to
         # support multiple outputs) but we should clean up that API.
-        verilog_filepath = utils.output_dir() / (
-            str(instruction["relative_verilog_filepath"])[:-2] + "_1.sv"
-        )
+        module_name = str(instruction["verilog_module_name"]) + "_1"
+        verilog_filepath = utils.output_dir() / instruction["relative_verilog_filepath"]
 
         actions, file_dep, targets = [], [], []
 
