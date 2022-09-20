@@ -17,7 +17,7 @@ import utils
         },
     ]
 )
-def task_compile_instrs( instructions_file: str):
+def task_compile_instrs(instructions_file: str):
     """DoIt task creator for compiling instructions with various backends.
 
     TODO We may want to support compiling instructions for the same architecture
