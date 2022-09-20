@@ -36,7 +36,7 @@ def task_compile_instrs(instructions_file: str):
         # appended to the end of the filename. I understand why we did it (to
         # support multiple outputs) but we should clean up that API.
         verilog_filepath = utils.output_dir() / (
-            str(instruction["relative_verilog_filepath"])[:-2] + "_1.sv"
+            str(instruction["relative_verilog_filepath"])[:-3] + "_1.sv"
         )
 
         actions, file_dep, targets = [], [], []
