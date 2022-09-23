@@ -36,7 +36,9 @@ def invoke_lakeroad(
         "--out-filepath",
         out_filepath,
     ]
-    logging.info("Generating %s with instruction:\n%s", out_filepath, " ".join(cmd))
+    logging.info(
+        "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
+    )
 
     return subprocess.run(
         cmd,
