@@ -24,7 +24,7 @@ def invoke_lakeroad(
 
     cmd = [
         "racket",
-        str(utils.lakeroad_evaluation_dir() / "lakeroad" / "racket" / "main.rkt"),
+        str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
         "--out-format",
         "verilog",
         "--template",
