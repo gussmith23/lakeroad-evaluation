@@ -10,7 +10,7 @@ def invoke_lakeroad(
     instruction: str,
     template: str,
     out_filepath: Union[str, Path],
-) -> subprocess.CompletedProcess:
+):
     """Invoke Lakeroad to generate an instruction implementation.
 
     instruction: The Racket code representing the instruction. See main.rkt.
@@ -40,7 +40,7 @@ def invoke_lakeroad(
         "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
-    return subprocess.run(
+    subprocess.run(
         cmd,
         check=True,
     )
