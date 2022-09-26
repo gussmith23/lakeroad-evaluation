@@ -106,6 +106,12 @@ def _make_instructions():
                 arity=1,
                 expr=f"(bvnot (var a {bw}))",
             ),
+            Instruction(
+                name="mux",
+                bitwidth=bw,
+                arity=3,
+                expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
+            ),
         ]:
             #    (list (cons "synthesize_wire" synthesize-wire)
             #          (cons "synthesize_sofa_bitwise" (synthesize-using-lut 'sofa 1 4))
@@ -121,12 +127,9 @@ def _make_instructions():
             #          (cons "synthesize_lattice_ecp5_multiply_circt" synthesize-lattice-ecp5-multiply-circt))))
 
             for (architecture, template) in [
-                ("xilinx_ultrascale_plus", "synthesize_xilinx_ultrascale_plus_dsp"),
                 ("xilinx_ultrascale_plus", "synthesize_xilinx_ultrascale_plus_bitwise"),
                 ("lattice_ecp5", "synthesize_lattice_ecp5_for_pfu"),
                 ("lattice_ecp5", "synthesize_lattice_ecp5_for_ripple_pfu"),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ccu2c"),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ccu2c_tri"),
                 ("sofa", "synthesize_sofa_bitwise"),
             ]:
                 yield _make_experiment(architecture, instruction, template)
@@ -144,6 +147,17 @@ def _make_instructions():
                 arity=2,
                 expr=f"(bvsub (var a {bw}) (var b {bw}))",
             ),
+        ]:
+            for (architecture, template) in [
+                (
+                    "xilinx_ultrascale_plus",
+                    "synthesize_xilinx_ultrascale_plus_kitchen_sink",
+                ),
+                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ripple_pfu"),
+            ]:
+                yield _make_experiment(architecture, instruction, template)
+
+        for instruction in [
             Instruction(
                 name="eq",
                 bitwidth=bw,
@@ -179,12 +193,6 @@ def _make_instructions():
                 bitwidth=bw,
                 arity=2,
                 expr=f"(bool->bitvector (bvule (var a {bw}) (var b {bw})))",
-            ),
-            Instruction(
-                name="mux",
-                bitwidth=bw,
-                arity=3,
-                expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
             ),
         ]:
             for (architecture, template) in [
