@@ -2,3 +2,7 @@ instructions/out/
 instructions/logs
 instructions/synth-ecp5.sv
 instructions/synth-ecp5.json
+vivado.jou
+vivado.log
+vivado*.jou
+vivado*.log

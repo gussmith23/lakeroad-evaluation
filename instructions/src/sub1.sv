@@ -1,3 +1,3 @@
-module example(input [0:0] a, input [0:0] b, output [0:0] out);
+module sub1(input [0:0] a, input [0:0] b, output [0:0] out);
   assign out = a - b;
 endmodule
