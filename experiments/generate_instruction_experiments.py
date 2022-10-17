@@ -52,6 +52,7 @@ def task_instruction_experiments(experiments_file: str):
                         instruction_str,
                         template,
                         output_filepath,
+                        experiment.architecture.replace("_", "-"),
                     ],
                 )
             ],

@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from platform import architecture
 from typing import List, Union
 from pathlib import Path
 
@@ -49,3 +50,4 @@ class LakeroadInstructionExperiment:
     instruction: Instruction
     implementation_action: ImplementationAction
     compile_actions: List[CompileAction]
+    architecture: str

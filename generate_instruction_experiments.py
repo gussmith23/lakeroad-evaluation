@@ -75,6 +75,7 @@ def _make_experiment(
             implementation_module_name=module_name,
         ),
         compile_actions=compile_actions,
+        architecture=architecture,
     )
 
 
@@ -127,10 +128,9 @@ def _make_instructions():
             #          (cons "synthesize_lattice_ecp5_multiply_circt" synthesize-lattice-ecp5-multiply-circt))))
 
             for (architecture, template) in [
-                ("xilinx_ultrascale_plus", "synthesize_xilinx_ultrascale_plus_bitwise"),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_pfu"),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ripple_pfu"),
-                ("sofa", "synthesize_sofa_bitwise"),
+                ("xilinx_ultrascale_plus", "bitwise"),
+                ("lattice_ecp5", "bitwise"),
+                ("sofa", "bitwise"),
             ]:
                 yield _make_experiment(architecture, instruction, template)
 
@@ -151,9 +151,10 @@ def _make_instructions():
             for (architecture, template) in [
                 (
                     "xilinx_ultrascale_plus",
-                    "synthesize_xilinx_ultrascale_plus_kitchen_sink",
+                    "bitwise-with-carry",
                 ),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ripple_pfu"),
+                ("lattice_ecp5", "bitwise-with-carry"),
+                ("sofa", "bitwise-with-carry"),
             ]:
                 yield _make_experiment(architecture, instruction, template)
 
@@ -198,11 +199,31 @@ def _make_instructions():
             for (architecture, template) in [
                 (
                     "xilinx_ultrascale_plus",
-                    "synthesize_xilinx_ultrascale_plus_kitchen_sink",
+                    "comparison",
                 ),
-                ("lattice_ecp5", "synthesize_lattice_ecp5_for_ccu2c_tri"),
+                ("lattice_ecp5", "comparison"),
+                ("sofa", "comparison"),
             ]:
                 yield _make_experiment(architecture, instruction, template)
+
+        if bw <= 8:
+            for instruction in [
+                Instruction(
+                    name="mul",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvmul (var a {bw}) (var b {bw}))",
+                ),
+            ]:
+                for (architecture, template) in [
+                    (
+                        "xilinx_ultrascale_plus",
+                        "multiplication",
+                    ),
+                    ("lattice_ecp5", "multiplication"),
+                    ("sofa", "multiplication"),
+                ]:
+                    yield _make_experiment(architecture, instruction, template)
 
 
 def main(output_file):

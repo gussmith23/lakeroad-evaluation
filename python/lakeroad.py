@@ -10,6 +10,7 @@ def invoke_lakeroad(
     instruction: str,
     template: str,
     out_filepath: Union[str, Path],
+    architecture: str,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -35,6 +36,8 @@ def invoke_lakeroad(
         instruction,
         "--out-filepath",
         out_filepath,
+        "--architecture",
+        architecture,
     ]
     logging.info(
         "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
