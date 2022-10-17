@@ -146,7 +146,9 @@ ENV PATH="/root/oss-cad-suite/bin:${PATH}"
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
 RUN raco setup --doc-index --force-user-docs \
-  && raco pkg install --deps search-auto --batch rosette
+  && raco pkg install --deps search-auto --batch \
+  rosette \
+  yaml
 
 # Install Rust.
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
