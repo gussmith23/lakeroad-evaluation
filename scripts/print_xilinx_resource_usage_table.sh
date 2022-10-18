@@ -9,6 +9,8 @@ set -u
 }
 
 THISDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+LOGFILE="$THISDIR"/../xilinx_resources.log
+echo "" >"$LOGFILE"
 
 # Get INSTRUCTIONS and BITWIDTHS
 source "$THISDIR"/include.sh
@@ -30,11 +32,11 @@ for instr in "${INSTRUCTIONS[@]}"; do
     # LAKEROAD RESOURCES
     vivado_log="$(find "$XILINX_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "vivado_log.txt")"
     [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>xilinx_resources.log
+      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$LOGFILE"
       continue
     }
     [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>xilinx_resources.log
+      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$THISDIR"/xilinx_resources.log
       continue
     }
 

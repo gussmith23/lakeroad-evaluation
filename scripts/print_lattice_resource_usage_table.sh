@@ -4,6 +4,9 @@ set -e
 set -u
 
 THISDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+LOGFILE="$THISDIR"/../lattice_resources.log
+
+echo "" >"$LOGFILE"
 
 # Get INSTRUCTIONS and BITWIDTHS
 
@@ -31,13 +34,12 @@ for instr in "${INSTRUCTIONS[@]}"; do
     # LAKEROAD RESOURCES
     synth_log_file="$(find "$LATTICE_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "yosys_log.txt")"
     pnr_log_file="$(find "$LATTICE_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "nextpnr_log.txt")"
-    # synth_log_file=("$LATTICE_DIR/lakeroad_lattice_ecp5_${instr}${bitwidth}_"*-synth.log)
-    # pnr_log_file=("$THISDIR/../yosys-synth-opt-place-route-lattice-instrs/lakeroad_lattice_ecp5_${instr}${bitwidth}_"*-nextpnr.log)
     [ -e "$synth_log_file" ] || {
-      echo "Skipping $instr$bitwidth: synth log file '$synth_log_file' does not exist" >>lattice_resources.log
+      echo "Skipping $instr$bitwidth: synth log file '$synth_log_file' does not exist" >>"$LOGFILE"
       continue
     }
     [ -e "$pnr_log_file" ] || {
+      echo "Skipping $instr$bitwidth: pnr log file '$pnr_log_file' does not exist" >>"$LOGFILE"
       continue
     }
 
