@@ -45,7 +45,6 @@ for instr in "${INSTRUCTIONS[@]}"; do
     lr_LUT6_2="$(print_vivado_resource "$vivado_log" "LUT6_2")"
     lr_CARRY8="$(print_vivado_resource "$vivado_log" "CARRY8")"
     lr_MUX="$(print_vivado_resource "$vivado_log" "MUX")"
-    echo "$lr_MUX"
 
     # BASELINE TIMES
 
