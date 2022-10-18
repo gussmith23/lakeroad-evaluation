@@ -133,7 +133,7 @@ def task_lattice_ecp5_calyx_end_to_end():
                 lattice_ecp5_yosys_nextpnr_synthesis,
                 [
                     compiled_sv_filepath,
-                    "top",
+                    "main",
                     synth_opt_place_route_sv_output_filepath,
                     synth_opt_place_route_json_output_filepath,
                     yosys_log_filepath,
@@ -205,7 +205,7 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
                     [
                         compiled_sv_filepath,
                         synth_opt_place_route_output_filepath,
-                        "top",
+                        "main",
                         log_filepath,
                     ],
                 )
