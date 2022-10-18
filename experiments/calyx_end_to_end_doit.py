@@ -30,6 +30,7 @@ def compile_with_fud(
             futil_filepath,
             "-o",
             out_filepath,
+            "-q",
         ],
         check=True,
     )
