@@ -55,6 +55,22 @@ def _compile_with_fud_task_generator(
         }
 
 
+def _get_futil_files_to_test_with(calyx_path):
+    return (
+        list((calyx_path / "tests" / "correctness" / "exp").glob("**/*.futil"))
+        + list(
+            (calyx_path / "tests" / "correctness" / "ntt-pipeline").glob("**/*.futil")
+        )
+        + list(
+            (calyx_path / "tests" / "correctness" / "numeric-types").glob("**/*.futil")
+        )
+        # + list((calyx_path / "tests" / "correctness" / "ref-cells").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "relay").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "systolic").glob("**/*.futil"))
+        + list((calyx_path / "tests" / "correctness" / "tcam").glob("**/*.futil"))
+    )
+
+
 def task_lattice_ecp5_calyx_end_to_end():
     calyx_path = utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"
     output_base_dir = utils.output_dir() / "calyx_end_to_end" / "lattice_ecp5"
@@ -62,7 +78,7 @@ def task_lattice_ecp5_calyx_end_to_end():
         utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5" / "venv" / "bin" / "fud"
     )
 
-    for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
+    for futil_filepath in _get_futil_files_to_test_with(calyx_path):
         relative_dir_in_calyx = futil_filepath.parent.relative_to(calyx_path)
         compiled_sv_filepath = (
             output_base_dir
@@ -145,7 +161,7 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
         / "fud"
     )
 
-    for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
+    for futil_filepath in _get_futil_files_to_test_with(calyx_path):
         relative_dir_in_calyx = futil_filepath.parent.relative_to(calyx_path)
         compiled_sv_filepath = (
             output_base_dir
@@ -203,21 +219,7 @@ def task_vanilla_calyx_end_to_end():
     output_base_dir = utils.output_dir() / "calyx_end_to_end" / "vanilla_calyx"
     fud_filepath = utils.lakeroad_evaluation_dir() / "calyx" / "venv" / "bin" / "fud"
 
-    futil_files = (
-        list((calyx_path / "tests" / "correctness" / "exp").glob("**/*.futil"))
-        + list(
-            (calyx_path / "tests" / "correctness" / "ntt-pipeline").glob("**/*.futil")
-        )
-        + list(
-            (calyx_path / "tests" / "correctness" / "numeric-types").glob("**/*.futil")
-        )
-        # + list((calyx_path / "tests" / "correctness" / "ref-cells").glob("**/*.futil"))
-        + list((calyx_path / "tests" / "correctness" / "relay").glob("**/*.futil"))
-        + list((calyx_path / "tests" / "correctness" / "systolic").glob("**/*.futil"))
-        + list((calyx_path / "tests" / "correctness" / "tcam").glob("**/*.futil"))
-    )
-
-    for futil_filepath in futil_files:
+    for futil_filepath in (calyx_path / "tests" / "correctness").glob("**/*.futil"):
         relative_dir_in_calyx = futil_filepath.parent.relative_to(calyx_path)
         compiled_sv_filepath = (
             output_base_dir
