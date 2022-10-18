@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+file="$1"
+resource="$2"
+r=$(awk "/^ *$resource/"' {print $2}' "$file" | xargs)
+if [ -z "$r" ] || [ "$r" -eq 0 ]; then echo ""; else echo "$r"; fi

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+file="$1"
+resource="$2"
+[ -e "$file" ] || {
+    echo "File '$file' does not exist" >&2
+    exit 1
+}
+
+r=$(awk "/$resource/"'{print $4}' "$file" | cut -d/ -f1 | xargs)
+if [ -z "$r" ] || [ "$r" -eq 0 ]; then echo ""; else echo "$r"; fi
