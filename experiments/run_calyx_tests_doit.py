@@ -28,9 +28,30 @@ def _insert_instructions_and_run_tests(
         logging.info(
             "Inserting new implementations from %s into %s", impls_dir, core_sv_file
         )
-        assert not os.system(
-            f'for f in {str(impls_dir)}/* ; do sed -i -e "/^\/\/ BEGIN GENERATED LAKEROAD CODE$/r $f" {str(core_sv_file)}; done'
-        )
+
+        for instr_dir in filter(Path.is_dir, Path(impls_dir).glob("*")):
+            # Names of directories that might potentially exist, containing
+            # different impls of the operator. Sorted in order of preference. At
+            # least one of these will exist, otherwise there's a problem!
+            potential_impl_dirs = [
+                "multiplication",
+                "comparison",
+                "bitwise-with-carry",
+                "bitwise",
+            ]
+
+            # Get the first one that exists.
+            impl_dir = next(
+                filter(lambda d: (instr_dir / d).exists(), potential_impl_dirs)
+            )
+
+            sv_path = instr_dir / impl_dir / f"{instr_dir.name}.sv"
+
+            # Insert instruction.
+            #assert not 
+            os.system(
+                f'sed -i -e "/^\/\/ BEGIN GENERATED LAKEROAD CODE$/r {str(sv_path)}" {str(core_sv_file)}'
+            )
 
     # Run Calyx tests.
     logging.info("Running Calyx tests in %d", calyx_dir)
@@ -72,7 +93,7 @@ def task_run_calyx_tests():
                     utils.output_dir()
                     / "run_calyx_tests"
                     / "xilinx_ultrascale_plus.log",
-                    utils.output_dir() / "lakeroad_impls" / "xilinx_ultrascale_plus",
+                    utils.output_dir() / "xilinx_ultrascale_plus",
                 ],
             )
         ],
@@ -86,7 +107,7 @@ def task_run_calyx_tests():
                 [
                     utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5",
                     utils.output_dir() / "run_calyx_tests" / "lattice_ecp5.log",
-                    utils.output_dir() / "lakeroad_impls" / "lattice_ecp5",
+                    utils.output_dir() / "lattice_ecp5",
                 ],
             )
         ],
