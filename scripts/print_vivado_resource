@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+file="$1"
+resource="$2"
+[ -e "$file" ] || {
+    echo "File '$file' does not exist" >&2
+    exit 1
+}
+
+r=$(awk "/\|$resource/"'{print $0}' "$file" | cut -d'|' -f4 | xargs)
+if [ -z "$r" ] || [ "$r" -eq 0 ]; then
+    echo "$ZERO_PLACE_HOLDER"
+else
+    echo "$r"
+fi
