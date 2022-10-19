@@ -17,6 +17,7 @@ source "$THISDIR"/include.sh
 
 EVAL_RESULTS_DIR="$1"
 XILINX_DIR="$EVAL_RESULTS_DIR/xilinx_ultrascale_plus"
+BASELINE_DIR="$EVAL_RESULTS_DIR/baseline/vivado"
 
 export PATH="$THISDIR:$PATH"
 
@@ -44,7 +45,7 @@ for instr in "${INSTRUCTIONS[@]}"; do
     lr_LUT6="$(print_vivado_resource "$vivado_log" "LUT6")"
     lr_LUT6_2="$(print_vivado_resource "$vivado_log" "LUT6_2")"
     lr_CARRY8="$(print_vivado_resource "$vivado_log" "CARRY8")"
-    lr_MUX="$(print_vivado_resource "$vivado_log" "MUX")"
+    lr_DSP="$(print_vivado_resource "$vivado_log" "DSP48E2")"
 
     # BASELINE TIMES
 
@@ -52,13 +53,21 @@ for instr in "${INSTRUCTIONS[@]}"; do
     # doesn't work unless I put it in an array. But there is only one match per
     # glob, so when I expand the array later I am not actually losing any info.
 
-    vivado_log="todo"
+    vivado_log="$(find "$BASELINE_DIR" -type f -name "${instr}${bitwidth}_*.log")"
+    [ -e "$vivado_log" ] || {
+      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$LOGFILE"
+      continue
+    }
+    [ -e "$vivado_log" ] || {
+      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$THISDIR"/xilinx_resources.log
+      continue
+    }
 
-    bl_LUT2=" "
-    bl_LUT6=" "
-    bl_LUT6_2=" "
-    bl_CARRY8=" "
-    bl_MUX=" "
+    bl_LUT2="$(print_vivado_resource "$vivado_log" "LUT2")"
+    bl_LUT6="$(print_vivado_resource "$vivado_log" "LUT6")"
+    bl_LUT6_2="$(print_vivado_resource "$vivado_log" "LUT6_2")"
+    bl_CARRY8="$(print_vivado_resource "$vivado_log" "CARRY8")"
+    bl_DSP="$(print_vivado_resource "$vivado_log" "DSP48E2")"
 
     echo "$instr" \
       "& $bitwidth" \
@@ -66,12 +75,12 @@ for instr in "${INSTRUCTIONS[@]}"; do
       "& $lr_LUT6" \
       "& $lr_LUT6_2" \
       "& $lr_CARRY8" \
-      "& $lr_MUX" \
+      "& $lr_DSP" \
       "& $bl_LUT2" \
       "& $bl_LUT6" \
       "& $bl_LUT6_2" \
       "& $bl_CARRY8" \
-      "& $bl_MUX" \
+      "& $bl_DSP" \
       "\\\\"
 
   done

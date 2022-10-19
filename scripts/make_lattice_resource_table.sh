@@ -19,6 +19,7 @@ source "$THISDIR"/include.sh
 
 EVAL_RESULTS_DIR="$1"
 LATTICE_DIR="$EVAL_RESULTS_DIR/lattice_ecp5"
+BASELINE_DIR="$EVAL_RESULTS_DIR/baseline/yosys_nextpnr"
 
 export PATH="$THISDIR:$PATH"
 
@@ -54,17 +55,21 @@ for instr in "${INSTRUCTIONS[@]}"; do
     # doesn't work unless I put it in an array. But there is only one match per
     # glob, so when I expand the array later I am not actually losing any info.
 
-    synth_log_file="$THISDIR/../instructions/logs/${instr}${bitwidth}-synthesize-ecp5.log"
-    pnr_log_file="$THISDIR/../instructions/logs/${instr}${bitwidth}-nextpnr-ecp5.log"
+    synth_log_file="$(find "$BASELINE_DIR" -type f -name "*${instr}${bitwidth}_*.sv_yosys.log")"
+    pnr_log_file="$(find "$BASELINE_DIR" -type f -name "*${instr}${bitwidth}_*.sv_nextpnr.log")"
+    [ -e "$synth_log_file" ] || {
+      echo "Skipping $instr$bitwidth: baseline synth log file '$synth_log_file' does not exist" >>"$LOGFILE"
+      continue
+    }
+    [ -e "$pnr_log_file" ] || {
+      echo "Skipping $instr$bitwidth: baseline pnr log file '$pnr_log_file' does not exist" >>"$LOGFILE"
+      continue
+    }
 
-    # bl_LOGIC="$(print_nextpnr_resource "$pnr_log_file" "logic LUTs:")"
-    # bl_CARRY="$(print_nextpnr_resource "$pnr_log_file" "carry LUTs:")"
-    # bl_PFUMX="$(print_yosys_resource "$synth_log_file" PFUMX)"
-    # bl_L6MUX21="$(print_yosys_resource "$synth_log_file" L6MUX21)"
-    bl_LOGIC=" - "
-    bl_CARRY=" - "
-    bl_PFUMX=" - "
-    bl_L6MUX21=" - "
+    bl_LOGIC="$(print_nextpnr_resource "$pnr_log_file" "logic LUTs:")"
+    bl_CARRY="$(print_nextpnr_resource "$pnr_log_file" "carry LUTs:")"
+    bl_PFUMX="$(print_yosys_resource "$synth_log_file" PFUMX)"
+    bl_L6MUX21="$(print_yosys_resource "$synth_log_file" L6MUX21)"
 
     echo "$instr  & $bitwidth & $lr_LOGIC & $lr_CARRY & $lr_PFUMX & $lr_L6MUX21 & $bl_LOGIC & $bl_CARRY & $bl_PFUMX & $bl_L6MUX21 \\\\"
 
