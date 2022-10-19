@@ -30,6 +30,7 @@ class ImplementationAction:
     template: str
     implementation_sv_filepath: Union[str, Path]
     implementation_module_name: str
+    time_filepath: Union[str, Path]
 
 
 @dataclass

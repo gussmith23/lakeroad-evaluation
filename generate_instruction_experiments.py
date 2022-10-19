@@ -78,6 +78,7 @@ def _make_experiment(
             template=template,
             implementation_sv_filepath=str(base_path / (str(module_name) + ".sv")),
             implementation_module_name=module_name,
+            time_filepath=str(base_path / (str(module_name) + ".time")),
         ),
         compile_actions=compile_actions,
         architecture=architecture,

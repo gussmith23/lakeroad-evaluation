@@ -41,6 +41,9 @@ def task_instruction_experiments(experiments_file: str):
         template = experiment.implementation_action.template
 
         output_filepath = utils.output_dir() / relative_output_filepath
+        time_filepath = (
+            utils.output_dir() / experiment.implementation_action.time_filepath
+        )
 
         return {
             "name": f"lakeroad_generate_{template}_{verilog_module_name}",
@@ -53,6 +56,7 @@ def task_instruction_experiments(experiments_file: str):
                         template,
                         output_filepath,
                         experiment.architecture.replace("_", "-"),
+                        time_filepath,
                     ],
                 )
             ],
