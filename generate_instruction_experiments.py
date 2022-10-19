@@ -36,9 +36,7 @@ def _make_yosys_nextpnr_compile_command(
             base_output_path / "yosys_nextpnr" / "nextpnr_log.txt"
         ),
         yosys_time_filepath=str(base_output_path / "yosys_nextpnr" / "yosys.time"),
-        nextpnr_time_filepath=str(
-            base_output_path / "yosys_nextpnr" / "nextpnr.time"
-        ),
+        nextpnr_time_filepath=str(base_output_path / "yosys_nextpnr" / "nextpnr.time"),
         nextpnr_output_sv_filepath=str(
             base_output_path / "yosys_nextpnr" / "nextpnr_place_route.sv"
         ),
