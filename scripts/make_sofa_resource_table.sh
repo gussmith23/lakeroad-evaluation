@@ -33,7 +33,7 @@ for instr in "${INSTRUCTIONS[@]}"; do
     # LAKEROAD RESOURCES
     sofa_sv="$(find "$SOFA_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "lakeroad_sofa_${instr}${bitwidth}_*.sv")"
     [ -e "$sofa_sv" ] || {
-      echo "Skipping $instr$bitwidth: sofa verilog file '$sofa_sv' does not exist" >>"$LOGFILE"
+      echo "Skipping $instr$bitwidth: Lakeroad sofa verilog file '$sofa_sv' does not exist" >>"$LOGFILE"
       continue
     }
 

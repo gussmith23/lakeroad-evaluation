@@ -23,7 +23,7 @@ echo "| Generating Lattice Resource Table |"
 echo "+-----------------------------------+"
 echo
 
-"$THISDIR"/make_lattice_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/lattice_resource_table.tex
+"$THISDIR"/make_lattice_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/lattice-resource-table.tex
 
 echo "Wrote table body to $TABLE_OUTPUT_DIR/lattice_resource_table.tex"
 echo
@@ -33,7 +33,7 @@ echo "| Generating Xilinx Resource Table  |"
 echo "+-----------------------------------+"
 echo
 
-"$THISDIR"/make_xilinx_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/xilinx_resource_table.tex
+"$THISDIR"/make_xilinx_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/xilinx-resource-table.tex
 
 echo "Wrote table body to $TABLE_OUTPUT_DIR/xilinx_resource_table.tex"
 echo
@@ -43,6 +43,6 @@ echo "| Generating Sofa Resource Table    |"
 echo "+-----------------------------------+"
 echo
 
-"$THISDIR"/make_sofa_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/sofa_resource_table.tex
+"$THISDIR"/make_sofa_resource_table.sh "$1" >"$TABLE_OUTPUT_DIR"/sofa-resource-table.tex
 
 echo "Wrote table body to $TABLE_OUTPUT_DIR/sofa_resource_table.tex"

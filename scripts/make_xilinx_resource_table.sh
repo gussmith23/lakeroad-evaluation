@@ -12,6 +12,11 @@ THISDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 LOGFILE="$THISDIR"/../xilinx_resources.log
 echo "" >"$LOGFILE"
 
+function log {
+  echo "$1" >&2
+  echo "$1" >>"$LOGFILE"
+}
+
 # Get INSTRUCTIONS and BITWIDTHS
 source "$THISDIR"/include.sh
 
@@ -31,21 +36,33 @@ for instr in "${INSTRUCTIONS[@]}"; do
 
   for bitwidth in "${BITWIDTHS[@]}"; do
     # LAKEROAD RESOURCES
-    vivado_log="$(find "$XILINX_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "vivado_log.txt")"
+    used_dsp=false
+    vivado_logs="$(find "$XILINX_DIR" -path "*${instr}${bitwidth}_*/*" -type f -name "vivado_log.txt")"
+
+    # We might get back multiple vivado_logs, one for a DSP and one without
+    # THIS ASSUMES NO WHITESPACE IN PATHNAMES
+    # THIS ALSO ASSUMES A SINGLE NON-DSP IMPLEMENTATION AT MOST
+
+    vivado_log=""
+    for fname in $vivado_logs; do
+      if [[ "$fname" == *-dsp* ]]; then
+        used_dsp=true
+      else
+        vivado_log="$fname"
+      fi
+    done
+
     [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$LOGFILE"
-      continue
-    }
-    [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$THISDIR"/xilinx_resources.log
+      log "Skipping $instr$bitwidth: Vivado log file '$vivado_log' does not exist"
       continue
     }
 
     lr_LUT2="$(print_vivado_resource "$vivado_log" "LUT2")"
     lr_LUT6="$(print_vivado_resource "$vivado_log" "LUT6")"
     lr_LUT6_2="$(print_vivado_resource "$vivado_log" "LUT6_2")"
+    lr_LUTs=$(($(as_int "$lr_LUT2") + $(as_int "$lr_LUT6") + $(as_int "$lr_LUT6_2")))
     lr_CARRY8="$(print_vivado_resource "$vivado_log" "CARRY8")"
-    lr_DSP="$(print_vivado_resource "$vivado_log" "DSP48E2")"
+    lr_DSP="$(if $used_dsp; then echo '\checkmark'; else echo ""; fi)"
 
     # BASELINE TIMES
 
@@ -55,36 +72,33 @@ for instr in "${INSTRUCTIONS[@]}"; do
 
     vivado_log="$(find "$BASELINE_DIR" -type f -name "${instr}${bitwidth}_*.log")"
     [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$LOGFILE"
-      continue
-    }
-    [ -e "$vivado_log" ] || {
-      echo "Skipping $instr$bitwidth: vivado log file '$vivado_log' does not exist" >>"$THISDIR"/xilinx_resources.log
-      continue
+      log "Skipping $instr$bitwidth: baseline vivado log file '$vivado_log' does not exist"
     }
 
     bl_LUT2="$(print_vivado_resource "$vivado_log" "LUT2")"
+    bl_LUT3="$(print_vivado_resource "$vivado_log" "LUT3")"
+    bl_LUT4="$(print_vivado_resource "$vivado_log" "LUT4")"
+    bl_LUT5="$(print_vivado_resource "$vivado_log" "LUT5")"
     bl_LUT6="$(print_vivado_resource "$vivado_log" "LUT6")"
     bl_LUT6_2="$(print_vivado_resource "$vivado_log" "LUT6_2")"
+    bl_LUTs=$(($(as_int "$bl_LUT2") + $(as_int "$bl_LUT6") + $(as_int "$bl_LUT6_2") + $(as_int "$bl_LUT3") + $(as_int "$bl_LUT4") + $(as_int "$bl_LUT5")))
+    [ $bl_LUTs -eq 0 ] && bl_LUTs=""
     bl_CARRY8="$(print_vivado_resource "$vivado_log" "CARRY8")"
     bl_DSP="$(print_vivado_resource "$vivado_log" "DSP48E2")"
 
     echo "$instr" \
       "& $bitwidth" \
-      "& $lr_LUT2" \
-      "& $lr_LUT6" \
-      "& $lr_LUT6_2" \
+      "& $lr_LUTs" \
       "& $lr_CARRY8" \
       "& $lr_DSP" \
-      "& $bl_LUT2" \
-      "& $bl_LUT6" \
-      "& $bl_LUT6_2" \
+      "& $bl_LUTs" \
       "& $bl_CARRY8" \
       "& $bl_DSP" \
       "\\\\"
 
   done
 done
+log "Finished processing all instructions"
 
 # UNCOMMENT FOLLOWING LINE TO GENERATE FULL TABLE RATHER THAN DATA ALONE
 #

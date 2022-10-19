@@ -4,8 +4,14 @@ set -e
 
 file="$1"
 resource="$2"
+
+[ -z "$file" ] && {
+    echo "$ZERO_PLACE_HOLDER"
+    exit 0
+}
+
 [ -e "$file" ] || {
-    echo "File '$file' does not exist" >&2
+    echo "print_vivado_resource: File '$file' does not exist" >&2
     exit 1
 }
 
