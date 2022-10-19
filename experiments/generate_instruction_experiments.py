@@ -77,11 +77,13 @@ def task_instruction_experiments(experiments_file: str):
             case VivadoCompile(
                 synth_opt_place_route_relative_filepath=synth_opt_place_route_output_filepath,
                 log_filepath=log_filepath,
+                time_filepath=time_filepath,
             ):
                 synth_opt_place_route_output_filepath = (
                     utils.output_dir() / synth_opt_place_route_output_filepath
                 )
                 log_filepath = utils.output_dir() / log_filepath
+                time_filepath = utils.output_dir() / time_filepath
 
                 return {
                     "name": f"vivado_compile_{template}_{module_name}",
@@ -92,12 +94,17 @@ def task_instruction_experiments(experiments_file: str):
                                 verilog_filepath,
                                 synth_opt_place_route_output_filepath,
                                 module_name,
+                                time_filepath,
                                 log_filepath,
                             ],
                         )
                     ],
                     "file_dep": [verilog_filepath],
-                    "targets": [synth_opt_place_route_output_filepath, log_filepath],
+                    "targets": [
+                        synth_opt_place_route_output_filepath,
+                        log_filepath,
+                        time_filepath,
+                    ],
                 }
 
             case YosysNextpnrCompile(
@@ -105,12 +112,16 @@ def task_instruction_experiments(experiments_file: str):
                 synth_sv_relative_filepath=synth_sv_relative_filepath,
                 yosys_log_filepath=yosys_log_filepath,
                 nextpnr_log_filepath=nextpnr_log_filepath,
+                yosys_time_filepath=yosys_time_filepath,
+                nextpnr_time_filepath=nextpnr_time_filepath,
                 nextpnr_output_sv_filepath=nextpnr_output_sv_filepath,
             ):
                 synth_out_sv = utils.output_dir() / synth_sv_relative_filepath
                 synth_out_json = utils.output_dir() / synth_json_relative_filepath
                 yosys_log_path = utils.output_dir() / yosys_log_filepath
                 nextpnr_log_path = utils.output_dir() / nextpnr_log_filepath
+                yosys_time_path = utils.output_dir() / yosys_time_filepath
+                nextpnr_time_path = utils.output_dir() / nextpnr_time_filepath
                 nextpnr_output_sv_filepath = (
                     utils.output_dir() / nextpnr_output_sv_filepath
                 )
@@ -125,6 +136,8 @@ def task_instruction_experiments(experiments_file: str):
                                 module_name,
                                 synth_out_sv,
                                 synth_out_json,
+                                yosys_time_path,
+                                nextpnr_time_path,
                                 yosys_log_path,
                                 nextpnr_log_path,
                             ],
@@ -135,6 +148,8 @@ def task_instruction_experiments(experiments_file: str):
                         synth_out_json,
                         yosys_log_path,
                         nextpnr_log_path,
+                        yosys_time_path,
+                        nextpnr_time_path,
                     ],
                     "file_dep": [verilog_filepath],
                 }

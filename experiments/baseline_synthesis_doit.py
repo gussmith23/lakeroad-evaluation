@@ -30,6 +30,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
             output_dir_base / "vivado" / baseline_instruction_filepath.name
         )
         log_filepath = synth_opt_place_route_output_filepath.with_suffix(".log")
+        time_filepath = synth_opt_place_route_output_filepath.with_suffix(".time")
 
         return {
             "name": f"baseline_vivado_compile_{module_name}",
@@ -40,12 +41,13 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                         baseline_instruction_filepath,
                         synth_opt_place_route_output_filepath,
                         module_name,
+                        time_filepath,
                         log_filepath,
                     ],
                 )
             ],
             "file_dep": [baseline_instruction_filepath],
-            "targets": [synth_opt_place_route_output_filepath, log_filepath],
+            "targets": [synth_opt_place_route_output_filepath, log_filepath, time_filepath],
         }
 
     def _make_baseline_yosys_nextpnr_synthesis_task(
@@ -65,6 +67,14 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
             nextpnr_output_sv_filepath.parent
             / f"{nextpnr_output_sv_filepath.name}_nextpnr.log"
         )
+        yosys_time_path = (
+            nextpnr_output_sv_filepath.parent
+            / f"{nextpnr_output_sv_filepath.name}_yosys.time"
+        )
+        nextpnr_time_path = (
+            nextpnr_output_sv_filepath.parent
+            / f"{nextpnr_output_sv_filepath.name}_nextpnr.time"
+        )
 
         return {
             "name": f"baseline_yosys_nextpnr_compile_{module_name}",
@@ -76,6 +86,8 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                         module_name,
                         nextpnr_output_sv_filepath,
                         synth_out_json,
+                        yosys_time_path,
+                        nextpnr_time_path,
                         yosys_log_path,
                         nextpnr_log_path,
                     ],
@@ -86,6 +98,8 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                 synth_out_json,
                 yosys_log_path,
                 nextpnr_log_path,
+                yosys_time_path,
+                nextpnr_time_path,
             ],
             "file_dep": [baseline_instruction_filepath],
         }

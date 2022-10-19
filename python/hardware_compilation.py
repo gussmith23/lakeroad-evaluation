@@ -7,12 +7,14 @@ from typing import Union
 import subprocess
 import os
 import logging
+from time import time
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
     instr_src_file: Union[str, Path],
     synth_opt_place_route_output_filepath: Union[str, Path],
     module_name: str,
+    time_filepath: Union[str, Path],
     log_path: Union[str, Path] = os.devnull,
 ):
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -21,6 +23,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     # Synthesis with Vivado.
     with open(log_path, "w") as logfile:
         logging.info("Running Vivado synthesis/place/route on %s", instr_src_file)
+        start_time = time()
         subprocess.run(
             [
                 "vivado",
@@ -43,6 +46,10 @@ def xilinx_ultrascale_plus_vivado_synthesis(
             stdout=logfile,
             stderr=logfile,
         )
+        end_time = time()
+
+    with open(time_filepath, "w") as f:
+        print(f"{end_time-start_time}s", file=f)
 
 
 def lattice_ecp5_yosys_nextpnr_synthesis(
@@ -50,6 +57,8 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
     module_name: str,
     synth_out_sv: str,
     synth_out_json: str,
+    yosys_time_path: Union[str, Path],
+    nextpnr_time_path: Union[str, Path],
     yosys_log_path: Union[str, Path] = os.devnull,
     nextpnr_log_path: Union[str, Path] = os.devnull,
 ):
@@ -61,6 +70,7 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
     # Synthesis with Yosys.
     with open(yosys_log_path, "w") as logfile:
         logging.info("Running Yosys synthesis on %s", instr_src_file)
+        yosys_start_time = time()
         subprocess.run(
             [
                 "yosys",
@@ -78,14 +88,23 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
             stdout=logfile,
             stderr=logfile,
         )
+        yosys_end_time = time()
+
+    with open(yosys_time_path, "w") as f:
+        print(f"{yosys_end_time-yosys_start_time}s", file=f)
 
     # Place and route with nextpnr.
     # Runs in out-of-context mode, which doesn't insert I/O cells.
     with open(nextpnr_log_path, "w") as logfile:
         logging.info("Running nextpnr place-and-route on %s", instr_src_file)
+        nextpnr_start_time = time()
         subprocess.run(
             ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
             check=True,
             stdout=logfile,
             stderr=logfile,
         )
+        nextpnr_end_time = time()
+
+    with open(nextpnr_time_path, "w") as f:
+        print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)

@@ -10,6 +10,8 @@ class YosysNextpnrCompile(object):
     synth_sv_relative_filepath: Union[Path, str]
     yosys_log_filepath: Union[Path, str]
     nextpnr_log_filepath: Union[Path, str]
+    yosys_time_filepath: Union[Path, str]
+    nextpnr_time_filepath: Union[Path, str]
     nextpnr_output_sv_filepath: Union[Path, str]
 
 
@@ -17,6 +19,7 @@ class YosysNextpnrCompile(object):
 class VivadoCompile(object):
     synth_opt_place_route_relative_filepath: Union[Path, str]
     log_filepath: Union[Path, str]
+    time_filepath: Union[Path, str]
 
 
 CompileAction = Union[YosysNextpnrCompile, VivadoCompile]
