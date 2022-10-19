@@ -39,6 +39,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id001
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or1_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or1_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -71,6 +82,17 @@
     implementation_module_name: lakeroad_sofa_or1_2
     implementation_sv_filepath: sofa/lakeroad_sofa_or1_2/bitwise/lakeroad_sofa_or1_2.sv
     template: bitwise
+  instruction: *id002
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id002
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -113,6 +135,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id003
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not1_1/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not1_1/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -145,6 +178,17 @@
     implementation_module_name: lakeroad_sofa_not1_1
     implementation_sv_filepath: sofa/lakeroad_sofa_not1_1/bitwise/lakeroad_sofa_not1_1.sv
     template: bitwise
+  instruction: *id004
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not1_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not1_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not1_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not1_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not1_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id004
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -187,6 +231,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux1_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux1_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux1_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux1_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux1_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id005
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add1_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add1_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -224,6 +279,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id006
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub1_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub1_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -256,6 +322,17 @@
     implementation_module_name: lakeroad_sofa_sub1_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub1_2/bitwise-with-carry/lakeroad_sofa_sub1_2.sv
     template: bitwise-with-carry
+  instruction: *id007
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id007
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -520,6 +597,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul1_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul1_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul1_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul1_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul1_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 1
+    expr: (bvmul (var a 1) (var b 1))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and2_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and2_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -552,6 +644,17 @@
     implementation_module_name: lakeroad_sofa_and2_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and2_2/bitwise/lakeroad_sofa_and2_2.sv
     template: bitwise
+  instruction: *id015
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id015
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -594,6 +697,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id016
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor2_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor2_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -626,6 +740,17 @@
     implementation_module_name: lakeroad_sofa_xor2_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor2_2/bitwise/lakeroad_sofa_xor2_2.sv
     template: bitwise
+  instruction: *id017
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id017
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -668,6 +793,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not2_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not2_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not2_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not2_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not2_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id018
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux2_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux2_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -700,6 +836,17 @@
     implementation_module_name: lakeroad_sofa_mux2_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux2_3/bitwise/lakeroad_sofa_mux2_3.sv
     template: bitwise
+  instruction: *id019
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux2_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux2_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux2_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux2_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux2_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id019
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -742,6 +889,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id020
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub2_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub2_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -774,6 +932,17 @@
     implementation_module_name: lakeroad_sofa_sub2_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub2_2/bitwise-with-carry/lakeroad_sofa_sub2_2.sv
     template: bitwise-with-carry
+  instruction: *id021
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id021
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1038,6 +1207,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul2_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul2_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul2_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul2_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul2_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 2
+    expr: (bvmul (var a 2) (var b 2))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and3_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and3_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1070,6 +1254,17 @@
     implementation_module_name: lakeroad_sofa_and3_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and3_2/bitwise/lakeroad_sofa_and3_2.sv
     template: bitwise
+  instruction: *id029
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id029
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1112,6 +1307,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id030
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor3_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor3_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1144,6 +1350,17 @@
     implementation_module_name: lakeroad_sofa_xor3_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor3_2/bitwise/lakeroad_sofa_xor3_2.sv
     template: bitwise
+  instruction: *id031
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id031
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1186,6 +1403,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not3_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not3_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not3_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not3_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not3_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id032
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux3_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux3_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1218,6 +1446,17 @@
     implementation_module_name: lakeroad_sofa_mux3_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux3_3/bitwise/lakeroad_sofa_mux3_3.sv
     template: bitwise
+  instruction: *id033
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux3_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux3_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux3_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux3_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux3_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id033
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1260,6 +1499,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id034
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub3_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub3_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1292,6 +1542,17 @@
     implementation_module_name: lakeroad_sofa_sub3_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub3_2/bitwise-with-carry/lakeroad_sofa_sub3_2.sv
     template: bitwise-with-carry
+  instruction: *id035
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id035
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1556,6 +1817,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul3_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul3_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul3_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul3_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul3_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 3
+    expr: (bvmul (var a 3) (var b 3))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and4_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and4_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1588,6 +1864,17 @@
     implementation_module_name: lakeroad_sofa_and4_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and4_2/bitwise/lakeroad_sofa_and4_2.sv
     template: bitwise
+  instruction: *id043
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id043
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1630,6 +1917,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id044
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor4_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor4_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1662,6 +1960,17 @@
     implementation_module_name: lakeroad_sofa_xor4_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor4_2/bitwise/lakeroad_sofa_xor4_2.sv
     template: bitwise
+  instruction: *id045
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id045
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1704,6 +2013,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not4_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not4_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not4_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not4_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not4_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id046
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux4_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux4_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1736,6 +2056,17 @@
     implementation_module_name: lakeroad_sofa_mux4_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux4_3/bitwise/lakeroad_sofa_mux4_3.sv
     template: bitwise
+  instruction: *id047
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux4_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux4_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux4_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux4_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux4_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id047
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1778,6 +2109,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id048
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub4_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub4_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -1810,6 +2152,17 @@
     implementation_module_name: lakeroad_sofa_sub4_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub4_2/bitwise-with-carry/lakeroad_sofa_sub4_2.sv
     template: bitwise-with-carry
+  instruction: *id049
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id049
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2074,6 +2427,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul4_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul4_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul4_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul4_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul4_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 4
+    expr: (bvmul (var a 4) (var b 4))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and5_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and5_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2106,6 +2474,17 @@
     implementation_module_name: lakeroad_sofa_and5_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and5_2/bitwise/lakeroad_sofa_and5_2.sv
     template: bitwise
+  instruction: *id057
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id057
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2148,6 +2527,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id058
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor5_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor5_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2180,6 +2570,17 @@
     implementation_module_name: lakeroad_sofa_xor5_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor5_2/bitwise/lakeroad_sofa_xor5_2.sv
     template: bitwise
+  instruction: *id059
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id059
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2222,6 +2623,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not5_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not5_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not5_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not5_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not5_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id060
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux5_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux5_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2254,6 +2666,17 @@
     implementation_module_name: lakeroad_sofa_mux5_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux5_3/bitwise/lakeroad_sofa_mux5_3.sv
     template: bitwise
+  instruction: *id061
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux5_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux5_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux5_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux5_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux5_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id061
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2296,6 +2719,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id062
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub5_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub5_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2328,6 +2762,17 @@
     implementation_module_name: lakeroad_sofa_sub5_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub5_2/bitwise-with-carry/lakeroad_sofa_sub5_2.sv
     template: bitwise-with-carry
+  instruction: *id063
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id063
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2592,6 +3037,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul5_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul5_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul5_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul5_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul5_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 5
+    expr: (bvmul (var a 5) (var b 5))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and6_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and6_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2624,6 +3084,17 @@
     implementation_module_name: lakeroad_sofa_and6_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and6_2/bitwise/lakeroad_sofa_and6_2.sv
     template: bitwise
+  instruction: *id071
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id071
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2666,6 +3137,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id072
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor6_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor6_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2698,6 +3180,17 @@
     implementation_module_name: lakeroad_sofa_xor6_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor6_2/bitwise/lakeroad_sofa_xor6_2.sv
     template: bitwise
+  instruction: *id073
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id073
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2740,6 +3233,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not6_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not6_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not6_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not6_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not6_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id074
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux6_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux6_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2772,6 +3276,17 @@
     implementation_module_name: lakeroad_sofa_mux6_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux6_3/bitwise/lakeroad_sofa_mux6_3.sv
     template: bitwise
+  instruction: *id075
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux6_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux6_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux6_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux6_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux6_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id075
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2814,6 +3329,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id076
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub6_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub6_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -2846,6 +3372,17 @@
     implementation_module_name: lakeroad_sofa_sub6_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub6_2/bitwise-with-carry/lakeroad_sofa_sub6_2.sv
     template: bitwise-with-carry
+  instruction: *id077
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id077
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3110,6 +3647,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul6_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul6_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul6_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul6_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul6_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 6
+    expr: (bvmul (var a 6) (var b 6))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and7_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and7_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3142,6 +3694,17 @@
     implementation_module_name: lakeroad_sofa_and7_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and7_2/bitwise/lakeroad_sofa_and7_2.sv
     template: bitwise
+  instruction: *id085
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id085
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3184,6 +3747,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id086
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor7_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor7_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3216,6 +3790,17 @@
     implementation_module_name: lakeroad_sofa_xor7_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor7_2/bitwise/lakeroad_sofa_xor7_2.sv
     template: bitwise
+  instruction: *id087
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id087
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3258,6 +3843,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not7_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not7_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not7_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not7_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not7_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id088
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux7_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux7_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3290,6 +3886,17 @@
     implementation_module_name: lakeroad_sofa_mux7_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux7_3/bitwise/lakeroad_sofa_mux7_3.sv
     template: bitwise
+  instruction: *id089
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux7_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux7_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux7_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux7_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux7_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id089
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3332,6 +3939,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id090
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub7_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub7_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3364,6 +3982,17 @@
     implementation_module_name: lakeroad_sofa_sub7_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub7_2/bitwise-with-carry/lakeroad_sofa_sub7_2.sv
     template: bitwise-with-carry
+  instruction: *id091
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id091
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3628,6 +4257,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul7_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul7_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul7_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul7_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul7_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 7
+    expr: (bvmul (var a 7) (var b 7))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and8_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and8_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3660,6 +4304,17 @@
     implementation_module_name: lakeroad_sofa_and8_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and8_2/bitwise/lakeroad_sofa_and8_2.sv
     template: bitwise
+  instruction: *id099
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id099
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3702,6 +4357,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id100
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor8_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor8_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3734,6 +4400,17 @@
     implementation_module_name: lakeroad_sofa_xor8_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor8_2/bitwise/lakeroad_sofa_xor8_2.sv
     template: bitwise
+  instruction: *id101
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id101
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3776,6 +4453,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not8_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not8_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not8_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not8_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not8_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id102
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux8_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux8_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3808,6 +4496,17 @@
     implementation_module_name: lakeroad_sofa_mux8_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux8_3/bitwise/lakeroad_sofa_mux8_3.sv
     template: bitwise
+  instruction: *id103
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux8_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux8_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux8_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux8_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux8_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id103
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3850,6 +4549,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id104
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub8_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub8_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -3882,6 +4592,17 @@
     implementation_module_name: lakeroad_sofa_sub8_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub8_2/bitwise-with-carry/lakeroad_sofa_sub8_2.sv
     template: bitwise-with-carry
+  instruction: *id105
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id105
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4146,6 +4867,21 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul8_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul8_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul8_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul8_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul8_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 8
+    expr: (bvmul (var a 8) (var b 8))
+    name: mul
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and16_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and16_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -4178,6 +4914,17 @@
     implementation_module_name: lakeroad_sofa_and16_2
     implementation_sv_filepath: sofa/lakeroad_sofa_and16_2/bitwise/lakeroad_sofa_and16_2.sv
     template: bitwise
+  instruction: *id113
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_and16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_and16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id113
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4220,6 +4967,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_or16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_or16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id114
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor16_2/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor16_2/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -4252,6 +5010,17 @@
     implementation_module_name: lakeroad_sofa_xor16_2
     implementation_sv_filepath: sofa/lakeroad_sofa_xor16_2/bitwise/lakeroad_sofa_xor16_2.sv
     template: bitwise
+  instruction: *id115
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_xor16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_xor16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id115
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4294,6 +5063,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not16_1/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not16_1/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not16_1
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_not16_1/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_not16_1.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id116
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux16_3/bitwise/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux16_3/bitwise/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -4326,6 +5106,17 @@
     implementation_module_name: lakeroad_sofa_mux16_3
     implementation_sv_filepath: sofa/lakeroad_sofa_mux16_3/bitwise/lakeroad_sofa_mux16_3.sv
     template: bitwise
+  instruction: *id117
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux16_3/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux16_3/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux16_3
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mux16_3/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mux16_3.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id117
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4368,6 +5159,17 @@
   architecture: xilinx_ultrascale_plus
   compile_actions:
   - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_add16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_add16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: *id118
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
     log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub16_2/bitwise-with-carry/vivado/vivado_log.txt
     synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub16_2/bitwise-with-carry/vivado/synth_opt_place_route.sv
   implementation_action: !!python/object:schema.ImplementationAction
@@ -4400,6 +5202,17 @@
     implementation_module_name: lakeroad_sofa_sub16_2
     implementation_sv_filepath: sofa/lakeroad_sofa_sub16_2/bitwise-with-carry/lakeroad_sofa_sub16_2.sv
     template: bitwise-with-carry
+  instruction: *id119
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_sub16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_sub16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id119
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4623,6 +5436,21 @@
     implementation_sv_filepath: sofa/lakeroad_sofa_ule16_2/comparison/lakeroad_sofa_ule16_2.sv
     template: comparison
   instruction: *id125
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  compile_actions:
+  - !!python/object:schema.VivadoCompile
+    log_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul16_2/xilinx-ultrascale-plus-dsp48e2/vivado/vivado_log.txt
+    synth_opt_place_route_relative_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul16_2/xilinx-ultrascale-plus-dsp48e2/vivado/synth_opt_place_route.sv
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul16_2
+    implementation_sv_filepath: xilinx_ultrascale_plus/lakeroad_xilinx_ultrascale_plus_mul16_2/xilinx-ultrascale-plus-dsp48e2/lakeroad_xilinx_ultrascale_plus_mul16_2.sv
+    template: xilinx-ultrascale-plus-dsp48e2
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 16
+    expr: (bvmul (var a 16) (var b 16))
+    name: mul
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   compile_actions:

@@ -114,11 +114,18 @@ def _make_instructions():
                 expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
             ),
         ]:
-            for (architecture, template) in [
+            templates = [
                 ("xilinx_ultrascale_plus", "bitwise"),
                 ("lattice_ecp5", "bitwise"),
                 ("sofa", "bitwise"),
-            ]:
+            ]
+            # Only do DSP for <= 16 bits.
+            if bw <= 16:
+                templates += [
+                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+                ]
+
+            for (architecture, template) in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -135,14 +142,21 @@ def _make_instructions():
                 expr=f"(bvsub (var a {bw}) (var b {bw}))",
             ),
         ]:
-            for (architecture, template) in [
+            templates = [
                 (
                     "xilinx_ultrascale_plus",
                     "bitwise-with-carry",
                 ),
                 ("lattice_ecp5", "bitwise-with-carry"),
                 ("sofa", "bitwise-with-carry"),
-            ]:
+            ]
+            # Only do DSP for <= 16 bits.
+            if bw <= 16:
+                templates += [
+                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+                ]
+
+            for (architecture, template) in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -209,6 +223,23 @@ def _make_instructions():
                     ),
                     ("lattice_ecp5", "multiplication"),
                     ("sofa", "multiplication"),
+                ]:
+                    yield _make_experiment(architecture, instruction, template)
+
+        if bw <= 16:
+            for instruction in [
+                Instruction(
+                    name="mul",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvmul (var a {bw}) (var b {bw}))",
+                ),
+            ]:
+                for (architecture, template) in [
+                    (
+                        "xilinx_ultrascale_plus",
+                        "xilinx-ultrascale-plus-dsp48e2",
+                    ),
                 ]:
                     yield _make_experiment(architecture, instruction, template)
 
