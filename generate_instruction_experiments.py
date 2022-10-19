@@ -114,19 +114,6 @@ def _make_instructions():
                 expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
             ),
         ]:
-            #    (list (cons "synthesize_wire" synthesize-wire)
-            #          (cons "synthesize_sofa_bitwise" (synthesize-using-lut 'sofa 1 4))
-            #          (cons "synthesize_xilinx_ultrascale_plus_dsp" synthesize-xilinx-ultrascale-plus-dsp)
-            #          (cons "synthesize_xilinx_ultrascale_plus_bitwise"
-            #                (synthesize-using-lut 'xilinx-ultrascale-plus 1))
-            #          (cons "synthesize_xilinx_ultrascale_plus_kitchen_sink"
-            #                synthesize-xilinx-ultrascale-plus-impl-kitchen-sink)
-            #          (cons "synthesize_lattice_ecp5_for_pfu" synthesize-lattice-ecp5-for-pfu)
-            #          (cons "synthesize_lattice_ecp5_for_ripple_pfu" synthesize-lattice-ecp5-for-ripple-pfu)
-            #          (cons "synthesize_lattice_ecp5_for_ccu2c" synthesize-lattice-ecp5-for-ccu2c)
-            #          (cons "synthesize_lattice_ecp5_for_ccu2c_tri" synthesize-lattice-ecp5-for-ccu2c-tri)
-            #          (cons "synthesize_lattice_ecp5_multiply_circt" synthesize-lattice-ecp5-multiply-circt))))
-
             for (architecture, template) in [
                 ("xilinx_ultrascale_plus", "bitwise"),
                 ("lattice_ecp5", "bitwise"),
