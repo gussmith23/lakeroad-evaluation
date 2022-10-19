@@ -19,3 +19,4 @@ place_design
 # Docker container.
 route_design -release_memory
 write_verilog ${synth_opt_place_route_output_filepath}
+report_timing_summary

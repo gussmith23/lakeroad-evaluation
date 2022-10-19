@@ -111,6 +111,18 @@ def task_lattice_ecp5_calyx_end_to_end():
             / relative_dir_in_calyx
             / f"{futil_filepath.stem}_nextpnr.log"
         )
+        yosys_time_filepath = (
+            output_base_dir
+            / "synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}_yosys.time"
+        )
+        nextpnr_time_filepath = (
+            output_base_dir
+            / "synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}_nextpnr.time"
+        )
 
     # Filepath with / replaced with _
     file_identifier = str(futil_filepath.relative_to(calyx_path)).replace("/", "_")
@@ -136,6 +148,8 @@ def task_lattice_ecp5_calyx_end_to_end():
                     "main",
                     synth_opt_place_route_sv_output_filepath,
                     synth_opt_place_route_json_output_filepath,
+                    yosys_time_filepath,
+                    nextpnr_time_filepath,
                     yosys_log_filepath,
                     nextpnr_log_filepath,
                 ],
@@ -146,6 +160,8 @@ def task_lattice_ecp5_calyx_end_to_end():
             synth_opt_place_route_json_output_filepath,
             yosys_log_filepath,
             nextpnr_log_filepath,
+            yosys_time_filepath,
+            nextpnr_time_filepath,
         ],
         "file_dep": [compiled_sv_filepath],
     }
@@ -182,6 +198,12 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
             / relative_dir_in_calyx
             / f"{futil_filepath.stem}.log"
         )
+        time_filepath = (
+            output_base_dir
+            / "synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}.time"
+        )
 
         # Filepath with / replaced with _
         file_identifier = str(futil_filepath.relative_to(calyx_path)).replace("/", "_")
@@ -206,11 +228,16 @@ def task_xilinx_ultrascale_plus_calyx_end_to_end():
                         compiled_sv_filepath,
                         synth_opt_place_route_output_filepath,
                         "main",
+                        time_filepath,
                         log_filepath,
                     ],
                 )
             ],
-            "targets": [synth_opt_place_route_output_filepath, log_filepath],
+            "targets": [
+                synth_opt_place_route_output_filepath,
+                log_filepath,
+                time_filepath,
+            ],
             "file_dep": [compiled_sv_filepath],
         }
 
@@ -304,6 +331,12 @@ def task_vanilla_calyx_end_to_end():
             / relative_dir_in_calyx
             / f"{futil_filepath.stem}.log"
         )
+        vivado_time_filepath = (
+            output_base_dir
+            / "vivado_synthesis_results"
+            / relative_dir_in_calyx
+            / f"{futil_filepath.stem}.time"
+        )
 
         # Task to synthesize the file with Vivado. (.sv -> .sv, synthesized)
         yield {
@@ -315,6 +348,7 @@ def task_vanilla_calyx_end_to_end():
                         compiled_sv_filepath,
                         vivado_synth_opt_place_route_output_filepath,
                         "main",
+                        vivado_time_filepath,
                         vivado_log_filepath,
                     ],
                 )

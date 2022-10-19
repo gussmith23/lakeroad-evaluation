@@ -17,6 +17,7 @@ def _make_vivado_compile_command(
             base_output_path / "vivado" / "synth_opt_place_route.sv"
         ),
         log_filepath=str(base_output_path / "vivado" / "vivado_log.txt"),
+        time_filepath=str(base_output_path / "vivado" / "vivado.time"),
     )
 
 
@@ -34,6 +35,8 @@ def _make_yosys_nextpnr_compile_command(
         nextpnr_log_filepath=str(
             base_output_path / "yosys_nextpnr" / "nextpnr_log.txt"
         ),
+        yosys_time_filepath=str(base_output_path / "yosys_nextpnr" / "yosys.time"),
+        nextpnr_time_filepath=str(base_output_path / "yosys_nextpnr" / "nextpnr.time"),
         nextpnr_output_sv_filepath=str(
             base_output_path / "yosys_nextpnr" / "nextpnr_place_route.sv"
         ),
@@ -73,6 +76,7 @@ def _make_experiment(
             template=template,
             implementation_sv_filepath=str(base_path / (str(module_name) + ".sv")),
             implementation_module_name=module_name,
+            time_filepath=str(base_path / (str(module_name) + ".time")),
         ),
         compile_actions=compile_actions,
         architecture=architecture,
@@ -114,24 +118,18 @@ def _make_instructions():
                 expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
             ),
         ]:
-            #    (list (cons "synthesize_wire" synthesize-wire)
-            #          (cons "synthesize_sofa_bitwise" (synthesize-using-lut 'sofa 1 4))
-            #          (cons "synthesize_xilinx_ultrascale_plus_dsp" synthesize-xilinx-ultrascale-plus-dsp)
-            #          (cons "synthesize_xilinx_ultrascale_plus_bitwise"
-            #                (synthesize-using-lut 'xilinx-ultrascale-plus 1))
-            #          (cons "synthesize_xilinx_ultrascale_plus_kitchen_sink"
-            #                synthesize-xilinx-ultrascale-plus-impl-kitchen-sink)
-            #          (cons "synthesize_lattice_ecp5_for_pfu" synthesize-lattice-ecp5-for-pfu)
-            #          (cons "synthesize_lattice_ecp5_for_ripple_pfu" synthesize-lattice-ecp5-for-ripple-pfu)
-            #          (cons "synthesize_lattice_ecp5_for_ccu2c" synthesize-lattice-ecp5-for-ccu2c)
-            #          (cons "synthesize_lattice_ecp5_for_ccu2c_tri" synthesize-lattice-ecp5-for-ccu2c-tri)
-            #          (cons "synthesize_lattice_ecp5_multiply_circt" synthesize-lattice-ecp5-multiply-circt))))
-
-            for (architecture, template) in [
+            templates = [
                 ("xilinx_ultrascale_plus", "bitwise"),
                 ("lattice_ecp5", "bitwise"),
                 ("sofa", "bitwise"),
-            ]:
+            ]
+            # Only do DSP for <= 16 bits.
+            if bw <= 16:
+                templates += [
+                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+                ]
+
+            for (architecture, template) in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -148,14 +146,21 @@ def _make_instructions():
                 expr=f"(bvsub (var a {bw}) (var b {bw}))",
             ),
         ]:
-            for (architecture, template) in [
+            templates = [
                 (
                     "xilinx_ultrascale_plus",
                     "bitwise-with-carry",
                 ),
                 ("lattice_ecp5", "bitwise-with-carry"),
                 ("sofa", "bitwise-with-carry"),
-            ]:
+            ]
+            # Only do DSP for <= 16 bits.
+            if bw <= 16:
+                templates += [
+                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+                ]
+
+            for (architecture, template) in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -222,6 +227,23 @@ def _make_instructions():
                     ),
                     ("lattice_ecp5", "multiplication"),
                     ("sofa", "multiplication"),
+                ]:
+                    yield _make_experiment(architecture, instruction, template)
+
+        if bw <= 16:
+            for instruction in [
+                Instruction(
+                    name="mul",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvmul (var a {bw}) (var b {bw}))",
+                ),
+            ]:
+                for (architecture, template) in [
+                    (
+                        "xilinx_ultrascale_plus",
+                        "xilinx-ultrascale-plus-dsp48e2",
+                    ),
                 ]:
                     yield _make_experiment(architecture, instruction, template)
 

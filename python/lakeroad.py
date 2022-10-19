@@ -3,6 +3,7 @@ import logging
 import subprocess
 from typing import Union
 from pathlib import Path
+from time import time
 
 
 def invoke_lakeroad(
@@ -11,6 +12,7 @@ def invoke_lakeroad(
     template: str,
     out_filepath: Union[str, Path],
     architecture: str,
+    time_filepath: Union[str, Path],
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -43,7 +45,12 @@ def invoke_lakeroad(
         "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
+    start_time = time()
     subprocess.run(
         cmd,
         check=True,
     )
+    end_time = time()
+
+    with open(time_filepath, "w") as f:
+        print(f"{end_time-start_time}s", file=f)
