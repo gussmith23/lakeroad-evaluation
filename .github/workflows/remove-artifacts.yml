@@ -1,0 +1,19 @@
+name: Remove All Artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  remove-artifacts:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Remove artifacts
+      uses: c-hive/gha-remove-artifacts@24dc23384a1fa6a058b79c73727ae0cb2200ca4c
+      with:
+        # Artifacts older than this will be deleted (e.g. "2 months", "1 day"). Parsed by moment.
+        age: 0 days
+        # Access token for the repository, available under the same name in secrets.
+        skip-tags: true
