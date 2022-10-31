@@ -107,6 +107,11 @@ These versions of Calyx
   which all of our other Calyx versions
   are based off of.
 
+[`calyx_vivado`](./calyx_vivado//)
+  is Calyx using instructions pre-implemented
+  for Xilinx UltraScale+
+  using Vivado.
+
 ## Vivado
 
 The evaluation optionally depends

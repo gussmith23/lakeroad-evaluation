@@ -26,3 +26,6 @@
 [submodule "calyx_base"]
 	path = calyx_base
 	url = git@github.com:uwsampl/calyx
+[submodule "calyx_vivado"]
+	path = calyx_vivado
+	url = git@github.com:uwsampl/calyx
