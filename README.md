@@ -102,6 +102,11 @@ These versions of Calyx
   rather than the behavioral SystemVerilog
   which Calyx usually compiles to.
 
+[`calyx_base`](./calyx_base/)
+  contains the base set of modifications
+  which all of our other Calyx versions
+  are based off of.
+
 ## Vivado
 
 The evaluation optionally depends

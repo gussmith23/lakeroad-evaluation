@@ -23,3 +23,6 @@
 [submodule "calyx-evaluation"]
 	path = calyx-evaluation
 	url = git@github.com:uwsampl/calyx-evaluation
+[submodule "calyx_base"]
+	path = calyx_base
+	url = git@github.com:uwsampl/calyx
