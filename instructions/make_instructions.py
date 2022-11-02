@@ -86,6 +86,26 @@ inputs = {
     "mux": lambda sign, size: f"input s, input {sign}[{size-1}:0] a, input {sign}[{size-1}:0] b,",
 }
 
+make_output = lambda sign, size: f"output {sign}[{size-1}:0] out"
+outputs = {
+    "and": make_output,
+    "or": make_output,
+    "not": make_output,
+    "xor": make_output,
+    "add": make_output,
+    "sub": make_output,
+    "divs": make_output,
+    "divu": make_output,
+    "eq": lambda sign, _: f"output {sign} out",
+    "neq": lambda sign, _: f"output {sign} out",
+    "uge": lambda sign, _: f"output {sign} out",
+    "ugt": lambda sign, _: f"output {sign} out",
+    "ule": lambda sign, _: f"output {sign} out",
+    "ult": lambda sign, _: f"output {sign} out",
+    "mul": make_output,
+    "mux": make_output,
+}
+
 arity = {
     "and": 2,
     "or": 2,
@@ -116,7 +136,7 @@ for op, op_expr in ops.items():
         signed_msg = f"with {sign.upper()} inputs" if len(sign) > 0 else ""
         print(f"        -> Creating module for operation {op.upper()} {signed_msg}")
         modname = f"{op}{size}_{arity[op]}"
-        program = f"""module {modname}({inputs[op](sign,size)} output {sign}[{size-1}:0] out);
+        program = f"""module {modname}({inputs[op](sign,size)} {outputs[op](sign,size)});
   assign out = {op_expr};
 endmodule
 """

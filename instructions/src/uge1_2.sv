@@ -1,3 +1,3 @@
-module uge1_2(input unsigned[0:0] a, input unsigned[0:0] b, output unsigned[0:0] out);
+module uge1_2(input unsigned[0:0] a, input unsigned[0:0] b, output unsigned out);
   assign out = a >= b;
 endmodule

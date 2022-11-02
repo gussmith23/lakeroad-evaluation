@@ -1,3 +1,3 @@
-module eq16_2(input [15:0] a, input [15:0] b, output [15:0] out);
+module eq16_2(input [15:0] a, input [15:0] b, output  out);
   assign out = a == b;
 endmodule
