@@ -52,6 +52,41 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         print(f"{end_time-start_time}s", file=f)
 
 
+def make_xilinx_ultrascale_plus_vivado_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+):
+    """Wrapper over Vivado synthesis function which creates a DoIt task."""
+
+    input_filepath = Path(input_filepath)
+    output_dirpath = Path(output_dirpath)
+    synth_opt_place_route_output_filepath = output_dirpath / input_filepath.name
+    time_filepath = output_dirpath / f"{input_filepath.stem}.time"
+    log_filepath = output_dirpath / f"{input_filepath.stem}.log"
+
+    return {
+        "actions": [
+            (
+                xilinx_ultrascale_plus_vivado_synthesis,
+                [
+                    input_filepath,
+                    synth_opt_place_route_output_filepath,
+                    module_name,
+                    time_filepath,
+                    log_filepath,
+                ],
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [
+            synth_opt_place_route_output_filepath,
+            time_filepath,
+            log_filepath,
+        ],
+    }
+
+
 def lattice_ecp5_yosys_nextpnr_synthesis(
     instr_src_file: Union[str, Path],
     module_name: str,
