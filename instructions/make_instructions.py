@@ -10,7 +10,7 @@ ops = {
     "not": "~a",
     "xor": f("^"),
     "add": f("+"),
-    "sub": f("+"),
+    "sub": f("-"),
     # "concat": None,
     "divs": f("/"),
     "divu": f("/"),
