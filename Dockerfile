@@ -209,6 +209,23 @@ RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
   && ./calyx-lattice-ecp5/venv/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
   && ./calyx-lattice-ecp5/venv/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
 
+# Set up Lattice Diamond. 
+#
+# The following can be ignored if you're not using Diamond.
+#
+# Path to Diamond bin dir, when mounted in the container. E.g. if we mount
+# Diamond to /usr/local/diamond in the container, then
+# DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64.
+#
+# Note: due to how Lattice scripts are written, DIAMOND_BINDIR must NOT end in a
+# slash.
+ARG DIAMOND_BINDIR
+ENV bindir=${DIAMOND_BINDIR}
+# Check for trailing slash.
+RUN if [ -n "$bindir" ]; then \
+  echo "source $bindir/diamond_env" >> /root/.bashrc ; \
+  fi
+
 WORKDIR /root
 # Add the rest of the stuff. This might be a bad idea, I'm still not sure on
 # Docker best practices.
