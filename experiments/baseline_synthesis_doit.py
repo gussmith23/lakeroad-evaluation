@@ -111,3 +111,11 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
     for instruction_file in Path(baseline_instructions_dir).glob("*"):
         yield _make_baseline_vivado_synthesis_task(instruction_file)
         yield _make_baseline_yosys_nextpnr_synthesis_task(instruction_file)
+
+        diamond_baseline_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base / "diamond"/ instruction_file.stem,
+            module_name=instruction_file.stem,
+        )
+        diamond_baseline_synthesis_task['name'] = f"diamond_{instruction_file.stem}"
+        yield diamond_baseline_synthesis_task
