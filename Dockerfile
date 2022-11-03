@@ -209,6 +209,34 @@ RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
   && ./calyx-lattice-ecp5/venv/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
   && ./calyx-lattice-ecp5/venv/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
 
+# Build Lattice ECP5 Diamond version of Calyx.
+ADD calyx_lattice_ecp5_diamond /root/calyx_lattice_ecp5_diamond
+RUN cargo build --manifest-path ./calyx_lattice_ecp5_diamond/Cargo.toml \
+  && python3 -m venv --clear ./calyx_lattice_ecp5_diamond/venv/ \
+  # && cd /root/tvm/python \
+  # && /root/calyx_lattice_ecp5_diamond/bin/python setup.py install \
+  # && cd /root/tvm/topi/python \
+  # && /root/calyx_lattice_ecp5_diamond/bin/python setup.py install \
+  && cd /root/ \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx_lattice_ecp5_diamond/fud/pyproject.toml install -s --deps all --python ./calyx_lattice_ecp5_diamond/venv/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx_lattice_ecp5_diamond/calyx-py/pyproject.toml install -s --deps all --python ./calyx_lattice_ecp5_diamond/venv/bin/python \
+  && ./calyx_lattice_ecp5_diamond/venv/bin/fud config global.futil_directory /root/calyx_lattice_ecp5_diamond \
+  && ./calyx_lattice_ecp5_diamond/venv/bin/fud config stages.futil.exec /root/calyx_lattice_ecp5_diamond/target/debug/futil
+
+# Build Xilinx UltraScale+ Vivado version of Calyx.
+ADD calyx_vivado /root/calyx_vivado
+RUN cargo build --manifest-path ./calyx_vivado/Cargo.toml \
+  && python3 -m venv --clear ./calyx_vivado/venv/ \
+  # && cd /root/tvm/python \
+  # && /root/calyx_vivado/bin/python setup.py install \
+  # && cd /root/tvm/topi/python \
+  # && /root/calyx_vivado/bin/python setup.py install \
+  && cd /root/ \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx_vivado/fud/pyproject.toml install -s --deps all --python ./calyx_vivado/venv/bin/python \
+  && FLIT_ROOT_INSTALL=1 flit -f ./calyx_vivado/calyx-py/pyproject.toml install -s --deps all --python ./calyx_vivado/venv/bin/python \
+  && ./calyx_vivado/venv/bin/fud config global.futil_directory /root/calyx_vivado \
+  && ./calyx_vivado/venv/bin/fud config stages.futil.exec /root/calyx_vivado/target/debug/futil
+
 # Set up Lattice Diamond. 
 #
 # The following can be ignored if you're not using Diamond.
