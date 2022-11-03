@@ -59,6 +59,7 @@ jobs:
           --file Dockerfile \
           --tag ${{ steps.generate-tag.outputs.tag }} \
           --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2021.2/bin \
+          --build-arg DIAMOND_BINDIR=/usr/local/diamond/bin/lin64 \
           --build-arg MAKE_JOBS=36
 
   run-evaluation:
@@ -75,6 +76,7 @@ jobs:
         docker run \
           --name $CONTAINER_NAME \
           -v /tools/Xilinx:/tools/Xilinx \
+          -v /usr/local/diamond:/usr/local/diamond \
           --env LOGLEVEL=INFO \
           --env OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
