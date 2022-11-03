@@ -171,6 +171,62 @@ Once the environment is set up correctly, you should be able
   to run the evaluation scripts
   with Vivado-based eval enabled.
 
+## Lattice Diamond
+
+The evaluation optionally depends
+  on Lattice Diamond.
+We do not install Diamond
+  inside of the Docker container
+  due to its license,
+  so we expect the user to install it
+  on the host system,
+  and mount it into the container.
+
+There are three steps
+  to enabling Lattice Diamond
+  in the eval:
+
+1. Install and get a license for Lattice Diamond.
+2. Build this repo's Docker image with `DIAMOND_BINDIR` set.
+3. Run the image in a Docker container, mounting in the Diamond directory on the host system.
+
+Diamond
+  can be downloaded
+  [here](https://www.latticesemi.com/latticediamond).
+Lattice Diamond requires a license,
+  but most people can get a free license from their website.
+See [this page](https://www.latticesemi.com/en/Support/Licensing).
+For those on Ubuntu, the Linux version
+  of Diamond
+  can be made to work with Ubuntu.
+See [this tutorial](https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).
+
+When building the Docker image,
+  set the `DIAMOND_BINDIR` build argument.
+This argument should point to the main folder of Diamond binaries.
+How you set this variable is determined
+  by where you mount
+  the Diamond directory
+  in the next step.
+If we are on Linux, and our Diamond directory
+  on the host
+  is `/usr/local/diamond`,
+  and we mount it to
+  `/usr/local/diamond`
+  in our container,
+  then we will set `DIAMOND_BINDIR` with:
+  `--build-arg=DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64`.
+
+Lastly,
+  we need to mount
+  our Diamond directory
+  into the container
+  when we finally run the Docker image.
+To do so, we use the following syntax:
+  `docker run -v/usr/local/diamond:/usr/local/diamond ...`,
+  replacing `/usr/local/diamond` with the path
+  to your Diamond installation.
+  
 ## [./runs](./runs)
 
 This folder contains our output runs.
