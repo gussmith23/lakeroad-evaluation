@@ -173,22 +173,18 @@ Once the environment is set up correctly, you should be able
 
 ## Lattice Diamond
 
+*Summary:* To enable the use of Lattice Diamond,
+  set the `DIAMOND_BINDIR` environment variable when running locally,
+  and use the `DIAMOND_BINDIR` build argument
+  when building and running in the Docker container.
+
 The evaluation optionally depends
   on Lattice Diamond.
-We do not install Diamond
-  inside of the Docker container
+We do not install Diamond in the Docker image
   due to its license,
   so we expect the user to install it
   on the host system,
   and mount it into the container.
-
-There are three steps
-  to enabling Lattice Diamond
-  in the eval:
-
-1. Install and get a license for Lattice Diamond.
-2. Build this repo's Docker image with `DIAMOND_BINDIR` set.
-3. Run the image in a Docker container, mounting in the Diamond directory on the host system.
 
 Diamond
   can be downloaded
@@ -200,6 +196,23 @@ For those on Ubuntu, the Linux version
   of Diamond
   can be made to work with Ubuntu.
 See [this tutorial](https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).
+
+The evaluation does not expect
+  Diamond to be available on the `PATH`,
+  as Diamond's libraries can interfere with system libraries.
+Instead, the evaluation expects the user to set
+  the `DIAMOND_BINDIR`
+  environment variable
+  to the location of the directory
+  of Diamond binaries,
+  e.g. `/usr/local/diamond/3.12/bin/lin64`.
+  
+There are two steps
+  to enabling Lattice Diamond
+  inside the Docker image:
+
+1. Build this repo's Docker image with `--build-arg=DIAMOND_BINDIR=/path/to/diamond/bindir`.
+2. Mount the host's Diamond directory when running the Docker container.
 
 When building the Docker image,
   set the `DIAMOND_BINDIR` build argument.

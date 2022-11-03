@@ -157,10 +157,14 @@ def lattice_ecp5_diamond_synthesis(
     tmp_verilog_filepath = output_dirpath / f"{module_name}_orig.v"
     subprocess.run(["cp", src_filepath, tmp_verilog_filepath], check=True)
 
+    assert (
+        "bindir" in os.environ
+    ), "bindir environment variable must be set to the directory containing Lattice Diamond binaries, e.g. /usr/local/diamond/3.12/bin/lin64"
+
     # Run synthesis. Set cwd to the output, as Diamond seems to output its
     # results to the cwd.
     subprocess.run(
-        ["synthesis", "-a", "ECP5U", "-ver", tmp_verilog_filepath],
+        ["bash", "-c", "source $bindir/diamond_env && synthesis -a ECP5U -ver " + str(tmp_verilog_filepath)],
         check=True,
         stdout=subprocess.DEVNULL,
         cwd=output_dirpath,

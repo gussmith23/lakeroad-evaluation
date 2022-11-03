@@ -220,11 +220,7 @@ RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
 # Note: due to how Lattice scripts are written, DIAMOND_BINDIR must NOT end in a
 # slash.
 ARG DIAMOND_BINDIR
-ENV bindir=${DIAMOND_BINDIR}
-# Check for trailing slash.
-RUN if [ -n "$bindir" ]; then \
-  echo "source $bindir/diamond_env" >> /root/.bashrc ; \
-  fi
+ENV DIAMOND_BINDIR=${DIAMOND_BINDIR}
 
 WORKDIR /root
 # Add the rest of the stuff. This might be a bad idea, I'm still not sure on
