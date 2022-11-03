@@ -261,5 +261,15 @@ ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
 WORKDIR /root
 ADD calyx-evaluation/ calyx-evaluation/
 
+# Build sv2v, a SystemVerilog to Verilog compiler.
+# Install Haskell Stack and build
+WORKDIR /root
+RUN wget -qO- https://get.haskellstack.org/ | sh \
+  && git clone https://github.com/zachjs/sv2v.git \
+  && git checkout v0.0.10 \
+  && cd sv2v \
+  && make
+ENV PATH=/root/sv2v/bin:${PATH}
+
 WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]
