@@ -114,8 +114,8 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
 
         diamond_baseline_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
             input_filepath=instruction_file,
-            output_dirpath=output_dir_base / "diamond"/ instruction_file.stem,
+            output_dirpath=output_dir_base / "diamond" / instruction_file.stem,
             module_name=instruction_file.stem,
         )
-        diamond_baseline_synthesis_task['name'] = f"diamond_{instruction_file.stem}"
+        diamond_baseline_synthesis_task["name"] = f"diamond_{instruction_file.stem}"
         yield diamond_baseline_synthesis_task
