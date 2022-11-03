@@ -8,6 +8,7 @@ import subprocess
 import os
 import logging
 from time import time
+from tempfile import TemporaryDirectory
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
@@ -143,3 +144,53 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
 
     with open(nextpnr_time_path, "w") as f:
         print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
+
+
+def lattice_ecp5_diamond_synthesis(
+    src_filepath: Union[Path, str], module_name: str, output_dirpath: Union[Path, str]
+):
+    output_dirpath = Path(output_dirpath)
+    output_dirpath.mkdir(parents=True, exist_ok=True)
+
+    # Diamond's synthesis routine won't accept things with a .sv suffix, so we
+    # copy the file and give it a new name.
+    tmp_verilog_filepath = output_dirpath / f"{module_name}_orig.v"
+    subprocess.run(["cp", src_filepath, tmp_verilog_filepath], check=True)
+
+    # Run synthesis. Set cwd to the output, as Diamond seems to output its
+    # results to the cwd.
+    subprocess.run(
+        ["synthesis", "-a", "ECP5U", "-ver", tmp_verilog_filepath],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        cwd=output_dirpath,
+    )
+
+
+def make_lattice_ecp5_diamond_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+):
+    """Wrapper over Diamond synthesis function which creates a DoIt task."""
+
+    output_dirpath = Path(output_dirpath)
+
+    return {
+        "actions": [
+            (
+                lattice_ecp5_diamond_synthesis,
+                [input_filepath, module_name, output_dirpath],
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [
+            output_dirpath / f"{module_name}.arearep",
+            # output_dirpath / f"{module_name}.lsedata",
+            # output_dirpath / f"{module_name}.ngd",
+            output_dirpath / f"{module_name}_orig.v",
+            output_dirpath / f"{module_name}_prim.v",
+            output_dirpath / f"{module_name}_drc.log",
+            output_dirpath / f"synthesis.log",
+        ],
+    }
