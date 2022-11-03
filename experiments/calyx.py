@@ -278,3 +278,62 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
     )
+
+
+def task_calyx_setup_lattice_ecp5_diamond():
+    """Set up the calyx_lattice_ecp5_diamond directory."""
+    return _make_setup_calyx_task(
+        filepaths=[
+            utils.output_dir() / "baseline" / "diamond" / "add1_2" / "add1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add2_2" / "add2_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add3_2" / "add3_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add4_2" / "add4_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add8_2" / "add8_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add16_2" / "add16_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "add32_2" / "add32_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "and1_2" / "and1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "and2_2" / "and2_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "and8_2" / "and8_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "and16_2" / "and16_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "and32_2" / "and32_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "eq1_2" / "eq1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "eq5_2" / "eq5_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "eq6_2" / "eq6_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "eq32_2" / "eq32_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "neq1_2" / "neq1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "not1_1" / "not1_1_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "not5_1" / "not5_1_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "or1_2" / "or1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "or8_2" / "or8_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub1_2" / "sub1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub2_2" / "sub2_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub3_2" / "sub3_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub4_2" / "sub4_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub5_2" / "sub5_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub6_2" / "sub6_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub7_2" / "sub7_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub8_2" / "sub8_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub16_2" / "sub16_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "sub32_2" / "sub32_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "uge1_2" / "uge1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ugt1_2" / "ugt1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ugt5_2" / "ugt5_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ule1_2" / "ule1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ule4_2" / "ule4_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ult1_2" / "ult1_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ult3_2" / "ult3_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ult4_2" / "ult4_2_prim.v",
+            utils.output_dir() / "baseline" / "diamond" / "ult32_2" / "ult32_2_prim.v",
+        ],
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
+    )
+
+def task_calyx_tests_lattice_ecp5_diamond():
+    """Run Calyx tests for calyx_lattice_ecp5_diamond."""
+    return _make_run_calyx_tests_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
+        log_filepath=(
+            utils.output_dir() / "lattice_ecp5_diamond_calyx_tests.log"
+        ),
+        setup_calyx_taskname="calyx_setup_lattice_ecp5_diamond",
+    )
