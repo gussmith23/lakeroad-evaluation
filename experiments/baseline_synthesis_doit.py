@@ -47,7 +47,11 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                 )
             ],
             "file_dep": [baseline_instruction_filepath],
-            "targets": [synth_opt_place_route_output_filepath, log_filepath, time_filepath],
+            "targets": [
+                synth_opt_place_route_output_filepath,
+                log_filepath,
+                time_filepath,
+            ],
         }
 
     def _make_baseline_yosys_nextpnr_synthesis_task(
