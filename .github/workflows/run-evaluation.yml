@@ -59,7 +59,7 @@ jobs:
           --file Dockerfile \
           --tag ${{ steps.generate-tag.outputs.tag }} \
           --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2021.2/bin \
-          --build-arg DIAMOND_BINDIR=/usr/local/diamond/bin/lin64 \
+          --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
           --build-arg MAKE_JOBS=36
 
   run-evaluation:
