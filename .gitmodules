@@ -29,3 +29,6 @@
 [submodule "calyx_vivado"]
 	path = calyx_vivado
 	url = git@github.com:uwsampl/calyx
+[submodule "calyx_lattice_ecp5_diamond"]
+	path = calyx_lattice_ecp5_diamond
+	url = git@github.com:uwsampl/calyx
