@@ -266,8 +266,8 @@ ADD calyx-evaluation/ calyx-evaluation/
 WORKDIR /root
 RUN wget -qO- https://get.haskellstack.org/ | sh \
   && git clone https://github.com/zachjs/sv2v.git \
-  && git checkout v0.0.10 \
   && cd sv2v \
+  && git checkout v0.0.10 \
   && make
 ENV PATH=/root/sv2v/bin:${PATH}
 
