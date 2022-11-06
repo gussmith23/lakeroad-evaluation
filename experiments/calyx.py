@@ -65,7 +65,7 @@ def _make_setup_calyx_task(
 def _make_run_calyx_tests_task(
     calyx_dirpath: Union[str, Path],
     log_filepath: Union[str, Path],
-    setup_calyx_taskname: str,
+    setup_calyx_taskname: Optional[str] = None,
 ):
     """Makes a DoIt task which runs a given Calyx's test suite.
 
@@ -95,11 +95,13 @@ def _make_run_calyx_tests_task(
                 check=True,
             )
 
-    return {
+    task = {
         "actions": [(_impl, [calyx_dirpath, log_filepath])],
-        "task_dep": [setup_calyx_taskname],
         "targets": [log_filepath],
     }
+    if setup_calyx_taskname:
+        task["task_dep"] = [setup_calyx_taskname]
+    return task
 
 
 def _get_futil_files_to_test_with(calyx_dirpath):
@@ -353,3 +355,21 @@ def task_calyx_end_to_end_lattice_ecp5_diamond():
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
         setup_calyx_taskname="calyx_setup_lattice_ecp5_diamond",
     )
+
+
+def task_calyx_tests_vanilla_calyx():
+    """Run Calyx tests for vanilla Calyx."""
+    return _make_run_calyx_tests_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
+        log_filepath=(utils.output_dir() / "vanilla_calyx_tests.log"),
+    )
+
+
+# def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
+#    """Run end-to-end tests for calyx_vivado."""
+#    return _make_calyx_end_to_end_task(
+#        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
+#        output_base_dirpath=(utils.output_dir() / "calyx_vivado_end_to_end"),
+#        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+#        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+#    )
