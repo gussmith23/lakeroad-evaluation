@@ -365,11 +365,19 @@ def task_calyx_tests_vanilla_calyx():
     )
 
 
-# def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
-#    """Run end-to-end tests for calyx_vivado."""
-#    return _make_calyx_end_to_end_task(
-#        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
-#        output_base_dirpath=(utils.output_dir() / "calyx_vivado_end_to_end"),
-#        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
-#        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
-#    )
+def task_vanilla_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
+    """Run end-to-end tests for vanilla Calyx, synthesizing with Vivado."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
+        output_base_dirpath=(utils.output_dir() / "vanilla_calyx_vivado_end_to_end"),
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+    )
+
+
+def task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
+    """Run end-to-end tests for vanilla Calyx, synthesizing with Diamond."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
+        output_base_dirpath=(utils.output_dir() / "vanilla_calyx_diamond_end_to_end"),
+        make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
+    )
