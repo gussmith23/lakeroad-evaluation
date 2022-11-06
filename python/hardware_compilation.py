@@ -152,10 +152,11 @@ def lattice_ecp5_diamond_synthesis(
     output_dirpath = Path(output_dirpath)
     output_dirpath.mkdir(parents=True, exist_ok=True)
 
-    # Diamond's synthesis routine won't accept things with a .sv suffix, so we
-    # copy the file and give it a new name.
-    tmp_verilog_filepath = output_dirpath / f"{module_name}_orig.v"
-    subprocess.run(["cp", src_filepath, tmp_verilog_filepath], check=True)
+    # Diamond's synthesis routine won't accept SystemVerilog, so we use sv2v to
+    # convert.
+    sv2v_result_filepath = output_dirpath / f"{module_name}.v"
+    with open(sv2v_result_filepath, "w") as f:
+        subprocess.run(["sv2v", src_filepath], check=True, stdout=f)
 
     assert (
         "DIAMOND_BINDIR" in os.environ
@@ -165,13 +166,26 @@ def lattice_ecp5_diamond_synthesis(
     # results to the cwd.
     env = os.environ.copy()
     env["bindir"] = os.environ["DIAMOND_BINDIR"]
-    subprocess.run(
-        ["bash", "-c", "source $bindir/diamond_env && synthesis -a ECP5U -ver " + str(tmp_verilog_filepath)],
-        check=True,
+    out = subprocess.run(
+        [
+            "bash",
+            "-c",
+            f"source $bindir/diamond_env && synthesis -top {module_name} -a ECP5U -ver "
+            + str(sv2v_result_filepath),
+        ],
         stdout=subprocess.DEVNULL,
         cwd=output_dirpath,
         env=env,
-    )
+    ).returncode
+
+    # Currently, Diamond will likely take issue with Calyx's designs when
+    # running DRC. However, Diamond will still produce correct output. So we
+    # ignore DRC errors.
+    assert (
+        out == 0 or out == 2
+    ), f"Diamond failed with exit code {out}, indicating errors other than DRC errors."
+
+    assert (output_dirpath / f"{module_name}_prim.v").exists()
 
 
 def make_lattice_ecp5_diamond_synthesis_task(
@@ -195,7 +209,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
             output_dirpath / f"{module_name}.arearep",
             # output_dirpath / f"{module_name}.lsedata",
             # output_dirpath / f"{module_name}.ngd",
-            output_dirpath / f"{module_name}_orig.v",
+            output_dirpath / f"{module_name}.v",
             output_dirpath / f"{module_name}_prim.v",
             output_dirpath / f"{module_name}_drc.log",
             output_dirpath / f"synthesis.log",

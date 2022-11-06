@@ -3,7 +3,7 @@ import logging
 import os
 from pathlib import Path
 import subprocess
-from typing import Iterable, Optional, Union
+from typing import Iterable, List, Optional, Union
 from doit.tools import run_once
 from hardware_compilation import *
 
@@ -121,7 +121,11 @@ def _get_futil_files_to_test_with(calyx_dirpath):
         + list(
             (calyx_dirpath / "tests" / "correctness" / "systolic").glob("**/*.futil")
         )
-        + list((calyx_dirpath / "tests" / "correctness" / "tcam").glob("**/*.futil"))
+        # Disabling these tests as they cause the following error when
+        # synthesized via Diamond:
+        # ERROR - synthesis: Multiple Non-Tristate drivers exist for net clk.
+        # They work fine via Vivado.
+        # + list((calyx_dirpath / "tests" / "correctness" / "tcam").glob("**/*.futil"))
     )
 
 
@@ -200,7 +204,8 @@ def _make_calyx_end_to_end_task(
             input_filepath=compiled_sv_filepath,
             output_dirpath=output_base_dirpath
             / "synthesis_results"
-            / relative_dir_in_calyx,
+            / relative_dir_in_calyx
+            / futil_filepath.name,
             module_name="main",
         )
         synthesis_task["name"] = f"synthesize_{futil_filepath}"
@@ -328,12 +333,23 @@ def task_calyx_setup_lattice_ecp5_diamond():
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
     )
 
+
 def task_calyx_tests_lattice_ecp5_diamond():
     """Run Calyx tests for calyx_lattice_ecp5_diamond."""
     return _make_run_calyx_tests_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
-        log_filepath=(
-            utils.output_dir() / "lattice_ecp5_diamond_calyx_tests.log"
+        log_filepath=(utils.output_dir() / "lattice_ecp5_diamond_calyx_tests.log"),
+        setup_calyx_taskname="calyx_setup_lattice_ecp5_diamond",
+    )
+
+
+def task_calyx_end_to_end_lattice_ecp5_diamond():
+    """Run end-to-end tests for calyx_lattice_ecp5_diamond."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
+        output_base_dirpath=(
+            utils.output_dir() / "calyx_lattice_ecp5_diamond_end_to_end"
         ),
+        make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
         setup_calyx_taskname="calyx_setup_lattice_ecp5_diamond",
     )
