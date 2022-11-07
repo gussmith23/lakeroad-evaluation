@@ -21,8 +21,14 @@ class VivadoCompile(object):
     log_filepath: Union[Path, str]
     time_filepath: Union[Path, str]
 
+@dataclass
+class DiamondCompile(object):
+    output_dirpath: Union[Path, str]
+    log_filepath: Union[Path, str]
+    time_filepath: Union[Path, str]
 
-CompileAction = Union[YosysNextpnrCompile, VivadoCompile]
+
+CompileAction = Union[YosysNextpnrCompile, VivadoCompile, DiamondCompile]
 
 
 @dataclass

@@ -111,6 +111,20 @@ def task_instruction_experiments(experiments_file: str):
                     ],
                 }
 
+            case DiamondCompile(
+                output_dirpath=output_dirpath,
+                log_filepath=log_filepath,
+                time_filepath=time_filepath,
+            ):
+
+                task = make_lattice_ecp5_diamond_synthesis_task(
+                    input_filepath=verilog_filepath,
+                    output_dirpath=utils.output_dir() / output_dirpath,
+                    module_name=module_name,
+                )
+                task["name"] = f"diamond_compile_{template}_{module_name}"
+                return task
+
             case YosysNextpnrCompile(
                 synth_json_relative_filepath=synth_json_relative_filepath,
                 synth_sv_relative_filepath=synth_sv_relative_filepath,

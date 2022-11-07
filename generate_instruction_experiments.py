@@ -42,6 +42,17 @@ def _make_yosys_nextpnr_compile_command(
         ),
     )
 
+def _make_diamond_compile_command(
+    base_output_path: Union[Path, str],
+) -> DiamondCompile:
+    return DiamondCompile(
+        output_dirpath=
+            str(base_output_path / "diamond" ),
+        log_filepath=str(base_output_path / "diamond" / "diamond.log"),
+        time_filepath=str(base_output_path / "diamond" / "diamond.time"),
+    )
+
+
 
 def _verilog_module_name(
     architecture: str, instruction_name: str, bitwidth: int, arity: int
@@ -66,7 +77,7 @@ def _make_experiment(
     if architecture == "xilinx_ultrascale_plus":
         compile_actions = [_make_vivado_compile_command(base_path)]
     elif architecture == "lattice_ecp5":
-        compile_actions = [_make_yosys_nextpnr_compile_command(base_path)]
+        compile_actions = [_make_diamond_compile_command(base_path)]
     elif architecture == "sofa":
         compile_actions = []
 
