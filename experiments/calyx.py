@@ -381,3 +381,277 @@ def task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
         output_base_dirpath=(utils.output_dir() / "vanilla_calyx_diamond_end_to_end"),
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
     )
+
+
+def task_calyx_setup_lattice_ecp5_lakeroad():
+    """Set up the calyx-lattice-ecp5 directory.
+
+    This is the version of Calyx with instructions pre-synthesized by Lakeroad.
+
+    TODO(@gussmith23): Rename directory to include lakeroad."""
+    return _make_setup_calyx_task(
+        filepaths=[
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add1_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add2_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add2_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add3_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add3_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add4_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add4_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add8_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add8_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add16_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add16_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_add32_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_add32_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_and1_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_and1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_and2_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_and2_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_and8_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_and8_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_and16_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_and16_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_and32_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_and32_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_eq1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_eq1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_eq5_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_eq5_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_eq6_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_eq6_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_eq32_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_eq32_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_neq1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_neq1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_not1_1"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_not1_1_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_not5_1"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_not5_1_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_or1_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_or1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_or8_2"
+            / "bitwise"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_or8_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub1_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub2_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub2_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub3_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub3_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub4_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub4_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub5_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub5_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub6_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub6_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub7_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub7_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub8_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub8_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub16_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub16_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_sub32_2"
+            / "bitwise-with-carry"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_sub32_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_uge1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_uge1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ugt1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ugt1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ugt5_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ugt5_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ule1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ule1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ule4_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ule4_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ult1_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ult1_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ult3_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ult3_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ult4_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ult4_2_prim.v",
+            utils.output_dir()
+            / "lattice_ecp5"
+            / "lakeroad_lattice_ecp5_ult32_2"
+            / "comparison"
+            / "diamond"
+            / "lakeroad_lattice_ecp5_ult32_2_prim.v",
+        ],
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"),
+    )
+
+
+def task_calyx_tests_lattice_ecp5_lakeroad():
+    """Run Calyx tests for calyx-lattice-ecp5 directory."""
+    return _make_run_calyx_tests_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"),
+        log_filepath=(utils.output_dir() / "lattice_ecp5_lakeroad_calyx_tests.log"),
+        setup_calyx_taskname="calyx_setup_lattice_ecp5_lakeroad",
+    )
+
+
+def task_calyx_end_to_end_lattice_ecp5_lakeroad():
+    """Run end-to-end tests for calyx-lattice-ecp5."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"),
+        output_base_dirpath=(
+            utils.output_dir() / "calyx_lattice_ecp5_lakeroad_end_to_end"
+        ),
+        make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
+        setup_calyx_taskname="calyx_setup_lattice_ecp5_lakeroad",
+    )
