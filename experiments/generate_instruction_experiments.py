@@ -70,7 +70,7 @@ def task_instruction_experiments(experiments_file: str):
             #
             # Note: Leaving the file_dep empty is fine; it will just re-run
             # Lakeroad on each instruction each time.
-            "file_dep": [],
+            "file_dep": [experiments_file],
             "targets": [output_filepath],
         }
 
