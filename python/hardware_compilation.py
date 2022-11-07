@@ -3,6 +3,7 @@
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
 from pathlib import Path
+import sys
 from typing import Union
 import subprocess
 import os
@@ -106,25 +107,29 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
     # Synthesis with Yosys.
     with open(yosys_log_path, "w") as logfile:
         logging.info("Running Yosys synthesis on %s", instr_src_file)
-        yosys_start_time = time()
-        subprocess.run(
-            [
-                "yosys",
-                "-d",
-                "-p",
-                f"""
-                read -sv {instr_src_file}
-                hierarchy -top {module_name}
-                proc; opt; techmap; opt
-                synth_ecp5
-                write_json {synth_out_json}
-                write_verilog {synth_out_sv}""",
-            ],
-            check=True,
-            stdout=logfile,
-            stderr=logfile,
-        )
-        yosys_end_time = time()
+        try:
+            yosys_start_time = time()
+            subprocess.run(
+                [
+                    "yosys",
+                    "-d",
+                    "-p",
+                    f"""
+                    read -sv {instr_src_file}
+                    hierarchy -top {module_name}
+                    proc; opt; techmap; opt
+                    synth_ecp5
+                    write_json {synth_out_json}
+                    write_verilog {synth_out_sv}""",
+                ],
+                check=True,
+                stdout=logfile,
+                stderr=logfile,
+            )
+            yosys_end_time = time()
+        except subprocess.CalledProcessError as e:
+            print(f"Error log in {(str(logfile))}", file=sys.stderr)
+            raise e
 
     with open(yosys_time_path, "w") as f:
         print(f"{yosys_end_time-yosys_start_time}s", file=f)
@@ -133,14 +138,18 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
     # Runs in out-of-context mode, which doesn't insert I/O cells.
     with open(nextpnr_log_path, "w") as logfile:
         logging.info("Running nextpnr place-and-route on %s", instr_src_file)
-        nextpnr_start_time = time()
-        subprocess.run(
-            ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
-            check=True,
-            stdout=logfile,
-            stderr=logfile,
-        )
-        nextpnr_end_time = time()
+        try:
+            nextpnr_start_time = time()
+            subprocess.run(
+                ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
+                check=True,
+                stdout=logfile,
+                stderr=logfile,
+            )
+            nextpnr_end_time = time()
+        except subprocess.CalledProcessError as e:
+            print(f"Error log in {(str(logfile))}", file=sys.stderr)
+            raise e
 
     with open(nextpnr_time_path, "w") as f:
         print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
