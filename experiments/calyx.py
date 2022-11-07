@@ -655,3 +655,285 @@ def task_calyx_end_to_end_lattice_ecp5_lakeroad():
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
         setup_calyx_taskname="calyx_setup_lattice_ecp5_lakeroad",
     )
+
+
+def task_calyx_setup_xilinx_ultrascale_plus_lakeroad():
+    """Set up the calyx-xilinx-ultrascale-plus directory.
+
+    This is the version of Calyx with instructions pre-synthesized by Lakeroad.
+
+    TODO(@gussmith23): Rename directory to include lakeroad."""
+    return _make_setup_calyx_task(
+        filepaths=[
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add1_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add2_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add3_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add4_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add8_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add16_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_add32_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_and1_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_and2_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_and8_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_and16_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_and32_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_eq1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_eq5_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_eq6_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_eq32_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_neq1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_not1_1"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_not5_1"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_or1_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_or8_2"
+            / "bitwise"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub1_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub2_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub3_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub4_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub5_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub6_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub7_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub8_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub16_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_sub32_2"
+            / "bitwise-with-carry"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_uge1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ugt1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ugt5_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ule1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ule4_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ult1_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ult3_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ult4_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+            utils.output_dir()
+            / "xilinx_ultrascale_plus"
+            / "lakeroad_xilinx_ultrascale_plus_ult32_2"
+            / "comparison"
+            / "vivado"
+            / "synth_opt_place_route.sv",
+        ],
+        calyx_dirpath=(
+            utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus"
+        ),
+    )
+
+
+def task_calyx_tests_xilinx_ultrascale_plus_lakeroad():
+    """Run Calyx tests for calyx-xilinx-ultrascale-plus directory."""
+    return _make_run_calyx_tests_task(
+        calyx_dirpath=(
+            utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus"
+        ),
+        log_filepath=(
+            utils.output_dir() / "xilinx_ultrascale_plus_lakeroad_calyx_tests.log"
+        ),
+        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_lakeroad",
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
+    """Run end-to-end tests for calyx-xilinx-ultrascale-plus."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(
+            utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus"
+        ),
+        output_base_dirpath=(
+            utils.output_dir() / "calyx_xilinx_ultrascale_plus_lakeroad_end_to_end"
+        ),
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_lakeroad",
+    )
