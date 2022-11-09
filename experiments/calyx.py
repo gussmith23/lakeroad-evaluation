@@ -18,6 +18,12 @@ def _make_setup_calyx_task(
     helper creates tasks which set up a given Calyx directory by copying in
     inserted instructions.
 
+    TODO(@gussmith23): Currently, this copies everything into core.sv. This just
+    happens to make things work because core.sv is copied into every file
+    compiled through Calyx. However, some stuff doesn't actually belong in
+    core.sv (e.g. sqrt, from math.sv). This may or may not be an issue; it's
+    mostly just messy.
+
     Args:
       files: An iterable list of filepaths, each filepath being an instruction
         that should be inserted into Calyx.
@@ -238,6 +244,7 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "eq6_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "eq32_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "neq1_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "neq32_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "not1_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "not5_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "or1_2.sv",
@@ -258,9 +265,12 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "ule1_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "ule4_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "ult1_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "ult2_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "ult3_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "ult4_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "ult32_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "fp_sqrt_32_32_0.sv",
+            utils.output_dir() / "baseline" / "vivado" / "fp_sqrt_32_16_16.sv",
         ],
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
     )
