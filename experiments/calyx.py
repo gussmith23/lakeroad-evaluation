@@ -191,7 +191,9 @@ def _make_calyx_end_to_end_task(
     output_base_dirpath = Path(output_base_dirpath)
 
     for futil_filepath in _get_futil_files_to_test_with(calyx_dirpath):
-        relative_dir_in_calyx = futil_filepath.parent.relative_to(calyx_dirpath)
+        relative_dir_in_calyx = futil_filepath.parent.relative_to(
+            utils.lakeroad_evaluation_dir()
+        )
         compiled_sv_filepath = (
             output_base_dirpath
             / "compiled_with_futil"
