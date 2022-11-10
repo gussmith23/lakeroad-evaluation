@@ -11,6 +11,8 @@ ops = {
     "xor": f("^"),
     "add": f("+"),
     "sub": f("-"),
+    "sadd": f("+"),
+    "ssub": f("-"),
     # "concat": None,
     #"divs": f("/"),
     #"divu": f("/"),
@@ -34,6 +36,8 @@ ops = {
 }
 
 signedness = {
+    "sadd": "signed",
+    "ssub": "signed",
     "not": None,
     "add": None,
     "and": None,
@@ -68,6 +72,8 @@ make_binary_inputs = (
     lambda sign, size: f"input {sign}[{size-1}:0] a, input {sign}[{size-1}:0] b,"
 )
 inputs = {
+    "sadd": make_binary_inputs,
+    "ssub": make_binary_inputs,
     "and": make_binary_inputs,
     "or": make_binary_inputs,
     "not": lambda sign, size: f"input {sign}[{size-1}:0] a,",
@@ -88,6 +94,8 @@ inputs = {
 
 make_output = lambda sign, size: f"output {sign}[{size-1}:0] out"
 outputs = {
+    "sadd": make_output,
+    "ssub": make_output,
     "and": make_output,
     "or": make_output,
     "not": make_output,
@@ -107,6 +115,8 @@ outputs = {
 }
 
 arity = {
+    "sadd": 2,
+    "ssub": 2,
     "and": 2,
     "or": 2,
     "not": 1,
