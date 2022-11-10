@@ -1,7 +1,5 @@
 """File defining hardware compilation tasks using the DoIt framework."""
 
-from pathlib import Path
-from typing import Dict
 from hardware_compilation import *
 import doit
 import yaml
