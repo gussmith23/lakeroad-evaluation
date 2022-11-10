@@ -87,7 +87,7 @@ def task_instruction_experiments(experiments_file: str):
                 log_filepath = utils.output_dir() / log_filepath
                 time_filepath = utils.output_dir() / time_filepath
                 # TODO(@gussmith23) sloppy...
-                tcl_filepath = utils.output_dir() / "synthesize.tcl"
+                tcl_filepath = utils.output_dir() / f"{template}_{module_name}.tcl"
 
                 return {
                     "name": f"vivado_compile_{template}_{module_name}",
