@@ -286,6 +286,10 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "std_fp_div_pipe_32_1_31.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_div_pipe_4_2_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_div_pipe_32_24_8.sv",
+            utils.output_dir() / "baseline" / "vivado" / "sadd4_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "sadd32_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "ssub4_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "ssub32_2.sv",
         ],
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
     )

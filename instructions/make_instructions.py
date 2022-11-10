@@ -24,6 +24,8 @@ ops = {
     "ugt": f(">"),
     "ule": f("<="),
     "ult": f("<"),
+    "sgt": f(">"),
+    "slt": f("<"),
     # "mods": f("%"),
     # "modu": f("%"),
     "mul": f("*"),
@@ -64,6 +66,8 @@ signedness = {
     "ugt": "unsigned",
     "ule": "unsigned",
     "ult": "unsigned",
+    "sgt": "signed",
+    "slt": "signed",
     "mul": None,
     "mux": None,
 }
