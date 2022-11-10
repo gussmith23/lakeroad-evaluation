@@ -311,7 +311,10 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
         output_base_dirpath=(utils.output_dir() / "calyx_vivado_end_to_end"),
-        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+        # Use the synthesis function which does not perform optimization, and is
+        # optimized for runtime. This is because the pre-synthesized
+        # instructions will have already been synthesized with optimizations on.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
     )
 
@@ -399,7 +402,8 @@ def task_vanilla_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
         output_base_dirpath=(utils.output_dir() / "vanilla_calyx_vivado_end_to_end"),
-        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+        # Run optimization with synthesis.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
     )
 
 
@@ -963,6 +967,8 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
         output_base_dirpath=(
             utils.output_dir() / "calyx_xilinx_ultrascale_plus_lakeroad_end_to_end"
         ),
-        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task,
+        # Synthesize without optimization, as the pre-synthesized instructions
+        # should be considered optimized.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_lakeroad",
     )

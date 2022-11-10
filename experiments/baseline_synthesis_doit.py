@@ -31,19 +31,25 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         )
         log_filepath = synth_opt_place_route_output_filepath.with_suffix(".log")
         time_filepath = synth_opt_place_route_output_filepath.with_suffix(".time")
+        tcl_filepath = synth_opt_place_route_output_filepath.with_suffix(".tcl")
 
         return {
             "name": f"baseline_vivado_compile_{module_name}",
             "actions": [
                 (
                     xilinx_ultrascale_plus_vivado_synthesis,
-                    [
-                        baseline_instruction_filepath,
-                        synth_opt_place_route_output_filepath,
-                        module_name,
-                        time_filepath,
-                        log_filepath,
-                    ],
+                    [],
+                    {
+                        "instr_src_file": baseline_instruction_filepath,
+                        "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+                        "module_name": module_name,
+                        "time_filepath": time_filepath,
+                        "log_path": log_filepath,
+                        "tcl_script_filepath": tcl_filepath,
+                        # Run optimizations.
+                        "directive": "default",
+                        "opt_design": True,
+                    },
                 )
             ],
             "file_dep": [baseline_instruction_filepath],
@@ -51,6 +57,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                 synth_opt_place_route_output_filepath,
                 log_filepath,
                 time_filepath,
+                tcl_filepath,
             ],
         }
 

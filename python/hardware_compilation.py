@@ -9,7 +9,6 @@ import subprocess
 import os
 import logging
 from time import time
-from tempfile import TemporaryDirectory
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
@@ -17,10 +16,49 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     synth_opt_place_route_output_filepath: Union[str, Path],
     module_name: str,
     time_filepath: Union[str, Path],
+    tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path] = os.devnull,
+    directive: str = "default",
+    opt_design: bool = True,
 ):
+    """Synthesize with Xilinx Vivado.
+
+    Args:
+        tcl_script_filepath: Output filepath where .tcl script will be written.
+        directive: What to pass to the -directive arg of Vivado's synth_design command.
+        opt_design: Whether or not to run Vivado's opt_design command.
+    """
+    log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
+    synth_opt_place_route_output_filepath = Path(synth_opt_place_route_output_filepath)
     synth_opt_place_route_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    tcl_script_filepath = Path(tcl_script_filepath)
+    tcl_script_filepath.parent.mkdir(parents=True, exist_ok=True)
+
+    # Generate and write the TCL script.
+    with open(tcl_script_filepath, "w") as f:
+        f.write(
+            f"""
+set sv_source_file {str(instr_src_file)}
+set modname {module_name}
+set synth_opt_place_route_output_filepath {synth_opt_place_route_output_filepath}
+
+# Part number chosen at Luis's suggestion. Can be changed to another UltraScale+
+# part.
+set_part xczu3eg-sbva484-1-e
+
+read_verilog -sv ${{sv_source_file}}
+set_property top ${{modname}} [current_fileset]
+synth_design -mode out_of_context -directive {directive}
+{"opt_design" if opt_design else "# opt_design"}
+place_design
+# -release_memory seems to fix a bug where routing crashes when used inside the
+# Docker container.
+route_design -release_memory
+write_verilog -force ${{synth_opt_place_route_output_filepath}}
+report_timing_summary
+"""
+        )
 
     # Synthesis with Vivado.
     with open(log_path, "w") as logfile:
@@ -36,13 +74,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
                 "-mode",
                 "batch",
                 "-source",
-                Path(__file__).resolve().parent.parent
-                / "tcl"
-                / "synthesize_instruction_vivado.tcl",
-                "-tclargs",
-                instr_src_file,
-                module_name,
-                synth_opt_place_route_output_filepath,
+                tcl_script_filepath,
             ],
             check=True,
             stdout=logfile,
@@ -54,30 +86,37 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         print(f"{end_time-start_time}s", file=f)
 
 
-def make_xilinx_ultrascale_plus_vivado_synthesis_task(
+def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
 ):
-    """Wrapper over Vivado synthesis function which creates a DoIt task."""
+    """Wrapper over Vivado synthesis function which creates a DoIt task.
+
+    This task will run Vivado with optimizations."""
 
     input_filepath = Path(input_filepath)
     output_dirpath = Path(output_dirpath)
     synth_opt_place_route_output_filepath = output_dirpath / input_filepath.name
     time_filepath = output_dirpath / f"{input_filepath.stem}.time"
     log_filepath = output_dirpath / f"{input_filepath.stem}.log"
+    tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
 
     return {
         "actions": [
             (
                 xilinx_ultrascale_plus_vivado_synthesis,
-                [
-                    input_filepath,
-                    synth_opt_place_route_output_filepath,
-                    module_name,
-                    time_filepath,
-                    log_filepath,
-                ],
+                [],
+                {
+                    "instr_src_file": input_filepath,
+                    "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+                    "module_name": module_name,
+                    "time_filepath": time_filepath,
+                    "log_path": log_filepath,
+                    "tcl_script_filepath": tcl_script_filepath,
+                    "directive": "default",
+                    "opt_design": True,
+                },
             )
         ],
         "file_dep": [input_filepath],
@@ -85,6 +124,50 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task(
             synth_opt_place_route_output_filepath,
             time_filepath,
             log_filepath,
+            tcl_script_filepath,
+        ],
+    }
+
+def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+):
+    """Wrapper over Vivado synthesis function which creates a DoIt task.
+
+    This task will run Vivado without optimizations, optimized for making
+    synthesis fast."""
+
+    input_filepath = Path(input_filepath)
+    output_dirpath = Path(output_dirpath)
+    synth_opt_place_route_output_filepath = output_dirpath / input_filepath.name
+    time_filepath = output_dirpath / f"{input_filepath.stem}.time"
+    log_filepath = output_dirpath / f"{input_filepath.stem}.log"
+    tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
+
+    return {
+        "actions": [
+            (
+                xilinx_ultrascale_plus_vivado_synthesis,
+                [],
+                {
+                    "instr_src_file": input_filepath,
+                    "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+                    "module_name": module_name,
+                    "time_filepath": time_filepath,
+                    "log_path": log_filepath,
+                    "tcl_script_filepath": tcl_script_filepath,
+                    "directive": "runtimeoptimized",
+                    "opt_design": False,
+                },
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [
+            synth_opt_place_route_output_filepath,
+            time_filepath,
+            log_filepath,
+            tcl_script_filepath,
         ],
     }
 

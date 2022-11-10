@@ -88,6 +88,8 @@ def task_instruction_experiments(experiments_file: str):
                 )
                 log_filepath = utils.output_dir() / log_filepath
                 time_filepath = utils.output_dir() / time_filepath
+                # TODO(@gussmith23) sloppy...
+                tcl_filepath = utils.output_dir() / "synthesize.tcl"
 
                 return {
                     "name": f"vivado_compile_{template}_{module_name}",
@@ -101,6 +103,18 @@ def task_instruction_experiments(experiments_file: str):
                                 time_filepath,
                                 log_filepath,
                             ],
+                            {
+                                "instr_src_file": verilog_filepath,
+                                "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+                                "module_name": module_name,
+                                "time_filepath": time_filepath,
+                                "tcl_script_filepath": tcl_filepath,
+                                "log_path": log_filepath,
+                                # TODO(@gussmith23) Do we run optimizations on
+                                # Lakeroad-generated instructions? or no?
+                                "directive": "runtimeoptimized",
+                                "opt_design": False,
+                            },
                         )
                     ],
                     "file_dep": [verilog_filepath],
@@ -108,6 +122,7 @@ def task_instruction_experiments(experiments_file: str):
                         synth_opt_place_route_output_filepath,
                         log_filepath,
                         time_filepath,
+                        tcl_filepath,
                     ],
                 }
 
