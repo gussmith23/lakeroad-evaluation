@@ -19,6 +19,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path] = os.devnull,
     directive: str = "default",
+    synth_design: bool = True,
     opt_design: bool = True,
 ):
     """Synthesize with Xilinx Vivado.
@@ -26,6 +27,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     Args:
         tcl_script_filepath: Output filepath where .tcl script will be written.
         directive: What to pass to the -directive arg of Vivado's synth_design command.
+        synth_design: Whether or not to run Vivado's synth_design command.
         opt_design: Whether or not to run Vivado's opt_design command.
     """
     log_path = Path(log_path)
@@ -37,6 +39,9 @@ def xilinx_ultrascale_plus_vivado_synthesis(
 
     # Generate and write the TCL script.
     with open(tcl_script_filepath, "w") as f:
+        synth_design_command = (
+            f"synth_design -mode out_of_context -directive {directive}"
+        )
         f.write(
             f"""
 set sv_source_file {str(instr_src_file)}
@@ -49,7 +54,7 @@ set_part xczu3eg-sbva484-1-e
 
 read_verilog -sv ${{sv_source_file}}
 set_property top ${{modname}} [current_fileset]
-synth_design -mode out_of_context -directive {directive}
+{synth_design_command if synth_design else f"# {synth_design_command}"}
 {"opt_design" if opt_design else "# opt_design"}
 place_design
 # -release_memory seems to fix a bug where routing crashes when used inside the
