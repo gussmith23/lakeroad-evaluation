@@ -275,11 +275,26 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "std_fp_add_32_1_31.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_sub_32_16_16.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_sub_32_1_31.sv",
-            utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_32_16_16_0.sv",
-            utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_32_16_16_1.sv",
-            utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_32_32_0_0.sv",
-            utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_32_32_0_1.sv",
-            utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_32_1_31_0.sv",
+            utils.output_dir()
+            / "baseline"
+            / "vivado"
+            / "std_fp_mult_pipe_32_16_16_0.sv",
+            utils.output_dir()
+            / "baseline"
+            / "vivado"
+            / "std_fp_mult_pipe_32_16_16_1.sv",
+            utils.output_dir()
+            / "baseline"
+            / "vivado"
+            / "std_fp_mult_pipe_32_32_0_0.sv",
+            utils.output_dir()
+            / "baseline"
+            / "vivado"
+            / "std_fp_mult_pipe_32_32_0_1.sv",
+            utils.output_dir()
+            / "baseline"
+            / "vivado"
+            / "std_fp_mult_pipe_32_1_31_0.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_4_2_2_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_mult_pipe_4_4_0_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "std_fp_div_pipe_32_16_16.sv",
