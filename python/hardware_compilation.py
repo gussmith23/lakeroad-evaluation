@@ -133,6 +133,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
         ],
     }
 
+
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
