@@ -134,6 +134,11 @@ def _get_futil_files_to_test_with(calyx_dirpath):
         # ERROR - synthesis: Multiple Non-Tristate drivers exist for net clk.
         # They work fine via Vivado.
         # + list((calyx_dirpath / "tests" / "correctness" / "tcam").glob("**/*.futil"))
+        + list(
+            (utils.lakeroad_evaluation_dir() / "calyx-evaluation" / "benchmarks").glob(
+                "**/*.fuse"
+            )
+        )
     )
 
 
