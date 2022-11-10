@@ -65,6 +65,7 @@ place_design
 route_design -release_memory
 write_verilog -force ${{synth_opt_place_route_output_filepath}}
 report_timing_summary
+report_utilization
 """
         )
 
