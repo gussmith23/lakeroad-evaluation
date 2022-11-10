@@ -21,6 +21,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
+    synth_design_rtl_flag: bool = False,
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -29,6 +30,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         directive: What to pass to the -directive arg of Vivado's synth_design command.
         synth_design: Whether or not to run Vivado's synth_design command.
         opt_design: Whether or not to run Vivado's opt_design command.
+        synth_design_rtl_flag: Whether or not to pass the -rtl flag to synth_design.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -41,6 +43,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     with open(tcl_script_filepath, "w") as f:
         synth_design_command = (
             f"synth_design -mode out_of_context -directive {directive}"
+            + (" -rtl" if synth_design_rtl_flag else "")
         )
         f.write(
             f"""
@@ -165,6 +168,8 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
                     "tcl_script_filepath": tcl_script_filepath,
                     "directive": "runtimeoptimized",
                     "opt_design": False,
+                    "synth_design": True,
+                    "synth_design_rtl_flag": False,
                 },
             )
         ],
