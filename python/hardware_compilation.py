@@ -4,7 +4,7 @@ By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
 from pathlib import Path
 import sys
-from typing import Union
+from typing import Optional, Union
 import subprocess
 import os
 import logging
@@ -22,15 +22,22 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     synth_design: bool = True,
     opt_design: bool = True,
     synth_design_rtl_flag: bool = False,
+    clock_name: Optional[str] = None,
 ):
     """Synthesize with Xilinx Vivado.
 
+    NOTE: We could use fud to do this; fud will allow you to provide a tcl and
+    xdc file, and will parse out the results for you (which I still have to do.)
+
     Args:
         tcl_script_filepath: Output filepath where .tcl script will be written.
-        directive: What to pass to the -directive arg of Vivado's synth_design command.
-        synth_design: Whether or not to run Vivado's synth_design command.
+        directive: What to pass to the -directive arg of Vivado's synth_design
+          command. 
+        synth_design: Whether or not to run Vivado's synth_design
+          command. 
         opt_design: Whether or not to run Vivado's opt_design command.
-        synth_design_rtl_flag: Whether or not to pass the -rtl flag to synth_design.
+        synth_design_rtl_flag: Whether or not to pass the -rtl flag to
+          synth_design.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -38,6 +45,17 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     synth_opt_place_route_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     tcl_script_filepath = Path(tcl_script_filepath)
     tcl_script_filepath.parent.mkdir(parents=True, exist_ok=True)
+    xdc_filepath = tcl_script_filepath.with_suffix(".xdc")
+
+    with open(xdc_filepath, "w") as f:
+        if clock_name:
+            # We use 7 because that's what the Calyx team used for their eval.
+            # We could try to refine the clock period per design. Rachit's notes:
+            # 
+            set_clock_command = f"create_clock -period 7 -name {clock_name} -waveform {{0.0 1}} [get_ports {clock_name}]"
+        else:
+            set_clock_command = "# No clock provided; not creating a clock."
+        f.write(set_clock_command)
 
     # Generate and write the TCL script.
     with open(tcl_script_filepath, "w") as f:
@@ -45,6 +63,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
             f"synth_design -mode out_of_context -directive {directive}"
             + (" -rtl" if synth_design_rtl_flag else "")
         )
+
         f.write(
             f"""
 set sv_source_file {str(instr_src_file)}
@@ -58,6 +77,7 @@ set_part xczu3eg-sbva484-1-e
 read_verilog -sv ${{sv_source_file}}
 set_property top ${{modname}} [current_fileset]
 {synth_design_command if synth_design else f"# {synth_design_command}"}
+read_xdc -mode out_of_context {xdc_filepath}
 {"opt_design" if opt_design else "# opt_design"}
 place_design
 # -release_memory seems to fix a bug where routing crashes when used inside the
@@ -99,6 +119,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
+    clock_name: Optional[str] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -125,6 +146,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                     "tcl_script_filepath": tcl_script_filepath,
                     "directive": "default",
                     "opt_design": True,
+                    "clock_name": clock_name,
                 },
             )
         ],
@@ -142,6 +164,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
+    clock_name: Optional[str] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -171,6 +194,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
                     "opt_design": False,
                     "synth_design": True,
                     "synth_design_rtl_flag": False,
+                    "clock_name": clock_name,
                 },
             )
         ],
@@ -296,8 +320,12 @@ def make_lattice_ecp5_diamond_synthesis_task(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
+    clock_name: Optional[str] = None,
 ):
     """Wrapper over Diamond synthesis function which creates a DoIt task."""
+    # TODO(@gussmith23): Support clocks on Lattice.
+    if clock_name is not None:
+        logging.warn("clock_name not supported for Lattice yet.")
 
     output_dirpath = Path(output_dirpath)
 

@@ -222,6 +222,7 @@ def _make_calyx_end_to_end_task(
             / relative_dir_in_calyx
             / futil_filepath.name,
             module_name="main",
+            clock_name="clk",
         )
         synthesis_task["name"] = f"synthesize_{futil_filepath}"
         yield synthesis_task
