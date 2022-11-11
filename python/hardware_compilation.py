@@ -16,13 +16,22 @@ from time import time
 
 
 @dataclass
-class VivadoLogStats:
-    primitives: List[Tuple[str, int]]
+class VivadoTimingStats:
+    """Class representing timing stats that may be present in a Vivado log."""
+
     user_constraints_met: bool
     worst_negative_slack: Optional[float]
     clock_name: str
     clock_period_ns: float
     clock_frequency_MHz: float
+
+
+@dataclass
+class VivadoLogStats:
+    primitives: List[Tuple[str, int]]
+    # Timing stats won't be present if there was not a clock constraint
+    # provided, thus timing_stats may be None.
+    timing_stats: Optional[VivadoTimingStats]
 
 
 def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
@@ -49,58 +58,62 @@ def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
     )
     primitives = [(m[0], int(m[1])) for m in matches]
 
-    ## Timing constraints met.
-    user_constraints_met = bool(
-        re.search(
-            r"^All user specified timing constraints are met\.$",
-            log_text,
-            flags=re.MULTILINE,
+    if re.search("There are no user specified timing constraints.", log_text):
+        timing_stats = None
+    else:
+        ## Timing constraints met.
+        user_constraints_met = bool(
+            re.search(
+                r"^All user specified timing constraints are met\.$",
+                log_text,
+                flags=re.MULTILINE,
+            )
         )
-    )
 
-    ## Timing summary.
+        ## Timing summary.
 
-    matches = re.findall(
-        r"""\| Design Timing Summary
+        matches = re.findall(
+            r"""\| Design Timing Summary
 \| ---------------------
 -+
 
 ^    WNS.*$
 ^[ -]+$
  +(-?\d+\.\d+|NA) """,
-        log_text,
-        flags=re.MULTILINE,
-    )
-    assert len(matches) == 1
-    worst_negative_slack = None if matches[0] == "NA" else float(matches[0])
+            log_text,
+            flags=re.MULTILINE,
+        )
+        assert len(matches) == 1
+        worst_negative_slack = None if matches[0] == "NA" else float(matches[0])
 
-    matches = list(
-        re.finditer(
-            r"""-+
+        matches = list(
+            re.finditer(
+                r"""-+
 \| Clock Summary
 \| -+
 ------------------------------------------------------------------------------------------------
 
 Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
 [ -]+
-(?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
-            log_text,
-            flags=re.MULTILINE,
+    (?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
+                log_text,
+                flags=re.MULTILINE,
+            )
         )
-    )
-    assert len(matches) == 1
-    clock_name = matches[0]["name"]
-    clock_period_ns = float(matches[0]["period"])
-    clock_frequency_MHz = float(matches[0]["frequency"])
+        assert len(matches) == 1
+        clock_name = matches[0]["name"]
+        clock_period_ns = float(matches[0]["period"])
+        clock_frequency_MHz = float(matches[0]["frequency"])
 
-    return VivadoLogStats(
-        primitives=primitives,
-        user_constraints_met=user_constraints_met,
-        worst_negative_slack=worst_negative_slack,
-        clock_name=clock_name,
-        clock_period_ns=clock_period_ns,
-        clock_frequency_MHz=clock_frequency_MHz,
-    )
+        timing_stats = VivadoTimingStats(
+            user_constraints_met=user_constraints_met,
+            worst_negative_slack=worst_negative_slack,
+            clock_name=clock_name,
+            clock_period_ns=clock_period_ns,
+            clock_frequency_MHz=clock_frequency_MHz,
+        )
+
+    return VivadoLogStats(primitives=primitives, timing_stats=timing_stats)
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
