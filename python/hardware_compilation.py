@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 import re
 import sys
-from typing import List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 import subprocess
 import os
 import logging
@@ -29,6 +29,8 @@ class VivadoTimingStats:
 @dataclass
 class VivadoLogStats:
     primitives: List[Tuple[str, int]]
+    # Maps CLB resource name to # used and % utilized.
+    clb: Dict[str, Tuple[int, float]]
     # Timing stats won't be present if there was not a clock constraint
     # provided, thus timing_stats may be None.
     timing_stats: Optional[VivadoTimingStats]
@@ -58,7 +60,42 @@ def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
     )
     primitives = [(m[0], int(m[1])) for m in matches]
 
-    if re.search("There are no user specified timing constraints.", log_text):
+    ## CLB usage.
+    matches = list(
+        re.finditer(
+            r"""
+1\. CLB Logic
+------------
+
+\+-[+-]*
+\| *Site Type *\| *Used *\| *Fixed *\| *Prohibited *\| *Available *\| *Util% *\|
+\+-[+-]*
+\| CLB LUTs +\| +(?P<clbluts>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<clblutsutil>\d+\.\d+) +\|
+(^\|.*$\n?)*
+\| CLB Registers +\| +(?P<clbregisters>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<clbregistersutil>\d+\.\d+) +\|
+(^\|.*$\n?)*
+\| CARRY8 +\| +(?P<carry8>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<carry8util>\d+\.\d+) +\|
+\| F7 Muxes +\| +(?P<f7muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f7muxesutil>\d+\.\d+) +\|
+\| F8 Muxes +\| +(?P<f8muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f8muxesutil>\d+\.\d+) +\|
+\| F9 Muxes +\| +(?P<f9muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f9muxesutil>\d+\.\d+) +\|
+\+-[+-]*""",
+            log_text,
+            flags=re.MULTILINE,
+        )
+    )
+    assert len(matches) == 1
+    m = matches[0]
+    clb = {
+        "CLB LUTs": (int(m["clbluts"]), float(m["clblutsutil"])),
+        "CLB Registers": (int(m["clbregisters"]), float(m["clbregistersutil"])),
+        "CARRY8": (int(m["carry8"]), float(m["carry8util"])),
+        "F7 Muxes": (int(m["f7muxes"]), float(m["f7muxesutil"])),
+        "F8 Muxes": (int(m["f8muxes"]), float(m["f8muxesutil"])),
+        "F9 Muxes": (int(m["f9muxes"]), float(m["f9muxesutil"])),
+    }
+
+    ## Timing.
+    if re.search("There are no user specified timing constraints\.", log_text):
         timing_stats = None
     else:
         ## Timing constraints met.
@@ -113,7 +150,7 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
             clock_frequency_MHz=clock_frequency_MHz,
         )
 
-    return VivadoLogStats(primitives=primitives, timing_stats=timing_stats)
+    return VivadoLogStats(primitives=primitives, clb=clb, timing_stats=timing_stats)
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
