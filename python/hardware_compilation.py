@@ -95,7 +95,7 @@ def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
 
 Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
 [ -]+
-    (?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
+(?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
                 log_text,
                 flags=re.MULTILINE,
             )
