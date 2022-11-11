@@ -15,10 +15,6 @@ import logging
 from time import time
 
 
-def parse_vivado_primitive_table(text: str):
-    pass
-
-
 @dataclass
 class VivadoLogStats:
     primitives: List[Tuple[str, int]]
