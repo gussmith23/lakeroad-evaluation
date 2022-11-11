@@ -2,13 +2,109 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
+from dataclasses import dataclass
+import dataclasses
+import json
 from pathlib import Path
+import re
 import sys
-from typing import Optional, Union
+from typing import List, Optional, Tuple, Union
 import subprocess
 import os
 import logging
 from time import time
+
+
+def parse_vivado_primitive_table(text: str):
+    pass
+
+
+@dataclass
+class VivadoLogStats:
+    primitives: List[Tuple[str, int]]
+    user_constraints_met: bool
+    worst_negative_slack: Optional[float]
+    clock_name: str
+    clock_period_ns: float
+    clock_frequency_MHz: float
+
+
+def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
+    ## Parse primitive table.
+    # Get range to search between.
+    matches = list(
+        re.finditer(
+            r"^9. Primitives$\r?\n^-------------$", log_text, flags=re.MULTILINE
+        )
+    )
+    assert len(matches) == 1
+    start_index = matches[0].span()[1]
+    matches = list(
+        re.finditer(
+            r"^10. Black Boxes$\r?\n^---------------$", log_text, flags=re.MULTILINE
+        )
+    )
+    end_index = matches[0].span()[0]
+    # Find matches.
+    matches = re.findall(
+        r"^\| (\w+) +\| +(\d+) \| +\w+ \|$",
+        log_text[start_index:end_index],
+        flags=re.MULTILINE,
+    )
+    primitives = [(m[0], int(m[1])) for m in matches]
+
+    ## Timing constraints met.
+    user_constraints_met = bool(
+        re.search(
+            r"^All user specified timing constraints are met\.$",
+            log_text,
+            flags=re.MULTILINE,
+        )
+    )
+
+    ## Timing summary.
+
+    matches = re.findall(
+        r"""\| Design Timing Summary
+\| ---------------------
+-+
+
+^    WNS.*$
+^[ -]+$
+ +(-?\d+\.\d+|NA) """,
+        log_text,
+        flags=re.MULTILINE,
+    )
+    assert len(matches) == 1
+    worst_negative_slack = None if matches[0] == "NA" else float(matches[0])
+
+    matches = list(
+        re.finditer(
+            r"""-+
+\| Clock Summary
+\| -+
+------------------------------------------------------------------------------------------------
+
+Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
+[ -]+
+(?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
+            log_text,
+            flags=re.MULTILINE,
+        )
+    )
+    assert len(matches) == 1
+    clock_name = matches[0]["name"]
+    clock_period_ns = float(matches[0]["period"])
+    clock_frequency_MHz = float(matches[0]["frequency"])
+
+    return VivadoLogStats(
+        primitives=primitives,
+        user_constraints_met=user_constraints_met,
+        worst_negative_slack=worst_negative_slack,
+        clock_name=clock_name,
+        clock_period_ns=clock_period_ns,
+        clock_frequency_MHz=clock_frequency_MHz,
+    )
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
@@ -17,7 +113,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     module_name: str,
     time_filepath: Union[str, Path],
     tcl_script_filepath: Union[str, Path],
-    log_path: Union[str, Path] = os.devnull,
+    log_path: Union[str, Path],
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
@@ -46,12 +142,13 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     tcl_script_filepath = Path(tcl_script_filepath)
     tcl_script_filepath.parent.mkdir(parents=True, exist_ok=True)
     xdc_filepath = tcl_script_filepath.with_suffix(".xdc")
+    json_filepath = tcl_script_filepath.with_suffix(".json")
 
     with open(xdc_filepath, "w") as f:
         if clock_name:
             # We use 7 because that's what the Calyx team used for their eval.
             # We could try to refine the clock period per design. Rachit's notes:
-            # 
+            #
             set_clock_command = f"create_clock -period 7 -name {clock_name} -waveform {{0.0 1}} [get_ports {clock_name}]"
         else:
             set_clock_command = "# No clock provided; not creating a clock."
@@ -114,6 +211,9 @@ report_utilization
     with open(time_filepath, "w") as f:
         print(f"{end_time-start_time}s", file=f)
 
+    with open(json_filepath, "w") as f:
+        json.dump(dataclasses.asdict(parse_ultrascale_log(open(log_path).read())), f)
+
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
@@ -147,6 +247,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                     "directive": "default",
                     "opt_design": True,
                     "clock_name": clock_name,
+                    "synth_design": True,
                 },
             )
         ],
