@@ -32,9 +32,9 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     Args:
         tcl_script_filepath: Output filepath where .tcl script will be written.
         directive: What to pass to the -directive arg of Vivado's synth_design
-          command. 
+          command.
         synth_design: Whether or not to run Vivado's synth_design
-          command. 
+          command.
         opt_design: Whether or not to run Vivado's opt_design command.
         synth_design_rtl_flag: Whether or not to pass the -rtl flag to
           synth_design.
