@@ -69,6 +69,9 @@ jobs:
       container-name: ${{ steps.run-evaluation.outputs.container-name }}
     steps:
     - id: run-evaluation
+      # NOTE: -n argument for doit controls # simultaneous processes. I have to
+      # set it manually -- if it's too high, too many Vivados running at once
+      # will cause out-of-memory errors.
       run: |
         CONTAINER_NAME=lakeroad-evaluation-run-$(date +%s)
         echo "Docker container name: $CONTAINER_NAME"
@@ -80,7 +83,7 @@ jobs:
           --env LOGLEVEL=INFO \
           --env OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
-          doit --continue --file experiments/dodo.py -n `nproc`
+          doit --continue --file experiments/dodo.py -n 20
 
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
