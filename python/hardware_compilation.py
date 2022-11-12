@@ -229,9 +229,12 @@ set_property top ${{modname}} [current_fileset]
 read_xdc -mode out_of_context {xdc_filepath}
 {"opt_design" if opt_design else "# opt_design"}
 place_design
-# -release_memory seems to fix a bug where routing crashes when used inside the
-# Docker container.
-route_design -release_memory
+# route_design causes problems when run inside the Docker container. Originally,
+# I used -release_memory, because I thought the issue was memory related. This
+# fixed the issue, but only because (as I later discovered) -release_memory
+# doesn't actually run routing! So we need to see if the crash still occurs, 
+# and if it does, we need another way around it.
+route_design
 write_verilog -force ${{synth_opt_place_route_output_filepath}}
 report_timing_summary
 report_utilization
