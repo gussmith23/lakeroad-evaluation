@@ -13,6 +13,7 @@ import subprocess
 import os
 import logging
 from time import time
+from datetime import datetime, timedelta
 
 
 @dataclass
@@ -34,6 +35,11 @@ class VivadoLogStats:
     # Timing stats won't be present if there was not a clock constraint
     # provided, thus timing_stats may be None.
     timing_stats: Optional[VivadoTimingStats]
+
+    # CPU runtime of various Vivado commands as reported by Vivado, in seconds.
+    synth_time: float
+    # May or may not be present, as we may or may not run opt_design.
+    opt_time: Optional[float]
 
 
 def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
@@ -156,7 +162,51 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
             clock_frequency_MHz=clock_frequency_MHz,
         )
 
-    return VivadoLogStats(primitives=primitives, clb=clb, timing_stats=timing_stats)
+    ## Parse latency of each command (synth_design, opt_design, etc)
+    def _parse_command_latency(command: str) -> Optional[Tuple[float, float]]:
+        """
+        Returns a tuple of the CPU seconds and the elapsed seconds. Returns None
+        if not found."""
+        matches = list(
+            re.finditer(
+                rf"""{command} completed successfully
+{command}: Time \(s\): cpu = (?P<cputime>.*) ; elapsed = (?P<elapsedtime>.*) . Memory \(MB\):""",
+                log_text,
+            )
+        )
+
+        if len(matches) == 0:
+            return None
+
+        assert len(matches) == 1
+
+        def _get_secs(time_str: str):
+            """Parse seconds from time string.
+
+            Ignores elapsed time.
+
+            Returns:
+                cpu time in seconds."""
+            parsed_datetime = datetime.strptime(time_str, "%H:%M:%S")
+            converted_timedelta = timedelta(
+                hours=parsed_datetime.hour,
+                minutes=parsed_datetime.minute,
+                seconds=parsed_datetime.second,
+            )
+            return converted_timedelta.total_seconds()
+
+        return _get_secs(matches[0]["cputime"])
+
+    synth_time = _parse_command_latency("synth_design")
+    opt_time = _parse_command_latency("opt_design")
+
+    return VivadoLogStats(
+        primitives=primitives,
+        clb=clb,
+        timing_stats=timing_stats,
+        synth_time=synth_time,
+        opt_time=opt_time,
+    )
 
 
 def xilinx_ultrascale_plus_vivado_synthesis(
