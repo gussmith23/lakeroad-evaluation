@@ -37,6 +37,12 @@ class VivadoLogStats:
 
 
 def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
+    """Parse Vivado logs.
+
+    Parses logs from Vivado version:
+    Vivado v2021.2 (64-bit)
+    SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+    IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021"""
     ## Parse primitive table.
     # Get range to search between.
     matches = list(
