@@ -20,21 +20,31 @@ from datetime import datetime, timedelta
 class VivadoTimingStats:
     """Class representing timing stats that may be present in a Vivado log."""
 
-    user_constraints_met: bool
-    worst_negative_slack: Optional[float]
-    clock_name: str
-    clock_period_ns: float
-    clock_frequency_MHz: float
-
 
 @dataclass
 class VivadoLogStats:
-    primitives: List[Tuple[str, int]]
-    # Maps CLB resource name to # used and % utilized.
-    clb: Dict[str, Tuple[int, float]]
+    """Statistics parsed from Vivado logfile.
+
+    NOTE: it's important that this is not a nested dictionary, i.e. that all of
+    the fields of this dictionary are strings/ints/floats and not lists/dicts.
+    This is because each of these dictionaries becomes a row in a CSV file, and
+    thus if there was a nested structure, it would get a lot more compilcated."""
+
+    # The number of various resources used.
+    clb_luts: int
+    clb_regs: int
+    carry8s: int
+    f7muxes: int
+    f8muxes: int
+    f9muxes: int
+
     # Timing stats won't be present if there was not a clock constraint
-    # provided, thus timing_stats may be None.
-    timing_stats: Optional[VivadoTimingStats]
+    # provided, thus all timing stats are Optional.
+    user_constraints_met: Optional[bool]
+    worst_negative_slack: Optional[float]
+    clock_name: Optional[str]
+    clock_period_ns: Optional[float]
+    clock_frequency_MHz: Optional[float]
 
     # CPU runtime of various Vivado commands as reported by Vivado, in seconds.
     synth_time: float
@@ -97,18 +107,20 @@ def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
     )
     assert len(matches) == 1
     m = matches[0]
-    clb = {
-        "CLB LUTs": (int(m["clbluts"]), float(m["clblutsutil"])),
-        "CLB Registers": (int(m["clbregisters"]), float(m["clbregistersutil"])),
-        "CARRY8": (int(m["carry8"]), float(m["carry8util"])),
-        "F7 Muxes": (int(m["f7muxes"]), float(m["f7muxesutil"])),
-        "F8 Muxes": (int(m["f8muxes"]), float(m["f8muxesutil"])),
-        "F9 Muxes": (int(m["f9muxes"]), float(m["f9muxesutil"])),
-    }
+    clb_luts = int(m["clbluts"])
+    clb_regs = int(m["clbregisters"])
+    carry8s = int(m["carry8"])
+    f7muxes = int(m["f7muxes"])
+    f8muxes = int(m["f8muxes"])
+    f9muxes = int(m["f9muxes"])
 
     ## Timing.
     if re.search("There are no user specified timing constraints\.", log_text):
-        timing_stats = None
+        user_constraints_met = None
+        worst_negative_slack = None
+        clock_name = None
+        clock_period_ns = None
+        clock_frequency_MHz = None
     else:
         ## Timing constraints met.
         user_constraints_met = bool(
@@ -154,14 +166,6 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
         clock_period_ns = float(matches[0]["period"])
         clock_frequency_MHz = float(matches[0]["frequency"])
 
-        timing_stats = VivadoTimingStats(
-            user_constraints_met=user_constraints_met,
-            worst_negative_slack=worst_negative_slack,
-            clock_name=clock_name,
-            clock_period_ns=clock_period_ns,
-            clock_frequency_MHz=clock_frequency_MHz,
-        )
-
     ## Parse latency of each command (synth_design, opt_design, etc)
     def _parse_command_latency(command: str) -> Optional[Tuple[float, float]]:
         """
@@ -201,9 +205,17 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
     opt_time = _parse_command_latency("opt_design")
 
     return VivadoLogStats(
-        primitives=primitives,
-        clb=clb,
-        timing_stats=timing_stats,
+        clb_luts=clb_luts,
+        clb_regs=clb_regs,
+        carry8s=carry8s,
+        f7muxes=f7muxes,
+        f8muxes=f8muxes,
+        f9muxes=f9muxes,
+        user_constraints_met=user_constraints_met,
+        worst_negative_slack=worst_negative_slack,
+        clock_name=clock_name,
+        clock_period_ns=clock_period_ns,
+        clock_frequency_MHz=clock_frequency_MHz,
         synth_time=synth_time,
         opt_time=opt_time,
     )
