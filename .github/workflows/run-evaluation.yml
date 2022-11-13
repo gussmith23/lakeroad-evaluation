@@ -83,7 +83,7 @@ jobs:
           --env LOGLEVEL=INFO \
           --env OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
-          doit --always-execute --continue -n 20
+          doit --always-execute --continue -n 26
 
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
