@@ -34,4 +34,4 @@
 	url = git@github.com:uwsampl/calyx
 [submodule "dahlia"]
 	path = dahlia
-	url = https://github.com/cucapra/dahlia
+	url = gt@github.com:cucapra/dahlia
