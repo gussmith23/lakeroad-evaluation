@@ -171,7 +171,7 @@ RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux
   && chmod +x cs \
   && ./cs setup --yes \
   && cd /root/dahlia \
-  && /root/.local/share/coursier/sbt assembly
+  && /root/.local/share/coursier/bin/sbt assembly
 ENV PATH="${PATH}:/root/.local/share/coursier/bin"
 
 # Set up Calyx.
