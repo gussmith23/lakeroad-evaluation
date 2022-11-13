@@ -166,6 +166,7 @@ ENV LAKEROAD_DIR=/root/lakeroad
 
 # Build Dahlia. First, install Scala via cs setup; then, build Dahlia.
 WORKDIR /root
+ADD dahlia/ dahlia/
 RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs \
   && chmod +x cs \
   && ./cs setup --yes \
