@@ -32,6 +32,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         log_filepath = synth_opt_place_route_output_filepath.with_suffix(".log")
         time_filepath = synth_opt_place_route_output_filepath.with_suffix(".time")
         tcl_filepath = synth_opt_place_route_output_filepath.with_suffix(".tcl")
+        json_filepath = synth_opt_place_route_output_filepath.with_suffix(".json")
 
         return {
             "name": f"baseline_vivado_compile_{module_name}",
@@ -49,6 +50,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                         # Run optimizations.
                         "directive": "default",
                         "opt_design": True,
+                        "json_filepath": json_filepath,
                     },
                 )
             ],
@@ -58,6 +60,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
                 log_filepath,
                 time_filepath,
                 tcl_filepath,
+                json_filepath,
             ],
         }
 

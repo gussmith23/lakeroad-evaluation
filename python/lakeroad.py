@@ -137,19 +137,14 @@ def task_instruction_experiments(experiments_file: str):
                 time_filepath = utils.output_dir() / time_filepath
                 # TODO(@gussmith23) sloppy...
                 tcl_filepath = utils.output_dir() / f"{template}_{module_name}.tcl"
+                json_filepath = utils.output_dir() / f"{template}_{module_name}.json"
 
                 return {
                     "name": f"vivado_compile_{template}_{module_name}",
                     "actions": [
                         (
                             xilinx_ultrascale_plus_vivado_synthesis,
-                            [
-                                verilog_filepath,
-                                synth_opt_place_route_output_filepath,
-                                module_name,
-                                time_filepath,
-                                log_filepath,
-                            ],
+                            [],
                             {
                                 "instr_src_file": verilog_filepath,
                                 "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
@@ -161,6 +156,7 @@ def task_instruction_experiments(experiments_file: str):
                                 # Lakeroad-generated instructions? or no?
                                 "directive": "runtimeoptimized",
                                 "opt_design": False,
+                                "json_filepath": json_filepath,
                             },
                         )
                     ],
@@ -170,6 +166,7 @@ def task_instruction_experiments(experiments_file: str):
                         log_filepath,
                         time_filepath,
                         tcl_filepath,
+                        json_filepath,
                     ],
                 }
 
