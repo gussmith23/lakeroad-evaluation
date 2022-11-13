@@ -22,6 +22,7 @@ RUN apt-get update \
   ninja-build \
   ocl-icd-opencl-dev \
   opencl-headers \
+  openjdk-11-jre \
   parallel \
   python3 \
   python3-dev \
