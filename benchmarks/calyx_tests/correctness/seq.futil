@@ -1,0 +1,40 @@
+import "primitives/core.futil";
+
+component main() -> () {
+  cells {
+    @external(1) in = std_mem_d1(32, 1, 1);
+    b = std_reg(32);
+    c = std_reg(32);
+    @external(1) out = std_mem_d1(32, 1, 1);
+  }
+
+  wires {
+    group B<"static"=1> {
+      b.write_en = 1'b1;
+      in.addr0 = 1'b0;
+      b.in = in.read_data;
+      B[done] = b.done;
+    }
+
+    group C<"static"=1> {
+      c.write_en = 1'b1;
+      c.in = b.out;
+      C[done] = c.done;
+    }
+
+    group commit<"static"=1> {
+      out.write_en = 1'b1;
+      out.addr0 = 1'b0;
+      out.write_data = c.out;
+      commit[done] = out.done;
+    }
+  }
+
+  control {
+    seq {
+      B;
+      C;
+      commit;
+    }
+  }
+}

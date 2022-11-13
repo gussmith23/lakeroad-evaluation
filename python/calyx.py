@@ -3,7 +3,7 @@ import logging
 import os
 from pathlib import Path
 import subprocess
-from typing import Iterable, List, Optional, Union
+from typing import Iterable, Optional, Union
 from doit.tools import run_once
 from hardware_compilation import *
 
@@ -110,24 +110,54 @@ def _make_run_calyx_tests_task(
     return task
 
 
-def _get_futil_files_to_test_with(calyx_dirpath):
+def _get_futil_files_to_test_with():
     """Generates the list of Calyx files that we use for end-to-end tests."""
     return (
-        list((calyx_dirpath / "tests" / "correctness" / "exp").glob("**/*.futil"))
-        + list(
-            (calyx_dirpath / "tests" / "correctness" / "ntt-pipeline").glob(
-                "**/*.futil"
-            )
+        list(
+            (
+                utils.lakeroad_evaluation_dir()
+                / "benchmarks"
+                / "calyx_tests"
+                / "correctness"
+                / "exp"
+            ).glob("**/*.futil")
         )
         + list(
-            (calyx_dirpath / "tests" / "correctness" / "numeric-types").glob(
-                "**/*.futil"
-            )
+            (
+                utils.lakeroad_evaluation_dir()
+                / "benchmarks"
+                / "calyx_tests"
+                / "correctness"
+                / "ntt-pipeline"
+            ).glob("**/*.futil")
         )
-        # + list((calyx_dirpath / "tests" / "correctness" / "ref-cells").glob("**/*.futil"))
-        + list((calyx_dirpath / "tests" / "correctness" / "relay").glob("**/*.futil"))
         + list(
-            (calyx_dirpath / "tests" / "correctness" / "systolic").glob("**/*.futil")
+            (
+                utils.lakeroad_evaluation_dir()
+                / "benchmarks"
+                / "calyx_tests"
+                / "correctness"
+                / "numeric-types"
+            ).glob("**/*.futil")
+        )
+        # + list((utils.lakeroad_evaluation_dir() / "benchmarks" / "calyx_tests"  / "correctness" / "ref-cells").glob("**/*.futil"))
+        + list(
+            (
+                utils.lakeroad_evaluation_dir()
+                / "benchmarks"
+                / "calyx_tests"
+                / "correctness"
+                / "relay"
+            ).glob("**/*.futil")
+        )
+        + list(
+            (
+                utils.lakeroad_evaluation_dir()
+                / "benchmarks"
+                / "calyx_tests"
+                / "correctness"
+                / "systolic"
+            ).glob("**/*.futil")
         )
         # Disabling these tests as they cause the following error when
         # synthesized via Diamond:
@@ -135,7 +165,7 @@ def _get_futil_files_to_test_with(calyx_dirpath):
         # They work fine via Vivado.
         # + list((calyx_dirpath / "tests" / "correctness" / "tcam").glob("**/*.futil"))
         + list(
-            (utils.lakeroad_evaluation_dir() / "calyx-evaluation" / "benchmarks").glob(
+            (utils.lakeroad_evaluation_dir() / "benchmarks" / "calyx_evaluation").glob(
                 "**/*.fuse"
             )
         )
@@ -195,7 +225,7 @@ def _make_calyx_end_to_end_task(
     calyx_dirpath = Path(calyx_dirpath)
     output_base_dirpath = Path(output_base_dirpath)
 
-    for futil_filepath in _get_futil_files_to_test_with(calyx_dirpath):
+    for futil_filepath in _get_futil_files_to_test_with():
         relative_dir_in_calyx = futil_filepath.parent.relative_to(
             utils.lakeroad_evaluation_dir()
         )
