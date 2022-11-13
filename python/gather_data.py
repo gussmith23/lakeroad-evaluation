@@ -1,7 +1,6 @@
 """Functions and tasks for gathering generated data."""
 
 
-import functools
 import json
 from pathlib import Path
 from typing import List, Union
@@ -95,73 +94,112 @@ def gather_calyx_end_to_end_data_vivado(
 
 
 def make_gather_calyx_end_to_end_results_task(
-    iters: int, dirname: str, output_csv: Union[str, Path]
+    output_dirpath: Union[str, Path], output_csv: Union[str, Path]
 ):
     """Creates DoIt task which gathers Calyx end-to-end results into a table.
 
     Args:
-      iters: Number of iterations used by this experiment.
-      dirname: Name of the directory in the evaluation output directory
-        containing the results.
+      output_dirpath: Path of the directory containing the output.
       output_csv: Location to write the output.
     """
 
-    # Collecting all the filenames for all the JSON files produced by all the
-    # iters in one list of lists.
-    json_filepaths_from_each_iter: List[List[Union[Path, str]]] = []
-    for i in range(iters):
-        json_filepaths_from_each_iter.append(
-            [
-                # TODO(@gussmith23): Could make this more flexible by not
-                # assuming how this path should be constructed. But then I start
-                # questioning whether this function should know about number of
-                # iterations at all, and then perfect starts being the enemy of
-                # good...
-                utils.output_dir() / dirname / f"iter{i}" / json_filepath
-                for json_filepath in json_filepaths
-            ]
-        )
+    # Create the actual paths to the json files by concatenating the output
+    # directory path to the json filepaths defined above.
+    full_json_filepaths = [
+        output_dirpath / json_filepath for json_filepath in json_filepaths
+    ]
 
     def _impl():
         output_csv.parent.mkdir(exist_ok=True, parents=True)
-
-        dfs: List[pd.DataFrame] = []
-        for i, l in enumerate(json_filepaths_from_each_iter):
-            df = gather_calyx_end_to_end_data_vivado(l)
-            df.insert(0, "iteration", i)
-            dfs.append(df)
-
-        df = pd.concat(dfs)
+        df = gather_calyx_end_to_end_data_vivado(full_json_filepaths)
         df.to_csv(output_csv)
 
     return {
-        "file_dep": sum(json_filepaths_from_each_iter, []),
+        "file_dep": full_json_filepaths,
         "targets": [output_csv],
         "actions": [(_impl, [])],
     }
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results():
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter0():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
-        iters=3,
-        dirname="calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado",
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+        / "iter0",
         output_csv=(
             utils.output_dir()
             / "gathered_data"
-            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results.csv"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter0.csv"
         ),
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results():
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter1():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
-        iters=3,
-        dirname="calyx_end_to_end_xilinx_ultrascale_plus_no_presynth",
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+        / "iter1",
         output_csv=(
             utils.output_dir()
             / "gathered_data"
-            / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results.csv"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter1.csv"
+        ),
+    )
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter2():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+        / "iter2",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter2.csv"
+        ),
+    )
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter0():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter0",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter0.csv"
+        ),
+    )
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter1():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter1",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter1.csv"
+        ),
+    )
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter2():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        output_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter2",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter2.csv"
         ),
     )
