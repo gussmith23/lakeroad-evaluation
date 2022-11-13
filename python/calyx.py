@@ -688,25 +688,75 @@ def task_calyx_tests_vanilla_calyx():
 
 
 calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map = {
-    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 3.919),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 3.933),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 3.705),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 2.888),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": (
         "clk",
-        7.0,
+        3.162,
     ),
-    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 2.91),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 3.622),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 3.124),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 4.729),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 3.632),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
         "clk",
-        7.0,
+        3.798,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 3.327),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 3.681),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 3.461),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 2.949),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 3.184),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 2.955),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 2.805),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 2.779),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 3.482),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 4.341),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 6.055),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 5.812),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 4.987),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 5.768),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 4.101),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 4.16),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 4.631),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 5.912),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 4.57),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        5.545,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 3.956),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 3.78),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        2.779,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": (
+        "clk",
+        1.815,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        2.667,
     ),
     "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        2.981,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
         "clk",
         7.0,
     ),
     "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
         "clk",
-        7.0,
+        2.028,
     ),
-    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
         "clk",
-        7.0,
+        3.834,
     ),
     "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
         "clk",
@@ -720,54 +770,10 @@ calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map = {
         "clk",
         7.0,
     ),
-    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
         "clk",
         7.0,
     ),
-    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
-        "clk",
-        7.0,
-    ),
-    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
-        "clk",
-        7.0,
-    ),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
-        "clk",
-        7.0,
-    ),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
-    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
 }
 
 
