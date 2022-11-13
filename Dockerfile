@@ -168,11 +168,18 @@ ENV LAKEROAD_DIR=/root/lakeroad
 # Build Dahlia. First, install Scala via cs setup; then, build Dahlia.
 WORKDIR /root
 ADD dahlia/ dahlia/
+# Dahlia depends on having its git repo around, so we add it manually. If we
+# just added the entire .git repo here, we'd get poor caching behavior.
+ADD .git/modules/dahlia .git/modules/dahlia
+# Note that we use the full path to sbt when we build Dahlia, because we haven't
+# yet updated the environment to make sbt and other Scala binaries visible.
+# Kinda hacky.
 RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs \
   && chmod +x cs \
   && ./cs setup --yes \
   && cd /root/dahlia \
   && /root/.local/share/coursier/bin/sbt assembly
+# Make Scala binaries visible.
 ENV PATH="${PATH}:/root/.local/share/coursier/bin"
 
 # Set up Calyx.
