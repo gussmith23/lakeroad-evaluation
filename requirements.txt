@@ -5,6 +5,7 @@ doit==0.36.0
 flit==3.7.1
 lit==15.0.0
 numpy==1.23.0
+pandas==1.5.1
 psutil==5.9.1
 pytest==6.2.5
 tornado==6.1
