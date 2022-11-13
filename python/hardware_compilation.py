@@ -228,6 +228,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     time_filepath: Union[str, Path],
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path],
+    json_filepath: Union[str, Path],
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
@@ -248,6 +249,8 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         opt_design: Whether or not to run Vivado's opt_design command.
         synth_design_rtl_flag: Whether or not to pass the -rtl flag to
           synth_design.
+        json_filepath: Filepath of the output JSON file where results parsed
+          from the Vivado logfile should be written.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -256,7 +259,6 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     tcl_script_filepath = Path(tcl_script_filepath)
     tcl_script_filepath.parent.mkdir(parents=True, exist_ok=True)
     xdc_filepath = tcl_script_filepath.with_suffix(".xdc")
-    json_filepath = tcl_script_filepath.with_suffix(".json")
 
     with open(xdc_filepath, "w") as f:
         if clock_name:
@@ -359,6 +361,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     time_filepath = output_dirpath / f"{input_filepath.stem}.time"
     log_filepath = output_dirpath / f"{input_filepath.stem}.log"
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
+    json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
     return {
         "actions": [
@@ -376,6 +379,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                     "opt_design": True,
                     "clock_name": clock_name,
                     "synth_design": True,
+                    "json_filepath": json_filepath,
                 },
             )
         ],
@@ -385,6 +389,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             time_filepath,
             log_filepath,
             tcl_script_filepath,
+            json_filepath,
         ],
     }
 
@@ -406,6 +411,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     time_filepath = output_dirpath / f"{input_filepath.stem}.time"
     log_filepath = output_dirpath / f"{input_filepath.stem}.log"
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
+    json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
     return {
         "actions": [
@@ -424,6 +430,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
                     "synth_design": True,
                     "synth_design_rtl_flag": False,
                     "clock_name": clock_name,
+                    "json_filepath": json_filepath,
                 },
             )
         ],
@@ -433,6 +440,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
             time_filepath,
             log_filepath,
             tcl_script_filepath,
+            json_filepath,
         ],
     }
 
