@@ -500,11 +500,46 @@ def task_calyx_tests_vanilla_calyx():
     )
 
 
-def task_vanilla_calyx_end_to_end_xilinx_ultrascale_plus_vivado():
-    """Run end-to-end tests for vanilla Calyx, synthesizing with Vivado."""
+def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
+    """End-to-end Calyx experiments.
+
+    Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
+    Vivado."""
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
-        output_base_dirpath=(utils.output_dir() / "vanilla_calyx_vivado_end_to_end"),
+        output_base_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter0",
+        # Run optimization with synthesis.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter1():
+    """End-to-end Calyx experiments.
+
+    Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
+    Vivado."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
+        output_base_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter1",
+        # Run optimization with synthesis.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter2():
+    """End-to-end Calyx experiments.
+
+    Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
+    Vivado."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
+        output_base_dirpath=utils.output_dir()
+        / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth"
+        / "iter2",
         # Run optimization with synthesis.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
     )
