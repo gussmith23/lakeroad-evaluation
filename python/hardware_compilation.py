@@ -234,6 +234,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     opt_design: bool = True,
     synth_design_rtl_flag: bool = False,
     clock_info: Optional[Tuple[str, float]] = None,
+    fail_if_constraints_not_met=True,
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -346,7 +347,12 @@ report_utilization
         print(f"{end_time-start_time}s", file=f)
 
     with open(json_filepath, "w") as f:
-        json.dump(dataclasses.asdict(parse_ultrascale_log(open(log_path).read())), f)
+        log_stats = parse_ultrascale_log(open(log_path).read())
+        json.dump(dataclasses.asdict(log_stats, f))
+        if fail_if_constraints_not_met:
+            assert (
+                log_stats.user_constraints_met
+            ), "Vivado reports that user constraints were not met!"
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
