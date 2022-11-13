@@ -172,6 +172,7 @@ RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux
   && ./cs setup --yes \
   && cd /root/dahlia \
   && sbt assembly
+ENV PATH="${PATH}:/root/.local/share/coursier/bin"
 
 # Set up Calyx.
 RUN mkdir /root/.config 
