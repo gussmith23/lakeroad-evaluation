@@ -2,18 +2,18 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
-from dataclasses import dataclass
 import dataclasses
 import json
-from pathlib import Path
-import re
-import sys
-from typing import Dict, List, Optional, Tuple, Union
-import subprocess
-import os
 import logging
-from time import time
+import os
+import re
+import subprocess
+import sys
+from dataclasses import dataclass
 from datetime import datetime, timedelta
+from pathlib import Path
+from time import time
+from typing import Optional, Tuple, Union
 
 
 @dataclass
@@ -233,7 +233,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     synth_design: bool = True,
     opt_design: bool = True,
     synth_design_rtl_flag: bool = False,
-    clock_name: Optional[str] = None,
+    clock_info: Optional[Tuple[str, float]] = None,
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -251,6 +251,9 @@ def xilinx_ultrascale_plus_vivado_synthesis(
           synth_design.
         json_filepath: Filepath of the output JSON file where results parsed
           from the Vivado logfile should be written.
+        clock_info: Clock name and period in nanoseconds. When provided, a
+          constraint file will be created and loaded using the given clock
+          information.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -261,11 +264,12 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     xdc_filepath = tcl_script_filepath.with_suffix(".xdc")
 
     with open(xdc_filepath, "w") as f:
-        if clock_name:
+        if clock_info:
+            clock_name, clock_period = clock_info
             # We use 7 because that's what the Calyx team used for their eval.
             # We could try to refine the clock period per design. Rachit's notes:
             #
-            set_clock_command = f"create_clock -period 7 -name {clock_name} -waveform {{0.0 1}} [get_ports {clock_name}]"
+            set_clock_command = f"create_clock -period {clock_period} -name {clock_name} -waveform {{0.0 1}} [get_ports {clock_name}]"
         else:
             set_clock_command = "# No clock provided; not creating a clock."
         f.write(set_clock_command)
@@ -349,7 +353,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
-    clock_name: Optional[str] = None,
+    clock_info: Optional[Tuple[str, float]] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -377,7 +381,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                     "tcl_script_filepath": tcl_script_filepath,
                     "directive": "default",
                     "opt_design": True,
-                    "clock_name": clock_name,
+                    "clock_info": clock_info,
                     "synth_design": True,
                     "json_filepath": json_filepath,
                 },
@@ -398,7 +402,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
-    clock_name: Optional[str] = None,
+    clock_info: Optional[Tuple[str, float]] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -429,7 +433,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
                     "opt_design": False,
                     "synth_design": True,
                     "synth_design_rtl_flag": False,
-                    "clock_name": clock_name,
+                    "clock_info": clock_info,
                     "json_filepath": json_filepath,
                 },
             )
@@ -557,12 +561,12 @@ def make_lattice_ecp5_diamond_synthesis_task(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
-    clock_name: Optional[str] = None,
+    clock_info: Optional[Tuple[str, float]] = None,
 ):
     """Wrapper over Diamond synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
-    if clock_name is not None:
-        logging.warn("clock_name not supported for Lattice yet.")
+    if clock_info is not None:
+        logging.warn("clock_info not supported for Lattice yet.")
 
     output_dirpath = Path(output_dirpath)
 

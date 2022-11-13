@@ -3,7 +3,7 @@ import logging
 import os
 from pathlib import Path
 import subprocess
-from typing import Iterable, Optional, Union
+from typing import Dict, Iterable, Optional, Union
 from doit.tools import run_once
 from hardware_compilation import *
 
@@ -220,19 +220,25 @@ def _make_calyx_end_to_end_task(
     calyx_dirpath: Union[Path, str],
     output_base_dirpath: Union[Path, str],
     make_synthesis_task_fn,
+    clock_info_map: Dict[str, Tuple[str, float]],
     setup_calyx_taskname: Optional[str] = None,
 ):
+    """
+    Args:
+      clock_info_map: Maps a benchmark (identified by its filepath as a str) to
+        (clock_name, clock_period)."""
+
     calyx_dirpath = Path(calyx_dirpath)
     output_base_dirpath = Path(output_base_dirpath)
 
     for futil_filepath in _get_futil_files_to_test_with():
-        relative_dir_in_calyx = futil_filepath.parent.relative_to(
+        relative_dir_in_eval_repo = futil_filepath.parent.relative_to(
             utils.lakeroad_evaluation_dir()
         )
         compiled_sv_filepath = (
             output_base_dirpath
             / "compiled_with_futil"
-            / relative_dir_in_calyx
+            / relative_dir_in_eval_repo
             / f"{futil_filepath.stem}.sv"
         )
 
@@ -245,14 +251,18 @@ def _make_calyx_end_to_end_task(
         compile_with_fud_task["name"] = f"futil_compile_{futil_filepath}"
         yield compile_with_fud_task
 
+        clock_info = clock_info_map[
+            str(futil_filepath.relative_to(utils.lakeroad_evaluation_dir()))
+        ]
+
         synthesis_task = make_synthesis_task_fn(
             input_filepath=compiled_sv_filepath,
             output_dirpath=output_base_dirpath
             / "synthesis_results"
-            / relative_dir_in_calyx
+            / relative_dir_in_eval_repo
             / futil_filepath.name,
             module_name="main",
-            clock_name="clk",
+            clock_info=clock_info,
         )
         synthesis_task["name"] = f"synthesize_{futil_filepath}"
         yield synthesis_task
@@ -362,6 +372,95 @@ def task_calyx_tests_xilinx_ultrascale_plus_presynth_vivado():
     )
 
 
+# Sets the clock periods for the Calyx E2E presynth w/ Vivado experiments.
+#
+# TODO(@gussmith23): These should be moved to config files. One important
+# reason: currently, if these change, DoIt will not rerun evaluation unless told
+# to. If they were in a file, it would be easier to make them a DoIt dependency.
+calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
+
+
 def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter0():
     """End-to-end Calyx experiments.
 
@@ -379,6 +478,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter0():
         # instructions will have already been synthesized with optimizations on.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
     )
 
 
@@ -399,6 +499,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter1():
         # instructions will have already been synthesized with optimizations on.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
     )
 
 
@@ -419,6 +520,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
         # instructions will have already been synthesized with optimizations on.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
     )
 
 
@@ -480,6 +582,90 @@ def task_calyx_tests_lattice_ecp5_diamond():
     )
 
 
+calyx_end_to_end_lattice_ecp5_diamond_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
+
+
 def task_calyx_end_to_end_lattice_ecp5_diamond():
     """Run end-to-end tests for calyx_lattice_ecp5_diamond."""
     return _make_calyx_end_to_end_task(
@@ -489,6 +675,7 @@ def task_calyx_end_to_end_lattice_ecp5_diamond():
         ),
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
         setup_calyx_taskname="calyx_setup_lattice_ecp5_diamond",
+        clock_info_map=calyx_end_to_end_lattice_ecp5_diamond_clock_info_map,
     )
 
 
@@ -498,6 +685,90 @@ def task_calyx_tests_vanilla_calyx():
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
         log_filepath=(utils.output_dir() / "vanilla_calyx_tests.log"),
     )
+
+
+calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
 
 
 def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
@@ -512,6 +783,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
         / "iter0",
         # Run optimization with synthesis.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map,
     )
 
 
@@ -527,6 +799,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter1():
         / "iter1",
         # Run optimization with synthesis.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map,
     )
 
 
@@ -542,7 +815,92 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter2():
         / "iter2",
         # Run optimization with synthesis.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_opt,
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map,
     )
+
+
+vanilla_calyx_end_to_end_lattice_ecp5_diamond_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
 
 
 def task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
@@ -551,6 +909,7 @@ def task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
         output_base_dirpath=(utils.output_dir() / "vanilla_calyx_diamond_end_to_end"),
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
+        clock_info_map=vanilla_calyx_end_to_end_lattice_ecp5_diamond_clock_info_map,
     )
 
 
@@ -816,6 +1175,90 @@ def task_calyx_tests_lattice_ecp5_lakeroad():
     )
 
 
+calyx_end_to_end_lattice_ecp5_lakeroad_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
+
+
 def task_calyx_end_to_end_lattice_ecp5_lakeroad():
     """Run end-to-end tests for calyx-lattice-ecp5."""
     return _make_calyx_end_to_end_task(
@@ -825,6 +1268,7 @@ def task_calyx_end_to_end_lattice_ecp5_lakeroad():
         ),
         make_synthesis_task_fn=make_lattice_ecp5_diamond_synthesis_task,
         setup_calyx_taskname="calyx_setup_lattice_ecp5_lakeroad",
+        clock_info_map=calyx_end_to_end_lattice_ecp5_lakeroad_clock_info_map,
     )
 
 
@@ -1096,6 +1540,90 @@ def task_calyx_tests_xilinx_ultrascale_plus_lakeroad():
     )
 
 
+calyx_end_to_end_xilinx_ultrascale_plus_lakeroad_clock_info_map = {
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/constants.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/std-fp-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/fixed-point/sqrt.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/signed-fp.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/parsing/unsigned-bitnum.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/std-sdiv.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/unrolled/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-lu.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-bicg.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-2mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gramschmidt.fuse": (
+        "clk",
+        7.0,
+    ),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-durbin.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-mvt.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gemver.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-ludcmp.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-doitgen.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-cholesky.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-3mm.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-gesummv.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-atax.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm6.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 7.0),
+    "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 7.0),
+}
+
+
 def task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
     """Run end-to-end tests for calyx-xilinx-ultrascale-plus."""
     return _make_calyx_end_to_end_task(
@@ -1109,4 +1637,5 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
         # should be considered optimized.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_lakeroad",
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_lakeroad_clock_info_map,
     )
