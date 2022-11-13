@@ -351,13 +351,62 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
     )
 
 
-def task_calyx_tests_xilinx_ultrascale_plus_vivado():
-    """Run Calyx tests for calyx_vivado."""
-    return _make_run_calyx_tests_task(
+def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado_iter0():
+    """End-to-end Calyx experiments.
+
+    Synthesize benchmarks with using Calyx with primitives presynthesized for
+    Xilinx UltraScale+ using Vivado (iteration 2)."""
+    return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
-        log_filepath=(
-            utils.output_dir() / "xilinx_ultrascale_plus_vivado_calyx_tests.log"
+        output_base_dirpath=(
+            utils.output_dir()
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+            / "iter0"
         ),
+        # Use the synthesis function which does not perform optimization, and is
+        # optimized for runtime. This is because the pre-synthesized
+        # instructions will have already been synthesized with optimizations on.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
+        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado_iter1():
+    """End-to-end Calyx experiments.
+
+    Synthesize benchmarks with using Calyx with primitives presynthesized for
+    Xilinx UltraScale+ using Vivado (iteration 2)."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
+        output_base_dirpath=(
+            utils.output_dir()
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+            / "iter1"
+        ),
+        # Use the synthesis function which does not perform optimization, and is
+        # optimized for runtime. This is because the pre-synthesized
+        # instructions will have already been synthesized with optimizations on.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
+        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_vivado_iter2():
+    """End-to-end Calyx experiments.
+
+    Synthesize benchmarks with using Calyx with primitives presynthesized for
+    Xilinx UltraScale+ using Vivado (iteration 2)."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
+        output_base_dirpath=(
+            utils.output_dir()
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
+            / "iter2"
+        ),
+        # Use the synthesis function which does not perform optimization, and is
+        # optimized for runtime. This is because the pre-synthesized
+        # instructions will have already been synthesized with optimizations on.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
     )
 
