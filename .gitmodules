@@ -32,3 +32,6 @@
 [submodule "calyx_lattice_ecp5_diamond"]
 	path = calyx_lattice_ecp5_diamond
 	url = git@github.com:uwsampl/calyx
+[submodule "dahlia"]
+	path = dahlia
+	url = https://github.com/cucapra/dahlia

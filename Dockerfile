@@ -164,6 +164,14 @@ ADD lakeroad /root/lakeroad
 RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
 ENV LAKEROAD_DIR=/root/lakeroad
 
+# Build Dahlia. First, install Scala via cs setup; then, build Dahlia.
+WORKDIR /root
+RUN curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs \
+  && chmod +x cs \
+  && ./cs setup --yes \
+  && cd /root/dahlia \
+  && sbt assembly
+
 # Set up Calyx.
 RUN mkdir /root/.config 
 
@@ -179,7 +187,8 @@ RUN cargo build --manifest-path ./calyx/Cargo.toml \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx/fud/pyproject.toml install -s --deps all --python ./calyx/venv/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx/calyx-py/pyproject.toml install -s --deps all --python ./calyx/venv/bin/python \
   && ./calyx/venv/bin/fud config global.futil_directory /root/calyx \
-  && ./calyx/venv/bin/fud config stages.futil.exec /root/calyx/target/debug/futil
+  && ./calyx/venv/bin/fud config stages.futil.exec /root/calyx/target/debug/futil \
+  && ./calyx/venv/bin/fud config stages.dahlia.exec /root/dahlia/fuse
 
 # Build Xilinx UltraScale+ version of Calyx.
 ADD calyx-xilinx-ultrascale-plus /root/calyx-xilinx-ultrascale-plus
@@ -193,7 +202,8 @@ RUN cargo build --manifest-path ./calyx-xilinx-ultrascale-plus/Cargo.toml \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/fud/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/venv/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-xilinx-ultrascale-plus/calyx-py/pyproject.toml install -s --deps all --python ./calyx-xilinx-ultrascale-plus/venv/bin/python \
   && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config global.futil_directory /root/calyx-xilinx-ultrascale-plus \
-  && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil
+  && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config stages.futil.exec /root/calyx-xilinx-ultrascale-plus/target/debug/futil \
+  && ./calyx-xilinx-ultrascale-plus/venv/bin/fud config stages.dahlia.exec /root/dahlia/fuse
 
 # Build Lattice ECP5 version of Calyx.
 ADD calyx-lattice-ecp5 /root/calyx-lattice-ecp5
@@ -207,7 +217,8 @@ RUN cargo build --manifest-path ./calyx-lattice-ecp5/Cargo.toml \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/fud/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/venv/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx-lattice-ecp5/calyx-py/pyproject.toml install -s --deps all --python ./calyx-lattice-ecp5/venv/bin/python \
   && ./calyx-lattice-ecp5/venv/bin/fud config global.futil_directory /root/calyx-lattice-ecp5 \
-  && ./calyx-lattice-ecp5/venv/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil
+  && ./calyx-lattice-ecp5/venv/bin/fud config stages.futil.exec /root/calyx-lattice-ecp5/target/debug/futil \
+  && ./calyx-lattice-ecp5/venv/bin/fud config stages.dahlia.exec /root/dahlia/fuse
 
 # Build Lattice ECP5 Diamond version of Calyx.
 ADD calyx_lattice_ecp5_diamond /root/calyx_lattice_ecp5_diamond
@@ -221,7 +232,8 @@ RUN cargo build --manifest-path ./calyx_lattice_ecp5_diamond/Cargo.toml \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx_lattice_ecp5_diamond/fud/pyproject.toml install -s --deps all --python ./calyx_lattice_ecp5_diamond/venv/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx_lattice_ecp5_diamond/calyx-py/pyproject.toml install -s --deps all --python ./calyx_lattice_ecp5_diamond/venv/bin/python \
   && ./calyx_lattice_ecp5_diamond/venv/bin/fud config global.futil_directory /root/calyx_lattice_ecp5_diamond \
-  && ./calyx_lattice_ecp5_diamond/venv/bin/fud config stages.futil.exec /root/calyx_lattice_ecp5_diamond/target/debug/futil
+  && ./calyx_lattice_ecp5_diamond/venv/bin/fud config stages.futil.exec /root/calyx_lattice_ecp5_diamond/target/debug/futil \
+  && ./calyx_lattice_ecp5_diamond/venv/bin/fud config stages.dahlia.exec /root/dahlia/fuse
 
 # Build Xilinx UltraScale+ Vivado version of Calyx.
 ADD calyx_vivado /root/calyx_vivado
@@ -235,7 +247,8 @@ RUN cargo build --manifest-path ./calyx_vivado/Cargo.toml \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx_vivado/fud/pyproject.toml install -s --deps all --python ./calyx_vivado/venv/bin/python \
   && FLIT_ROOT_INSTALL=1 flit -f ./calyx_vivado/calyx-py/pyproject.toml install -s --deps all --python ./calyx_vivado/venv/bin/python \
   && ./calyx_vivado/venv/bin/fud config global.futil_directory /root/calyx_vivado \
-  && ./calyx_vivado/venv/bin/fud config stages.futil.exec /root/calyx_vivado/target/debug/futil
+  && ./calyx_vivado/venv/bin/fud config stages.futil.exec /root/calyx_vivado/target/debug/futil \
+  && ./calyx_vivado/venv/bin/fud config stages.dahlia.exec /root/dahlia/fuse
 
 # Set up Lattice Diamond. 
 #
