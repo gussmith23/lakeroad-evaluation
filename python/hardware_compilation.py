@@ -348,10 +348,11 @@ report_utilization
 
     with open(json_filepath, "w") as f:
         log_stats = parse_ultrascale_log(open(log_path).read())
-        json.dump(dataclasses.asdict(log_stats, f))
+        json.dump(dataclasses.asdict(log_stats), f)
         if fail_if_constraints_not_met:
             assert (
-                log_stats.user_constraints_met
+                log_stats.user_constraints_met is None
+                or log_stats.user_constraints_met is True
             ), "Vivado reports that user constraints were not met!"
 
 
