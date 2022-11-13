@@ -94,16 +94,17 @@ def gather_calyx_end_to_end_data_vivado(
     return pd.DataFrame(map(_f, json_filepaths))
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results():
-    # Number of iters run for this experiment. Should really be set in a config
-    # somewhere.
-    iters = 3
+def make_gather_calyx_end_to_end_results_task(
+    iters: int, dirname: str, output_csv: Union[str, Path]
+):
+    """Creates DoIt task which gathers Calyx end-to-end results into a table.
 
-    output_csv = (
-        utils.output_dir()
-        / "gathered_data"
-        / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results.csv"
-    )
+    Args:
+      iters: Number of iterations used by this experiment.
+      dirname: Name of the directory in the evaluation output directory
+        containing the results.
+      output_csv: Location to write the output.
+    """
 
     # Collecting all the filenames for all the JSON files produced by all the
     # iters in one list of lists.
@@ -111,15 +112,18 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results(
     for i in range(iters):
         json_filepaths_from_each_iter.append(
             [
-                utils.output_dir()
-                / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado"
-                / f"iter{i}"
-                / json_filepath
+                # TODO(@gussmith23): Could make this more flexible by not
+                # assuming how this path should be constructed. But then I start
+                # questioning whether this function should know about number of
+                # iterations at all, and then perfect starts being the enemy of
+                # good...
+                utils.output_dir() / dirname / f"iter{i}" / json_filepath
                 for json_filepath in json_filepaths
             ]
         )
 
     def _impl():
+        output_csv.parent.mkdir(exist_ok=True, parents=True)
 
         dfs: List[pd.DataFrame] = []
         for i, l in enumerate(json_filepaths_from_each_iter):
@@ -135,3 +139,29 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results(
         "targets": [output_csv],
         "actions": [(_impl, [])],
     }
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        iters=3,
+        dirname="calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results.csv"
+        ),
+    )
+
+
+def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results():
+    """Gather results of Calyx end-to-end experiments into a table."""
+    return make_gather_calyx_end_to_end_results_task(
+        iters=3,
+        dirname="calyx_end_to_end_xilinx_ultrascale_plus_no_presynth",
+        output_csv=(
+            utils.output_dir()
+            / "gathered_data"
+            / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results.csv"
+        ),
+    )
