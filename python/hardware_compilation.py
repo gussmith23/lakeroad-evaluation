@@ -306,6 +306,16 @@ report_utilization
     # Synthesis with Vivado.
     with open(log_path, "w") as logfile:
         logging.info("Running Vivado synthesis/place/route on %s", instr_src_file)
+
+        # Setting this environment variable prevents an error when running
+        # Vivado route_design inside a Docker container. See:
+        # https://community.flexera.com/t5/InstallAnywhere-Forum/Issues-when-running-Xilinx-tools-or-Other-vendor-tools-in-docker/m-p/245820#M10647
+        env = os.environ.copy()
+        ld_preload_previous_value = env["LD_PRELOAD"] if "LD_PRELOAD" in env else ""
+        env[
+            "LD_PRELOAD"
+        ] = f"/lib/x86_64-linux-gnu/libudev.so.1:{ld_preload_previous_value}"
+
         start_time = time()
         subprocess.run(
             [
@@ -322,6 +332,7 @@ report_utilization
             check=True,
             stdout=logfile,
             stderr=logfile,
+            env=env,
         )
         end_time = time()
 

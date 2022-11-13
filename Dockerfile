@@ -257,10 +257,6 @@ ADD . .
 
 ARG VIVADO_BIN_DIR
 ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
-# This prevents an error when running Vivado route_design inside a Docker
-# container. See:
-# https://community.flexera.com/t5/InstallAnywhere-Forum/Issues-when-running-Xilinx-tools-or-Other-vendor-tools-in-docker/m-p/245820#M10647
-ENV LD_PRELOAD=/lib/x86_64-linux-gnu/libudev.so.1
 
 WORKDIR /root
 ADD calyx-evaluation/ calyx-evaluation/
