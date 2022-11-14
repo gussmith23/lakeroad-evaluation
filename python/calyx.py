@@ -299,7 +299,25 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "not5_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "or1_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "or8_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_2_3.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_4_4.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_6_4.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_8_5.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_16_4.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_64_8.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_96_8.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_1_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_8_4.sv",
+            utils.output_dir() / "baseline" / "vivado" / "seq_mem_d1_32_144_8.sv",
             utils.output_dir() / "baseline" / "vivado" / "shru4_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_1.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_3.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_4.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_5.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_6.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_7.sv",
+            utils.output_dir() / "baseline" / "vivado" / "std_reg_32.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub1_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub2_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub3_2.sv",
@@ -493,6 +511,25 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
         # optimized for runtime. This is because the pre-synthesized
         # instructions will have already been synthesized with optimizations on.
         make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt,
+        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
+    )
+
+
+def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment():
+    """End-to-end Calyx experiments.
+
+    Experimental. Tries to make synthesis as minimal as possible."""
+    return _make_calyx_end_to_end_task(
+        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
+        output_base_dirpath=(
+            utils.output_dir()
+            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment"
+        ),
+        # Use the synthesis function which does not perform optimization, and is
+        # optimized for runtime. This is because the pre-synthesized
+        # instructions will have already been synthesized with optimizations on.
+        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_nosynth,
         setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
         clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
     )
