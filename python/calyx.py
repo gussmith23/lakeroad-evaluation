@@ -420,7 +420,7 @@ calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map = {
     "benchmarks/calyx_evaluation/polybench/linear-algebra-symm.fuse": ("clk", 3.9),
     "benchmarks/calyx_evaluation/polybench/linear-algebra-syr2k.fuse": ("clk", 3.753),
     "benchmarks/calyx_evaluation/polybench/linear-algebra-syrk.fuse": ("clk", 4.122),
-    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 2.805),
+    "benchmarks/calyx_evaluation/polybench/linear-algebra-trisolv.fuse": ("clk", 2.855),
     "benchmarks/calyx_evaluation/polybench/linear-algebra-trmm.fuse": ("clk", 2.873),
     "benchmarks/calyx_evaluation/systolic-sources/gemm2.fuse": ("clk", 4.303),
     "benchmarks/calyx_evaluation/systolic-sources/gemm4.fuse": ("clk", 5.078),
@@ -428,7 +428,7 @@ calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map = {
     "benchmarks/calyx_evaluation/systolic-sources/gemm8.fuse": ("clk", 6.626),
     "benchmarks/calyx_tests/correctness/numeric-types/bitnum/binary-operators.futil": (
         "clk",
-        2.8,
+        2.810,
     ),
     "benchmarks/calyx_tests/correctness/numeric-types/bitnum/sqrt.futil": (
         "clk",
