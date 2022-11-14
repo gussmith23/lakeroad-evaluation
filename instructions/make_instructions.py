@@ -32,7 +32,7 @@ ops = {
     "mux": "s ? a : b",
     # "parity": None,
     # "replicate": None,
-    # "shl": f("<<"),
+    "shl": f("<<"),
     # "shrs": f(">>"),
     "shru": f(">>"),
 }
@@ -97,6 +97,7 @@ inputs = {
     "mul": make_binary_inputs,
     "mux": lambda sign, size: f"input s, input {sign}[{size-1}:0] a, input {sign}[{size-1}:0] b,",
     "shru": make_binary_inputs,
+    "shl": make_binary_inputs,
 }
 
 make_output = lambda sign, size: f"output {sign}[{size-1}:0] out"
@@ -122,6 +123,7 @@ outputs = {
     "mul": make_output,
     "mux": make_output,
     "shru": make_output,
+    "shl": make_output,
 }
 
 arity = {
@@ -146,6 +148,7 @@ arity = {
     "mul": 2,
     "mux": 3,
     "shru": 2,
+    "shl": 2,
 }
 
 for op, op_expr in ops.items():
