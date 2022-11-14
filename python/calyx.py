@@ -299,6 +299,7 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
             utils.output_dir() / "baseline" / "vivado" / "not5_1.sv",
             utils.output_dir() / "baseline" / "vivado" / "or1_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "or8_2.sv",
+            utils.output_dir() / "baseline" / "vivado" / "shru4_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub1_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub2_2.sv",
             utils.output_dir() / "baseline" / "vivado" / "sub3_2.sv",
