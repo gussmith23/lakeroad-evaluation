@@ -510,23 +510,23 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
     )
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment():
-    """End-to-end Calyx experiments.
-
-    Experimental. Tries to make synthesis as minimal as possible."""
-    return _make_calyx_end_to_end_task(
-        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
-        output_base_dirpath=(
-            utils.output_dir()
-            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment"
-        ),
-        # Use the synthesis function which does not perform optimization, and is
-        # optimized for runtime. This is because the pre-synthesized
-        # instructions will have already been synthesized with optimizations on.
-        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_nosynth,
-        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
-        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
-    )
+#def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment():
+#    """End-to-end Calyx experiments.
+#
+#    Experimental. Tries to make synthesis as minimal as possible."""
+#    return _make_calyx_end_to_end_task(
+#        calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
+#        output_base_dirpath=(
+#            utils.output_dir()
+#            / "calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment"
+#        ),
+#        # Use the synthesis function which does not perform optimization, and is
+#        # optimized for runtime. This is because the pre-synthesized
+#        # instructions will have already been synthesized with optimizations on.
+#        make_synthesis_task_fn=make_xilinx_ultrascale_plus_vivado_synthesis_task_nosynth,
+#        setup_calyx_taskname="calyx_setup_xilinx_ultrascale_plus_vivado",
+#        clock_info_map=calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map,
+#    )
 
 
 def task_calyx_setup_lattice_ecp5_diamond():
