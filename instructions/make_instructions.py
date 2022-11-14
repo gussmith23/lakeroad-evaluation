@@ -34,7 +34,7 @@ ops = {
     # "replicate": None,
     # "shl": f("<<"),
     # "shrs": f(">>"),
-    # "shru": f(">>"),
+    "shru": f(">>"),
 }
 
 signedness = {
@@ -92,8 +92,11 @@ inputs = {
     "ugt": make_binary_inputs,
     "ule": make_binary_inputs,
     "ult": make_binary_inputs,
+    "slt": make_binary_inputs,
+    "sgt": make_binary_inputs,
     "mul": make_binary_inputs,
     "mux": lambda sign, size: f"input s, input {sign}[{size-1}:0] a, input {sign}[{size-1}:0] b,",
+    "shru": make_binary_inputs,
 }
 
 make_output = lambda sign, size: f"output {sign}[{size-1}:0] out"
@@ -114,8 +117,11 @@ outputs = {
     "ugt": lambda sign, _: f"output {sign} out",
     "ule": lambda sign, _: f"output {sign} out",
     "ult": lambda sign, _: f"output {sign} out",
+    "slt": lambda sign, _: f"output {sign} out",
+    "sgt": lambda sign, _: f"output {sign} out",
     "mul": make_output,
     "mux": make_output,
+    "shru": make_output,
 }
 
 arity = {
@@ -135,8 +141,11 @@ arity = {
     "ugt": 2,
     "ule": 2,
     "ult": 2,
+    "slt": 2,
+    "sgt": 2,
     "mul": 2,
     "mux": 3,
+    "shru": 2,
 }
 
 for op, op_expr in ops.items():
