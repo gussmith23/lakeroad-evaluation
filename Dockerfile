@@ -46,6 +46,12 @@ ENV LC_ALL en_US.UTF-8
 # `llvm-config` on your PATH.
 ENV LLVM_CONFIG=llvm-config-14
 
+# Build our version of Yosys.
+WORKDIR /root/
+ADD yosys/ yosys/
+RUN cd yosys && \
+  make -j$(nproc)
+
 # Make a binary for `lit`. If you're on Mac, you can install lit via Brew.
 # Ubuntu doesn't have a binary for it, but it is available on pip and is
 # installed later in this Dockerfile.
