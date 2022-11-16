@@ -232,9 +232,11 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
-    synth_design_rtl_flag: bool = False,
+    synth_design_rtl_flags: bool = False,
     clock_info: Optional[Tuple[str, float]] = None,
     fail_if_constraints_not_met=True,
+    place_directive: str = "default",
+    route_directive: str = "default",
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -248,8 +250,8 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         synth_design: Whether or not to run Vivado's synth_design
           command.
         opt_design: Whether or not to run Vivado's opt_design command.
-        synth_design_rtl_flag: Whether or not to pass the -rtl flag to
-          synth_design.
+        synth_design_rtl_flags: Whether or not to pass the -rtl and all
+          -rtl_skip_* flags to synth_design.
         json_filepath: Filepath of the output JSON file where results parsed
           from the Vivado logfile should be written.
         clock_info: Clock name and period in nanoseconds. When provided, a
@@ -279,7 +281,11 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     with open(tcl_script_filepath, "w") as f:
         synth_design_command = (
             f"synth_design -mode out_of_context -directive {directive}"
-            + (" -rtl" if synth_design_rtl_flag else "")
+            + (
+                " -rtl -rtl_skip_mlo -rtl_skip_ip -rtl_skip_constraints"
+                if synth_design_rtl_flags
+                else ""
+            )
         )
 
         f.write(
@@ -297,13 +303,13 @@ set_property top ${{modname}} [current_fileset]
 {synth_design_command if synth_design else f"# {synth_design_command}"}
 read_xdc -mode out_of_context {xdc_filepath}
 {"opt_design" if opt_design else "# opt_design"}
-place_design
+place_design -directive {place_directive}
 # route_design causes problems when run inside the Docker container. Originally,
 # I used -release_memory, because I thought the issue was memory related. This
 # fixed the issue, but only because (as I later discovered) -release_memory
 # doesn't actually run routing! So we need to see if the crash still occurs, 
 # and if it does, we need another way around it.
-route_design
+route_design -directive {route_directive}
 write_verilog -force ${{synth_opt_place_route_output_filepath}}
 report_timing_summary
 report_utilization
@@ -436,10 +442,12 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
                     "time_filepath": time_filepath,
                     "log_path": log_filepath,
                     "tcl_script_filepath": tcl_script_filepath,
-                    "directive": "runtimeoptimized",
+                    "directive": "RuntimeOptimized",
+                    "place_directive": "RuntimeOptimized",
+                    "route_directive": "RuntimeOptimized",
                     "opt_design": False,
                     "synth_design": True,
-                    "synth_design_rtl_flag": False,
+                    "synth_design_rtl_flags": False,
                     "clock_info": clock_info,
                     "json_filepath": json_filepath,
                 },
