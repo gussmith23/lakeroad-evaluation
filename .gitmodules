@@ -35,3 +35,6 @@
 [submodule "dahlia"]
 	path = dahlia
 	url = git@github.com:cucapra/dahlia
+[submodule "yosys"]
+	path = yosys
+	url = git@github.com:uwsampl/yosys
