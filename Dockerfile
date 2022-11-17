@@ -7,6 +7,7 @@ RUN apt-get update \
   && apt-get install -y \
   bison \
   build-essential \
+  clang \
   cmake \
   curl \
   flex \
