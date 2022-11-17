@@ -268,7 +268,7 @@ def _make_calyx_end_to_end_task(
         yield synthesis_task
 
 
-def task_calyx_setup_xilinx_ultrascale_plus_vivado():
+def disabled_task_calyx_setup_xilinx_ultrascale_plus_vivado():
     """Set up the calyx_vivado directory.
 
     This task sets up the calyx_vivado directory by copying in instruction
@@ -374,7 +374,7 @@ def task_calyx_setup_xilinx_ultrascale_plus_vivado():
     )
 
 
-def task_calyx_tests_xilinx_ultrascale_plus_presynth_vivado():
+def disabled_task_calyx_tests_xilinx_ultrascale_plus_presynth_vivado():
     """Run Calyx tests for calyx_vivado."""
     return _make_run_calyx_tests_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_vivado"),
@@ -447,7 +447,7 @@ calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_clock_info_map = {
 }
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter0():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter0():
     """End-to-end Calyx experiments.
 
     Synthesize benchmarks with using Calyx with primitives presynthesized for
@@ -468,7 +468,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter0():
     )
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter1():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter1():
     """End-to-end Calyx experiments.
 
     Synthesize benchmarks with using Calyx with primitives presynthesized for
@@ -489,7 +489,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter1():
     )
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
     """End-to-end Calyx experiments.
 
     Synthesize benchmarks with using Calyx with primitives presynthesized for
@@ -510,7 +510,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
     )
 
 
-#def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment():
+# def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_nosynth_experiment():
 #    """End-to-end Calyx experiments.
 #
 #    Experimental. Tries to make synthesis as minimal as possible."""
@@ -529,7 +529,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_iter2():
 #    )
 
 
-def task_calyx_setup_lattice_ecp5_diamond():
+def disabled_task_calyx_setup_lattice_ecp5_diamond():
     """Set up the calyx_lattice_ecp5_diamond directory."""
     return _make_setup_calyx_task(
         filepaths=[
@@ -578,7 +578,7 @@ def task_calyx_setup_lattice_ecp5_diamond():
     )
 
 
-def task_calyx_tests_lattice_ecp5_diamond():
+def disabled_task_calyx_tests_lattice_ecp5_diamond():
     """Run Calyx tests for calyx_lattice_ecp5_diamond."""
     return _make_run_calyx_tests_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
@@ -671,7 +671,7 @@ calyx_end_to_end_lattice_ecp5_diamond_clock_info_map = {
 }
 
 
-def task_calyx_end_to_end_lattice_ecp5_diamond():
+def disabled_task_calyx_end_to_end_lattice_ecp5_diamond():
     """Run end-to-end tests for calyx_lattice_ecp5_diamond."""
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx_lattice_ecp5_diamond"),
@@ -782,7 +782,7 @@ calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_clock_info_map = {
 }
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
     """End-to-end Calyx experiments.
 
     Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
@@ -798,7 +798,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter0():
     )
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter1():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter1():
     """End-to-end Calyx experiments.
 
     Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
@@ -814,7 +814,7 @@ def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter1():
     )
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter2():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_iter2():
     """End-to-end Calyx experiments.
 
     Tests unmodified Calyx (i.e. no presynthesis), synthesizing its output with
@@ -914,7 +914,7 @@ vanilla_calyx_end_to_end_lattice_ecp5_diamond_clock_info_map = {
 }
 
 
-def task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
+def disabled_task_vanilla_calyx_end_to_end_lattice_ecp5_diamond():
     """Run end-to-end tests for vanilla Calyx, synthesizing with Diamond."""
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx"),
@@ -1270,7 +1270,7 @@ calyx_end_to_end_lattice_ecp5_lakeroad_clock_info_map = {
 }
 
 
-def task_calyx_end_to_end_lattice_ecp5_lakeroad():
+def disabled_task_calyx_end_to_end_lattice_ecp5_lakeroad():
     """Run end-to-end tests for calyx-lattice-ecp5."""
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(utils.lakeroad_evaluation_dir() / "calyx-lattice-ecp5"),
@@ -1635,7 +1635,7 @@ calyx_end_to_end_xilinx_ultrascale_plus_lakeroad_clock_info_map = {
 }
 
 
-def task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
+def disabled_task_calyx_end_to_end_xilinx_ultrascale_plus_lakeroad():
     """Run end-to-end tests for calyx-xilinx-ultrascale-plus."""
     return _make_calyx_end_to_end_task(
         calyx_dirpath=(

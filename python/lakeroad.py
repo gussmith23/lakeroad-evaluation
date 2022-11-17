@@ -124,51 +124,29 @@ def task_instruction_experiments(experiments_file: str):
     def _make_compile_task(
         verilog_filepath, module_name, template, compile_action: CompileAction
     ):
+
+        output_dir_base = utils.output_dir() / "lakeroad"
+
         match compile_action:
             case VivadoCompile(
                 synth_opt_place_route_relative_filepath=synth_opt_place_route_output_filepath,
                 log_filepath=log_filepath,
                 time_filepath=time_filepath,
             ):
-                synth_opt_place_route_output_filepath = (
-                    utils.output_dir() / synth_opt_place_route_output_filepath
+                vivado_baseline_synthesis_task = (
+                    make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+                        input_filepath=verilog_filepath,
+                        output_dirpath=output_dir_base
+                        / module_name
+                        / template
+                        / "vivado",
+                        module_name=module_name,
+                    )
                 )
-                log_filepath = utils.output_dir() / log_filepath
-                time_filepath = utils.output_dir() / time_filepath
-                # TODO(@gussmith23) sloppy...
-                tcl_filepath = utils.output_dir() / f"{template}_{module_name}.tcl"
-                json_filepath = utils.output_dir() / f"{template}_{module_name}.json"
-
-                return {
-                    "name": f"vivado_compile_{template}_{module_name}",
-                    "actions": [
-                        (
-                            xilinx_ultrascale_plus_vivado_synthesis,
-                            [],
-                            {
-                                "instr_src_file": verilog_filepath,
-                                "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
-                                "module_name": module_name,
-                                "time_filepath": time_filepath,
-                                "tcl_script_filepath": tcl_filepath,
-                                "log_path": log_filepath,
-                                # TODO(@gussmith23) Do we run optimizations on
-                                # Lakeroad-generated instructions? or no?
-                                "directive": "runtimeoptimized",
-                                "opt_design": False,
-                                "json_filepath": json_filepath,
-                            },
-                        )
-                    ],
-                    "file_dep": [verilog_filepath],
-                    "targets": [
-                        synth_opt_place_route_output_filepath,
-                        log_filepath,
-                        time_filepath,
-                        tcl_filepath,
-                        json_filepath,
-                    ],
-                }
+                vivado_baseline_synthesis_task[
+                    "name"
+                ] = f"vivado_lakeroad_{template}_{module_name}"
+                return vivado_baseline_synthesis_task
 
             case DiamondCompile(
                 output_dirpath=output_dirpath,
@@ -178,7 +156,7 @@ def task_instruction_experiments(experiments_file: str):
 
                 task = make_lattice_ecp5_diamond_synthesis_task(
                     input_filepath=verilog_filepath,
-                    output_dirpath=utils.output_dir() / output_dirpath,
+                    output_dirpath=output_dir_base / module_name / template / "diamond",
                     module_name=module_name,
                 )
                 task["name"] = f"diamond_compile_{template}_{module_name}"

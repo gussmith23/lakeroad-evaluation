@@ -106,7 +106,7 @@ def make_gather_calyx_end_to_end_results_task(
     }
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter0():
+def disabled_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter0():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
@@ -120,7 +120,7 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter1():
+def disabled_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter1():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
@@ -134,7 +134,7 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter2():
+def disabled_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_iter2():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
@@ -148,7 +148,7 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_presynth_vivado_results_
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter0():
+def disabled_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter0():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
@@ -162,7 +162,7 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter1():
+def disabled_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter1():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
@@ -176,7 +176,7 @@ def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter
     )
 
 
-def task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter2():
+def disable_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter2():
     """Gather results of Calyx end-to-end experiments into a table."""
     return make_gather_calyx_end_to_end_results_task(
         output_dirpath=utils.output_dir()
