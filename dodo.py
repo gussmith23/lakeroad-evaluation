@@ -11,3 +11,4 @@ from baseline_synthesis import task_baseline_synthesis
 from calyx_tasks import *
 from lakeroad import task_instruction_experiments
 from gather_data import *
+from yosys_experiments import *
