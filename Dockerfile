@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y \
   bison \
-  boost \
   build-essential \
   cmake \
   curl \
@@ -16,10 +15,13 @@ RUN apt-get update \
   git \
   graphviz \
   jq \
+  libboost-all-dev \
   libedit-dev \
-  libffi \
+  libffi-dev \
   libtinfo-dev \
   libtinfo5 \
+  libreadline6 \
+  libreadline6-dev \
   libssl-dev \
   libx11-6 \
   libxml2-dev \
@@ -30,19 +32,17 @@ RUN apt-get update \
   opencl-headers \
   openjdk-11-jre \
   parallel \
-  pkgconfig \
+  pkg-config \
   python3 \
   python3-dev \
   python3-pip \
   python3-setuptools \
   python3-venv \
   racket \
-  readline \
   software-properties-common \
   tcl \
   verilator \
   wget \
-  zlib \
   zlib1g-dev 
 
 # Set the locale. Necessary for Vivado.
