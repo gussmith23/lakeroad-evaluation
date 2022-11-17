@@ -5,13 +5,19 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y \
+  bison \
+  boost \
   build-essential \
   cmake \
   curl \
+  flex \
+  gawk \
   gcc \
   git \
+  graphviz \
   jq \
   libedit-dev \
+  libffi \
   libtinfo-dev \
   libtinfo5 \
   libssl-dev \
@@ -24,15 +30,19 @@ RUN apt-get update \
   opencl-headers \
   openjdk-11-jre \
   parallel \
+  pkgconfig \
   python3 \
   python3-dev \
   python3-pip \
   python3-setuptools \
   python3-venv \
   racket \
+  readline \
   software-properties-common \
+  tcl \
   verilator \
   wget \
+  zlib \
   zlib1g-dev 
 
 # Set the locale. Necessary for Vivado.
