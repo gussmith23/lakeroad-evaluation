@@ -24,6 +24,8 @@ RUN apt-get update \
   libreadline8 \
   libreadline-dev \
   libssl-dev \
+  libtcl8.6 \
+  libtclcl1-dev \
   libx11-6 \
   libxml2-dev \
   llvm-14 \
