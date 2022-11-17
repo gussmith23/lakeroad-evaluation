@@ -47,6 +47,8 @@ def invoke_lakeroad(
         out_filepath,
         "--architecture",
         architecture,
+        "--verilog-module-out-signal",
+        "out"
     ]
     logging.info(
         "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
