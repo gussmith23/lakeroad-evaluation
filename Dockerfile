@@ -42,7 +42,7 @@ RUN apt-get update \
   python3-venv \
   racket \
   software-properties-common \
-  tcl \
+  tcl8.6-dev \
   verilator \
   wget \
   zlib1g-dev 
