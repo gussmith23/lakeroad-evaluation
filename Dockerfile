@@ -42,6 +42,7 @@ RUN apt-get update \
   python3-venv \
   racket \
   software-properties-common \
+  tcl-dev \
   tcl8.6-dev \
   verilator \
   wget \
