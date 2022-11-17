@@ -17,8 +17,107 @@ from typing import Optional, Tuple, Union
 
 
 @dataclass
-class VivadoTimingStats:
-    """Class representing timing stats that may be present in a Vivado log."""
+class DiamondSynthesisStats:
+    """Statistics about a synthesis run using Diamond.
+
+    NOTE: it's important that this is not a nested dictionary, i.e. that all of
+    the fields of this dictionary are strings/ints/floats and not lists/dicts.
+    This is because each of these dictionaries becomes a row in a CSV file, and
+    thus if there was a nested structure, it would get a lot more compilcated."""
+
+    # Number of various primitives
+    num_LUT4: int
+    num_CCU2C: int
+    num_PFUMX: int
+    num_ALU54B: int
+    num_MULT18X18D: int
+    num_L6MUX21: int
+    num_MULT9X9D: int
+
+    # Runtime of Diamond
+    diamond_cpu_time: float
+
+
+def parse_diamond_log(log_text: str) -> DiamondSynthesisStats:
+    """Parses a Diamond log.
+
+    Specifically, parses whatever comes out of the `synthesis` binary in Diamond."""
+    matches = list(
+        re.finditer(
+            r"""\#* Begin Area Report .*\#*
+Number of register bits => .*?$
+(?P<table_contents>.*)
+\#* End Area Report""",
+            log_text,
+            flags=re.MULTILINE | re.DOTALL,
+        )
+    )
+    assert len(matches) == 1
+    span = matches[0].span("table_contents")
+
+    matches = list(
+        re.finditer(r"(?P<name>\w+) => (?P<value>\d+)", log_text[span[0] : span[1]])
+    )
+    primitives_dict = {match["name"]: int(match["value"]) for match in matches}
+
+    # Make sure there aren't any primitives we don't know about. Wouldn't want
+    # to let one slip through and not count it, if we care to count it!
+    all_known_primitives_set = {
+        "GSR",
+        "IB",
+        "LUT4",
+        "OB",
+        "CCU2C",
+        "IFS1P3IX",
+        "OFS1P3IX",
+        "OFS1P3DX",
+        "FD1P3IX",
+        "FD1S3AX",
+        "FD1S3IX",
+        "PFUMX",
+        "ALU54B",
+        "MULT18X18D",
+        "L6MUX21",
+        "SPR16X4C",
+        "MULT9X9D",
+        "FD1P3AX",
+        "OFS1P3JXI",
+        "DP16KD",
+        "OFS1P3JX",
+        "IFS1P3DX",
+    }
+    if not set(primitives_dict.keys()).issubset(all_known_primitives_set):
+        raise Exception(
+            f"""Previously unseen primitive(s) {set(primitives_dict.keys()).difference(all_known_primitives_set)}, please determine if it should be logged and add it to all_known_primitives_set!"""
+        )
+
+    maybe_get = lambda k: primitives_dict[k] if k in primitives_dict else None
+    num_LUT4 = maybe_get("LUT4")
+    num_CCU2C = maybe_get("CCU2C")
+    num_PFUMX = maybe_get("PFUMX")
+    num_ALU54B = maybe_get("ALU54B")
+    num_MULT18X18D = maybe_get("MULT18X18D")
+    num_L6MUX21 = maybe_get("L6MUX21")
+    num_MULT9X9D = maybe_get("MULT9X9D")
+
+    matches = list(
+        re.finditer(
+            r"Elapsed CPU time for LSE flow : (?P<time>\d+\.\d+)  secs", log_text
+        )
+    )
+    assert len(matches) == 1
+    diamond_cpu_time = float(matches[0]["time"])
+
+    return DiamondSynthesisStats(
+        num_MULT9X9D=num_MULT9X9D,
+        num_L6MUX21=num_L6MUX21,
+        num_MULT18X18D=num_MULT18X18D,
+        num_ALU54B=num_ALU54B,
+        num_PFUMX=num_PFUMX,
+        num_CCU2C=num_CCU2C,
+        num_LUT4=num_LUT4,
+        diamond_cpu_time=diamond_cpu_time,
+    )
 
 
 @dataclass
@@ -531,7 +630,10 @@ def lattice_ecp5_yosys_nextpnr_synthesis(
 
 
 def lattice_ecp5_diamond_synthesis(
-    src_filepath: Union[Path, str], module_name: str, output_dirpath: Union[Path, str]
+    src_filepath: Union[Path, str],
+    module_name: str,
+    output_dirpath: Union[Path, str],
+    json_filepath: Union[Path, str],
 ):
     output_dirpath = Path(output_dirpath)
     output_dirpath.mkdir(parents=True, exist_ok=True)
@@ -571,6 +673,12 @@ def lattice_ecp5_diamond_synthesis(
 
     assert (output_dirpath / f"{module_name}_prim.v").exists()
 
+    with open(json_filepath, "w") as f:
+        log_stats = parse_diamond_log(
+            open(Path(output_dirpath) / "synthesis.log").read()
+        )
+        json.dump(dataclasses.asdict(log_stats), f)
+
 
 def make_lattice_ecp5_diamond_synthesis_task(
     input_filepath: Union[str, Path],
@@ -584,12 +692,14 @@ def make_lattice_ecp5_diamond_synthesis_task(
         logging.warn("clock_info not supported for Lattice yet.")
 
     output_dirpath = Path(output_dirpath)
+    json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
     return {
         "actions": [
             (
                 lattice_ecp5_diamond_synthesis,
                 [input_filepath, module_name, output_dirpath],
+                {"json_filepath": json_filepath},
             )
         ],
         "file_dep": [input_filepath],
@@ -601,5 +711,6 @@ def make_lattice_ecp5_diamond_synthesis_task(
             output_dirpath / f"{module_name}_prim.v",
             output_dirpath / f"{module_name}_drc.log",
             output_dirpath / f"synthesis.log",
+            json_filepath,
         ],
     }
