@@ -20,8 +20,8 @@ RUN apt-get update \
   libffi-dev \
   libtinfo-dev \
   libtinfo5 \
-  libreadline6 \
-  libreadline6-dev \
+  libreadline8 \
+  libreadline-dev \
   libssl-dev \
   libx11-6 \
   libxml2-dev \
