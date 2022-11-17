@@ -24,8 +24,7 @@ RUN apt-get update \
   libreadline8 \
   libreadline-dev \
   libssl-dev \
-  libtcl8.6 \
-  libtclcl1-dev \
+  libtcl8.6-dev \
   libx11-6 \
   libxml2-dev \
   llvm-14 \
@@ -63,7 +62,7 @@ ENV LLVM_CONFIG=llvm-config-14
 WORKDIR /root/
 ADD yosys/ yosys/
 RUN cd yosys && \
-  make -j$(nproc)
+  CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j `nproc`
 
 # Make a binary for `lit`. If you're on Mac, you can install lit via Brew.
 # Ubuntu doesn't have a binary for it, but it is available on pip and is
