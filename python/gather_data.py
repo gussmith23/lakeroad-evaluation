@@ -188,3 +188,54 @@ def disable_task_gather_calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_resu
             / "calyx_end_to_end_xilinx_ultrascale_plus_no_presynth_results_iter2.csv"
         ),
     )
+
+
+instruction_names = (
+    [f"add{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"and{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"eq{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"mul{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"mux{n}_3" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"neq{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"not{n}_1" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"or{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"or{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"sub{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"uge{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"ugt{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"ule{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"ult{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+    + [f"xor{n}_2" for n in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64]]
+)
+
+
+def make_gather_instruction_synthesis_results_task(
+    make_path_to_json_file, output_filepath
+):
+    """"""
+
+    filenames = list(map(make_path_to_json_file, instruction_names))
+
+    def _impl():
+        Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
+        df = pd.DataFrame((json.load(open(filename)) for filename in filenames))
+        df.set_index("identifier")
+        df.to_csv(output_filepath)
+
+    return {
+        "actions": [
+            (
+                _impl,
+                [],
+            )
+        ],
+        "file_dep": filenames,
+        "targets": [output_filepath],
+    }
+
+
+def task_gather_diamond_baseline_synthesis_results():
+    return make_gather_instruction_synthesis_results_task(
+        lambda f: utils.output_dir() / "baseline" / "diamond" / f / f"{f}.json",
+        utils.output_dir() / "gathered_data" / "diamond_baseline.csv",
+    )

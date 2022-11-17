@@ -25,6 +25,9 @@ class DiamondSynthesisStats:
     This is because each of these dictionaries becomes a row in a CSV file, and
     thus if there was a nested structure, it would get a lot more compilcated."""
 
+    # Likely just the module name.
+    identifier: str
+
     # Number of various primitives
     num_LUT4: int
     num_CCU2C: int
@@ -38,7 +41,7 @@ class DiamondSynthesisStats:
     diamond_cpu_time: float
 
 
-def parse_diamond_log(log_text: str) -> DiamondSynthesisStats:
+def parse_diamond_log(log_text: str, identifier: str) -> DiamondSynthesisStats:
     """Parses a Diamond log.
 
     Specifically, parses whatever comes out of the `synthesis` binary in Diamond."""
@@ -117,6 +120,7 @@ Number of register bits => .*?$
         num_CCU2C=num_CCU2C,
         num_LUT4=num_LUT4,
         diamond_cpu_time=diamond_cpu_time,
+        identifier=identifier,
     )
 
 
@@ -675,7 +679,7 @@ def lattice_ecp5_diamond_synthesis(
 
     with open(json_filepath, "w") as f:
         log_stats = parse_diamond_log(
-            open(Path(output_dirpath) / "synthesis.log").read()
+            open(Path(output_dirpath) / "synthesis.log").read(), identifier=module_name
         )
         json.dump(dataclasses.asdict(log_stats), f)
 
