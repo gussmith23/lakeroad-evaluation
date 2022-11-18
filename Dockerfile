@@ -184,6 +184,9 @@ ADD lakeroad /root/lakeroad
 RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
 ENV LAKEROAD_DIR=/root/lakeroad
 
+# Build Racket bytecode; makes Lakeroad WAY faster.
+RUN raco make /root/lakeroad/bin/main.rkt
+
 # Build Dahlia. First, install Scala via cs setup; then, build Dahlia.
 WORKDIR /root
 ADD dahlia/ dahlia/
