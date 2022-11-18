@@ -42,16 +42,15 @@ def _make_yosys_nextpnr_compile_command(
         ),
     )
 
+
 def _make_diamond_compile_command(
     base_output_path: Union[Path, str],
 ) -> DiamondCompile:
     return DiamondCompile(
-        output_dirpath=
-            str(base_output_path / "diamond" ),
+        output_dirpath=str(base_output_path / "diamond"),
         log_filepath=str(base_output_path / "diamond" / "diamond.log"),
         time_filepath=str(base_output_path / "diamond" / "diamond.time"),
     )
-
 
 
 def _verilog_module_name(
@@ -97,6 +96,34 @@ def _make_experiment(
 def _make_instructions():
 
     for bw in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64, 128]:
+        for instruction in [
+            Instruction(
+                name="shl",
+                bitwidth=bw,
+                arity=2,
+                expr=f"(bvshl (var a {bw}) (var b {bw}))",
+            ),
+            Instruction(
+                name="ashr",
+                bitwidth=bw,
+                arity=2,
+                expr=f"(bvashr (var a {bw}) (var b {bw}))",
+            ),
+            Instruction(
+                name="lshr",
+                bitwidth=bw,
+                arity=2,
+                expr=f"(bvlshr (var a {bw}) (var b {bw}))",
+            ),
+        ]:
+            templates = [
+                ("xilinx_ultrascale_plus", "shift"),
+                ("lattice_ecp5", "shift"),
+                ("sofa", "shift"),
+            ]
+            for (architecture, template) in templates:
+                yield _make_experiment(architecture, instruction, template)
+
         for instruction in [
             Instruction(
                 name="and",
