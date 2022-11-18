@@ -933,240 +933,280 @@ def task_calyx_setup_lattice_ecp5_lakeroad():
     return _make_setup_calyx_task(
         filepaths=[
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add1_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add2_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add2_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add3_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add3_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add4_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add4_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add8_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add8_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add16_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add16_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_add32_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_add32_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_and1_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_and1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_and2_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_and2_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_and8_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_and8_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_and16_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_and16_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_and32_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_and32_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_eq1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_eq1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_eq5_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_eq5_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_eq6_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_eq6_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_eq32_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_eq32_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_neq1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_neq1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_not1_1"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_not1_1_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_not5_1"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_not5_1_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_or1_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_or1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_or8_2"
             / "bitwise"
             / "diamond"
             / "lakeroad_lattice_ecp5_or8_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub1_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub2_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub2_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub3_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub3_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub4_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub4_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub5_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub5_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub6_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub6_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub7_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub7_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub8_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub8_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub16_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub16_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_sub32_2"
             / "bitwise-with-carry"
             / "diamond"
             / "lakeroad_lattice_ecp5_sub32_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_uge1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_uge1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ugt1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ugt1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ugt5_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ugt5_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ule1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ule1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ule4_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ule4_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ult1_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ult1_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ult3_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ult3_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ult4_2"
             / "comparison"
             / "diamond"
             / "lakeroad_lattice_ecp5_ult4_2_prim.v",
             utils.output_dir()
+            / "lakeroad"
             / "lattice_ecp5"
             / "lakeroad_lattice_ecp5_ult32_2"
             / "comparison"
@@ -1292,245 +1332,285 @@ def task_calyx_setup_xilinx_ultrascale_plus_lakeroad():
     return _make_setup_calyx_task(
         filepaths=[
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add1_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add2_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add2_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add3_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add3_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add4_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add4_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add8_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add8_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add16_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add16_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_add32_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_add32_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_and1_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_and1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_and2_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_and2_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_and8_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_and8_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_and16_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_and16_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_and32_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_and32_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_eq1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_eq1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_eq5_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_eq5_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_eq6_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_eq6_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_eq32_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_eq32_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_neq1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_neq1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_not1_1"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_not1_1.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_not5_1"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_not5_1.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_or1_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_or1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_or8_2"
             / "bitwise"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_or8_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub1_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub2_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub2_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub3_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub3_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub4_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub4_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub5_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub5_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub6_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub6_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub7_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub7_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub8_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub8_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub16_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub16_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_sub32_2"
             / "bitwise-with-carry"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_sub32_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_uge1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_uge1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ugt1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ugt1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ugt5_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ugt5_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ule1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ule1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ule4_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ule4_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ult1_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ult1_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ult3_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ult3_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ult4_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ult4_2.sv",
             utils.output_dir()
+            / "lakeroad"
             / "xilinx_ultrascale_plus"
             / "lakeroad_xilinx_ultrascale_plus_ult32_2"
             / "comparison"
             / "vivado"
-            / "synth_opt_place_route.sv",
+            / "lakeroad_xilinx_ultrascale_plus_ult32_2.sv",
         ],
         calyx_dirpath=(
             utils.lakeroad_evaluation_dir() / "calyx-xilinx-ultrascale-plus"

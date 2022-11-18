@@ -4,7 +4,7 @@ import logging
 import subprocess
 from pathlib import Path
 from time import time
-from typing import Union
+from typing import List, Union
 
 import doit
 import utils
@@ -48,18 +48,22 @@ def invoke_lakeroad(
         "--architecture",
         architecture,
         "--verilog-module-out-signal",
-        "out"
+        "out",
     ]
     logging.info(
         "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
-    start_time = time()
-    subprocess.run(
-        cmd,
-        check=True,
-    )
-    end_time = time()
+    try:
+        start_time = time()
+        subprocess.run(
+            cmd,
+            check=True,
+        )
+        end_time = time()
+    except subprocess.CalledProcessError as e:
+        logging.error(" " + " ".join(map(str, cmd)))
+        raise e
 
     with open(time_filepath, "w") as f:
         print(f"{end_time-start_time}s", file=f)
@@ -79,20 +83,14 @@ def task_instruction_experiments(experiments_file: str):
 
     def _make_instruction_implementation_with_lakeroad_task(
         experiment: LakeroadInstructionExperiment,
+        verilog_filepath: Union[str, Path],
+        time_filepath: Union[str, Path],
     ):
         instruction_str = experiment.instruction.expr
         verilog_module_name = (
             experiment.implementation_action.implementation_module_name
         )
-        relative_output_filepath = (
-            experiment.implementation_action.implementation_sv_filepath
-        )
         template = experiment.implementation_action.template
-
-        output_filepath = utils.output_dir() / relative_output_filepath
-        time_filepath = (
-            utils.output_dir() / experiment.implementation_action.time_filepath
-        )
 
         return {
             "name": f"lakeroad_generate_{template}_{verilog_module_name}",
@@ -103,7 +101,7 @@ def task_instruction_experiments(experiments_file: str):
                         verilog_module_name,
                         instruction_str,
                         template,
-                        output_filepath,
+                        verilog_filepath,
                         experiment.architecture.replace("_", "-"),
                         time_filepath,
                     ],
@@ -120,110 +118,58 @@ def task_instruction_experiments(experiments_file: str):
             # Note: Leaving the file_dep empty is fine; it will just re-run
             # Lakeroad on each instruction each time.
             "file_dep": [experiments_file],
-            "targets": [output_filepath],
+            "targets": [verilog_filepath, time_filepath],
         }
 
-    def _make_compile_task(
-        verilog_filepath, module_name, template, compile_action: CompileAction
-    ):
-
-        output_dir_base = utils.output_dir() / "lakeroad"
-
-        match compile_action:
-            case VivadoCompile(
-                synth_opt_place_route_relative_filepath=synth_opt_place_route_output_filepath,
-                log_filepath=log_filepath,
-                time_filepath=time_filepath,
-            ):
-                vivado_baseline_synthesis_task = (
-                    make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                        input_filepath=verilog_filepath,
-                        output_dirpath=output_dir_base
-                        / module_name
-                        / template
-                        / "vivado",
-                        module_name=module_name,
-                    )
-                )
-                vivado_baseline_synthesis_task[
-                    "name"
-                ] = f"vivado_lakeroad_{template}_{module_name}"
-                return vivado_baseline_synthesis_task
-
-            case DiamondCompile(
-                output_dirpath=output_dirpath,
-                log_filepath=log_filepath,
-                time_filepath=time_filepath,
-            ):
-
-                task = make_lattice_ecp5_diamond_synthesis_task(
-                    input_filepath=verilog_filepath,
-                    output_dirpath=output_dir_base / module_name / template / "diamond",
-                    module_name=module_name,
-                )
-                task["name"] = f"diamond_compile_{template}_{module_name}"
-                return task
-
-            case YosysNextpnrCompile(
-                synth_json_relative_filepath=synth_json_relative_filepath,
-                synth_sv_relative_filepath=synth_sv_relative_filepath,
-                yosys_log_filepath=yosys_log_filepath,
-                nextpnr_log_filepath=nextpnr_log_filepath,
-                yosys_time_filepath=yosys_time_filepath,
-                nextpnr_time_filepath=nextpnr_time_filepath,
-                nextpnr_output_sv_filepath=nextpnr_output_sv_filepath,
-            ):
-                synth_out_sv = utils.output_dir() / synth_sv_relative_filepath
-                synth_out_json = utils.output_dir() / synth_json_relative_filepath
-                yosys_log_path = utils.output_dir() / yosys_log_filepath
-                nextpnr_log_path = utils.output_dir() / nextpnr_log_filepath
-                yosys_time_path = utils.output_dir() / yosys_time_filepath
-                nextpnr_time_path = utils.output_dir() / nextpnr_time_filepath
-                nextpnr_output_sv_filepath = (
-                    utils.output_dir() / nextpnr_output_sv_filepath
-                )
-
-                return {
-                    "name": f"yosys_nextpnr_compile_{template}_{module_name}",
-                    "actions": [
-                        (
-                            lattice_ecp5_yosys_nextpnr_synthesis,
-                            [
-                                verilog_filepath,
-                                module_name,
-                                synth_out_sv,
-                                synth_out_json,
-                                yosys_time_path,
-                                nextpnr_time_path,
-                                yosys_log_path,
-                                nextpnr_log_path,
-                            ],
-                        )
-                    ],
-                    "targets": [
-                        synth_out_sv,
-                        synth_out_json,
-                        yosys_log_path,
-                        nextpnr_log_path,
-                        yosys_time_path,
-                        nextpnr_time_path,
-                    ],
-                    "file_dep": [verilog_filepath],
-                }
-
-            case _:
-                raise NotImplementedError(compile_action)
-
     with open(experiments_file) as f:
-        experiments = yaml.load(f, yaml.Loader)
+        experiments: List[LakeroadInstructionExperiment] = yaml.load(f, yaml.Loader)
 
     for experiment in experiments:
-        yield _make_instruction_implementation_with_lakeroad_task(experiment)
-        for compile_task in experiment.compile_actions:
-            yield _make_compile_task(
-                utils.output_dir()
-                / experiment.implementation_action.implementation_sv_filepath,
-                experiment.implementation_action.implementation_module_name,
-                experiment.implementation_action.template,
-                compile_task,
-            )
+        module_name = experiment.implementation_action.implementation_module_name
+        template = experiment.implementation_action.template
+        architecture = experiment.architecture
+
+        # Base output path.
+        output_dirpath = (
+            utils.output_dir() / "lakeroad" / architecture / module_name / template
+        )
+
+        time_filepath = output_dirpath / f"{module_name}.time"
+        verilog_filepath = output_dirpath / f"{module_name}.sv"
+
+        yield _make_instruction_implementation_with_lakeroad_task(
+            experiment, time_filepath=time_filepath, verilog_filepath=verilog_filepath
+        )
+
+        match experiment.architecture:
+            case "lattice_ecp5":
+                diamond_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
+                    input_filepath=verilog_filepath,
+                    output_dirpath=output_dirpath / "diamond",
+                    module_name=module_name,
+                )
+                diamond_synthesis_task[
+                    "name"
+                ] = f"diamond_synthesize_{template}_{module_name}"
+                yield diamond_synthesis_task
+
+            case "xilinx_ultrascale_plus":
+                vivado_synthesis_task = (
+                    make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
+                        input_filepath=verilog_filepath,
+                        module_name=module_name,
+                        output_dirpath=output_dirpath / "vivado",
+                    )
+                )
+                vivado_synthesis_task[
+                    "name"
+                ] = f"vivado_synthesize_{template}_{module_name}"
+                yield vivado_synthesis_task
+
+            case "sofa":
+                logging.warn("No synthesis implemented for SOFA.")
+
+            case _:
+                raise Exception(
+                    f"Unexpected architecture value {experiment.architecture}"
+                )

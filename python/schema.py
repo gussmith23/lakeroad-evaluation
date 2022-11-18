@@ -1,42 +1,9 @@
 from dataclasses import dataclass
-from platform import architecture
-from typing import List, Union
-from pathlib import Path
-
-
-@dataclass
-class YosysNextpnrCompile(object):
-    synth_json_relative_filepath: Union[Path, str]
-    synth_sv_relative_filepath: Union[Path, str]
-    yosys_log_filepath: Union[Path, str]
-    nextpnr_log_filepath: Union[Path, str]
-    yosys_time_filepath: Union[Path, str]
-    nextpnr_time_filepath: Union[Path, str]
-    nextpnr_output_sv_filepath: Union[Path, str]
-
-
-@dataclass
-class VivadoCompile(object):
-    synth_opt_place_route_relative_filepath: Union[Path, str]
-    log_filepath: Union[Path, str]
-    time_filepath: Union[Path, str]
-
-@dataclass
-class DiamondCompile(object):
-    output_dirpath: Union[Path, str]
-    log_filepath: Union[Path, str]
-    time_filepath: Union[Path, str]
-
-
-CompileAction = Union[YosysNextpnrCompile, VivadoCompile, DiamondCompile]
-
 
 @dataclass
 class ImplementationAction:
     template: str
-    implementation_sv_filepath: Union[str, Path]
     implementation_module_name: str
-    time_filepath: Union[str, Path]
 
 
 @dataclass
@@ -59,5 +26,4 @@ class LakeroadInstructionExperiment:
 
     instruction: Instruction
     implementation_action: ImplementationAction
-    compile_actions: List[CompileAction]
     architecture: str
