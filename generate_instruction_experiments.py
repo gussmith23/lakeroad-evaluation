@@ -2,55 +2,8 @@
 
 By default, prints to stdout. To write to a file, use the --output-file
 argument."""
-from typing import Union
 import yaml
-from pathlib import Path
 from schema import *
-
-
-def _make_vivado_compile_command(
-    base_output_path: Union[Path, str],
-) -> VivadoCompile:
-    base_output_path = Path(base_output_path)
-    return VivadoCompile(
-        synth_opt_place_route_relative_filepath=str(
-            base_output_path / "vivado" / "synth_opt_place_route.sv"
-        ),
-        log_filepath=str(base_output_path / "vivado" / "vivado_log.txt"),
-        time_filepath=str(base_output_path / "vivado" / "vivado.time"),
-    )
-
-
-def _make_yosys_nextpnr_compile_command(
-    base_output_path: Union[Path, str],
-) -> YosysNextpnrCompile:
-    return YosysNextpnrCompile(
-        synth_json_relative_filepath=str(
-            base_output_path / "yosys_nextpnr" / "yosys_synth.json"
-        ),
-        synth_sv_relative_filepath=str(
-            base_output_path / "yosys_nextpnr" / "yosys_synth.sv"
-        ),
-        yosys_log_filepath=str(base_output_path / "yosys_nextpnr" / "yosys_log.txt"),
-        nextpnr_log_filepath=str(
-            base_output_path / "yosys_nextpnr" / "nextpnr_log.txt"
-        ),
-        yosys_time_filepath=str(base_output_path / "yosys_nextpnr" / "yosys.time"),
-        nextpnr_time_filepath=str(base_output_path / "yosys_nextpnr" / "nextpnr.time"),
-        nextpnr_output_sv_filepath=str(
-            base_output_path / "yosys_nextpnr" / "nextpnr_place_route.sv"
-        ),
-    )
-
-
-def _make_diamond_compile_command(
-    base_output_path: Union[Path, str],
-) -> DiamondCompile:
-    return DiamondCompile(
-        output_dirpath=str(base_output_path / "diamond"),
-        log_filepath=str(base_output_path / "diamond" / "diamond.log"),
-        time_filepath=str(base_output_path / "diamond" / "diamond.time"),
-    )
 
 
 def _verilog_module_name(
@@ -71,24 +24,12 @@ def _make_experiment(
         instruction.arity,
     )
 
-    base_path = Path(architecture) / module_name / template
-
-    if architecture == "xilinx_ultrascale_plus":
-        compile_actions = [_make_vivado_compile_command(base_path)]
-    elif architecture == "lattice_ecp5":
-        compile_actions = [_make_diamond_compile_command(base_path)]
-    elif architecture == "sofa":
-        compile_actions = []
-
     return LakeroadInstructionExperiment(
         instruction=instruction,
         implementation_action=ImplementationAction(
             template=template,
-            implementation_sv_filepath=str(base_path / (str(module_name) + ".sv")),
             implementation_module_name=module_name,
-            time_filepath=str(base_path / (str(module_name) + ".time")),
         ),
-        compile_actions=compile_actions,
         architecture=architecture,
     )
 
@@ -96,33 +37,60 @@ def _make_experiment(
 def _make_instructions():
 
     for bw in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64, 128]:
-        for instruction in [
-            Instruction(
-                name="shl",
-                bitwidth=bw,
-                arity=2,
-                expr=f"(bvshl (var a {bw}) (var b {bw}))",
-            ),
-            Instruction(
-                name="ashr",
-                bitwidth=bw,
-                arity=2,
-                expr=f"(bvashr (var a {bw}) (var b {bw}))",
-            ),
-            Instruction(
-                name="lshr",
-                bitwidth=bw,
-                arity=2,
-                expr=f"(bvlshr (var a {bw}) (var b {bw}))",
-            ),
-        ]:
-            templates = [
-                ("xilinx_ultrascale_plus", "shift"),
-                ("lattice_ecp5", "shift"),
-                ("sofa", "shift"),
-            ]
-            for (architecture, template) in templates:
-                yield _make_experiment(architecture, instruction, template)
+        # No shifts of size 1, they'll get optimized away.
+        if bw > 1:
+            for instruction in [
+                Instruction(
+                    name="shl",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvshl (var a {bw}) (var b {bw}))",
+                ),
+                Instruction(
+                    name="ashr",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvashr (var a {bw}) (var b {bw}))",
+                ),
+                Instruction(
+                    name="lshr",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvlshr (var a {bw}) (var b {bw}))",
+                ),
+            ]:
+                templates = [
+                    ("xilinx_ultrascale_plus", "shift"),
+                    ("lattice_ecp5", "shift"),
+                ]
+                for (architecture, template) in templates:
+                    yield _make_experiment(architecture, instruction, template)
+            for instruction in [
+                Instruction(
+                    name="shl",
+                    bitwidth=bw,
+                    arity=2,
+                    expr=f"(bvshl (var a {bw}) (var b {bw}))",
+                ),
+                # TODO(@gussmith23): Currently only left shift works on SOFA, oddly.
+                # Instruction(
+                #     name="ashr",
+                #     bitwidth=bw,
+                #     arity=2,
+                #     expr=f"(bvashr (var a {bw}) (var b {bw}))",
+                # ),
+                # Instruction(
+                #     name="lshr",
+                #     bitwidth=bw,
+                #     arity=2,
+                #     expr=f"(bvlshr (var a {bw}) (var b {bw}))",
+                # ),
+            ]:
+                templates = [
+                    ("sofa", "shift"),
+                ]
+                for (architecture, template) in templates:
+                    yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
             Instruction(
