@@ -239,3 +239,9 @@ def task_gather_diamond_baseline_synthesis_results():
         lambda f: utils.output_dir() / "baseline" / "diamond" / f / f"{f}.json",
         utils.output_dir() / "gathered_data" / "diamond_baseline.csv",
     )
+
+def task_gather_vivado_baseline_synthesis_results():
+    return make_gather_instruction_synthesis_results_task(
+        lambda f: utils.output_dir() / "baseline" / "vivado" / f / f"{f}.json",
+        utils.output_dir() / "gathered_data" / "vivado_baseline.csv",
+    )
