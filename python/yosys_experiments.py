@@ -37,6 +37,9 @@ def test_file(
     verilog_module_output_signal,
     expected_lakeroad_yosys_resources,
     expected_vanilla_yosys_resources,
+    vanilla_synth_command,
+    architecture,
+    template,
 ):
     vanilla_yosys_resources = parse_yosys_log(
         subprocess.run(
@@ -45,7 +48,7 @@ def test_file(
                 "-p",
                 f"""
             read_verilog {verilog_filepath};
-            synth_xilinx -family xcup;
+            {vanilla_synth_command};
             """,
             ],
             stdout=subprocess.PIPE,
@@ -61,7 +64,7 @@ def test_file(
                 "-p",
                 f"""
             read_verilog {verilog_filepath};
-            lakeroad {verilog_module_name} {verilog_module_output_signal} xilinx-ultrascale-plus xilinx-ultrascale-plus-dsp48e2;
+            lakeroad {verilog_module_name} {verilog_module_output_signal} {architecture} {template};
             write_verilog;
             stat;
             """,
@@ -81,7 +84,7 @@ def test_file(
 def task_yosys_lakeroad_pass_tests():
     def _make_test(**kwargs):
         return {
-            "name": kwargs["verilog_module_name"],
+            "name": kwargs["architecture"] + "_" + kwargs["verilog_module_name"],
             "actions": [(test_file, [], kwargs)],
         }
 
@@ -91,6 +94,9 @@ def task_yosys_lakeroad_pass_tests():
         verilog_filepath=utils.lakeroad_evaluation_dir() / "verilog" / "test_mul16.v",
         verilog_module_name="test_mul16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "DSP48E2": 1,
@@ -104,6 +110,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_mul_add16.v",
         verilog_module_name="test_add_mul_add16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 8,
@@ -117,6 +126,9 @@ def task_yosys_lakeroad_pass_tests():
         verilog_filepath=utils.lakeroad_evaluation_dir() / "verilog" / "test_sub16.v",
         verilog_module_name="test_sub16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -131,6 +143,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_mul_add16.v",
         verilog_module_name="test_mul_add16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -146,6 +161,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_mul16.v",
         verilog_module_name="test_add_mul16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -162,6 +180,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_squared16.v",
         verilog_module_name="test_add_squared16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -178,6 +199,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_sub_squared16.v",
         verilog_module_name="test_sub_squared16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -194,6 +218,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_sub_squared_sub16.v",
         verilog_module_name="test_sub_squared_sub16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 8,
@@ -210,6 +237,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_squared_add16.v",
         verilog_module_name="test_add_squared_add16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 8,
@@ -226,6 +256,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_squared_sub16.v",
         verilog_module_name="test_add_squared_sub16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 8,
@@ -242,6 +275,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_sub_squared_add16.v",
         verilog_module_name="test_sub_squared_add16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 8,
@@ -258,6 +294,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_mul_xor16.v",
         verilog_module_name="test_add_mul_xor16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -274,6 +313,9 @@ def task_yosys_lakeroad_pass_tests():
         / "test_add_mul_xnor16.v",
         verilog_module_name="test_add_mul_xnor16",
         verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
         expected_lakeroad_yosys_resources={"DSP48E2": 1},
         expected_vanilla_yosys_resources={
             "CARRY4": 4,
@@ -284,4 +326,61 @@ def task_yosys_lakeroad_pass_tests():
         },
     )
 
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_sub16.v",
+        verilog_module_name="test_mul_sub16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
+        expected_lakeroad_yosys_resources={"DSP48E2": 1},
+        expected_vanilla_yosys_resources={
+            "CARRY4": 4,
+            "DSP48E2": 1,
+            "IBUF": 48,
+            "LUT2": 16,
+            "OBUF": 16,
+        },
+    )
+
     # TODO could add more of these...
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir() / "verilog" / "test_mul16.v",
+        verilog_module_name="test_mul16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        # TODO: we use an extra ALU when it's not needed.
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"MULT18X18D": 1},
+    )
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_add16.v",
+        verilog_module_name="test_mul_add16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"CCU2C": 8, "MULT18X18D": 1},
+    )
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_sub16.v",
+        verilog_module_name="test_mul_sub16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"CCU2C": 8, "MULT18X18D": 1},
+    )
