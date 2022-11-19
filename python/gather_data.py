@@ -1,12 +1,16 @@
 """Functions and tasks for gathering generated data."""
 
 
+import dataclasses
 import json
 from pathlib import Path
-from typing import List, Union
+import yaml
+from typing import Dict, List, Union
 
 import pandas as pd
 import utils
+from schema import *
+import doit
 
 # Paths to JSON files in the output directory, sorted in ascending order. These
 # paths must be appended onto a path base to actually produce a valid path, e.g.:
@@ -209,12 +213,8 @@ instruction_names = (
 )
 
 
-def make_gather_instruction_synthesis_results_task(
-    make_path_to_json_file, output_filepath
-):
+def make_gather_instruction_synthesis_results_task(filenames, output_filepath):
     """"""
-
-    filenames = list(map(make_path_to_json_file, instruction_names))
 
     def _impl():
         Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
@@ -235,13 +235,126 @@ def make_gather_instruction_synthesis_results_task(
 
 
 def task_gather_diamond_baseline_synthesis_results():
+    filenames = list(
+        map(
+            lambda f: utils.output_dir() / "baseline" / "diamond" / f / f"{f}.json",
+            instruction_names,
+        )
+    )
     return make_gather_instruction_synthesis_results_task(
-        lambda f: utils.output_dir() / "baseline" / "diamond" / f / f"{f}.json",
+        filenames,
         utils.output_dir() / "gathered_data" / "diamond_baseline.csv",
     )
 
+
 def task_gather_vivado_baseline_synthesis_results():
+    filenames = list(
+        map(
+            lambda f: utils.output_dir() / "baseline" / "vivado" / f / f"{f}.json",
+            instruction_names,
+        )
+    )
     return make_gather_instruction_synthesis_results_task(
-        lambda f: utils.output_dir() / "baseline" / "vivado" / f / f"{f}.json",
+        filenames,
         utils.output_dir() / "gathered_data" / "vivado_baseline.csv",
     )
+
+
+@doit.task_params(
+    [
+        {
+            "name": "experiments_file",
+            "default": str(utils.lakeroad_evaluation_dir() / "experiments.yaml"),
+            "type": str,
+        },
+        {
+            "name": "output_filepath",
+            "default": str(
+                utils.lakeroad_evaluation_dir()
+                / "gathered_data"
+                / "lakeroad_results.csv"
+            ),
+            "type": str,
+        },
+    ]
+)
+def task_gather_lakeroad_synthesis_results(
+    experiments_file: str,
+    output_filepath: str,
+):
+    with open(experiments_file) as f:
+        experiments: List[LakeroadInstructionExperiment] = yaml.load(f, yaml.Loader)
+
+    @dataclasses.dataclass
+    class ExpectedInstruction:
+        filepath: Union[Path, str]
+        module_name: str
+        template: str
+        architecture: str
+
+    expected_instructions = []
+    for experiment in experiments:
+        module_name = experiment.implementation_action.implementation_module_name
+        template = experiment.implementation_action.template
+        architecture = experiment.architecture
+
+        # Vivado results.
+        expected_instructions.append(
+            ExpectedInstruction(
+                filepath=utils.output_dir()
+                / "lakeroad"
+                / architecture
+                / module_name
+                / template
+                / "vivado"
+                / f"{module_name}.json",
+                module_name=module_name,
+                template=template,
+                architecture=architecture,
+            )
+        )
+
+        # Diamond results.
+        expected_instructions.append(
+            ExpectedInstruction(
+                filepath=utils.output_dir()
+                / "lakeroad"
+                / architecture
+                / module_name
+                / template
+                / "diamond"
+                / f"{module_name}.json",
+                module_name=module_name,
+                template=template,
+                architecture=architecture,
+            )
+        )
+
+    def impl(expected_instructions: List[ExpectedInstruction], output_filepath):
+        Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
+        rows: List[Dict] = []
+        for expected_instruction in expected_instructions:
+            data = json.loads(open(expected_instruction.filepath).read())
+            data["module_name"] = expected_instruction.module_name
+            data["architecture"] = expected_instruction.architecture
+            data["template"] = expected_instruction.template
+            rows.append(data)
+        pd.DataFrame(rows).to_csv(output_filepath)
+
+    return {
+        "actions": [
+            (
+                impl,
+                [],
+                {
+                    "expected_instructions": expected_instructions,
+                    "output_filepath": output_filepath,
+                },
+            )
+        ],
+        "file_dep": [
+            expected_instruction.filepath
+            for expected_instruction in expected_instructions
+        ],
+        "targets": [output_filepath],
+    }
