@@ -84,7 +84,7 @@ def test_file(
 def task_yosys_lakeroad_pass_tests():
     def _make_test(**kwargs):
         return {
-            "name": kwargs["verilog_module_name"],
+            "name": kwargs["architecture"] + "_" + kwargs["verilog_module_name"],
             "actions": [(test_file, [], kwargs)],
         }
 
@@ -326,4 +326,56 @@ def task_yosys_lakeroad_pass_tests():
         },
     )
 
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_sub16.v",
+        verilog_module_name="test_mul_sub16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_xilinx -family xcup",
+        architecture="xilinx-ultrascale-plus",
+        template="xilinx-ultrascale-plus-dsp48e2",
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"MULT18X18D": 1},
+    )
+
+
     # TODO could add more of these...
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir() / "verilog" / "test_mul16.v",
+        verilog_module_name="test_mul16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        # TODO: we use an extra ALU when it's not needed.
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"MULT18X18D": 1},
+    )
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_add16.v",
+        verilog_module_name="test_mul_add16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"CCU2C": 8, "MULT18X18D": 1},
+    )
+
+    yield _make_test(
+        verilog_filepath=utils.lakeroad_evaluation_dir()
+        / "verilog"
+        / "test_mul_sub16.v",
+        verilog_module_name="test_mul_sub16",
+        verilog_module_output_signal="out",
+        vanilla_synth_command="synth_ecp5",
+        architecture="lattice-ecp5",
+        template="lattice-ecp5-dsp",
+        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
+        expected_vanilla_yosys_resources={"CCU2C": 8, "MULT18X18D": 1},
+    )
