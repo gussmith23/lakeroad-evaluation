@@ -335,10 +335,15 @@ def task_yosys_lakeroad_pass_tests():
         vanilla_synth_command="synth_xilinx -family xcup",
         architecture="xilinx-ultrascale-plus",
         template="xilinx-ultrascale-plus-dsp48e2",
-        expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
-        expected_vanilla_yosys_resources={"MULT18X18D": 1},
+        expected_lakeroad_yosys_resources={"DSP48E2": 1},
+        expected_vanilla_yosys_resources={
+            "CARRY4": 4,
+            "DSP48E2": 1,
+            "IBUF": 48,
+            "LUT2": 16,
+            "OBUF": 16,
+        },
     )
-
 
     # TODO could add more of these...
 
