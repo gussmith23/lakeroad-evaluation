@@ -37,8 +37,10 @@ def _make_experiment(
 def _make_instructions():
 
     for bw in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64, 128]:
-        # No shifts of size 1, they'll get optimized away.
-        if bw > 1:
+        # No shifts of size 1, they'll get optimized away. No shifts of 64 or
+        # greater; our template is really inefficient and so it leads to OOM
+        # when attempting to synthesize.
+        if bw > 1 and bw < 64:
             for instruction in [
                 Instruction(
                     name="shl",

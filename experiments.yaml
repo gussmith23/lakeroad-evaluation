@@ -4027,67 +4027,9 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl64_2
-    template: shift
-  instruction: &id166 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 64
-    expr: (bvshl (var a 64) (var b 64))
-    name: shl
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_shl64_2
-    template: shift
-  instruction: *id166
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_ashr64_2
-    template: shift
-  instruction: &id167 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 64
-    expr: (bvashr (var a 64) (var b 64))
-    name: ashr
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_ashr64_2
-    template: shift
-  instruction: *id167
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_lshr64_2
-    template: shift
-  instruction: &id168 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 64
-    expr: (bvlshr (var a 64) (var b 64))
-    name: lshr
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_lshr64_2
-    template: shift
-  instruction: *id168
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: sofa
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_sofa_shl64_2
-    template: shift
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 64
-    expr: (bvshl (var a 64) (var b 64))
-    name: shl
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_and64_2
     template: bitwise
-  instruction: &id169 !!python/object:schema.Instruction
+  instruction: &id166 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bvand (var a 64) (var b 64))
@@ -4097,19 +4039,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_and64_2
     template: bitwise
-  instruction: *id169
+  instruction: *id166
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_and64_2
     template: bitwise
-  instruction: *id169
+  instruction: *id166
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or64_2
     template: bitwise
-  instruction: &id170 !!python/object:schema.Instruction
+  instruction: &id167 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bvor (var a 64) (var b 64))
@@ -4119,19 +4061,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_or64_2
     template: bitwise
-  instruction: *id170
+  instruction: *id167
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or64_2
     template: bitwise
-  instruction: *id170
+  instruction: *id167
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor64_2
     template: bitwise
-  instruction: &id171 !!python/object:schema.Instruction
+  instruction: &id168 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bvxor (var a 64) (var b 64))
@@ -4141,19 +4083,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_xor64_2
     template: bitwise
-  instruction: *id171
+  instruction: *id168
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_xor64_2
     template: bitwise
-  instruction: *id171
+  instruction: *id168
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not64_1
     template: bitwise
-  instruction: &id172 !!python/object:schema.Instruction
+  instruction: &id169 !!python/object:schema.Instruction
     arity: 1
     bitwidth: 64
     expr: (bvnot (var a 64))
@@ -4163,19 +4105,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_not64_1
     template: bitwise
-  instruction: *id172
+  instruction: *id169
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_not64_1
     template: bitwise
-  instruction: *id172
+  instruction: *id169
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux64_3
     template: bitwise
-  instruction: &id173 !!python/object:schema.Instruction
+  instruction: &id170 !!python/object:schema.Instruction
     arity: 3
     bitwidth: 64
     expr: (circt-comb-mux (var a 1) (var b 64) (var c 64))
@@ -4185,19 +4127,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_mux64_3
     template: bitwise
-  instruction: *id173
+  instruction: *id170
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux64_3
     template: bitwise
-  instruction: *id173
+  instruction: *id170
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_add64_2
     template: bitwise-with-carry
-  instruction: &id174 !!python/object:schema.Instruction
+  instruction: &id171 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bvadd (var a 64) (var b 64))
@@ -4207,19 +4149,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_add64_2
     template: bitwise-with-carry
-  instruction: *id174
+  instruction: *id171
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add64_2
     template: bitwise-with-carry
-  instruction: *id174
+  instruction: *id171
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub64_2
     template: bitwise-with-carry
-  instruction: &id175 !!python/object:schema.Instruction
+  instruction: &id172 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bvsub (var a 64) (var b 64))
@@ -4229,19 +4171,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub64_2
     template: bitwise-with-carry
-  instruction: *id175
+  instruction: *id172
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub64_2
     template: bitwise-with-carry
-  instruction: *id175
+  instruction: *id172
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_eq64_2
     template: comparison
-  instruction: &id176 !!python/object:schema.Instruction
+  instruction: &id173 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (bveq (var a 64) (var b 64)))
@@ -4251,19 +4193,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_eq64_2
     template: comparison
-  instruction: *id176
+  instruction: *id173
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_eq64_2
     template: comparison
-  instruction: *id176
+  instruction: *id173
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_neq64_2
     template: comparison
-  instruction: &id177 !!python/object:schema.Instruction
+  instruction: &id174 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (not (bveq (var a 64) (var b 64))))
@@ -4273,19 +4215,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_neq64_2
     template: comparison
-  instruction: *id177
+  instruction: *id174
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_neq64_2
     template: comparison
-  instruction: *id177
+  instruction: *id174
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ugt64_2
     template: comparison
-  instruction: &id178 !!python/object:schema.Instruction
+  instruction: &id175 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (bvugt (var a 64) (var b 64)))
@@ -4295,19 +4237,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ugt64_2
     template: comparison
-  instruction: *id178
+  instruction: *id175
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ugt64_2
     template: comparison
-  instruction: *id178
+  instruction: *id175
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ult64_2
     template: comparison
-  instruction: &id179 !!python/object:schema.Instruction
+  instruction: &id176 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (bvult (var a 64) (var b 64)))
@@ -4317,19 +4259,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ult64_2
     template: comparison
-  instruction: *id179
+  instruction: *id176
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ult64_2
     template: comparison
-  instruction: *id179
+  instruction: *id176
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_uge64_2
     template: comparison
-  instruction: &id180 !!python/object:schema.Instruction
+  instruction: &id177 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (bvuge (var a 64) (var b 64)))
@@ -4339,19 +4281,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_uge64_2
     template: comparison
-  instruction: *id180
+  instruction: *id177
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_uge64_2
     template: comparison
-  instruction: *id180
+  instruction: *id177
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ule64_2
     template: comparison
-  instruction: &id181 !!python/object:schema.Instruction
+  instruction: &id178 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 64
     expr: (bool->bitvector (bvule (var a 64) (var b 64)))
@@ -4361,77 +4303,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ule64_2
     template: comparison
-  instruction: *id181
+  instruction: *id178
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ule64_2
     template: comparison
-  instruction: *id181
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl128_2
-    template: shift
-  instruction: &id182 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 128
-    expr: (bvshl (var a 128) (var b 128))
-    name: shl
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_shl128_2
-    template: shift
-  instruction: *id182
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_ashr128_2
-    template: shift
-  instruction: &id183 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 128
-    expr: (bvashr (var a 128) (var b 128))
-    name: ashr
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_ashr128_2
-    template: shift
-  instruction: *id183
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_lshr128_2
-    template: shift
-  instruction: &id184 !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 128
-    expr: (bvlshr (var a 128) (var b 128))
-    name: lshr
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: lattice_ecp5
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_lattice_ecp5_lshr128_2
-    template: shift
-  instruction: *id184
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: sofa
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_sofa_shl128_2
-    template: shift
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 128
-    expr: (bvshl (var a 128) (var b 128))
-    name: shl
+  instruction: *id178
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_and128_2
     template: bitwise
-  instruction: &id185 !!python/object:schema.Instruction
+  instruction: &id179 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bvand (var a 128) (var b 128))
@@ -4441,19 +4325,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_and128_2
     template: bitwise
-  instruction: *id185
+  instruction: *id179
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_and128_2
     template: bitwise
-  instruction: *id185
+  instruction: *id179
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or128_2
     template: bitwise
-  instruction: &id186 !!python/object:schema.Instruction
+  instruction: &id180 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bvor (var a 128) (var b 128))
@@ -4463,19 +4347,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_or128_2
     template: bitwise
-  instruction: *id186
+  instruction: *id180
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or128_2
     template: bitwise
-  instruction: *id186
+  instruction: *id180
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor128_2
     template: bitwise
-  instruction: &id187 !!python/object:schema.Instruction
+  instruction: &id181 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bvxor (var a 128) (var b 128))
@@ -4485,19 +4369,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_xor128_2
     template: bitwise
-  instruction: *id187
+  instruction: *id181
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_xor128_2
     template: bitwise
-  instruction: *id187
+  instruction: *id181
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not128_1
     template: bitwise
-  instruction: &id188 !!python/object:schema.Instruction
+  instruction: &id182 !!python/object:schema.Instruction
     arity: 1
     bitwidth: 128
     expr: (bvnot (var a 128))
@@ -4507,19 +4391,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_not128_1
     template: bitwise
-  instruction: *id188
+  instruction: *id182
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_not128_1
     template: bitwise
-  instruction: *id188
+  instruction: *id182
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux128_3
     template: bitwise
-  instruction: &id189 !!python/object:schema.Instruction
+  instruction: &id183 !!python/object:schema.Instruction
     arity: 3
     bitwidth: 128
     expr: (circt-comb-mux (var a 1) (var b 128) (var c 128))
@@ -4529,19 +4413,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_mux128_3
     template: bitwise
-  instruction: *id189
+  instruction: *id183
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux128_3
     template: bitwise
-  instruction: *id189
+  instruction: *id183
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_add128_2
     template: bitwise-with-carry
-  instruction: &id190 !!python/object:schema.Instruction
+  instruction: &id184 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bvadd (var a 128) (var b 128))
@@ -4551,19 +4435,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_add128_2
     template: bitwise-with-carry
-  instruction: *id190
+  instruction: *id184
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add128_2
     template: bitwise-with-carry
-  instruction: *id190
+  instruction: *id184
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub128_2
     template: bitwise-with-carry
-  instruction: &id191 !!python/object:schema.Instruction
+  instruction: &id185 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bvsub (var a 128) (var b 128))
@@ -4573,19 +4457,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub128_2
     template: bitwise-with-carry
-  instruction: *id191
+  instruction: *id185
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub128_2
     template: bitwise-with-carry
-  instruction: *id191
+  instruction: *id185
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_eq128_2
     template: comparison
-  instruction: &id192 !!python/object:schema.Instruction
+  instruction: &id186 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (bveq (var a 128) (var b 128)))
@@ -4595,19 +4479,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_eq128_2
     template: comparison
-  instruction: *id192
+  instruction: *id186
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_eq128_2
     template: comparison
-  instruction: *id192
+  instruction: *id186
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_neq128_2
     template: comparison
-  instruction: &id193 !!python/object:schema.Instruction
+  instruction: &id187 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (not (bveq (var a 128) (var b 128))))
@@ -4617,19 +4501,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_neq128_2
     template: comparison
-  instruction: *id193
+  instruction: *id187
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_neq128_2
     template: comparison
-  instruction: *id193
+  instruction: *id187
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ugt128_2
     template: comparison
-  instruction: &id194 !!python/object:schema.Instruction
+  instruction: &id188 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (bvugt (var a 128) (var b 128)))
@@ -4639,19 +4523,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ugt128_2
     template: comparison
-  instruction: *id194
+  instruction: *id188
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ugt128_2
     template: comparison
-  instruction: *id194
+  instruction: *id188
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ult128_2
     template: comparison
-  instruction: &id195 !!python/object:schema.Instruction
+  instruction: &id189 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (bvult (var a 128) (var b 128)))
@@ -4661,19 +4545,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ult128_2
     template: comparison
-  instruction: *id195
+  instruction: *id189
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ult128_2
     template: comparison
-  instruction: *id195
+  instruction: *id189
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_uge128_2
     template: comparison
-  instruction: &id196 !!python/object:schema.Instruction
+  instruction: &id190 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (bvuge (var a 128) (var b 128)))
@@ -4683,19 +4567,19 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_uge128_2
     template: comparison
-  instruction: *id196
+  instruction: *id190
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_uge128_2
     template: comparison
-  instruction: *id196
+  instruction: *id190
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_ule128_2
     template: comparison
-  instruction: &id197 !!python/object:schema.Instruction
+  instruction: &id191 !!python/object:schema.Instruction
     arity: 2
     bitwidth: 128
     expr: (bool->bitvector (bvule (var a 128) (var b 128)))
@@ -4705,10 +4589,10 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_ule128_2
     template: comparison
-  instruction: *id197
+  instruction: *id191
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_ule128_2
     template: comparison
-  instruction: *id197
+  instruction: *id191
