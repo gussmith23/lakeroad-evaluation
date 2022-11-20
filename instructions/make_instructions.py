@@ -32,9 +32,10 @@ ops = {
     "mux": "s ? a : b",
     # "parity": None,
     # "replicate": None,
-    "shl": f("<<"),
+    # Yosys really doesn't like `signed` and `unsigned`, what's going on?
+    #"shl": f("<<"),
     # "shrs": f(">>"),
-    "shru": f(">>"),
+    #"shru": f(">>"),
 }
 
 signedness = {
