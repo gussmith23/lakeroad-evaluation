@@ -370,22 +370,24 @@ def task_gather_lakeroad_synthesis_results(
             )
 
         elif architecture == "sofa":
-            ExpectedInstruction(
-                filepath=utils.output_dir()
-                / "lakeroad"
-                / architecture
-                / module_name
-                / template
-                / f"{module_name}.json",
-                time_filepath=utils.output_dir()
-                / "lakeroad"
-                / architecture
-                / module_name
-                / template
-                / f"{module_name}.time",
-                module_name=module_name,
-                template=template,
-                architecture=architecture,
+            expected_instructions.append(
+                ExpectedInstruction(
+                    filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / f"{module_name}.json",
+                    time_filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / f"{module_name}.time",
+                    module_name=module_name,
+                    template=template,
+                    architecture=architecture,
+                )
             )
 
     def impl(expected_instructions: List[ExpectedInstruction], output_filepath):
