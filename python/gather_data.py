@@ -266,20 +266,10 @@ def task_gather_vivado_baseline_synthesis_results():
             "default": str(utils.lakeroad_evaluation_dir() / "experiments.yaml"),
             "type": str,
         },
-        {
-            "name": "output_filepath",
-            "default": str(
-                utils.lakeroad_evaluation_dir()
-                / "gathered_data"
-                / "lakeroad_results.csv"
-            ),
-            "type": str,
-        },
     ]
 )
 def task_gather_lakeroad_synthesis_results(
     experiments_file: str,
-    output_filepath: str,
 ):
     with open(experiments_file) as f:
         experiments: List[LakeroadInstructionExperiment] = yaml.load(f, yaml.Loader)
@@ -287,6 +277,7 @@ def task_gather_lakeroad_synthesis_results(
     @dataclasses.dataclass
     class ExpectedInstruction:
         filepath: Union[Path, str]
+        time_filepath: Union[Path, str]
         module_name: str
         template: str
         architecture: str
@@ -297,37 +288,50 @@ def task_gather_lakeroad_synthesis_results(
         template = experiment.implementation_action.template
         architecture = experiment.architecture
 
-        # Vivado results.
-        expected_instructions.append(
-            ExpectedInstruction(
-                filepath=utils.output_dir()
-                / "lakeroad"
-                / architecture
-                / module_name
-                / template
-                / "vivado"
-                / f"{module_name}.json",
-                module_name=module_name,
-                template=template,
-                architecture=architecture,
+        if architecture == "xilinx_ultrascale_plus":
+            # Vivado results.
+            expected_instructions.append(
+                ExpectedInstruction(
+                    filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / "vivado"
+                    / f"{module_name}.json",
+                    time_filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / f"{module_name}.time",
+                    module_name=module_name,
+                    template=template,
+                    architecture=architecture,
+                )
             )
-        )
-
-        # Diamond results.
-        expected_instructions.append(
-            ExpectedInstruction(
-                filepath=utils.output_dir()
-                / "lakeroad"
-                / architecture
-                / module_name
-                / template
-                / "diamond"
-                / f"{module_name}.json",
-                module_name=module_name,
-                template=template,
-                architecture=architecture,
+        elif architecture == "lattice_ecp5":
+            # Diamond results.
+            expected_instructions.append(
+                ExpectedInstruction(
+                    filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / "diamond"
+                    / f"{module_name}.json",
+                    time_filepath=utils.output_dir()
+                    / "lakeroad"
+                    / architecture
+                    / module_name
+                    / template
+                    / f"{module_name}.time",
+                    module_name=module_name,
+                    template=template,
+                    architecture=architecture,
+                )
             )
-        )
 
     def impl(expected_instructions: List[ExpectedInstruction], output_filepath):
         Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
@@ -337,17 +341,27 @@ def task_gather_lakeroad_synthesis_results(
             data["module_name"] = expected_instruction.module_name
             data["architecture"] = expected_instruction.architecture
             data["template"] = expected_instruction.template
+            data["lakeroad_runtime_s"] = float(
+                open(expected_instruction.time_filepath).read().replace("s", "")
+            )
             rows.append(data)
         pd.DataFrame(rows).to_csv(output_filepath)
 
-    return {
+    yield {
+        "name": "xilinx_ultrascale_plus_vivado",
         "actions": [
             (
                 impl,
                 [],
                 {
-                    "expected_instructions": expected_instructions,
-                    "output_filepath": output_filepath,
+                    "expected_instructions": [
+                        i
+                        for i in expected_instructions
+                        if i.architecture == "xilinx_ultrascale_plus"
+                    ],
+                    "output_filepath": utils.output_dir()
+                    / "gathered_data"
+                    / "lakeroad_xilinx_ultrascale_plus_vivado_results.csv",
                 },
             )
         ],
@@ -355,5 +369,38 @@ def task_gather_lakeroad_synthesis_results(
             expected_instruction.filepath
             for expected_instruction in expected_instructions
         ],
-        "targets": [output_filepath],
+        "targets": [
+            utils.output_dir()
+            / "gathered_data"
+            / "lakeroad_xilinx_ultrascale_plus_vivado_results.csv"
+        ],
+    }
+
+    yield {
+        "name": "lattice_ecp5_diamond",
+        "actions": [
+            (
+                impl,
+                [],
+                {
+                    "expected_instructions": [
+                        i
+                        for i in expected_instructions
+                        if i.architecture == "lattice_ecp5"
+                    ],
+                    "output_filepath": utils.output_dir()
+                    / "gathered_data"
+                    / "lakeroad_lattice_ecp5_diamond_results.csv",
+                },
+            )
+        ],
+        "file_dep": [
+            expected_instruction.filepath
+            for expected_instruction in expected_instructions
+        ],
+        "targets": [
+            utils.output_dir()
+            / "gathered_data"
+            / "lakeroad_lattice_ecp5_diamond_results.csv",
+        ],
     }
