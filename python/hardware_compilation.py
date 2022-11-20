@@ -133,6 +133,9 @@ class VivadoLogStats:
     This is because each of these dictionaries becomes a row in a CSV file, and
     thus if there was a nested structure, it would get a lot more compilcated."""
 
+    # Likely just the module name.
+    identifier: str
+
     # The number of various resources used.
     clb_luts: int
     clb_regs: int
@@ -155,7 +158,7 @@ class VivadoLogStats:
     opt_time: Optional[float]
 
 
-def parse_ultrascale_log(log_text: str) -> VivadoLogStats:
+def parse_ultrascale_log(log_text: str, identifier: str) -> VivadoLogStats:
     """Parse Vivado logs.
 
     Parses logs from Vivado version:
@@ -321,6 +324,7 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
         clock_frequency_MHz=clock_frequency_MHz,
         synth_time=synth_time,
         opt_time=opt_time,
+        identifier=identifier,
     )
 
 
@@ -456,7 +460,7 @@ report_utilization
         print(f"{end_time-start_time}s", file=f)
 
     with open(json_filepath, "w") as f:
-        log_stats = parse_ultrascale_log(open(log_path).read())
+        log_stats = parse_ultrascale_log(open(log_path).read(), identifier=module_name)
         json.dump(dataclasses.asdict(log_stats), f)
         if fail_if_constraints_not_met:
             assert (
