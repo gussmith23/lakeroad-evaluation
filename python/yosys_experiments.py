@@ -1,34 +1,7 @@
 import subprocess
 from pathlib import Path
 import utils
-import re
-
-
-def parse_yosys_log(log_txt: str):
-
-    matches = list(
-        re.finditer(
-            r"""
-   Number of cells:.*$
-.*
-
-""",
-            log_txt,
-            flags=re.DOTALL | re.MULTILINE,
-        )
-    )
-    assert len(matches) == 1
-    span = matches[0].span()
-    matches = list(
-        re.finditer(
-            r"^     (?P<name>\w+) +(?P<count>\d+)$",
-            log_txt[span[0] : span[1]],
-            flags=re.MULTILINE,
-        )
-    )
-    resources = {match["name"]: int(match["count"]) for match in matches}
-
-    return resources
+from hardware_compilation import parse_yosys_log
 
 
 def test_file(
