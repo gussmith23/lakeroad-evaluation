@@ -54,7 +54,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         )
         yosys_xilinx_ultrascale_plus_baseline_synthesis_task[
             "name"
-        ] = f"xilinx_ultrascale_plus_ecp5_{instruction_file.stem}"
+        ] = f"yosys_xilinx_ultrascale_plus_{instruction_file.stem}"
         yield yosys_xilinx_ultrascale_plus_baseline_synthesis_task
 
         diamond_baseline_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(

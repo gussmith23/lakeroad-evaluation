@@ -665,6 +665,7 @@ def yosys_synthesis(
 
     parsed = parse_yosys_log(open(log_filepath).read())
     parsed["yosys_runtime_s"] = yosys_end_time-yosys_start_time
+    parsed["identifier"] = module_name
     with open(json_filepath, "w") as f:
         json.dump(parsed, f)
 
