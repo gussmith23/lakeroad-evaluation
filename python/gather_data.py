@@ -259,6 +259,42 @@ def task_gather_vivado_baseline_synthesis_results():
     )
 
 
+def task_gather_yosys_xilinx_ultrascale_plus_baseline_synthesis_results():
+    filenames = list(
+        map(
+            lambda f: utils.output_dir()
+            / "baseline"
+            / "yosys_xilinx_ultrascale_plus"
+            / f
+            / f"{f}.json",
+            instruction_names,
+        )
+    )
+    return make_gather_instruction_synthesis_results_task(
+        filenames,
+        utils.output_dir()
+        / "gathered_data"
+        / "yosys_xilinx_ultrascale_plus_baseline.csv",
+    )
+
+
+def task_gather_yosys_lattice_ecp5_baseline_synthesis_results():
+    filenames = list(
+        map(
+            lambda f: utils.output_dir()
+            / "baseline"
+            / "yosys_lattice_ecp5"
+            / f
+            / f"{f}.json",
+            instruction_names,
+        )
+    )
+    return make_gather_instruction_synthesis_results_task(
+        filenames,
+        utils.output_dir() / "gathered_data" / "yosys_lattice_ecp5_baseline.csv",
+    )
+
+
 @doit.task_params(
     [
         {
@@ -333,6 +369,25 @@ def task_gather_lakeroad_synthesis_results(
                 )
             )
 
+        elif architecture == "sofa":
+            ExpectedInstruction(
+                filepath=utils.output_dir()
+                / "lakeroad"
+                / architecture
+                / module_name
+                / template
+                / f"{module_name}.json",
+                time_filepath=utils.output_dir()
+                / "lakeroad"
+                / architecture
+                / module_name
+                / template
+                / f"{module_name}.time",
+                module_name=module_name,
+                template=template,
+                architecture=architecture,
+            )
+
     def impl(expected_instructions: List[ExpectedInstruction], output_filepath):
         Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
         rows: List[Dict] = []
@@ -368,6 +423,7 @@ def task_gather_lakeroad_synthesis_results(
         "file_dep": [
             expected_instruction.filepath
             for expected_instruction in expected_instructions
+            if expected_instruction.architecture == "xilinx_ultrascale_plus"
         ],
         "targets": [
             utils.output_dir()
@@ -397,10 +453,35 @@ def task_gather_lakeroad_synthesis_results(
         "file_dep": [
             expected_instruction.filepath
             for expected_instruction in expected_instructions
+            if expected_instruction.architecture == "lattice_ecp5"
         ],
         "targets": [
             utils.output_dir()
             / "gathered_data"
             / "lakeroad_lattice_ecp5_diamond_results.csv",
         ],
+    }
+
+    yield {
+        "name": "sofa",
+        "actions": [
+            (
+                impl,
+                [],
+                {
+                    "expected_instructions": [
+                        i for i in expected_instructions if i.architecture == "sofa"
+                    ],
+                    "output_filepath": utils.output_dir()
+                    / "gathered_data"
+                    / "lakeroad_sofa_results.csv",
+                },
+            )
+        ],
+        "file_dep": [
+            expected_instruction.filepath
+            for expected_instruction in expected_instructions
+            if expected_instruction.architecture == "sofa"
+        ],
+        "targets": [utils.output_dir() / "gathered_data" / "lakeroad_sofa_results.csv"],
     }

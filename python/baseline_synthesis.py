@@ -1,7 +1,6 @@
 """File defining hardware compilation tasks using the DoIt framework."""
 
 from pathlib import Path
-from typing import Union
 from hardware_compilation import *
 import doit
 import utils
@@ -21,103 +20,6 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
 
     output_dir_base = utils.output_dir() / "baseline"
 
-    def _make_baseline_vivado_synthesis_task(
-        baseline_instruction_filepath: Union[str, Path]
-    ):
-        baseline_instruction_filepath = Path(baseline_instruction_filepath)
-        module_name = baseline_instruction_filepath.stem
-        synth_opt_place_route_output_filepath = (
-            output_dir_base / "vivado" / baseline_instruction_filepath.name
-        )
-        log_filepath = synth_opt_place_route_output_filepath.with_suffix(".log")
-        time_filepath = synth_opt_place_route_output_filepath.with_suffix(".time")
-        tcl_filepath = synth_opt_place_route_output_filepath.with_suffix(".tcl")
-        json_filepath = synth_opt_place_route_output_filepath.with_suffix(".json")
-
-        return {
-            "name": f"baseline_vivado_compile_{module_name}",
-            "actions": [
-                (
-                    xilinx_ultrascale_plus_vivado_synthesis,
-                    [],
-                    {
-                        "instr_src_file": baseline_instruction_filepath,
-                        "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
-                        "module_name": module_name,
-                        "time_filepath": time_filepath,
-                        "log_path": log_filepath,
-                        "tcl_script_filepath": tcl_filepath,
-                        # Run optimizations.
-                        "directive": "default",
-                        "opt_design": True,
-                        "json_filepath": json_filepath,
-                    },
-                )
-            ],
-            "file_dep": [baseline_instruction_filepath],
-            "targets": [
-                synth_opt_place_route_output_filepath,
-                log_filepath,
-                time_filepath,
-                tcl_filepath,
-                json_filepath,
-            ],
-        }
-
-    def _make_baseline_yosys_nextpnr_synthesis_task(
-        baseline_instruction_filepath: Union[str, Path]
-    ):
-        baseline_instruction_filepath = Path(baseline_instruction_filepath)
-        module_name = baseline_instruction_filepath.stem
-        nextpnr_output_sv_filepath = (
-            output_dir_base / "yosys_nextpnr" / baseline_instruction_filepath.name
-        )
-        synth_out_json = nextpnr_output_sv_filepath.with_suffix(".json")
-        yosys_log_path = (
-            nextpnr_output_sv_filepath.parent
-            / f"{nextpnr_output_sv_filepath.name}_yosys.log"
-        )
-        nextpnr_log_path = (
-            nextpnr_output_sv_filepath.parent
-            / f"{nextpnr_output_sv_filepath.name}_nextpnr.log"
-        )
-        yosys_time_path = (
-            nextpnr_output_sv_filepath.parent
-            / f"{nextpnr_output_sv_filepath.name}_yosys.time"
-        )
-        nextpnr_time_path = (
-            nextpnr_output_sv_filepath.parent
-            / f"{nextpnr_output_sv_filepath.name}_nextpnr.time"
-        )
-
-        return {
-            "name": f"baseline_yosys_nextpnr_compile_{module_name}",
-            "actions": [
-                (
-                    lattice_ecp5_yosys_nextpnr_synthesis,
-                    [
-                        baseline_instruction_filepath,
-                        module_name,
-                        nextpnr_output_sv_filepath,
-                        synth_out_json,
-                        yosys_time_path,
-                        nextpnr_time_path,
-                        yosys_log_path,
-                        nextpnr_log_path,
-                    ],
-                )
-            ],
-            "targets": [
-                nextpnr_output_sv_filepath,
-                synth_out_json,
-                yosys_log_path,
-                nextpnr_log_path,
-                yosys_time_path,
-                nextpnr_time_path,
-            ],
-            "file_dep": [baseline_instruction_filepath],
-        }
-
     for instruction_file in Path(baseline_instructions_dir).glob("*"):
         vivado_baseline_synthesis_task = (
             make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
@@ -129,7 +31,31 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         vivado_baseline_synthesis_task["name"] = f"vivado_{instruction_file.stem}"
         yield vivado_baseline_synthesis_task
 
-        yield _make_baseline_yosys_nextpnr_synthesis_task(instruction_file)
+        yosys_lattice_baseline_synthesis_task = make_lattice_ecp5_yosys_synthesis_task(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base
+            / "yosys_lattice_ecp5"
+            / instruction_file.stem,
+            module_name=instruction_file.stem,
+        )
+        yosys_lattice_baseline_synthesis_task[
+            "name"
+        ] = f"yosys_lattice_ecp5_{instruction_file.stem}"
+        yield yosys_lattice_baseline_synthesis_task
+
+        yosys_xilinx_ultrascale_plus_baseline_synthesis_task = (
+            make_xilinx_ultrascale_plus_yosys_synthesis_task(
+                input_filepath=instruction_file,
+                output_dirpath=output_dir_base
+                / "yosys_xilinx_ultrascale_plus"
+                / instruction_file.stem,
+                module_name=instruction_file.stem,
+            )
+        )
+        yosys_xilinx_ultrascale_plus_baseline_synthesis_task[
+            "name"
+        ] = f"xilinx_ultrascale_plus_ecp5_{instruction_file.stem}"
+        yield yosys_xilinx_ultrascale_plus_baseline_synthesis_task
 
         diamond_baseline_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
             input_filepath=instruction_file,

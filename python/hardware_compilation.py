@@ -571,8 +571,6 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     }
 
 
-def lattice_ecp5_yosys_nextpnr_synthesis(
-    instr_src_file: Union[str, Path],
 def parse_yosys_log(log_txt: str):
 
     matches = list(
@@ -599,22 +597,22 @@ def parse_yosys_log(log_txt: str):
 
     return resources
 
+
+def yosys_synthesis(
+    input_filepath: Union[str, Path],
     module_name: str,
-    synth_out_sv: str,
-    synth_out_json: str,
-    yosys_time_path: Union[str, Path],
-    nextpnr_time_path: Union[str, Path],
-    yosys_log_path: Union[str, Path] = os.devnull,
-    nextpnr_log_path: Union[str, Path] = os.devnull,
+    output_filepath: str,
+    time_filepath: Union[str, Path],
+    synth_command: str,
+    log_filepath: Union[str, Path],
+    json_filepath: Union[str, Path],
 ):
-    synth_out_json.parent.mkdir(parents=True, exist_ok=True)
-    synth_out_sv.parent.mkdir(parents=True, exist_ok=True)
-    yosys_log_path.parent.mkdir(parents=True, exist_ok=True)
-    nextpnr_log_path.parent.mkdir(parents=True, exist_ok=True)
+    output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    log_filepath.parent.mkdir(parents=True, exist_ok=True)
 
     # Synthesis with Yosys.
-    with open(yosys_log_path, "w") as logfile:
-        logging.info("Running Yosys synthesis on %s", instr_src_file)
+    with open(log_filepath, "w") as logfile:
+        logging.info("Running Yosys synthesis on %s", input_filepath)
         try:
             yosys_start_time = time()
             subprocess.run(
@@ -623,12 +621,11 @@ def parse_yosys_log(log_txt: str):
                     "-d",
                     "-p",
                     f"""
-                    read -sv {instr_src_file}
+                    read -sv {input_filepath}
                     hierarchy -top {module_name}
-                    proc; opt; techmap; opt
-                    synth_ecp5
-                    write_json {synth_out_json}
-                    write_verilog {synth_out_sv}""",
+                    {synth_command}
+                    stat
+                    write_verilog {output_filepath}""",
                 ],
                 check=True,
                 stdout=logfile,
@@ -639,28 +636,112 @@ def parse_yosys_log(log_txt: str):
             print(f"Error log in {(str(logfile))}", file=sys.stderr)
             raise e
 
-    with open(yosys_time_path, "w") as f:
+    with open(time_filepath, "w") as f:
         print(f"{yosys_end_time-yosys_start_time}s", file=f)
 
-    # Place and route with nextpnr.
-    # Runs in out-of-context mode, which doesn't insert I/O cells.
-    with open(nextpnr_log_path, "w") as logfile:
-        logging.info("Running nextpnr place-and-route on %s", instr_src_file)
-        try:
-            nextpnr_start_time = time()
-            subprocess.run(
-                ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
-                check=True,
-                stdout=logfile,
-                stderr=logfile,
-            )
-            nextpnr_end_time = time()
-        except subprocess.CalledProcessError as e:
-            print(f"Error log in {(str(logfile))}", file=sys.stderr)
-            raise e
+    # We don't need to PnR with nextpnr anymore. All Lakeroad instructions are
+    # validated through PnR with Vivado/Diamond. And we only need synthesis (not
+    # pnr) results for baseline.
+    # # Place and route with nextpnr.
+    # # Runs in out-of-context mode, which doesn't insert I/O cells.
+    # with open(nextpnr_log_path, "w") as logfile:
+    #     logging.info("Running nextpnr place-and-route on %s", instr_src_file)
+    #     try:
+    #         nextpnr_start_time = time()
+    #         subprocess.run(
+    #             ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
+    #             check=True,
+    #             stdout=logfile,
+    #             stderr=logfile,
+    #         )
+    #         nextpnr_end_time = time()
+    #     except subprocess.CalledProcessError as e:
+    #         print(f"Error log in {(str(logfile))}", file=sys.stderr)
+    #         raise e
 
-    with open(nextpnr_time_path, "w") as f:
-        print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
+    # with open(nextpnr_time_path, "w") as f:
+    #     print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
+
+
+    parsed = parse_yosys_log(open(log_filepath).read())
+    parsed["yosys_runtime_s"] = yosys_end_time-yosys_start_time
+    with open(json_filepath, "w") as f:
+        json.dump(parsed, f)
+
+def make_lattice_ecp5_yosys_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+    clock_info: Optional[Tuple[str, float]] = None,
+):
+    """Wrapper over Yosys synthesis function which creates a DoIt task."""
+    # TODO(@gussmith23): Support clocks on Lattice.
+    if clock_info is not None:
+        logging.warn("clock_info not supported for Lattice yet.")
+
+    output_dirpath = Path(output_dirpath)
+    json_filepath = output_dirpath / f"{module_name}.json"
+    output_filepath = output_dirpath / f"{module_name}.sv"
+    time_filepath = output_dirpath / f"{module_name}.time"
+    log_filepath = output_dirpath / f"{module_name}.log"
+
+    return {
+        "actions": [
+            (
+                yosys_synthesis,
+                [],
+                {
+                    "json_filepath": json_filepath,
+                    "input_filepath": input_filepath,
+                    "module_name": module_name,
+                    "output_filepath": output_filepath,
+                    "time_filepath": time_filepath,
+                    "synth_command": "synth_ecp5",
+                    "log_filepath": log_filepath,
+                },
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [json_filepath, output_filepath, time_filepath, log_filepath],
+    }
+
+
+def make_xilinx_ultrascale_plus_yosys_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+    clock_info: Optional[Tuple[str, float]] = None,
+):
+    """Wrapper over Yosys synthesis function which creates a DoIt task."""
+    # TODO(@gussmith23): Support clocks on Lattice.
+    if clock_info is not None:
+        logging.warn("clock_info not supported for Yosys.")
+
+    output_dirpath = Path(output_dirpath)
+    json_filepath = output_dirpath / f"{module_name}.json"
+    output_filepath = output_dirpath / f"{module_name}.sv"
+    time_filepath = output_dirpath / f"{module_name}.time"
+    log_filepath = output_dirpath / f"{module_name}.log"
+
+    return {
+        "actions": [
+            (
+                yosys_synthesis,
+                [],
+                {
+                    "json_filepath": json_filepath,
+                    "input_filepath": input_filepath,
+                    "module_name": module_name,
+                    "output_filepath": output_filepath,
+                    "time_filepath": time_filepath,
+                    "synth_command": "synth_xilinx -family xcup",
+                    "log_filepath": log_filepath,
+                },
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [json_filepath, output_filepath, time_filepath, log_filepath],
+    }
 
 
 def lattice_ecp5_diamond_synthesis(
@@ -747,4 +828,47 @@ def make_lattice_ecp5_diamond_synthesis_task(
             output_dirpath / f"synthesis.log",
             json_filepath,
         ],
+    }
+
+
+def make_yosys_nextpnr_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+):
+    input_filepath = Path(input_filepath)
+    output_dirpath = Path(output_dirpath)
+
+    nextpnr_output_sv_filepath = output_dirpath / f"{module_name}_pnr.sv"
+    synth_out_json = output_dirpath / f"{module_name}_synth.json"
+    yosys_log_path = output_dirpath / f"{module_name}_yosys.log"
+    nextpnr_log_path = output_dirpath / f"{module_name}_nextpnr.log"
+    yosys_time_path = output_dirpath / f"{module_name}_yosys.time"
+    nextpnr_time_path = output_dirpath / f"{module_name}_nextpnr.time"
+
+    return {
+        "actions": [
+            (
+                lattice_ecp5_yosys_nextpnr_synthesis,
+                [
+                    input_filepath,
+                    module_name,
+                    nextpnr_output_sv_filepath,
+                    synth_out_json,
+                    yosys_time_path,
+                    nextpnr_time_path,
+                    yosys_log_path,
+                    nextpnr_log_path,
+                ],
+            )
+        ],
+        "targets": [
+            nextpnr_output_sv_filepath,
+            synth_out_json,
+            yosys_log_path,
+            nextpnr_log_path,
+            yosys_time_path,
+            nextpnr_time_path,
+        ],
+        "file_dep": [input_filepath],
     }

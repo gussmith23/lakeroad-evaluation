@@ -6,11 +6,28 @@ from pathlib import Path
 from time import time
 from typing import List, Union
 
+import re
 import doit
 import utils
 import yaml
 from hardware_compilation import *
 from schema import *
+
+
+def count_sofa_resources(
+    verilog_source_filepath: Union[str, Path], output_filepath: Union[str, Path]
+):
+    """Count number of resources in a SOFA Verilog implementation."""
+    txt = open(verilog_source_filepath).read()
+    num_module_declarations = len(re.findall(r"frac_lut4 .* \(", txt))
+    num_right_paren_semicolons = len(re.findall(r"\);", txt))
+
+    # The number of module declarations is the number of frac_lut4s we use.
+    # There should always be an equal number of right-paren-semicolon closings,
+    # plus one for closing the `module(...);` declaration.
+    assert num_module_declarations == num_right_paren_semicolons - 1
+
+    json.dump({"frac_lut4": num_module_declarations}, open(output_filepath, "w"))
 
 
 def invoke_lakeroad(
@@ -308,6 +325,28 @@ def task_instruction_experiments(experiments_file: str):
 
             case "sofa":
                 logging.warn("No synthesis implemented for SOFA.")
+                yield {
+                    "name": f"count_sofa_resources_{template}_{module_name}",
+                    "actions": [
+                        (
+                            count_sofa_resources,
+                            [
+                                output_dirpath
+                                / f"{module_name}.sv",
+                                output_dirpath
+                                / f"{module_name}.json",
+                            ],
+                        )
+                    ],
+                    "file_dep": [
+                        output_dirpath
+                        / f"{module_name}.sv",
+                    ],
+                    "targets": [
+                        output_dirpath
+                        / f"{module_name}.json",
+                    ],
+                }
 
             case _:
                 raise Exception(
