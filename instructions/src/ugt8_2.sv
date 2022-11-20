@@ -1,3 +1,3 @@
-module ugt8_2(input unsigned[7:0] a, input unsigned[7:0] b, output unsigned out);
+module ugt8_2(input  [7:0] a, input  [7:0] b, output  out);
   assign out = a > b;
 endmodule

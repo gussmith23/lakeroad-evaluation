@@ -1,3 +1,3 @@
-module ule64_2(input unsigned[63:0] a, input unsigned[63:0] b, output unsigned out);
+module ule64_2(input  [63:0] a, input  [63:0] b, output  out);
   assign out = a <= b;
 endmodule

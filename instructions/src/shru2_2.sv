@@ -1,3 +1,3 @@
-module shru2_2(input unsigned[1:0] a, input unsigned[1:0] b, output unsigned[1:0] out);
+module shru2_2(input unsigned [1:0] a, input unsigned [1:0] b, output unsigned[1:0] out);
   assign out = a >> b;
 endmodule

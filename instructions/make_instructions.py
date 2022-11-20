@@ -62,10 +62,10 @@ signedness = {
     "xor": None,
     "eq": None,
     "neq": None,
-    "uge": "unsigned",
-    "ugt": "unsigned",
-    "ule": "unsigned",
-    "ult": "unsigned",
+    "uge": None,
+    "ugt": None,
+    "ule": None,
+    "ult": None,
     "sgt": "signed",
     "slt": "signed",
     "mul": None,
@@ -73,14 +73,14 @@ signedness = {
 }
 
 make_binary_inputs = (
-    lambda sign, size: f"input {sign}[{size-1}:0] a, input {sign}[{size-1}:0] b,"
+    lambda sign, size: f"input {sign} [{size-1}:0] a, input {sign} [{size-1}:0] b,"
 )
 inputs = {
     "sadd": make_binary_inputs,
     "ssub": make_binary_inputs,
     "and": make_binary_inputs,
     "or": make_binary_inputs,
-    "not": lambda sign, size: f"input {sign}[{size-1}:0] a,",
+    "not": lambda sign, size: f"input {sign} [{size-1}:0] a,",
     "xor": make_binary_inputs,
     "add": make_binary_inputs,
     "sub": make_binary_inputs,

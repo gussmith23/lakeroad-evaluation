@@ -1,3 +1,3 @@
-module ult1_2(input unsigned[0:0] a, input unsigned[0:0] b, output unsigned out);
+module ult1_2(input  [0:0] a, input  [0:0] b, output  out);
   assign out = a < b;
 endmodule
