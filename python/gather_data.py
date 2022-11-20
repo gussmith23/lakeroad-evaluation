@@ -219,7 +219,6 @@ def make_gather_instruction_synthesis_results_task(filenames, output_filepath):
     def _impl():
         Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
         df = pd.DataFrame((json.load(open(filename)) for filename in filenames))
-        df.set_index("identifier")
         df.to_csv(output_filepath)
 
     return {
