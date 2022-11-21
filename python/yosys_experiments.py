@@ -1,7 +1,14 @@
+import json
 import subprocess
 from pathlib import Path
+import time
+from typing import Union
+import pandas as pd
+
+import doit
 import utils
 from hardware_compilation import parse_yosys_log
+import socket
 
 
 def test_file(
@@ -13,22 +20,24 @@ def test_file(
     vanilla_synth_command,
     architecture,
     template,
+    json_output_filepath: Union[Path, str],
 ):
-    vanilla_yosys_resources = parse_yosys_log(
-        subprocess.run(
-            [
-                Path(utils.lakeroad_evaluation_dir()) / "yosys" / "yosys",
-                "-p",
-                f"""
+    vanilla_yosys_start_time = time.time()
+    vanilla_yosys_out = subprocess.run(
+        [
+            Path(utils.lakeroad_evaluation_dir()) / "yosys" / "yosys",
+            "-p",
+            f"""
             read_verilog {verilog_filepath};
             {vanilla_synth_command};
             """,
-            ],
-            stdout=subprocess.PIPE,
-            check=True,
-            encoding="utf8",
-        ).stdout
-    )
+        ],
+        stdout=subprocess.PIPE,
+        check=True,
+        encoding="utf8",
+    ).stdout
+    vanilla_yosys_end_time = time.time()
+    vanilla_yosys_resources = parse_yosys_log(vanilla_yosys_out)
 
     assert vanilla_yosys_resources == expected_vanilla_yosys_resources
 
@@ -43,38 +52,76 @@ def test_file(
     # When that bug is fixed (or if we find a workaround), we can remove this.
     #
     # Note that all of these are also tested in Lakeroad's tests.
-    if (
-        architecture == "xilinx-ultrascale-plus"
-        and template == "xilinx-ultrascale-plus-dsp48e2"
-    ) or (architecture == "lattice-ecp5" and template == "lattice-ecp5-dsp"):
+    if socket.gethostname() == "boba" and (
+        (
+            architecture == "xilinx-ultrascale-plus"
+            and template == "xilinx-ultrascale-plus-dsp48e2"
+        )
+        or (architecture == "lattice-ecp5" and template == "lattice-ecp5-dsp")
+    ):
         # Currently this test doesn't write any data, so just return.
         return
 
-    lakeroad_yosys_resources = parse_yosys_log(
-        subprocess.run(
-            [
-                Path(utils.lakeroad_evaluation_dir()) / "yosys" / "yosys",
-                "-p",
-                f"""
+    lakeroad_yosys_start_time = time.time()
+    lakeroad_yosys_out = subprocess.run(
+        [
+            Path(utils.lakeroad_evaluation_dir()) / "yosys" / "yosys",
+            "-p",
+            f"""
             read_verilog {verilog_filepath};
             lakeroad {verilog_module_name} {verilog_module_output_signal} {architecture} {template};
             write_verilog;
             stat;
             """,
-            ],
-            stdout=subprocess.PIPE,
-            check=True,
-            encoding="utf8",
-        ).stdout
-    )
+        ],
+        stdout=subprocess.PIPE,
+        check=True,
+        encoding="utf8",
+    ).stdout
+    lakeroad_yosys_end_time = time.time()
+    lakeroad_yosys_resources = parse_yosys_log(lakeroad_yosys_out)
 
     print(lakeroad_yosys_resources)
     print(vanilla_yosys_resources)
     assert lakeroad_yosys_resources == expected_lakeroad_yosys_resources
 
+    out_data = {
+        "lakeroad_yosys_runtime_s": lakeroad_yosys_end_time - lakeroad_yosys_start_time,
+        "vanilla_yosys_runtime_s": vanilla_yosys_end_time - vanilla_yosys_start_time,
+        "module_name": verilog_module_name,
+        "architecture": architecture,
+    }
 
-def task_yosys_lakeroad_pass_tests():
+    for k, v in lakeroad_yosys_resources.items():
+        out_data[f"lakeroad_yosys_{k}"] = v
+    for k, v in vanilla_yosys_resources.items():
+        out_data[f"vanilla_yosys_{k}"] = v
+
+    Path(json_output_filepath).parent.mkdir(parents=True, exist_ok=True)
+    json.dump(out_data, open(json_output_filepath, "w"))
+
+
+@doit.task_params(
+    [
+        {
+            "name": "gathered_data_filepath",
+            "default": str(
+                utils.output_dir() / "gathered_data" / "yosys_lakeroad_experiments.csv"
+            ),
+            "type": str,
+        },
+    ]
+)
+def task_yosys_lakeroad_pass_tests(gathered_data_filepath: str):
+    json_filepaths = []
+
     def _make_test(**kwargs):
+        kwargs["json_output_filepath"] = (
+            utils.output_dir()
+            / "yosys_lakeroad_pass_experiments"
+            / (kwargs["architecture"] + "_" + kwargs["verilog_module_name"] + ".json")
+        )
+        json_filepaths.append(kwargs["json_output_filepath"])
         return {
             "name": kwargs["architecture"] + "_" + kwargs["verilog_module_name"],
             "actions": [(test_file, [], kwargs)],
@@ -376,3 +423,15 @@ def task_yosys_lakeroad_pass_tests():
         expected_lakeroad_yosys_resources={"ALU24B": 1, "MULT18X18D": 1},
         expected_vanilla_yosys_resources={"CCU2C": 8, "MULT18X18D": 1},
     )
+
+    def _gather_data():
+        Path(gathered_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+        rows = [json.load(open(filepath)) for filepath in json_filepaths]
+        pd.DataFrame(rows).to_csv(gathered_data_filepath, index=False)
+
+    yield {
+        "name": "gather_data",
+        "actions": [(_gather_data, [])],
+        "file_dep": json_filepaths,
+        "targets": [gathered_data_filepath],
+    }
