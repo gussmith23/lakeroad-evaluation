@@ -25,16 +25,23 @@ import utils
             "default": str(utils.output_dir() / "figures" / "sofa_figure.tex"),
             "type": str,
         },
+        {
+            "name": "excel_filepath",
+            "default": str(utils.output_dir() / "figures" / "sofa_figure.xlsx"),
+            "type": str,
+        },
     ]
 )
 def task_make_sofa_figure(
     gathered_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
+    excel_filepath: Union[str, Path],
 ):
     gathered_data_filepath = Path(gathered_data_filepath)
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
+    excel_filepath = Path(excel_filepath)
 
     instruction_col = ("", "", "Instr")
     template_col = ("", "", "Template")
@@ -57,6 +64,7 @@ def task_make_sofa_figure(
     def _impl():
         csv_filepath.parent.mkdir(parents=True, exist_ok=True)
         tex_filepath.parent.mkdir(parents=True, exist_ok=True)
+        excel_filepath.parent.mkdir(parents=True, exist_ok=True)
 
         data = pd.read_csv(gathered_data_filepath)
         table = pd.DataFrame(columns=columns)
@@ -149,7 +157,11 @@ def task_make_sofa_figure(
         add_row("ule16", 2, "comparison")
         add_row("ule32", 2, "comparison")
 
-        table.to_csv(csv_filepath, )
-        table.style.format(precision=1).hide(axis="index").to_latex(tex_filepath)
+        table.to_csv(
+            csv_filepath,
+        )
+        styler = table.style.format(precision=1).hide(axis="index")
+        styler.to_latex(tex_filepath)
+        styler.to_excel(excel_filepath)
 
     return {"actions": [(_impl,)], "file_dep": [gathered_data_filepath]}

@@ -3,11 +3,13 @@ cloudpickle==2.1.0
 decorator==5.1.1
 doit==0.36.0
 flit==3.7.1
+Jinja2==3.1.2
 lit==15.0.0
 numpy==1.23.0
 pandas==1.5.1
 psutil==5.9.1
 pytest==6.2.5
+tabulate==0.9.0
 tornado==6.1
 xgboost==1.6.1
 z3-solver==4.8.17.0
