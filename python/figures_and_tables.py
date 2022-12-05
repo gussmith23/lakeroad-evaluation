@@ -301,3 +301,74 @@ def task_make_sofa_figure(
         styler.to_excel(excel_filepath)
 
     return {"actions": [(_impl,)], "file_dep": [gathered_data_filepath]}
+
+@doit.task_params(
+    [
+        {
+            "name": "gathered_data_filepath",
+            "default": str(
+                utils.output_dir() / "gathered_data" / "lakeroad_lattice_ecp5_results.csv"
+            ),
+            "type": str,
+        },
+        {
+            "name": "csv_filepath",
+            "default": str(utils.output_dir() / "figures" / "lattice_ecp5_figure.csv"),
+            "type": str,
+        },
+        {
+            "name": "tex_filepath",
+            "default": str(utils.output_dir() / "figures" / "lattice_ecp5_figure.tex"),
+            "type": str,
+        },
+        {
+            "name": "excel_filepath",
+            "default": str(utils.output_dir() / "figures" / "lattice_ecp5_figure.xlsx"),
+            "type": str,
+        },
+    ]
+)
+def task_make_lattice_ecp5_figure(
+    gathered_data_filepath: Union[str, Path],
+    csv_filepath: Union[str, Path],
+    tex_filepath: Union[str, Path],
+    excel_filepath: Union[str, Path],
+):
+    gathered_data_filepath = Path(gathered_data_filepath)
+    csv_filepath = Path(csv_filepath)
+    tex_filepath = Path(tex_filepath)
+    excel_filepath = Path(excel_filepath)
+
+    columns = pd.MultiIndex.from_tuples(
+        [
+            ("","","Instr"),
+            ("","","Template"),
+            ("Lattice ECP5","Lakeroad","Runtime in sec"),
+            ("Lattice ECP5","Lakeroad","#LUTs"),
+            ("Lattice ECP5","Lakeroad","#CCU2Cs"),
+            ("Lattice ECP5","Lakeroad","MUL? (sec)"),
+            ("Lattice ECP5","Yosys","Runtime in sec"),
+            ("Lattice ECP5","Yosys","#LUTs"),
+            ("Lattice ECP5","Yosys","#CCU2Cs"),
+            ("Lattice ECP5","Yosys","#MUL"),
+            ("Lattice ECP5","Diamond","Runtime in sec"),
+            ("Lattice ECP5","Diamond","#LUTs"),
+            ("Lattice ECP5","Diamond","#CCU2Cs"),
+            ("Lattice ECP5","Diamond","#MUL"),
+            ("Lattice ECP5","Diamond","#ALU"),
+            ("Lattice ECP5","Vivado","Support"),
+        ]
+    )
+
+    def _impl():
+        csv_filepath.parent.mkdir(parents=True, exist_ok=True)
+        tex_filepath.parent.mkdir(parents=True, exist_ok=True)
+        excel_filepath.parent.mkdir(parents=True, exist_ok=True)
+
+        #data = pd.read_csv(gathered_data_filepath)
+        table = pd.DataFrame(columns=columns)
+
+        def add_row(instr, arity, template):
+            pass
+        
+        raise Exception("not implemented")
