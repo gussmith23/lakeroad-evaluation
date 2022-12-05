@@ -14,21 +14,6 @@ from hardware_compilation import *
 from schema import *
 
 
-def count_sofa_resources(
-    verilog_source_filepath: Union[str, Path], output_filepath: Union[str, Path]
-):
-    """Count number of resources in a SOFA Verilog implementation."""
-    txt = open(verilog_source_filepath).read()
-    num_module_declarations = len(re.findall(r"frac_lut4 .* \(", txt))
-    num_right_paren_semicolons = len(re.findall(r"\);", txt))
-
-    # The number of module declarations is the number of frac_lut4s we use.
-    # There should always be an equal number of right-paren-semicolon closings,
-    # plus one for closing the `module(...);` declaration.
-    assert num_module_declarations == num_right_paren_semicolons - 1
-
-    json.dump({"frac_lut4": num_module_declarations}, open(output_filepath, "w"))
-
 
 def invoke_lakeroad(
     module_name: str,
@@ -37,15 +22,22 @@ def invoke_lakeroad(
     out_filepath: Union[str, Path],
     architecture: str,
     time_filepath: Union[str, Path],
+    json_filepath: Union[str, Path],
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
-    instruction: The Racket code representing the instruction. See main.rkt.
+    Args:
+      instruction: The Racket code representing the instruction. See main.rkt.
+      json_filepath: After this function generates the Lakeroad implementation,
+        it collects information from the implementation (which later is used to
+        make the tables in the paper). This is the path to write the collected
+        data (in JSON format) to.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
     addition isn't implemented on SOFA, so we could allow users to attempt to
     invoke Lakeroad to generate a SOFA add and expect the subprocess to
     terminate with an error code."""
+    out_filepath = Path(out_filepath)
 
     out_filepath.parent.mkdir(parents=True, exist_ok=True)
 
@@ -225,6 +217,13 @@ endmodule
     with open(time_filepath, "w") as f:
         print(f"{end_time-start_time}s", file=f)
 
+    json.dump(
+        count_resources_in_verilog_src(
+            verilog_src=out_filepath.read_text(), module_name=module_name
+        ),
+        fp=open(json_filepath,"w"),
+    )
+
 
 @doit.task_params(
     [
@@ -242,6 +241,7 @@ def task_instruction_experiments(experiments_file: str):
         experiment: LakeroadInstructionExperiment,
         verilog_filepath: Union[str, Path],
         time_filepath: Union[str, Path],
+        json_filepath: Union[str, Path],
     ):
         instruction_str = experiment.instruction.expr
         verilog_module_name = (
@@ -262,6 +262,9 @@ def task_instruction_experiments(experiments_file: str):
                         experiment.architecture.replace("_", "-"),
                         time_filepath,
                     ],
+                    {
+                        "json_filepath": json_filepath,
+                    },
                 )
             ],
             # If I'm understanding DoIt correctly, then I think
@@ -275,7 +278,7 @@ def task_instruction_experiments(experiments_file: str):
             # Note: Leaving the file_dep empty is fine; it will just re-run
             # Lakeroad on each instruction each time.
             "file_dep": [experiments_file],
-            "targets": [verilog_filepath, time_filepath],
+            "targets": [verilog_filepath, time_filepath, json_filepath],
         }
 
     with open(experiments_file) as f:
@@ -293,9 +296,13 @@ def task_instruction_experiments(experiments_file: str):
 
         time_filepath = output_dirpath / f"{module_name}.time"
         verilog_filepath = output_dirpath / f"{module_name}.sv"
+        json_filepath = output_dirpath / f"{module_name}.json"
 
         yield _make_instruction_implementation_with_lakeroad_task(
-            experiment, time_filepath=time_filepath, verilog_filepath=verilog_filepath
+            experiment,
+            time_filepath=time_filepath,
+            verilog_filepath=verilog_filepath,
+            json_filepath=json_filepath,
         )
 
         match experiment.architecture:
@@ -325,28 +332,6 @@ def task_instruction_experiments(experiments_file: str):
 
             case "sofa":
                 logging.warn("No synthesis implemented for SOFA.")
-                yield {
-                    "name": f"count_sofa_resources_{template}_{module_name}",
-                    "actions": [
-                        (
-                            count_sofa_resources,
-                            [
-                                output_dirpath
-                                / f"{module_name}.sv",
-                                output_dirpath
-                                / f"{module_name}.json",
-                            ],
-                        )
-                    ],
-                    "file_dep": [
-                        output_dirpath
-                        / f"{module_name}.sv",
-                    ],
-                    "targets": [
-                        output_dirpath
-                        / f"{module_name}.json",
-                    ],
-                }
 
             case _:
                 raise Exception(

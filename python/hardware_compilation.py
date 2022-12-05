@@ -13,8 +13,30 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from time import time
-from typing import Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
+from tempfile import NamedTemporaryFile
 
+
+def count_resources_in_verilog_src(verilog_src: str, module_name: str) -> Dict[str, int]:
+
+
+    with NamedTemporaryFile(mode="w") as f:
+        with f.file as file_object:
+            file_object.write(verilog_src)
+
+        out = subprocess.run(
+            [
+                "yosys",
+                "-p",
+                f"read_verilog {f.name}; hierarchy -top {module_name}; stat",
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+
+    #print(out)
+    return parse_yosys_log(out)
 
 @dataclass
 class DiamondSynthesisStats:
@@ -662,12 +684,12 @@ def yosys_synthesis(
     # with open(nextpnr_time_path, "w") as f:
     #     print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
 
-
     parsed = parse_yosys_log(open(log_filepath).read())
-    parsed["yosys_runtime_s"] = yosys_end_time-yosys_start_time
+    parsed["yosys_runtime_s"] = yosys_end_time - yosys_start_time
     parsed["identifier"] = module_name
     with open(json_filepath, "w") as f:
         json.dump(parsed, f)
+
 
 def make_lattice_ecp5_yosys_synthesis_task(
     input_filepath: Union[str, Path],
