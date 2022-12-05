@@ -12,4 +12,4 @@ from calyx_tasks import *
 from lakeroad import task_instruction_experiments
 from gather_data import *
 from yosys_experiments import *
-from make_figures import *
+from figures_and_tables import *
