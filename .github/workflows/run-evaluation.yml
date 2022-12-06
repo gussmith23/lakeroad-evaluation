@@ -91,11 +91,11 @@ jobs:
     steps:
     - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
     - run: |
-      curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
-           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-           -F file=@results/figures/sofa_figure.xlsx \
-           -F "initial_comment=results from CI run"
-           -X POST https://slack.com/api/files.upload 
+        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+            -F file=@results/figures/sofa_figure.xlsx \
+            -F "initial_comment=results from CI run"
+            -X POST https://slack.com/api/files.upload 
 
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
