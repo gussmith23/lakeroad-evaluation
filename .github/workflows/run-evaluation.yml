@@ -85,6 +85,18 @@ jobs:
           ${{ needs.build-docker-image.outputs.tag }} \
           doit --always-execute --continue -n 22
 
+  send-results-to-slack:
+    needs: run-evaluation
+    runs-on: self-hosted
+    steps:
+    - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
+    - run: |
+      curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+           -F file=@results/figures/sofa_figure.xlsx \
+           -F "initial_comment=results from CI run"
+           -X POST https://slack.com/api/files.upload 
+
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
     if: always()
