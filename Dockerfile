@@ -317,4 +317,7 @@ RUN wget -qO- https://get.haskellstack.org/ | sh \
 ENV PATH=/root/sv2v/bin:${PATH}
 
 WORKDIR /root
+ADD verilog/ verilog/
+
+WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]
