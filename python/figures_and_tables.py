@@ -4,6 +4,7 @@ import doit
 import pandas as pd
 import utils
 from pathlib import Path
+from typing import Union
 
 
 @doit.task_params(
