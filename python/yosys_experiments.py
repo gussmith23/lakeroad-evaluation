@@ -125,6 +125,7 @@ def task_yosys_lakeroad_pass_tests(gathered_data_filepath: str):
         return {
             "name": kwargs["architecture"] + "_" + kwargs["verilog_module_name"],
             "actions": [(test_file, [], kwargs)],
+            "targets": [kwargs["json_output_filepath"]],
         }
 
     # Confusingly, some of these tests are hanging in boolector, while others
