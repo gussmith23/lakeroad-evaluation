@@ -175,7 +175,7 @@ def task_make_sofa_figure(
             "default": str(
                 utils.output_dir()
                 / "gathered_data"
-                / "lattice_ecp5_diamond_lakeroad_results.csv"
+                / "lakeroad_lattice_ecp5_diamond_results.csv"
             ),
             "type": str,
         },
