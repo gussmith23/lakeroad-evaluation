@@ -282,7 +282,6 @@ def task_make_lattice_ecp5_figure(
             raw_yosys_data_row = yosys_data.loc[
                 yosys_data["identifier"] == f"{instr}_{arity}"
             ].squeeze()
-            print(raw_yosys_data_row)
             assert isinstance(raw_yosys_data_row, pd.Series)
 
             raw_diamond_data_row = diamond_data.loc[
