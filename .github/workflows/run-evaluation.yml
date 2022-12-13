@@ -93,13 +93,13 @@ jobs:
     - run: |
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F file=@results/figures/sofa_figure.xlsx \
+            -F "file=@results/figures/sofa_figure.xlsx" \
             -F "initial_comment=results from CI run" \
             -X POST https://slack.com/api/files.upload 
     - run: |
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F file=@results/figures/lattice_ecp5_figure.xlsx \
+            -F "file=@results/figures/lattice_ecp5_figure.xlsx" \
             -F "initial_comment=results from CI run"
             -X POST https://slack.com/api/files.upload 
 
@@ -110,8 +110,9 @@ jobs:
     runs-on: self-hosted
     steps:
     - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
+    - run: zip -r results.zip results/
     - uses: actions/upload-artifact@v3
       with:
         name: evaluation-results
-        path: results/
+        path: results.zip
 
