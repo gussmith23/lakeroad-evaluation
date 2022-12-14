@@ -100,7 +100,7 @@ jobs:
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
             -F "file=@results/figures/lattice_ecp5_figure.xlsx" \
-            -F "initial_comment=results from CI run"
+            -F "initial_comment=results from CI run" \
             -X POST https://slack.com/api/files.upload 
 
   upload-artifact:
