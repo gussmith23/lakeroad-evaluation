@@ -313,10 +313,10 @@ def task_make_lattice_ecp5_figure(
                         raw_lakeroad_data_row["lakeroad_runtime_s"]
                         if not raw_lakeroad_data_row.empty
                         else None,
-                        raw_lakeroad_data_row["num_LUT4"]
+                        raw_lakeroad_data_row["LUT4"]
                         if not raw_lakeroad_data_row.empty
                         else None,
-                        raw_lakeroad_data_row["num_CCU2C"]
+                        raw_lakeroad_data_row["CCU2C"]
                         if not raw_lakeroad_data_row.empty
                         else None,
                         None
