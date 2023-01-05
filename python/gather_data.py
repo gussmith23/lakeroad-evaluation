@@ -332,7 +332,6 @@ def task_gather_lakeroad_synthesis_results(
                     / architecture
                     / module_name
                     / template
-                    / "vivado"
                     / f"{module_name}.json",
                     time_filepath=utils.output_dir()
                     / "lakeroad"
@@ -354,7 +353,6 @@ def task_gather_lakeroad_synthesis_results(
                     / architecture
                     / module_name
                     / template
-                    / "diamond"
                     / f"{module_name}.json",
                     time_filepath=utils.output_dir()
                     / "lakeroad"
