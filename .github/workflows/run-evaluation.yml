@@ -100,17 +100,17 @@ jobs:
 
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/sofa_figure.xlsx" \
+            -F "file=@results/figures/sofa_figure.png" \
             -F "thread_ts=$THREAD_TS" \
             -X POST https://slack.com/api/files.upload 
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/lattice_ecp5_figure.xlsx" \
+            -F "file=@results/figures/lattice_ecp5_figure.png" \
             -F "thread_ts=$THREAD_TS" \
             -X POST https://slack.com/api/files.upload 
         curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
             -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/xilinx_ultrascale_plus_figure.xlsx" \
+            -F "file=@results/figures/xilinx_ultrascale_plus_figure.png" \
             -F "thread_ts=$THREAD_TS" \
             -X POST https://slack.com/api/files.upload 
 

@@ -1,10 +1,61 @@
 """DoIt tasks for creating paper figures and tables."""
 
+import subprocess
+from tempfile import NamedTemporaryFile
 import doit
 import pandas as pd
 import utils
 from pathlib import Path
 from typing import Union
+import os
+
+
+def create_png_from_tex(tex_filepath: Path, png_filepath: Path):
+    """Given a .tex file with a table, create a .png file from it."""
+
+    # Generate PNG.
+    with NamedTemporaryFile(mode="w", delete=False) as tmp_tex_file:
+        print("\\documentclass{standalone}", file=tmp_tex_file)
+        print(
+            """\\usepackage[utf8]{inputenc}
+\\usepackage{pifont}
+\\usepackage{newunicodechar}
+\\newunicodechar{✓}{\\ding{51}}
+\\newunicodechar{✗}{\\ding{55}}""",
+            file=tmp_tex_file,
+        )
+        print("\\begin{document}", file=tmp_tex_file)
+        tmp_tex_file.write(open(tex_filepath).read())
+        print("\\end{document}", file=tmp_tex_file)
+
+        tmp_tex_file.flush()
+        subprocess.run(
+            [
+                "latex",
+                f"--output-directory={Path(tmp_tex_file.name).parent}",
+                tmp_tex_file.name,
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        subprocess.run(
+            [
+                "dvipng",
+                "-D",
+                "300",
+                "-bg",
+                "rgb 1.0 1.0 1.0",
+                "-T",
+                "tight",
+                "-o",
+                png_filepath,
+                Path(tmp_tex_file.name).with_suffix(".dvi"),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
 
 @doit.task_params(
@@ -31,6 +82,11 @@ from typing import Union
             "default": str(utils.output_dir() / "figures" / "sofa_figure.xlsx"),
             "type": str,
         },
+        {
+            "name": "png_filepath",
+            "default": str(utils.output_dir() / "figures" / "sofa_figure.png"),
+            "type": str,
+        },
     ]
 )
 def task_make_sofa_figure(
@@ -38,11 +94,13 @@ def task_make_sofa_figure(
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
     excel_filepath: Union[str, Path],
+    png_filepath: Union[str, Path],
 ):
     gathered_data_filepath = Path(gathered_data_filepath)
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
     excel_filepath = Path(excel_filepath)
+    png_filepath = Path(png_filepath)
 
     instruction_col = ("", "", "Instr")
     template_col = ("", "", "Template")
@@ -163,7 +221,11 @@ def task_make_sofa_figure(
         )
         styler = table.style.format(precision=1).hide(axis="index")
         styler.to_latex(tex_filepath)
+        # rewrite #s in tex file to \#. seems like it should be a fix in pandas.
+        os.system(f"sed -i 's/#/\\\\#/g' {tex_filepath}")
         styler.to_excel(excel_filepath)
+
+        create_png_from_tex(tex_filepath, png_filepath)
 
     return {"actions": [(_impl,)], "file_dep": [gathered_data_filepath]}
 
@@ -208,6 +270,11 @@ def task_make_sofa_figure(
             "default": str(utils.output_dir() / "figures" / "lattice_ecp5_figure.xlsx"),
             "type": str,
         },
+        {
+            "name": "png_filepath",
+            "default": str(utils.output_dir() / "figures" / "lattice_ecp5_figure.png"),
+            "type": str,
+        },
     ]
 )
 def task_make_lattice_ecp5_figure(
@@ -217,6 +284,7 @@ def task_make_lattice_ecp5_figure(
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
     excel_filepath: Union[str, Path],
+    png_filepath: Union[str, Path],
 ):
     gathered_lakeroad_data_filepath = Path(gathered_lakeroad_data_filepath)
     gathered_diamond_data_filepath = Path(gathered_diamond_data_filepath)
@@ -224,6 +292,7 @@ def task_make_lattice_ecp5_figure(
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
     excel_filepath = Path(excel_filepath)
+    png_filepath = Path(png_filepath)
 
     columns = pd.MultiIndex.from_tuples(
         [
@@ -402,7 +471,11 @@ def task_make_lattice_ecp5_figure(
         )
         styler = table.style.format(precision=1).hide(axis="index")
         styler.to_latex(tex_filepath)
+        # rewrite #s in tex file to \#. seems like it should be a fix in pandas.
+        os.system(f"sed -i 's/#/\\\\#/g' {tex_filepath}")
         styler.to_excel(excel_filepath)
+
+        create_png_from_tex(tex_filepath, png_filepath)
 
     return {
         "actions": [(_impl, [])],
@@ -463,6 +536,13 @@ def task_make_lattice_ecp5_figure(
             ),
             "type": str,
         },
+        {
+            "name": "png_filepath",
+            "default": str(
+                utils.output_dir() / "figures" / "xilinx_ultrascale_plus_figure.png"
+            ),
+            "type": str,
+        },
     ]
 )
 def task_make_xilinx_ultrascale_plus_figure(
@@ -472,6 +552,7 @@ def task_make_xilinx_ultrascale_plus_figure(
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
     excel_filepath: Union[str, Path],
+    png_filepath: Union[str, Path],
 ):
     gathered_lakeroad_data_filepath = Path(gathered_lakeroad_data_filepath)
     gathered_vivado_data_filepath = Path(gathered_vivado_data_filepath)
@@ -479,6 +560,7 @@ def task_make_xilinx_ultrascale_plus_figure(
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
     excel_filepath = Path(excel_filepath)
+    png_filepath = Path(png_filepath)
 
     columns = pd.MultiIndex.from_tuples(
         [
@@ -701,7 +783,11 @@ def task_make_xilinx_ultrascale_plus_figure(
         )
         styler = table.style.format(precision=1).hide(axis="index")
         styler.to_latex(tex_filepath)
+        # rewrite #s in tex file to \#. seems like it should be a fix in pandas.
+        os.system(f"sed -i 's/#/\\\\#/g' {tex_filepath}")
         styler.to_excel(excel_filepath)
+
+        create_png_from_tex(tex_filepath, png_filepath)
 
     return {
         "actions": [(_impl, [])],
