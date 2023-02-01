@@ -46,6 +46,7 @@ RUN apt-get update \
   tcl-dev \
   tcl8.6-dev \
   texlive \
+  texlive-latex-extra \
   verilator \
   wget \
   zlib1g-dev 
