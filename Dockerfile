@@ -10,6 +10,7 @@ RUN apt-get update \
   clang \
   cmake \
   curl \
+  dvipng \
   flex \
   gawk \
   gcc \
@@ -44,6 +45,8 @@ RUN apt-get update \
   software-properties-common \
   tcl-dev \
   tcl8.6-dev \
+  texlive \
+  texlive-latex-extra \
   verilator \
   wget \
   zlib1g-dev 
