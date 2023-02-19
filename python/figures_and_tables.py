@@ -777,6 +777,12 @@ def task_make_xilinx_ultrascale_plus_figure(
         add_row("ule8", 2, "comparison")
         add_row("ule16", 2, "comparison")
         add_row("ule32", 2, "comparison")
+        add_row("parity96", 1, "xilinx-ultrascale-plus-dsp-xor")
+        add_row("add96", 2, "xilinx-ultrascale-plus-2-dsps")
+        add_row("sub96", 2, "xilinx-ultrascale-plus-2-dsps")
+        add_row("and96", 2, "xilinx-ultrascale-plus-2-dsps")
+        add_row("or96", 2, "xilinx-ultrascale-plus-2-dsps")
+        add_row("xor96", 2, "xilinx-ultrascale-plus-2-dsps")
 
         table.to_csv(
             csv_filepath,
