@@ -4596,3 +4596,63 @@
     implementation_module_name: lakeroad_sofa_ule128_2
     template: comparison
   instruction: *id191
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add96_2
+    template: xilinx-ultrascale-plus-dsp48e2-2-dsps
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 96
+    expr: (bvadd (var a 96) (var b 96))
+    name: add
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub96_2
+    template: xilinx-ultrascale-plus-dsp48e2-2-dsps
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 96
+    expr: (bvsub (var a 96) (var b 96))
+    name: sub
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and96_2
+    template: xilinx-ultrascale-plus-dsp48e2-2-dsps
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 96
+    expr: (bvand (var a 96) (var b 96))
+    name: and
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or96_2
+    template: xilinx-ultrascale-plus-dsp48e2-2-dsps
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 96
+    expr: (bvor (var a 96) (var b 96))
+    name: or
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor96_2
+    template: xilinx-ultrascale-plus-dsp48e2-2-dsps
+  instruction: !!python/object:schema.Instruction
+    arity: 2
+    bitwidth: 96
+    expr: (bvxor (var a 96) (var b 96))
+    name: xor
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: xilinx_ultrascale_plus
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_xilinx_ultrascale_plus_parity96_1
+    template: xilinx-ultrascale-plus-dsp48e2-xor
+  instruction: !!python/object:schema.Instruction
+    arity: 1
+    bitwidth: 96
+    expr: (apply bvxor (bitvector->bits (var a 96)))
+    name: parity

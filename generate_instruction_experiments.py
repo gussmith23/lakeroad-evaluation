@@ -255,6 +255,73 @@ def _make_instructions():
                 ]:
                     yield _make_experiment(architecture, instruction, template)
 
+    # Some one-off instructions.
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="add",
+            bitwidth=96,
+            arity=2,
+            expr="(bvadd (var a 96) (var b 96))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-2-dsps",
+    )
+
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="sub",
+            bitwidth=96,
+            arity=2,
+            expr="(bvsub (var a 96) (var b 96))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-2-dsps",
+    )
+
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="and",
+            bitwidth=96,
+            arity=2,
+            expr="(bvand (var a 96) (var b 96))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-2-dsps",
+    )
+
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="or",
+            bitwidth=96,
+            arity=2,
+            expr="(bvor (var a 96) (var b 96))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-2-dsps",
+    )
+
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="xor",
+            bitwidth=96,
+            arity=2,
+            expr="(bvxor (var a 96) (var b 96))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-2-dsps",
+    )
+
+    yield _make_experiment(
+        "xilinx_ultrascale_plus",
+        Instruction(
+            name="parity",
+            bitwidth=96,
+            arity=1,
+            expr="(apply bvxor (bitvector->bits (var a 96)))",
+        ),
+        "xilinx-ultrascale-plus-dsp48e2-xor",
+    )
+
 
 def main(output_file):
     yaml.dump(list(_make_instructions()), stream=output_file)
