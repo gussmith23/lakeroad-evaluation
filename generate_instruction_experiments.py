@@ -35,7 +35,6 @@ def _make_experiment(
 
 
 def _make_instructions():
-
     for bw in [1, 2, 3, 4, 5, 6, 7, 8, 16, 32, 64, 128]:
         # No shifts of size 1, they'll get optimized away. No shifts of 64 or
         # greater; our template is really inefficient and so it leads to OOM
@@ -65,7 +64,7 @@ def _make_instructions():
                     ("xilinx_ultrascale_plus", "shift"),
                     ("lattice_ecp5", "shift"),
                 ]
-                for (architecture, template) in templates:
+                for architecture, template in templates:
                     yield _make_experiment(architecture, instruction, template)
             for instruction in [
                 Instruction(
@@ -91,7 +90,7 @@ def _make_instructions():
                 templates = [
                     ("sofa", "shift"),
                 ]
-                for (architecture, template) in templates:
+                for architecture, template in templates:
                     yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -137,7 +136,7 @@ def _make_instructions():
                     ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
                 ]
 
-            for (architecture, template) in templates:
+            for architecture, template in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -160,6 +159,7 @@ def _make_instructions():
                     "bitwise-with-carry",
                 ),
                 ("lattice_ecp5", "bitwise-with-carry"),
+                ("lattice_ecp5", "carry"),
                 ("sofa", "bitwise-with-carry"),
             ]
             # Only do DSP for <= 16 bits.
@@ -168,7 +168,7 @@ def _make_instructions():
                     ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
                 ]
 
-            for (architecture, template) in templates:
+            for architecture, template in templates:
                 yield _make_experiment(architecture, instruction, template)
 
         for instruction in [
@@ -209,7 +209,7 @@ def _make_instructions():
                 expr=f"(bool->bitvector (bvule (var a {bw}) (var b {bw})))",
             ),
         ]:
-            for (architecture, template) in [
+            for architecture, template in [
                 (
                     "xilinx_ultrascale_plus",
                     "comparison",
@@ -219,6 +219,30 @@ def _make_instructions():
             ]:
                 yield _make_experiment(architecture, instruction, template)
 
+        # Shallow comparisons
+        for instruction in [
+            Instruction(
+                name="eq",
+                bitwidth=bw,
+                arity=2,
+                expr=f"(bool->bitvector (bveq (var a {bw}) (var b {bw})))",
+            ),
+            Instruction(
+                name="neq",
+                bitwidth=bw,
+                arity=2,
+                expr=f"(bool->bitvector (not (bveq (var a {bw}) (var b {bw}))))",
+            ),
+        ]:
+            for architecture, template in [
+                (
+                    "xilinx_ultrascale_plus",
+                    "shallow-comparison",
+                ),
+                ("lattice_ecp5", "shallow-comparison"),
+                ("sofa", "shallow-comparison"),
+            ]:
+                yield _make_experiment(architecture, instruction, template)
         if bw <= 8:
             for instruction in [
                 Instruction(
@@ -228,7 +252,7 @@ def _make_instructions():
                     expr=f"(bvmul (var a {bw}) (var b {bw}))",
                 ),
             ]:
-                for (architecture, template) in [
+                for architecture, template in [
                     (
                         "xilinx_ultrascale_plus",
                         "multiplication",
@@ -247,7 +271,7 @@ def _make_instructions():
                     expr=f"(bvmul (var a {bw}) (var b {bw}))",
                 ),
             ]:
-                for (architecture, template) in [
+                for architecture, template in [
                     (
                         "xilinx_ultrascale_plus",
                         "xilinx-ultrascale-plus-dsp48e2",
