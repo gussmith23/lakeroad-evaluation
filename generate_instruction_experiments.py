@@ -159,6 +159,7 @@ def _make_instructions():
                     "bitwise-with-carry",
                 ),
                 ("lattice_ecp5", "bitwise-with-carry"),
+                ("lattice_ecp5", "carry"),
                 ("sofa", "bitwise-with-carry"),
             ]
             # Only do DSP for <= 16 bits.

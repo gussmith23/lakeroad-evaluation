@@ -155,6 +155,12 @@
     template: bitwise-with-carry
   instruction: *id006
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add1_2
+    template: carry
+  instruction: *id006
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add1_2
@@ -181,6 +187,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub1_2
     template: bitwise-with-carry
+  instruction: *id007
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub1_2
+    template: carry
   instruction: *id007
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -617,6 +629,12 @@
     template: bitwise-with-carry
   instruction: *id025
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add2_2
+    template: carry
+  instruction: *id025
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add2_2
@@ -643,6 +661,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub2_2
     template: bitwise-with-carry
+  instruction: *id026
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub2_2
+    template: carry
   instruction: *id026
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -1079,6 +1103,12 @@
     template: bitwise-with-carry
   instruction: *id044
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add3_2
+    template: carry
+  instruction: *id044
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add3_2
@@ -1105,6 +1135,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub3_2
     template: bitwise-with-carry
+  instruction: *id045
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub3_2
+    template: carry
   instruction: *id045
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -1541,6 +1577,12 @@
     template: bitwise-with-carry
   instruction: *id063
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add4_2
+    template: carry
+  instruction: *id063
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add4_2
@@ -1567,6 +1609,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub4_2
     template: bitwise-with-carry
+  instruction: *id064
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub4_2
+    template: carry
   instruction: *id064
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -2003,6 +2051,12 @@
     template: bitwise-with-carry
   instruction: *id082
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add5_2
+    template: carry
+  instruction: *id082
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add5_2
@@ -2029,6 +2083,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub5_2
     template: bitwise-with-carry
+  instruction: *id083
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub5_2
+    template: carry
   instruction: *id083
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -2465,6 +2525,12 @@
     template: bitwise-with-carry
   instruction: *id101
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add6_2
+    template: carry
+  instruction: *id101
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add6_2
@@ -2491,6 +2557,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub6_2
     template: bitwise-with-carry
+  instruction: *id102
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub6_2
+    template: carry
   instruction: *id102
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -2927,6 +2999,12 @@
     template: bitwise-with-carry
   instruction: *id120
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add7_2
+    template: carry
+  instruction: *id120
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add7_2
@@ -2953,6 +3031,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub7_2
     template: bitwise-with-carry
+  instruction: *id121
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub7_2
+    template: carry
   instruction: *id121
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -3389,6 +3473,12 @@
     template: bitwise-with-carry
   instruction: *id139
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add8_2
+    template: carry
+  instruction: *id139
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add8_2
@@ -3415,6 +3505,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub8_2
     template: bitwise-with-carry
+  instruction: *id140
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub8_2
+    template: carry
   instruction: *id140
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -3851,6 +3947,12 @@
     template: bitwise-with-carry
   instruction: *id158
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add16_2
+    template: carry
+  instruction: *id158
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add16_2
@@ -3877,6 +3979,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub16_2
     template: bitwise-with-carry
+  instruction: *id159
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub16_2
+    template: carry
   instruction: *id159
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -4261,6 +4369,12 @@
     template: bitwise-with-carry
   instruction: *id176
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add32_2
+    template: carry
+  instruction: *id176
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add32_2
@@ -4281,6 +4395,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub32_2
     template: bitwise-with-carry
+  instruction: *id177
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub32_2
+    template: carry
   instruction: *id177
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -4591,6 +4711,12 @@
     template: bitwise-with-carry
   instruction: *id191
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add64_2
+    template: carry
+  instruction: *id191
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add64_2
@@ -4611,6 +4737,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub64_2
     template: bitwise-with-carry
+  instruction: *id192
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub64_2
+    template: carry
   instruction: *id192
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
@@ -4921,6 +5053,12 @@
     template: bitwise-with-carry
   instruction: *id206
 - !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_add128_2
+    template: carry
+  instruction: *id206
+- !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_add128_2
@@ -4941,6 +5079,12 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_lattice_ecp5_sub128_2
     template: bitwise-with-carry
+  instruction: *id207
+- !!python/object:schema.LakeroadInstructionExperiment
+  architecture: lattice_ecp5
+  implementation_action: !!python/object:schema.ImplementationAction
+    implementation_module_name: lakeroad_lattice_ecp5_sub128_2
+    template: carry
   instruction: *id207
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: sofa
