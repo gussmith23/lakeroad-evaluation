@@ -38,3 +38,12 @@
 [submodule "yosys"]
 	path = yosys
 	url = git@github.com:uwsampl/yosys
+[submodule "fpga-npu"]
+	path = fpga-npu
+	url = git@github.com:intel/fpga-npu
+[submodule "basejump_stl"]
+	path = basejump_stl
+	url = https://github.com/bespoke-silicon-group/basejump_stl
+[submodule "bsg_micro_designs"]
+	path = bsg_micro_designs
+	url = https://github.com/bsg-idea/bsg_micro_designs
