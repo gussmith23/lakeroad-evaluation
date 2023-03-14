@@ -1,7 +1,7 @@
 [submodule "lakeroad"]
 	path = lakeroad
 	url = git@github.com:gussmith23/lakeroad
-	ignore = dirty
+	ignore = untracked
 [submodule "verilator-unisims"]
 	path = verilator-unisims
 	url = git@github.com:oliverbunting/verilator-unisims
