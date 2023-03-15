@@ -1,2 +1,6 @@
 - url: https://github.com/muzicarski/bachelor/blob/2d477a54404cdaf9855af1d46934b3c8f0c3d805/DESKEW_IP_V1_2/src/dim_mult.v
   dest_filename: "muzicarski_bachelor_DESKEW_IP_V1_2_src_dim_mult.v"
+- url: https://github.com/adamgallas/fpga_accelerator_yolov3tiny/blob/15963fa5510271e66835a7c59448beebf8bc2d38/vivado_prj/source/cal_mul_int8_x2_dsp.v
+  dest_filename: adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_mul_int8_x2_dsp.v
+- url: https://github.com/adamgallas/fpga_accelerator_yolov3tiny/blob/15963fa5510271e66835a7c59448beebf8bc2d38/vivado_prj/source/cal_scale_mul.v
+  dest_filename: adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
