@@ -16,3 +16,9 @@
 - filename: submodules/seyed1mehdi_G3_FPGA_Object_Classification_Accelerator/src/lenet5/neural_core/neural_core.srcs/conv.v
   dest_filename: benchmarks/seyed1mehdi_G3_FPGA_Object_Classification_Accelerator_src_lenet5_neural_core_neural_core_srcs_conv.v
   top_module: conv
+- filename: submodules/chhsiao121_HLS__final_gesture/vivado_project/base/project_1/project_1.srcs/sources_1/bd/base/ipshared/b9a3/hdl/verilog/color_convert_macbkb.v
+  dest_filename: benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
+  top_module: color_convert_macbkb_DSP48_0
+- filename: submodules/chhsiao121_HLS__final_gesture/vivado_project/base/project_1/project_1.srcs/sources_1/bd/base/ipshared/b9a3/hdl/verilog/color_convert_maccud.v
+  dest_filename: benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_maccud.v
+  top_module: color_convert_maccud_DSP48_1
