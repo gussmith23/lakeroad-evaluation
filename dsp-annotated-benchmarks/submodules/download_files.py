@@ -6,7 +6,7 @@ def main():
         files = yaml.safe_load(f)
     
     for file in files:
-        subprocess.run(['wget', '-o', file['dest_filename'], file['url']], check=True)
+        subprocess.run(['wget', '-O', file['dest_filename'], file['url']], check=True)
 
 if __name__=="__main__":
     main()
