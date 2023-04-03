@@ -50,3 +50,6 @@
 [submodule "dsp-annotated-benchmarks/submodules/chhsiao121_HLS__final_gesture"]
 	path = dsp-annotated-benchmarks/submodules/chhsiao121_HLS__final_gesture
 	url = https://github.com/chhsiao121/HLS__final_gesture
+[submodule "fpga-dsp-mapping-benchmarks"]
+	path = fpga-dsp-mapping-benchmarks
+	url = git@github.com:uwsampl/fpga-dsp-mapping-benchmarks.git
