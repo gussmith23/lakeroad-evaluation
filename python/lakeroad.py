@@ -14,24 +14,35 @@ from hardware_compilation import *
 from schema import *
 
 
-
 def invoke_lakeroad(
     module_name: str,
-    instruction: str,
+    instruction: Optional[str],
     template: str,
     out_filepath: Union[str, Path],
     architecture: str,
     time_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
+    verilog_module_filepath: Optional[Union[str, Path]] = None,
+    top_module_name: Optional[str] = None,
+    verilog_module_out_signal: Optional[str] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
+    The arguments to this function mostly mirror the arguments to the
+    bin/main.rkt file in Lakeroad.
+
     Args:
       instruction: The Racket code representing the instruction. See main.rkt.
+        This argument is optional; the input to Lakeroad can also be specified
+        as a Verilog file in verilog_module_filepath.
       json_filepath: After this function generates the Lakeroad implementation,
         it collects information from the implementation (which later is used to
         make the tables in the paper). This is the path to write the collected
         data (in JSON format) to.
+      verilog_module_filepath: The input Verilog file to compile.
+      top_module_name: The name of the module to compile in the Verilog file.
+      verilog_module_out_signal: The name of the output signal of the top
+        module.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
     addition isn't implemented on SOFA, so we could allow users to attempt to
@@ -190,15 +201,32 @@ def invoke_lakeroad(
         template,
         "--module-name",
         module_name,
-        "--instruction",
-        instruction,
-        "--out-filepath",
+        "--out_filepath",
         out_filepath,
         "--architecture",
         architecture,
         "--verilog-module-out-signal",
         "out",
     ]
+
+    if instruction != None and verilog_module_filepath == None:
+        # If instruction is specified and an input Verilog file isn't.
+        cmd += ["--instruction", instruction]
+    elif instruction != None and verilog_module_filepath == None:
+        # Vice versa.
+        cmd += [
+            "--verilog-module-filepath",
+            verilog_module_filepath,
+            "--verilog-module-out-signal",
+            verilog_module_out_signal,
+            "--top-module-name",
+            top_module_name,
+        ]
+    else:
+        raise Exception(
+            f"Didn't expect instruction ({instruction}) and verilog_module_filepath ({verilog_module_filepath})"
+        )
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
