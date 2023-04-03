@@ -5,36 +5,9 @@
 [submodule "verilator-unisims"]
 	path = verilator-unisims
 	url = git@github.com:oliverbunting/verilator-unisims
-[submodule "calyx"]
-	path = calyx
-	url = git@github.com:cucapra/calyx.git
-	ignore = dirty
-[submodule "calyx-xilinx-ultrascale-plus"]
-	path = calyx-xilinx-ultrascale-plus
-	url = git@github.com:uwsampl/calyx.git
-	ignore = dirty
 [submodule "circt"]
 	path = circt
 	url = git@github.com:uwsampl/circt
-[submodule "calyx-lattice-ecp5"]
-	path = calyx-lattice-ecp5
-	url = git@github.com:uwsampl/calyx
-	ignore = dirty
-[submodule "calyx-evaluation"]
-	path = calyx-evaluation
-	url = git@github.com:uwsampl/calyx-evaluation
-[submodule "calyx_base"]
-	path = calyx_base
-	url = git@github.com:uwsampl/calyx
-[submodule "calyx_vivado"]
-	path = calyx_vivado
-	url = git@github.com:uwsampl/calyx
-[submodule "calyx_lattice_ecp5_diamond"]
-	path = calyx_lattice_ecp5_diamond
-	url = git@github.com:uwsampl/calyx
-[submodule "dahlia"]
-	path = dahlia
-	url = git@github.com:cucapra/dahlia
 [submodule "yosys"]
 	path = yosys
 	url = git@github.com:uwsampl/yosys
