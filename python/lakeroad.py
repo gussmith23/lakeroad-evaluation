@@ -200,7 +200,7 @@ def invoke_lakeroad(
         "out",
     ]
     logging.info(
-        "Generating %s with instruction:\n%s", out_filepath, " ".join(map(str, cmd))
+        "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
     try:
