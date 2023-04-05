@@ -14,5 +14,8 @@ dsp_benchmarks:
   # Architecture.
   # TODO(@gussmith23): We shouldn't need to input this, ideally.
   architecture: xilinx-ultrascale-plus
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
+  module_name: cal_scale_mul
+  output_signal: dout
   template: xilinx-ultrascale-plus-dsp48e2
   architecture: xilinx-ultrascale-plus
