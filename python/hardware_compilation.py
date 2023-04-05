@@ -734,6 +734,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name:Optional[str] = None,
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -746,7 +747,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     time_filepath = output_dirpath / f"{module_name}.time"
     log_filepath = output_dirpath / f"{module_name}.log"
 
-    return {
+    task = {
         "actions": [
             (
                 yosys_synthesis,
@@ -765,6 +766,11 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
         "file_dep": [input_filepath],
         "targets": [json_filepath, output_filepath, time_filepath, log_filepath],
     }
+
+    if name is not None:
+        task["name"] = name
+    
+    return task
 
 
 def lattice_ecp5_diamond_synthesis(
