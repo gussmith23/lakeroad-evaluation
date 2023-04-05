@@ -17,9 +17,9 @@ from typing import Dict, Optional, Tuple, Union
 from tempfile import NamedTemporaryFile
 
 
-def count_resources_in_verilog_src(verilog_src: str, module_name: str) -> Dict[str, int]:
-
-
+def count_resources_in_verilog_src(
+    verilog_src: str, module_name: str
+) -> Dict[str, int]:
     with NamedTemporaryFile(mode="w") as f:
         with f.file as file_object:
             file_object.write(verilog_src)
@@ -35,8 +35,9 @@ def count_resources_in_verilog_src(verilog_src: str, module_name: str) -> Dict[s
             check=True,
         ).stdout
 
-    #print(out)
+    # print(out)
     return parse_yosys_log(out)
+
 
 @dataclass
 class DiamondSynthesisStats:
@@ -594,7 +595,6 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
 
 
 def parse_yosys_log(log_txt: str):
-
     matches = list(
         re.finditer(
             r"""
@@ -734,7 +734,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
-    name:Optional[str] = None,
+    name: Optional[str] = None,
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -769,7 +769,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
 
     if name is not None:
         task["name"] = name
-    
+
     return task
 
 
