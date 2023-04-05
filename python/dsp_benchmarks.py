@@ -45,26 +45,29 @@ def _make_lakeroad_task(
 
 def task_dsp_benchmarks():
     """Run DSP benchmarks.
-    
+
     This function defines the task for running the DSP benchmarks."""
 
     manifest = utils.get_manifest()
     iterations = manifest["iterations"]
     dsp_benchmarks = manifest["dsp_benchmarks"]
 
+    # Base filepath for all DSP benchmark run outputs.
+    base_filepath = utils.output_dir() / "dsp_benchmarks"
+
     for iter, benchmark in itertools.product(range(iterations), dsp_benchmarks):
         filepath = Path(benchmark["filepath"])
+
+        lakeroad_base_filepath = (
+            base_filepath / "lakeroad" / f"iter{iter}" / filepath.stem
+        )
         yield _make_lakeroad_task(
             template=benchmark["template"],
             out_module_name="out",
-            out_filepath=utils.output_dir() / f"iter{iter}" / filepath.name,
+            out_filepath=lakeroad_base_filepath / filepath.name,
             architecture=benchmark["architecture"],
-            time_filepath=utils.output_dir()
-            / f"iter{iter}"
-            / filepath.with_suffix(".time").name,
-            json_filepath=utils.output_dir()
-            / f"iter{iter}"
-            / filepath.with_suffix(".json").name,
+            time_filepath=lakeroad_base_filepath / filepath.with_suffix(".time").name,
+            json_filepath=lakeroad_base_filepath / filepath.with_suffix(".json").name,
             verilog_module_filepath=benchmark["filepath"],
             top_module_name=benchmark["module_name"],
             verilog_module_out_signal=benchmark["output_signal"],
