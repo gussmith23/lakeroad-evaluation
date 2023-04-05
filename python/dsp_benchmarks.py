@@ -5,7 +5,7 @@ import utils
 import itertools
 
 
-def _make_dsp_benchmark_task(
+def _make_lakeroad_task(
     template: str,
     out_module_name: str,
     out_filepath: Union[str, Path],
@@ -54,7 +54,7 @@ def task_dsp_benchmarks():
 
     for iter, benchmark in itertools.product(range(iterations), dsp_benchmarks):
         filepath = Path(benchmark["filepath"])
-        yield _make_dsp_benchmark_task(
+        yield _make_lakeroad_task(
             template=benchmark["template"],
             out_module_name="out",
             out_filepath=utils.output_dir() / f"iter{iter}" / filepath.name,
