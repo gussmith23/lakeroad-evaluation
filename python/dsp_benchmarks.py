@@ -3,6 +3,7 @@ from typing import Optional, Union
 from lakeroad import invoke_lakeroad
 import utils
 import itertools
+import hardware_compilation
 
 
 def _make_lakeroad_task(
@@ -72,4 +73,38 @@ def task_dsp_benchmarks():
             top_module_name=benchmark["module_name"],
             verilog_module_out_signal=benchmark["output_signal"],
             name=Path(benchmark["filepath"]).stem + f"_iter{iter}",
+        )
+
+        yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            input_filepath=filepath,
+            output_dirpath=base_filepath
+            / "yosys_xilinx_ultrascale_plus"
+            / f"iter{iter}"
+            / filepath.stem,
+            module_name=benchmark["module_name"],
+            name=f"{filepath.stem}_yosys_xilinx_ultrascale_plus_iter{iter}",
+        )
+
+        yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
+            input_filepath=filepath,
+            output_dirpath=base_filepath
+            / "yosys_lattice_ecp5"
+            / f"iter{iter}"
+            / filepath.stem,
+            module_name=benchmark["module_name"],
+            name=f"{filepath.stem}_yosys_lattice_ecp5_iter{iter}",
+        )
+
+        yield hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            input_filepath=filepath,
+            output_dirpath=base_filepath / "vivado" / f"iter{iter}" / filepath.stem,
+            module_name=benchmark["module_name"],
+            name=f"{filepath.stem}_vivado_iter{iter}",
+        )
+
+        yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
+            input_filepath=filepath,
+            output_dirpath=base_filepath / "diamond" / f"iter{iter}" / filepath.stem,
+            module_name=benchmark["module_name"],
+            name=f"{filepath.stem}_diamond_iter{iter}",
         )
