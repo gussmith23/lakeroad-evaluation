@@ -497,6 +497,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -510,7 +511,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
-    return {
+    task = {
         "actions": [
             (
                 xilinx_ultrascale_plus_vivado_synthesis,
@@ -539,6 +540,11 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             json_filepath,
         ],
     }
+
+    if name is not None:
+        task["name"] = name
+
+    return task
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
@@ -835,6 +841,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
 ):
     """Wrapper over Diamond synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -844,7 +851,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
     output_dirpath = Path(output_dirpath)
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
-    return {
+    task = {
         "actions": [
             (
                 lattice_ecp5_diamond_synthesis,
@@ -864,6 +871,11 @@ def make_lattice_ecp5_diamond_synthesis_task(
             json_filepath,
         ],
     }
+
+    if name is not None:
+        task["name"] = name
+
+    return task
 
 
 def make_yosys_nextpnr_synthesis_task(
