@@ -16,6 +16,8 @@ from schema import *
 
 def invoke_lakeroad(
     module_name: str,
+    # TODO(@gussmith23): Give this a default value of None. Will break
+    # positional uses.
     instruction: Optional[str],
     template: str,
     out_filepath: Union[str, Path],
