@@ -15,41 +15,41 @@ dsp_benchmarks:
   # TODO(@gussmith23): We shouldn't need to input this, ideally.
   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
-  module_name: cal_scale_mul
-  output_signal: dout
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
+#   module_name: cal_scale_mul
+#   output_signal: dout
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
-  module_name: color_convert_macbkb_DSP48_0
-  output_signal: dout
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
+#   module_name: color_convert_macbkb_DSP48_0
+#   output_signal: dout
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_maccud.v
-  module_name: color_convert_maccud_DSP48_1
-  output_signal: dout
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_maccud.v
+#   module_name: color_convert_maccud_DSP48_1
+#   output_signal: dout
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_dim_mult.v
-  module_name: dim_mult
-  output_signal: p_out
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_dim_mult.v
+#   module_name: dim_mult
+#   output_signal: p_out
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_mult_accum.v
-  module_name: mult_accum
-  output_signal: mac_out
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_mult_accum.v
+#   module_name: mult_accum
+#   output_signal: mac_out
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_signed_mult_accum.v
-  module_name: signed_mult_accum
-  output_signal: mac_out
-  template: xilinx-ultrascale-plus-dsp48e2
-  architecture: xilinx-ultrascale-plus
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/muzicarski_bachelor_DESKEW_IP_V1_2_src_signed_mult_accum.v
+#   module_name: signed_mult_accum
+#   output_signal: mac_out
+#   template: xilinx-ultrascale-plus-dsp48e2
+#   architecture: xilinx-ultrascale-plus
 
 - filepath: fpga-dsp-mapping-benchmarks/benchmarks/seyed1mehdi_G3_FPGA_Object_Classification_Accelerator_src_lenet5_neural_core_neural_core_srcs_conv.v
   module_name: conv
