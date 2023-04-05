@@ -212,7 +212,7 @@ def invoke_lakeroad(
     if instruction != None and verilog_module_filepath == None:
         # If instruction is specified and an input Verilog file isn't.
         cmd += ["--instruction", instruction]
-    elif instruction != None and verilog_module_filepath == None:
+    elif instruction == None and verilog_module_filepath != None:
         # Vice versa.
         cmd += [
             "--verilog-module-filepath",
