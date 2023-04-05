@@ -1,5 +1,9 @@
 # Number of iterations of each experiment to run.
 iterations: 3
 # Filepaths of DSP benchmarks (relative to root of Lakeroad evaluation).
-dsp_benchmark_filepaths:
-- fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_mul_int8_x2_dsp.v
+dsp_benchmarks:
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_mul_int8_x2_dsp.v
+  module_name: cal_mult_int8_x2_dsp
+  output_signal: ac
+  template: xilinx-ultrascale-plus-dsp48e2
+  architecture: xilinx-ultrascale-plus
