@@ -203,7 +203,7 @@ def invoke_lakeroad(
         template,
         "--module-name",
         module_name,
-        "--out_filepath",
+        "--out-filepath",
         out_filepath,
         "--architecture",
         architecture,
