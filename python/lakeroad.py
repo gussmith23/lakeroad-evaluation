@@ -6,7 +6,6 @@ from pathlib import Path
 from time import time
 from typing import List, Union
 
-import re
 import doit
 import utils
 import yaml
