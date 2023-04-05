@@ -207,8 +207,6 @@ def invoke_lakeroad(
         out_filepath,
         "--architecture",
         architecture,
-        "--verilog-module-out-signal",
-        "out",
     ]
 
     if instruction != None and verilog_module_filepath == None:
