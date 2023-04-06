@@ -795,10 +795,21 @@ def lattice_ecp5_diamond_synthesis(
     output_dirpath.mkdir(parents=True, exist_ok=True)
 
     # Diamond's synthesis routine won't accept SystemVerilog, so we use sv2v to
-    # convert.
+    # convert. sv2v doesn't like Verilog 2001 attributes, so we remove them with
+    # Yosys.
     sv2v_result_filepath = output_dirpath / f"{module_name}.v"
-    with open(sv2v_result_filepath, "w") as f:
-        subprocess.run(["sv2v", src_filepath], check=True, stdout=f)
+    subprocess.run(
+        [
+            "yosys",
+            "-p",
+            f"read_verilog -sv {src_filepath}; write_verilog -noattr {sv2v_result_filepath}",
+        ],
+        check=True,
+    )
+    subprocess.run(
+        ["sv2v", "-w", sv2v_result_filepath, sv2v_result_filepath],
+        check=True,
+    )
 
     assert (
         "DIAMOND_BINDIR" in os.environ
