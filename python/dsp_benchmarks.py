@@ -59,20 +59,43 @@ def task_dsp_benchmarks():
     for iter, benchmark in itertools.product(range(iterations), dsp_benchmarks):
         filepath = Path(benchmark["filepath"])
 
-        lakeroad_base_filepath = (
-            base_filepath / "lakeroad" / f"iter{iter}" / filepath.stem
+        lakeroad_xilinx_ultrascale_plus_base_filepath = (
+            base_filepath
+            / "lakeroad_xilinx_ultrascale_plus"
+            / f"iter{iter}"
+            / filepath.stem
         )
         yield _make_lakeroad_task(
-            template=benchmark["template"],
+            template="xilinx-ultrascale-plus-dsp48e2",
             out_module_name="out",
-            out_filepath=lakeroad_base_filepath / filepath.name,
-            architecture=benchmark["architecture"],
-            time_filepath=lakeroad_base_filepath / filepath.with_suffix(".time").name,
-            json_filepath=lakeroad_base_filepath / filepath.with_suffix(".json").name,
+            out_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name,
+            architecture="xilinx-ultrascale-plus",
+            time_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / filepath.with_suffix(".time").name,
+            json_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / filepath.with_suffix(".json").name,
             verilog_module_filepath=benchmark["filepath"],
             top_module_name=benchmark["module_name"],
             verilog_module_out_signal=benchmark["output_signal"],
-            name=Path(benchmark["filepath"]).stem + f"_iter{iter}",
+            name=f"{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
+        )
+
+        lakeroad_lattice_ecp5_base_filepath = (
+            base_filepath / "lakeroad_lattice_ecp5" / f"iter{iter}" / filepath.stem
+        )
+        yield _make_lakeroad_task(
+            template="lattice-ecp5-dsp",
+            out_module_name="out",
+            out_filepath=lakeroad_lattice_ecp5_base_filepath / filepath.name,
+            architecture="lattice-ecp5",
+            time_filepath=lakeroad_lattice_ecp5_base_filepath
+            / filepath.with_suffix(".time").name,
+            json_filepath=lakeroad_lattice_ecp5_base_filepath
+            / filepath.with_suffix(".json").name,
+            verilog_module_filepath=benchmark["filepath"],
+            top_module_name=benchmark["module_name"],
+            verilog_module_out_signal=benchmark["output_signal"],
+            name=f"{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
         )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
