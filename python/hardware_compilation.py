@@ -804,6 +804,7 @@ def lattice_ecp5_diamond_synthesis(
             "-p",
             f"read_verilog -sv {src_filepath}; write_verilog -noattr {sv2v_result_filepath}",
         ],
+        capture_output=True,
         check=True,
     )
     subprocess.run(
