@@ -166,6 +166,7 @@ class VivadoLogStats:
     f7muxes: int
     f8muxes: int
     f9muxes: int
+    dsp48e2s: int
 
     # Timing stats won't be present if there was not a clock constraint
     # provided, thus all timing stats are Optional.
@@ -209,7 +210,8 @@ def parse_ultrascale_log(log_text: str, identifier: str) -> VivadoLogStats:
         log_text[start_index:end_index],
         flags=re.MULTILINE,
     )
-    primitives = [(m[0], int(m[1])) for m in matches]
+    primitives = {m[0]: int(m[1]) for m in matches}
+    dsp48e2s = primitives["DSP48E2"] if "DSP48E2" in primitives else 0
 
     ## CLB usage.
     matches = list(
@@ -340,6 +342,7 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
         f7muxes=f7muxes,
         f8muxes=f8muxes,
         f9muxes=f9muxes,
+        dsp48e2s=dsp48e2s,
         user_constraints_met=user_constraints_met,
         worst_negative_slack=worst_negative_slack,
         clock_name=clock_name,
