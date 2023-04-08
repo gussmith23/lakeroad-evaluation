@@ -1,0 +1,15 @@
+identifier,name
+add64_2,Add64
+and64_2,And64
+eq64_2,Eq64
+mux64_3,Mux64
+neq64_2,Neq64
+not64_1,Not64
+or64_2,Or64
+sub64_2,Sub64
+uge64_2,Uge64
+ugt64_2,Ugt64
+ule64_2,Ule64
+ult64_2,Ult64
+xor64_2,Xor64
+mul64_2,Mul64
