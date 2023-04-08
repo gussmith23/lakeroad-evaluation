@@ -3,7 +3,7 @@
 #
 # Usage: Rscript plots.R <gathered_data folder> <output folder> <identifier-map.csv> <resource-map.csv>
 #
-# Example: Rscript tables.R results/gathered_data /tmp ./identifier-map.csv ./resource-map.csv
+# Example: Rscript plots.R results/gathered_data /tmp ./identifier-map.csv ./resource-map.csv
 #
 # The output folder must exist.
 suppressPackageStartupMessages({
