@@ -79,7 +79,7 @@ consolidate <- function() {
   old_wd <- getwd()
   setwd(DIR_RESULTS)
   lr_lattice      <- sanitize_df(read("lakeroad_lattice_ecp5_diamond_results.csv"), "lr_lattice")
-  yosys_lattice   <- sanitize_df(read("yosys_lattice_ecp5_baseline.csv"), "yosis_lattice")
+  yosys_lattice   <- sanitize_df(read("yosys_lattice_ecp5_baseline.csv"), "yosys_lattice")
   diamond_lattice <- sanitize_df(read("diamond_baseline.csv"), "diamond_lattice")
 
   lr_xilinx       <- sanitize_df(read("lakeroad_xilinx_ultrascale_plus_vivado_results.csv"), "lr_xilinx")
@@ -91,7 +91,7 @@ consolidate <- function() {
 
   # Map identifiers to human-readable names and limit the set of identifiers
   # that will eventually end up in the output table.
-  ident_map      <- read.csv("identifier-map.csv") 
+  ident_map      <- read.csv(CSV_IDENT_MAP)
 
   df <- lr_lattice %>%
     full_join(yosys_lattice) %>%
