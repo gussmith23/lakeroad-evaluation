@@ -26,6 +26,9 @@ def invoke_lakeroad(
     verilog_module_filepath: Optional[Union[str, Path]] = None,
     top_module_name: Optional[str] = None,
     verilog_module_out_signal: Optional[str] = None,
+    initiation_interval: Optional[int] = None,
+    inputs: Optional[List[Tuple[str, int]]] = None,
+    clock_name: Optional[str] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -44,6 +47,10 @@ def invoke_lakeroad(
       top_module_name: The name of the module to compile in the Verilog file.
       verilog_module_out_signal: The name of the output signal of the top
         module.
+      inputs: Inputs to the Verilog module. Must be specified for sequential
+        synthesis. A list of tuples, (<name>, <bitwidth>).
+      initiation_interval: The initiation interval of the module, for sequential
+        synthesis.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
     addition isn't implemented on SOFA, so we could allow users to attempt to
@@ -226,6 +233,16 @@ def invoke_lakeroad(
             f"Didn't expect instruction ({instruction}) and verilog_module_filepath ({verilog_module_filepath})"
         )
 
+    if initiation_interval:
+        cmd += ["--initiation-interval", str(initiation_interval)]
+
+    if inputs:
+        for (name, bitwidth) in inputs:
+            cmd += ["--input-signal", f"{name}:{bitwidth}"]
+
+    if clock_name:
+        cmd += ["--clock-name", clock_name]
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
@@ -252,6 +269,57 @@ def invoke_lakeroad(
     )
 
 
+def make_lakeroad_task(
+    template: str,
+    out_module_name: str,
+    out_filepath: Union[str, Path],
+    architecture: str,
+    time_filepath: Union[str, Path],
+    json_filepath: Union[str, Path],
+    verilog_module_filepath: Optional[Union[str, Path]] = None,
+    top_module_name: Optional[str] = None,
+    verilog_module_out_signal: Optional[str] = None,
+    name: Optional[str] = None,
+    initiation_interval: Optional[int] = None,
+    inputs: Optional[List[Tuple[str, int]]] = None,
+    clock_name: Optional[str] = None,
+):
+    task = {}
+
+    if name:
+        task["name"] = name
+
+    task["actions"] = [
+        (
+            invoke_lakeroad,
+            [],
+            {
+                "instruction": None,
+                "template": template,
+                "out_filepath": out_filepath,
+                "module_name": out_module_name,
+                "architecture": architecture,
+                "time_filepath": time_filepath,
+                "json_filepath": json_filepath,
+                "verilog_module_filepath": verilog_module_filepath,
+                "top_module_name": top_module_name,
+                "verilog_module_out_signal": verilog_module_out_signal,
+                "initiation_interval": initiation_interval,
+                "inputs": inputs,
+                "clock_name": clock_name,
+            },
+        )
+    ]
+
+    task["file_dep"] = []
+    if verilog_module_filepath:
+        task["file_dep"].append(verilog_module_filepath)
+
+    task["targets"] = [out_filepath, time_filepath, json_filepath]
+
+    return task
+
+
 @doit.task_params(
     [
         {
@@ -264,6 +332,7 @@ def invoke_lakeroad(
 def task_instruction_experiments(experiments_file: str):
     """DoIt task creator for compiling instructions with various backends."""
 
+    # TODO(@gussmith23) Use `make_lakeroad_task` above instead of this function.
     def _make_instruction_implementation_with_lakeroad_task(
         experiment: LakeroadInstructionExperiment,
         verilog_filepath: Union[str, Path],

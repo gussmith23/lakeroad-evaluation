@@ -1,47 +1,9 @@
 from pathlib import Path
-from typing import Optional, Union
-from lakeroad import invoke_lakeroad
+from lakeroad import make_lakeroad_task
 import utils
 import itertools
 import hardware_compilation
-
-
-def _make_lakeroad_task(
-    template: str,
-    out_module_name: str,
-    out_filepath: Union[str, Path],
-    architecture: str,
-    time_filepath: Union[str, Path],
-    json_filepath: Union[str, Path],
-    verilog_module_filepath: Optional[Union[str, Path]] = None,
-    top_module_name: Optional[str] = None,
-    verilog_module_out_signal: Optional[str] = None,
-    name=None,
-):
-    task = {}
-    if name:
-        task["name"] = name
-
-    task["actions"] = [
-        (
-            invoke_lakeroad,
-            [],
-            {
-                "instruction": None,
-                "template": template,
-                "out_filepath": out_filepath,
-                "module_name": out_module_name,
-                "architecture": architecture,
-                "time_filepath": time_filepath,
-                "json_filepath": json_filepath,
-                "verilog_module_filepath": verilog_module_filepath,
-                "top_module_name": top_module_name,
-                "verilog_module_out_signal": verilog_module_out_signal,
-            },
-        )
-    ]
-
-    return task
+import verilator
 
 
 def task_dsp_benchmarks():
@@ -65,8 +27,8 @@ def task_dsp_benchmarks():
             / f"iter{iter}"
             / filepath.stem
         )
-        yield _make_lakeroad_task(
-            template="xilinx-ultrascale-plus-dsp48e2",
+        yield make_lakeroad_task(
+            template="dsp",
             out_module_name="out",
             out_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name,
             architecture="xilinx-ultrascale-plus",
@@ -78,13 +40,42 @@ def task_dsp_benchmarks():
             top_module_name=benchmark["module_name"],
             verilog_module_out_signal=benchmark["output_signal"],
             name=f"{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
+            initiation_interval=benchmark["initiation_interval"],
+            inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+            clock_name=benchmark["clock_name"],
+        )
+
+        yield verilator.make_verilator_task(
+            name=f"simulate_{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
+            obj_dir_dir=(
+                lakeroad_xilinx_ultrascale_plus_base_filepath / "verilator_obj_dirs"
+            ),
+            test_module_filepath=(
+                lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name
+            ),
+            ground_truth_module_filepath=benchmark["filepath"],
+            include_dirs=benchmark["verilator_include_dirs"],
+            extra_args=benchmark["extra_verilator_args"],
+            module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+            testbench_c_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / "testbench.c",
+            testbench_exe_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / "testbench",
+            testbench_inputs_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / "testbench_inputs.txt",
+            makefile_filepath=(
+                lakeroad_xilinx_ultrascale_plus_base_filepath / "Makefile"
+            ),
+            clock_name=benchmark["clock_name"],
+            initiation_interval=benchmark["initiation_interval"],
+            output_signal=benchmark["output_signal"],
         )
 
         lakeroad_lattice_ecp5_base_filepath = (
             base_filepath / "lakeroad_lattice_ecp5" / f"iter{iter}" / filepath.stem
         )
-        yield _make_lakeroad_task(
-            template="lattice-ecp5-dsp",
+        yield make_lakeroad_task(
+            template="dsp",
             out_module_name="out",
             out_filepath=lakeroad_lattice_ecp5_base_filepath / filepath.name,
             architecture="lattice-ecp5",
@@ -96,6 +87,9 @@ def task_dsp_benchmarks():
             top_module_name=benchmark["module_name"],
             verilog_module_out_signal=benchmark["output_signal"],
             name=f"{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
+            initiation_interval=benchmark["initiation_interval"],
+            inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+            clock_name=benchmark["clock_name"],
         )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
