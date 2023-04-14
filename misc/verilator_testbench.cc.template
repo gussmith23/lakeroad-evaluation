@@ -55,8 +55,8 @@ int main(int argc, char** argv) {{
     test_module->eval();
     ground_truth_module->eval();
     
-    SET_MODULE_CLOCK(test_module, 0)
-    SET_MODULE_CLOCK(ground_truth_module, 0)
+    SET_MODULE_CLOCK(test_module, 1)
+    SET_MODULE_CLOCK(ground_truth_module, 1)
     
     test_module->eval();
     ground_truth_module->eval();
