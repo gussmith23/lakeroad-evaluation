@@ -21,6 +21,8 @@ def task_dsp_benchmarks():
     for iter, benchmark in itertools.product(range(iterations), dsp_benchmarks):
         filepath = Path(benchmark["filepath"])
 
+        assert len(benchmark["outputs"]) == 1, "Can't handle multiple outputs yet"
+
         lakeroad_xilinx_ultrascale_plus_base_filepath = (
             base_filepath
             / "lakeroad_xilinx_ultrascale_plus"
@@ -38,7 +40,10 @@ def task_dsp_benchmarks():
             / filepath.with_suffix(".json").name,
             verilog_module_filepath=benchmark["filepath"],
             top_module_name=benchmark["module_name"],
-            verilog_module_out_signal=benchmark["output_signal"],
+            verilog_module_out_signal=(
+                benchmark["outputs"][0][0],
+                benchmark["outputs"][0][1],
+            ),
             name=f"{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
             initiation_interval=benchmark["initiation_interval"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
@@ -68,7 +73,7 @@ def task_dsp_benchmarks():
             ),
             clock_name=benchmark["clock_name"],
             initiation_interval=benchmark["initiation_interval"],
-            output_signal=benchmark["output_signal"],
+            output_signal=benchmark["outputs"][0][0],
         )
 
         lakeroad_lattice_ecp5_base_filepath = (
@@ -85,7 +90,10 @@ def task_dsp_benchmarks():
             / filepath.with_suffix(".json").name,
             verilog_module_filepath=benchmark["filepath"],
             top_module_name=benchmark["module_name"],
-            verilog_module_out_signal=benchmark["output_signal"],
+            verilog_module_out_signal=(
+                benchmark["outputs"][0][0],
+                benchmark["outputs"][0][1],
+            ),
             name=f"{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
             initiation_interval=benchmark["initiation_interval"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],

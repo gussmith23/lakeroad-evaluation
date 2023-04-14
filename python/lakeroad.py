@@ -25,7 +25,7 @@ def invoke_lakeroad(
     json_filepath: Union[str, Path],
     verilog_module_filepath: Optional[Union[str, Path]] = None,
     top_module_name: Optional[str] = None,
-    verilog_module_out_signal: Optional[str] = None,
+    verilog_module_out_signal: Optional[Tuple[str, int]] = None,
     initiation_interval: Optional[int] = None,
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
@@ -200,9 +200,21 @@ def invoke_lakeroad(
 
     #         return
 
-    cmd = [
-        "racket",
-        str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
+    lakeroad_invoke = (
+        [
+            "racket",
+            str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
+        ]
+        if False
+        else [
+            "raco",
+            "symtrace",
+            "--racket",
+            str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
+            "--",
+        ]
+    )
+    cmd = lakeroad_invoke + [
         "--out-format",
         "verilog",
         "--template",
@@ -224,7 +236,7 @@ def invoke_lakeroad(
             "--verilog-module-filepath",
             verilog_module_filepath,
             "--verilog-module-out-signal",
-            verilog_module_out_signal,
+            f"{verilog_module_out_signal[0]}:{verilog_module_out_signal[1]}",
             "--top-module-name",
             top_module_name,
         ]

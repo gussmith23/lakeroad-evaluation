@@ -40,6 +40,7 @@ int main(int argc, char** argv) {{
     // Parse inputs from command line.
     for (int i = 0; i < NUM_INPUTS; i++) {{
       assert(scanf("%" SCNu64, &inputs[i]) == 1);
+      printf("%d\n", inputs[i]);
     }}
 
 

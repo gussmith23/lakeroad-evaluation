@@ -2,29 +2,37 @@
 iterations: 3
 # List of files used from the DSP benchmarks.
 dsp_benchmarks:
-- # Filepath of DSP benchmark (relative to root of Lakeroad evaluation).
-  filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_mul_int8_x2_dsp.v
-  # Name of module to compile within the benchmark file.
-  module_name: cal_mult_int8_x2_dsp
-  # Output signal we're specifically looking to reproduce.
-  output_signal: ac
+# - # Filepath of DSP benchmark (relative to root of Lakeroad evaluation).
+#   filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_mul_int8_x2_dsp.v
+#   # Name of module to compile within the benchmark file.
+#   module_name: cal_mult_int8_x2_dsp
+#   # Output signal we're specifically looking to reproduce.
+#   output_signal: ac
+#   # Initiation interval of the design.
+#   initiation_interval: 4
+#   # Inputs to the design.
+#   inputs: [[a, 8], [b, 8], [c, 8]]
+#   # Clock name of design.
+#   clock_name: clk
+#   # Include directories for Verilator.
+#   verilator_include_dirs: ["lakeroad/Nitro-Parts-lib-Xilinx"]
+#   # Extra arguments to pass to Verilator.
+#   extra_verilator_args: [-Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+
+
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
+  module_name: cal_scale_mul
+  outputs: [[dout, 32]]
   # Initiation interval of the design.
-  initiation_interval: 2
+  initiation_interval: 3
   # Inputs to the design.
-  inputs: [[a, 8], [b, 8]] #, [c, 8]]
+  inputs: [[val, 16], [scale, 16]]
   # Clock name of design.
   clock_name: clk
   # Include directories for Verilator.
   verilator_include_dirs: ["lakeroad/Nitro-Parts-lib-Xilinx"]
   # Extra arguments to pass to Verilator.
   extra_verilator_args: [-Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-
-
-# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/adamgallas_fpga_accelerator_yolov3tiny_vivado_prj_source_cal_scale_mul.v
-#   module_name: cal_scale_mul
-#   output_signal: dout
-#   template: xilinx-ultrascale-plus-dsp48e2
-#   architecture: xilinx-ultrascale-plus
 
 # - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
 #   module_name: color_convert_macbkb_DSP48_0
