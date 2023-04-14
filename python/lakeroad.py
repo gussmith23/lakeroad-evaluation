@@ -205,7 +205,7 @@ def invoke_lakeroad(
             "racket",
             str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
         ]
-        if False
+        if True
         else [
             "raco",
             "symtrace",
