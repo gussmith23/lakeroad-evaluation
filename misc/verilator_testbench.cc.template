@@ -84,10 +84,11 @@ int main(int argc, char** argv) {{
       
       test_module->eval();
       ground_truth_module->eval();
-
-      printf("actual, expected = %d, %d\n", test_module->{output_signal}, ground_truth_module->{output_signal});
-      assert(test_module->{output_signal} == ground_truth_module->{output_signal});
+      
     }}
+
+  printf("actual, expected = %d, %d\n", test_module->{output_signal}, ground_truth_module->{output_signal});
+  assert(test_module->{output_signal} == ground_truth_module->{output_signal});
 
   delete ground_truth_module;
   delete test_module;
