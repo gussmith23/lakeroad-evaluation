@@ -32,7 +32,7 @@ dsp_benchmarks:
   # Include directories for Verilator.
   verilator_include_dirs: ["lakeroad/Nitro-Parts-lib-Xilinx"]
   # Extra arguments to pass to Verilator.
-  extra_verilator_args: [-Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  extra_verilator_args: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
 
 # - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
 #   module_name: color_convert_macbkb_DSP48_0
