@@ -4,6 +4,7 @@ import io
 import itertools
 import os
 from pathlib import Path
+import random
 import sys
 from typing import List, Optional, Tuple, Union
 import subprocess
@@ -90,9 +91,17 @@ def simulate_with_verilator(
 
     # Generate the input to the testbench.
     with testbench_inputs_filepath.open("w") as f:
-        all_inputs = list(
-            itertools.product(*[range(2**width) for _, width in module_inputs])
-        )
+        MAX_NUM_TESTS = 2**20
+        if 2**(sum([width for _, width in module_inputs])) > MAX_NUM_TESTS:
+            # Generate a random subset of the inputs.
+            def generate_one():
+                return [random.randint(0, 2**width - 1) for _, width in module_inputs]
+            all_inputs= [generate_one() for _ in range(MAX_NUM_TESTS)]
+        else:
+            # Do exhaustive testing.
+            all_inputs = list(
+                itertools.product(*[range(2**width) for _, width in module_inputs])
+            )
         print(f"{len(module_inputs)} {len(all_inputs)}", file=f)
         for one_set_of_inputs in all_inputs:
             print(" ".join([str(x) for x in one_set_of_inputs]), file=f)
