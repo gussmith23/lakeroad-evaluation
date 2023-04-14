@@ -2,6 +2,7 @@
 
 import io
 import itertools
+import logging
 import os
 from pathlib import Path
 import random
@@ -93,6 +94,7 @@ def simulate_with_verilator(
     with testbench_inputs_filepath.open("w") as f:
         MAX_NUM_TESTS = 2**20
         if 2**(sum([width for _, width in module_inputs])) > MAX_NUM_TESTS:
+            logging.warning("Exhaustive testing space is too large, doing random testing.")
             # Generate a random subset of the inputs.
             def generate_one():
                 return [random.randint(0, 2**width - 1) for _, width in module_inputs]
