@@ -19,7 +19,7 @@ def simulate_with_verilator(
     module_inputs: List[Tuple[str, int]],
     clock_name: str,
     initiation_interval: int,
-    testbench_c_filepath: Union[str, Path],
+    testbench_cc_filepath: Union[str, Path],
     testbench_exe_filepath: Union[str, Path],
     testbench_inputs_filepath: Union[str, Path],
     makefile_filepath: Union[str, Path],
@@ -64,7 +64,7 @@ def simulate_with_verilator(
             ground_truth_module_extra_verilator_args=" ".join(
                 [f"-I{dir}" for dir in include_dirs] + extra_args
             ),
-            testbench_filepath=testbench_c_filepath,
+            testbench_filepath=testbench_cc_filepath,
             verilator_include_dir=os.environ["VERILATOR_INCLUDE_DIR"],
         )
     )
@@ -88,7 +88,7 @@ def simulate_with_verilator(
         initiation_interval=initiation_interval,
         output_signal=output_signal,
     )
-    Path(testbench_c_filepath).write_text(testbench_source)
+    Path(testbench_cc_filepath).write_text(testbench_source)
 
     # Generate the input to the testbench.
     with testbench_inputs_filepath.open("w") as f:

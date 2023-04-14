@@ -62,8 +62,8 @@ def task_dsp_benchmarks():
             include_dirs=benchmark["verilator_include_dirs"],
             extra_args=benchmark["extra_verilator_args"],
             module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
-            testbench_c_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
-            / "testbench.c",
+            testbench_cc_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+            / "testbench.cc",
             testbench_exe_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
             / "testbench",
             testbench_inputs_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
