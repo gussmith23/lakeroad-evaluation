@@ -31,9 +31,10 @@ int main(int argc, char** argv) {{
 
   for (int test_case_i = 0; test_case_i < num_test_cases; test_case_i++) {{
     
-    VerilatedContext* contextp = new VerilatedContext;
-    Vtest_module* test_module = new Vtest_module{{contextp}};
-    Vground_truth_module* ground_truth_module = new Vground_truth_module{{contextp}};
+    VerilatedContext* contextp_test = new VerilatedContext;
+    VerilatedContext* contextp_ground_truth = new VerilatedContext;
+    Vtest_module* test_module = new Vtest_module{{contextp_test}};
+    Vground_truth_module* ground_truth_module = new Vground_truth_module{{contextp_ground_truth}};
     //contextp->commandArgs(argc, argv);
 
 
@@ -92,7 +93,8 @@ int main(int argc, char** argv) {{
 
   delete ground_truth_module;
   delete test_module;
-  delete contextp;
+  delete contextp_test;
+  delete contextp_ground_truth;
 
   }}
 
