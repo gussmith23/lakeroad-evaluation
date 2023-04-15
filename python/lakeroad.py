@@ -229,7 +229,12 @@ def invoke_lakeroad(
 
     if instruction != None and verilog_module_filepath == None:
         # If instruction is specified and an input Verilog file isn't.
-        cmd += ["--instruction", instruction]
+        cmd += [
+            "--instruction",
+            instruction,
+            "--verilog-module-out-signal",
+            f"{verilog_module_out_signal[0]}:{verilog_module_out_signal[1]}",
+        ]
     elif instruction == None and verilog_module_filepath != None:
         # Vice versa.
         cmd += [
@@ -372,6 +377,11 @@ def task_instruction_experiments(experiments_file: str):
                     ],
                     {
                         "json_filepath": json_filepath,
+                        ""
+                        "verilog_module_out_signal": (
+                            "out",
+                            experiment.instruction.bitwidth,
+                        ),
                     },
                 )
             ],
