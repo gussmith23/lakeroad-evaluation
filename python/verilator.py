@@ -82,7 +82,10 @@ def simulate_with_verilator(
             Path(obj_dir_dir) / "ground_truth_module" / "Vground_truth_module.h"
         ),
         set_module_inputs_body=" ".join(
-            [f"module->{name}=inputs[{i}];" for i, (name, _) in enumerate(module_inputs)]
+            [
+                f"module->{name}=inputs[{i}];"
+                for i, (name, _) in enumerate(module_inputs)
+            ]
         ),
         set_module_clock_body=f"module->{clock_name}=clock;",
         initiation_interval=initiation_interval,
@@ -93,12 +96,15 @@ def simulate_with_verilator(
     # Generate the input to the testbench.
     with testbench_inputs_filepath.open("w") as f:
         MAX_NUM_TESTS = 2**20
-        if 2**(sum([width for _, width in module_inputs])) > MAX_NUM_TESTS:
-            logging.warning("Exhaustive testing space is too large, doing random testing.")
+        if 2 ** (sum([width for _, width in module_inputs])) > MAX_NUM_TESTS:
+            logging.warning(
+                "Exhaustive testing space is too large, doing random testing."
+            )
             # Generate a random subset of the inputs.
             def generate_one():
                 return [random.randint(0, 2**width - 1) for _, width in module_inputs]
-            all_inputs= [generate_one() for _ in range(MAX_NUM_TESTS)]
+
+            all_inputs = [generate_one() for _ in range(MAX_NUM_TESTS)]
         else:
             # Do exhaustive testing.
             all_inputs = list(
