@@ -30,7 +30,7 @@ dsp_benchmarks:
   # Clock name of design.
   clock_name: clk
   # Include directories for Verilator.
-  verilator_include_dirs: ["lakeroad/Nitro-Parts-lib-Xilinx"]
+  verilator_include_dirs: ["lakeroad/verilator-unisims"]
   # Extra arguments to pass to Verilator.
   extra_verilator_args: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
 
