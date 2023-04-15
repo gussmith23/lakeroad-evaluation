@@ -113,7 +113,7 @@ def simulate_with_verilator(
             ["make", "--always-make", "-f", makefile_filepath],
             # You can easily debug if there's activity happening by commenting
             # out this line (though it may break the `except` block)
-            # capture_output=True,
+            capture_output=True,
             check=True,
         )
     except subprocess.CalledProcessError as e:
