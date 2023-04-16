@@ -26,3 +26,6 @@
 [submodule "fpga-dsp-mapping-benchmarks"]
 	path = fpga-dsp-mapping-benchmarks
 	url = git@github.com:uwsampl/fpga-dsp-mapping-benchmarks.git
+[submodule "lakeroad-private"]
+	path = lakeroad-private
+	url = git@github.com:uwsampl/lakeroad-private
