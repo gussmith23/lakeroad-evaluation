@@ -39,10 +39,12 @@ int main(int argc, char** argv) {{
 
 
     // Parse inputs from command line.
+    printf("inputs:");
     for (int i = 0; i < NUM_INPUTS; i++) {{
       assert(scanf("%" SCNu64, &inputs[i]) == 1);
-      printf("%d\n", inputs[i]);
+      printf(" %" PRIu64, inputs[i]);
     }}
+    printf("\n");
 
 
     // CLOCK CYCLE 1
@@ -88,7 +90,7 @@ int main(int argc, char** argv) {{
       
     }}
 
-  printf("actual, expected = %d, %d\n", test_module->{output_signal}, ground_truth_module->{output_signal});
+  printf("actual, expected = %lu, %lu\n", test_module->{output_signal}, ground_truth_module->{output_signal});
   assert(test_module->{output_signal} == ground_truth_module->{output_signal});
 
   delete ground_truth_module;
