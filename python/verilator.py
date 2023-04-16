@@ -141,7 +141,15 @@ def make_verilator_task(name: Optional[str] = None, **kwargs):
 
     task["actions"] = [(simulate_with_verilator, [], kwargs)]
 
-    task["targets"] = [kwargs["obj_dir_dir"]]
+    task["targets"] = [
+        kwargs["obj_dir_dir"],
+        kwargs["testbench_exe_filepath"],
+        kwargs["testbench_stdout_log_filepath"],
+        kwargs["testbench_stderr_log_filepath"],
+        kwargs["makefile_filepath"],
+        kwargs["testbench_inputs_filepath"],
+        kwargs["testbench_cc_filepath"],
+    ]
 
     task["file_dep"] = [
         kwargs["test_module_filepath"],
