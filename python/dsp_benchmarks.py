@@ -48,6 +48,7 @@ def task_dsp_benchmarks():
             initiation_interval=benchmark["initiation_interval"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
+            reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
         )
 
         yield verilator.make_verilator_task(
@@ -101,6 +102,7 @@ def task_dsp_benchmarks():
             initiation_interval=benchmark["initiation_interval"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
+            reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
         )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(

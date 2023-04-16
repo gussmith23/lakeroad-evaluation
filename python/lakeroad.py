@@ -29,6 +29,7 @@ def invoke_lakeroad(
     initiation_interval: Optional[int] = None,
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
+    reset_name: Optional[str] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -260,6 +261,9 @@ def invoke_lakeroad(
     if clock_name:
         cmd += ["--clock-name", clock_name]
 
+    if reset_name:
+        cmd += ["--reset-name", reset_name]
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
@@ -300,6 +304,7 @@ def make_lakeroad_task(
     initiation_interval: Optional[int] = None,
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
+    reset_name: Optional[str] = None,
 ):
     task = {}
 
@@ -324,6 +329,7 @@ def make_lakeroad_task(
                 "initiation_interval": initiation_interval,
                 "inputs": inputs,
                 "clock_name": clock_name,
+                "reset_name": reset_name,
             },
         )
     ]
