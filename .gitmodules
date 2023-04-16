@@ -11,18 +11,6 @@
 [submodule "yosys"]
 	path = yosys
 	url = git@github.com:uwsampl/yosys
-[submodule "dsp-annotated-benchmarks/submodules/muzicarski_bachelor"]
-	path = dsp-annotated-benchmarks/submodules/muzicarski_bachelor
-	url = https://github.com/muzicarski/bachelor
-[submodule "dsp-annotated-benchmarks/submodules/adamgallas_fpga_accelerator_yolov3tiny"]
-	path = dsp-annotated-benchmarks/submodules/adamgallas_fpga_accelerator_yolov3tiny
-	url = https://github.com/adamgallas/fpga_accelerator_yolov3tiny
-[submodule "dsp-annotated-benchmarks/submodules/G3_FPGA_Object_Classification_Accelerator"]
-	path = dsp-annotated-benchmarks/submodules/seyed1mehdi_G3_FPGA_Object_Classification_Accelerator
-	url = https://github.com/seyed1mehdi/G3_FPGA_Object_Classification_Accelerator
-[submodule "dsp-annotated-benchmarks/submodules/chhsiao121_HLS__final_gesture"]
-	path = dsp-annotated-benchmarks/submodules/chhsiao121_HLS__final_gesture
-	url = https://github.com/chhsiao121/HLS__final_gesture
 [submodule "fpga-dsp-mapping-benchmarks"]
 	path = fpga-dsp-mapping-benchmarks
 	url = git@github.com:uwsampl/fpga-dsp-mapping-benchmarks.git
