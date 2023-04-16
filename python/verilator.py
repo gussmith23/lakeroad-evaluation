@@ -22,7 +22,8 @@ def simulate_with_verilator(
     testbench_cc_filepath: Union[str, Path],
     testbench_exe_filepath: Union[str, Path],
     testbench_inputs_filepath: Union[str, Path],
-    testbench_log_filepath: Union[str, Path],
+    testbench_stdout_log_filepath: Union[str, Path],
+    testbench_stderr_log_filepath: Union[str, Path],
     makefile_filepath: Union[str, Path],
     output_signal: str,
     include_dirs: List[Union[str, Path]] = [],
@@ -116,20 +117,16 @@ def simulate_with_verilator(
         for one_set_of_inputs in all_inputs:
             print(" ".join([str(x) for x in one_set_of_inputs]), file=f)
 
-    try:
-        with testbench_log_filepath.open("w") as f:
-            subprocess.run(
-                ["make", "--always-make", "-f", makefile_filepath],
-                # Throw exception if the command fails
-                check=True,
-                # Send stdout and stderr to a file
-                capture_output=False,
-                stderr=subprocess.STDOUT,
-                stdout=f,
-            )
-    except subprocess.CalledProcessError as e:
-        print(e.stderr.decode("utf-8"), file=sys.stderr)
-        raise e
+    proc = subprocess.run(
+        ["make", "--always-make", "-f", makefile_filepath], capture_output=True
+    )
+    Path(testbench_stdout_log_filepath).write_bytes(proc.stdout)
+    Path(testbench_stderr_log_filepath).write_bytes(proc.stderr)
+    if proc.returncode != 0:
+        print(proc.stderr.decode("utf-8"), file=sys.stderr)
+
+    # Error if failed.
+    proc.check_returncode()
 
 
 def make_verilator_task(name: Optional[str] = None, **kwargs):

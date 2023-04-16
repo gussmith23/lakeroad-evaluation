@@ -69,8 +69,11 @@ def task_dsp_benchmarks():
             / "testbench",
             testbench_inputs_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
             / "testbench_inputs.txt",
-            testbench_log_filepath=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.log"
+            testbench_stdout_log_filepath=(
+                lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stdout"
+            ),
+            testbench_stderr_log_filepath=(
+                lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stderr"
             ),
             makefile_filepath=(
                 lakeroad_xilinx_ultrascale_plus_base_filepath / "Makefile"
