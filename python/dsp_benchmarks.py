@@ -60,8 +60,8 @@ def task_dsp_benchmarks():
                 lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name
             ),
             ground_truth_module_filepath=benchmark["filepath"],
-            include_dirs=benchmark["verilator_include_dirs"],
-            extra_args=benchmark["extra_verilator_args"],
+            include_dirs=benchmark["verilator_include_dirs"]["xilinx_ultrascale_plus"],
+            extra_args=benchmark["extra_verilator_args"]["xilinx_ultrascale_plus"],
             module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             testbench_cc_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
             / "testbench.cc",
@@ -113,8 +113,8 @@ def task_dsp_benchmarks():
             obj_dir_dir=(lakeroad_lattice_ecp5_base_filepath / "verilator_obj_dirs"),
             test_module_filepath=(lakeroad_lattice_ecp5_base_filepath / filepath.name),
             ground_truth_module_filepath=benchmark["filepath"],
-            include_dirs=benchmark["verilator_include_dirs"],
-            extra_args=benchmark["extra_verilator_args"],
+            include_dirs=benchmark["verilator_include_dirs"]["lattice_ecp5"],
+            extra_args=benchmark["extra_verilator_args"]["lattice_ecp5"],
             module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             testbench_cc_filepath=lakeroad_lattice_ecp5_base_filepath / "testbench.cc",
             testbench_exe_filepath=lakeroad_lattice_ecp5_base_filepath / "testbench",

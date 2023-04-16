@@ -30,9 +30,13 @@ dsp_benchmarks:
   # Clock name of design.
   clock_name: clk
   # Include directories for Verilator.
-  verilator_include_dirs: ["lakeroad/verilator-unisims"]
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
   # Extra arguments to pass to Verilator.
-  extra_verilator_args: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  extra_verilator_args: 
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
 
 - filepath: fpga-dsp-mapping-benchmarks/benchmarks/lattice_ecp5_sysdsp_manual_2_stage_mult.v
   module_name: mult
@@ -41,8 +45,12 @@ dsp_benchmarks:
   inputs: [[dataax, 16], [dataay, 16]]
   clock_name: clk
   reset_name: reset
-  verilator_include_dirs: ["lakeroad-private/lattice_ecp5/"]
-  extra_verilator_args: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+  extra_verilator_args: 
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
 
 # - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
 #   module_name: color_convert_macbkb_DSP48_0
