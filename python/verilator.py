@@ -22,6 +22,7 @@ def simulate_with_verilator(
     testbench_cc_filepath: Union[str, Path],
     testbench_exe_filepath: Union[str, Path],
     testbench_inputs_filepath: Union[str, Path],
+    testbench_log_filepath: Union[str, Path],
     makefile_filepath: Union[str, Path],
     output_signal: str,
     include_dirs: List[Union[str, Path]] = [],
@@ -39,6 +40,7 @@ def simulate_with_verilator(
         assume inputs are the same between the two modules.
       testbench_{c,exe}_output_filepath: Filepath to write the testbench
         code/executable to.
+      testbench_log_filepath: Filepath to write the testbench output to.
     """
 
     # Instantiate Makefile template for our code.
@@ -115,13 +117,16 @@ def simulate_with_verilator(
             print(" ".join([str(x) for x in one_set_of_inputs]), file=f)
 
     try:
-        subprocess.run(
-            ["make", "--always-make", "-f", makefile_filepath],
-            # You can easily debug if there's activity happening by commenting
-            # out this line (though it may break the `except` block)
-            capture_output=True,
-            check=True,
-        )
+        with testbench_log_filepath.open("w") as f:
+            subprocess.run(
+                ["make", "--always-make", "-f", makefile_filepath],
+                # Throw exception if the command fails
+                check=True,
+                # Send stdout and stderr to a file
+                capture_output=False,
+                stderr=subprocess.STDOUT,
+                stdout=f,
+            )
     except subprocess.CalledProcessError as e:
         print(e.stderr.decode("utf-8"), file=sys.stderr)
         raise e
