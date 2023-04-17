@@ -30,6 +30,8 @@ def invoke_lakeroad(
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
+    timeout: Optional[int] = None,
+    expect_fail: bool = False,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -52,6 +54,8 @@ def invoke_lakeroad(
         synthesis. A list of tuples, (<name>, <bitwidth>).
       initiation_interval: The initiation interval of the module, for sequential
         synthesis.
+      timeout: Timeout arg to pass to Lakeroad.
+      expect_fail: If True, error if Lakeroad doesn't fail.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
     addition isn't implemented on SOFA, so we could allow users to attempt to
@@ -264,20 +268,27 @@ def invoke_lakeroad(
     if reset_name:
         cmd += ["--reset-name", reset_name]
 
+    if timeout:
+        cmd += ["--timeout", str(timeout)]
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
-    try:
-        start_time = time()
-        subprocess.run(
-            cmd,
-            check=True,
-        )
-        end_time = time()
-    except subprocess.CalledProcessError as e:
-        logging.error(" " + " ".join(map(str, cmd)))
-        raise e
+    start_time = time()
+    proc = subprocess.run(
+        cmd,
+    )
+    end_time = time()
+
+    if expect_fail:
+        assert proc.returncode != 0, "Expected Lakeroad to fail, but it didn't!"
+        # Exit early.
+        return
+    else:
+        if proc.returncode != 0:
+            logging.error(" " + " ".join(map(str, cmd)))
+        proc.check_returncode()
 
     with open(time_filepath, "w") as f:
         print(f"{end_time-start_time}s", file=f)
@@ -305,6 +316,8 @@ def make_lakeroad_task(
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
+    timeout: Optional[int] = None,
+    expect_fail: bool = False,
 ):
     task = {}
 
@@ -330,6 +343,8 @@ def make_lakeroad_task(
                 "inputs": inputs,
                 "clock_name": clock_name,
                 "reset_name": reset_name,
+                "timeout": timeout,
+                "expect_fail": expect_fail,
             },
         )
     ]

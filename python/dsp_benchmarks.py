@@ -158,31 +158,47 @@ def task_dsp_benchmarks():
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
+            timeout=(
+                benchmark["timeout"]["intel"]
+                if ("timeout" in benchmark and "intel" in benchmark["timeout"])
+                else None
+            ),
+            expect_fail=(
+                True
+                if ("expect_fail" in benchmark and "intel" in benchmark["expect_fail"])
+                else False
+            ),
         )
-        yield verilator.make_verilator_task(
-            name=f"simulate_{filepath.stem}_lakeroad_intel_iter{iter}",
-            obj_dir_dir=(lakeroad_intel_base_filepath / "verilator_obj_dirs"),
-            test_module_filepath=(lakeroad_intel_base_filepath / filepath.name),
-            ground_truth_module_filepath=benchmark["filepath"],
-            include_dirs=benchmark["verilator_include_dirs"]["intel"],
-            extra_args=benchmark["extra_verilator_args"]["intel"],
-            module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
-            testbench_cc_filepath=lakeroad_intel_base_filepath / "testbench.cc",
-            testbench_exe_filepath=lakeroad_intel_base_filepath / "testbench",
-            testbench_inputs_filepath=(
-                lakeroad_intel_base_filepath / "testbench_inputs.txt"
-            ),
-            testbench_stdout_log_filepath=(
-                lakeroad_intel_base_filepath / "testbench.stdout"
-            ),
-            testbench_stderr_log_filepath=(
-                lakeroad_intel_base_filepath / "testbench.stderr"
-            ),
-            makefile_filepath=lakeroad_intel_base_filepath / "Makefile",
-            clock_name=benchmark["clock_name"],
-            initiation_interval=benchmark["initiation_interval"],
-            output_signal=benchmark["outputs"][0][0],
-        )
+        # Only run Verilator if we don't expect failure on this architecture.
+        if not (
+            True
+            if ("expect_fail" in benchmark and "intel" in benchmark["expect_fail"])
+            else False
+        ):
+            yield verilator.make_verilator_task(
+                name=f"simulate_{filepath.stem}_lakeroad_intel_iter{iter}",
+                obj_dir_dir=(lakeroad_intel_base_filepath / "verilator_obj_dirs"),
+                test_module_filepath=(lakeroad_intel_base_filepath / filepath.name),
+                ground_truth_module_filepath=benchmark["filepath"],
+                include_dirs=benchmark["verilator_include_dirs"]["intel"],
+                extra_args=benchmark["extra_verilator_args"]["intel"],
+                module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+                testbench_cc_filepath=lakeroad_intel_base_filepath / "testbench.cc",
+                testbench_exe_filepath=lakeroad_intel_base_filepath / "testbench",
+                testbench_inputs_filepath=(
+                    lakeroad_intel_base_filepath / "testbench_inputs.txt"
+                ),
+                testbench_stdout_log_filepath=(
+                    lakeroad_intel_base_filepath / "testbench.stdout"
+                ),
+                testbench_stderr_log_filepath=(
+                    lakeroad_intel_base_filepath / "testbench.stderr"
+                ),
+                makefile_filepath=lakeroad_intel_base_filepath / "Makefile",
+                clock_name=benchmark["clock_name"],
+                initiation_interval=benchmark["initiation_interval"],
+                output_signal=benchmark["outputs"][0][0],
+            )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
             input_filepath=filepath,
