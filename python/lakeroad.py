@@ -304,6 +304,7 @@ def invoke_lakeroad(
 def collect_lakeroad(
     iteration: int,
     identifier: str,
+    architecture: str,
     collected_data_output_filepath: Union[str, Path],
     time_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
@@ -324,6 +325,12 @@ def collect_lakeroad(
 
     assert "identifier" not in out_data
     out_data["identifier"] = identifier
+
+    assert "tool" not in out_data
+    out_data["tool"] = "lakeroad"
+
+    assert "architecture" not in out_data
+    out_data["architecture"] = architecture
 
     with open(collected_data_output_filepath, "w") as f:
         json.dump(out_data, f)
@@ -390,6 +397,7 @@ def make_lakeroad_task(
                     "collected_data_output_filepath": collected_data_output_filepath,
                     "time_filepath": time_filepath,
                     "json_filepath": json_filepath,
+                    "architecture": architecture,
                 },
             ),
         ]
