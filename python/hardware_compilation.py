@@ -805,7 +805,11 @@ def lattice_ecp5_diamond_synthesis(
         [
             "yosys",
             "-p",
-            f"read_verilog -sv {src_filepath}; write_verilog -noattr {sv2v_result_filepath}",
+            # We need proc, otherwise we get things like
+            # always @ (posedge clk) r <= ...
+            # always @ (posedge rst) r <= ...
+            # Which is an error in most tools.
+            f"read_verilog -sv {src_filepath}; proc; write_verilog -noattr {sv2v_result_filepath}",
         ],
         capture_output=True,
         check=True,
