@@ -1,9 +1,12 @@
+import logging
+import os
 from pathlib import Path
 from lakeroad import make_lakeroad_task
 import utils
 import itertools
 import hardware_compilation
 import verilator
+import quartus
 
 
 def task_dsp_benchmarks():
@@ -233,3 +236,32 @@ def task_dsp_benchmarks():
             module_name=benchmark["module_name"],
             name=f"{filepath.stem}_diamond_iter{iter}",
         )
+
+        if manifest["use_quartus"]:
+            yield quartus.make_quartus_task(
+                name=f"{filepath.stem}_quartus_iter{iter}",
+                top_module_name=benchmark["module_name"],
+                # Note that we need to use the absolute path here.
+                source_input_filepath=(utils.lakeroad_evaluation_dir() / filepath),
+                summary_output_filepath=(
+                    base_filepath
+                    / "quartus"
+                    / f"iter{iter}"
+                    / filepath.stem
+                    / "quartus_map_summary.txt"
+                ),
+                json_output_filepath=(
+                    base_filepath
+                    / "quartus"
+                    / f"iter{iter}"
+                    / filepath.stem
+                    / "quartus_map_summary.json"
+                ),
+                time_output_filepath=(
+                    base_filepath
+                    / "quartus"
+                    / f"iter{iter}"
+                    / filepath.stem
+                    / "quartus.time"
+                ),
+            )

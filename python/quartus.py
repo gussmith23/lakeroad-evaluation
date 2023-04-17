@@ -7,6 +7,7 @@ import re
 import subprocess
 import tempfile
 from typing import Optional, Union
+import time
 
 
 def run_quartus(
@@ -14,6 +15,7 @@ def run_quartus(
     source_input_filepath: Union[str, Path],
     summary_output_filepath: Union[str, Path],
     json_output_filepath: Union[str, Path],
+    time_output_filepath: Union[str, Path],
 ):
     """Run Quartus on a design, generate a summary report.
 
@@ -22,12 +24,15 @@ def run_quartus(
         source_input_filepath (Union[str, Path]): Verilog source file.
         summary_output_filepath (Union[str, Path]): Quartus summary file.
         json_output_filepath (Union[str, Path]): Summary file, parsed into JSON.
+        time_output_filepath (Union[str, Path]): Time file.
     """
     summary_output_filepath = Path(summary_output_filepath)
     json_output_filepath = Path(json_output_filepath)
+    time_output_filepath = Path(time_output_filepath)
 
     with tempfile.TemporaryDirectory() as temp_dir_str:
         temp_dir = Path(temp_dir_str)
+        start = time.time()
         subprocess.run(
             args=[
                 utils.quartus_bin_dir() / "quartus_map",
@@ -42,6 +47,7 @@ def run_quartus(
             check=True,
             capture_output=True,
         )
+        end = time.time()
 
         # Copy summary file over.
         summary_output_filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -49,15 +55,20 @@ def run_quartus(
             (temp_dir / f"{top_module_name}.map.summary").read_bytes()
         )
 
-        # Write out JSON file with results.
-        json_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-        with open(json_output_filepath, "w") as f:
-            json.dump(
-                dataclasses.asdict(
-                    parse_quartus_map_summary(summary_output_filepath.read_text())
-                ),
-                f,
-            )
+    # Write time file.
+    time_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(time_output_filepath, "w") as f:
+        print(f"{end-start}s", file=f)
+
+    # Write out JSON file with results.
+    json_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(json_output_filepath, "w") as f:
+        json.dump(
+            dataclasses.asdict(
+                parse_quartus_map_summary(summary_output_filepath.read_text())
+            ),
+            f,
+        )
 
 
 def make_quartus_task(name: Optional[str], **kwargs):
