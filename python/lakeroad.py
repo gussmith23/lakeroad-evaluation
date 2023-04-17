@@ -301,7 +301,38 @@ def invoke_lakeroad(
     )
 
 
+def collect_lakeroad(
+    iteration: int,
+    identifier: str,
+    collected_data_output_filepath: Union[str, Path],
+    time_filepath: Union[str, Path],
+    json_filepath: Union[str, Path],
+):
+    with open(time_filepath) as f:
+        time = float(f.read().removesuffix("s\n"))
+
+    with open(json_filepath) as f:
+        resources = json.load(f)
+
+    out_data = resources
+
+    assert "time_s" not in out_data
+    out_data["time_s"] = time
+
+    assert "iteration" not in out_data
+    out_data["iteration"] = iteration
+
+    assert "identifier" not in out_data
+    out_data["identifier"] = identifier
+
+    with open(collected_data_output_filepath, "w") as f:
+        json.dump(out_data, f)
+
+
 def make_lakeroad_task(
+    iteration: int,
+    identifier: str,
+    collected_data_output_filepath: Union[str, Path],
     template: str,
     out_module_name: str,
     out_filepath: Union[str, Path],
@@ -348,12 +379,31 @@ def make_lakeroad_task(
             },
         )
     ]
+    if not expect_fail:
+        task["actions"] += [
+            (
+                collect_lakeroad,
+                [],
+                {
+                    "iteration": iteration,
+                    "identifier": identifier,
+                    "collected_data_output_filepath": collected_data_output_filepath,
+                    "time_filepath": time_filepath,
+                    "json_filepath": json_filepath,
+                },
+            ),
+        ]
 
     task["file_dep"] = []
     if verilog_module_filepath:
         task["file_dep"].append(verilog_module_filepath)
 
-    task["targets"] = [out_filepath, time_filepath, json_filepath]
+    task["targets"] = [
+        out_filepath,
+        time_filepath,
+        json_filepath,
+        collected_data_output_filepath,
+    ]
 
     return task
 

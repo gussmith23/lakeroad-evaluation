@@ -33,6 +33,13 @@ def task_dsp_benchmarks():
             / filepath.stem
         )
         yield make_lakeroad_task(
+            iteration=iter,
+            identifier=filepath.stem,
+            collected_data_output_filepath=(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
+            ),
             template="dsp",
             out_module_name="out",
             out_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name,
@@ -90,6 +97,13 @@ def task_dsp_benchmarks():
             base_filepath / "lakeroad_lattice_ecp5" / f"iter{iter}" / filepath.stem
         )
         yield make_lakeroad_task(
+            iteration=iter,
+            identifier=filepath.stem,
+            collected_data_output_filepath=(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_lattice_ecp5_{filepath.stem}_iter{iter}.json"
+            ),
             template="dsp",
             out_module_name="out",
             out_filepath=lakeroad_lattice_ecp5_base_filepath / filepath.name,
@@ -140,6 +154,13 @@ def task_dsp_benchmarks():
             base_filepath / "lakeroad_intel" / f"iter{iter}" / filepath.stem
         )
         yield make_lakeroad_task(
+            iteration=iter,
+            identifier=filepath.stem,
+            collected_data_output_filepath=(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_intel_{filepath.stem}_iter{iter}.json"
+            ),
             template="dsp",
             out_module_name="out",
             out_filepath=lakeroad_intel_base_filepath / filepath.name,
