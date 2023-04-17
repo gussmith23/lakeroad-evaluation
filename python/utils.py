@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from typing import Dict
+from typing import Dict, Optional
 import yaml
 
 
@@ -63,3 +63,9 @@ def get_manifest() -> Dict:
         manifest["iterations"] = int(os.environ["LRE_ITERATIONS"])
 
     return manifest
+
+def quartus_bin_dir() -> Optional[Path]:
+    if "QUARTUS_BIN_DIR" in os.environ:
+        return Path(os.environ["QUARTUS_BIN_DIR"])
+    else:
+        return None
