@@ -1,12 +1,25 @@
+import json
 import logging
 import os
 from pathlib import Path
+from typing import List, Union
+
+import pandas
 from lakeroad import make_lakeroad_task
 import utils
 import itertools
 import hardware_compilation
 import verilator
 import quartus
+
+
+def _collect_dsp_benchmarks(
+    filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
+):
+    Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
+    pandas.DataFrame.from_records(map(lambda f: json.load(open(f)), filepaths)).to_csv(
+        output_filepath
+    )
 
 
 def task_dsp_benchmarks():
@@ -20,6 +33,9 @@ def task_dsp_benchmarks():
 
     # Base filepath for all DSP benchmark run outputs.
     base_filepath = utils.output_dir() / "dsp_benchmarks"
+
+    # Filepaths of final output data, in JSON format.
+    collected_data_output_filepaths = []
 
     for iter, benchmark in itertools.product(range(iterations), dsp_benchmarks):
         filepath = Path(benchmark["filepath"])
@@ -59,6 +75,11 @@ def task_dsp_benchmarks():
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
+        )
+        collected_data_output_filepaths.append(
+            base_filepath
+            / "all_results"
+            / f"lakeroad_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
         )
 
         yield verilator.make_verilator_task(
@@ -123,6 +144,11 @@ def task_dsp_benchmarks():
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
+        )
+        collected_data_output_filepaths.append(
+            base_filepath
+            / "all_results"
+            / f"lakeroad_lattice_ecp5_{filepath.stem}_iter{iter}.json"
         )
 
         yield verilator.make_verilator_task(
@@ -193,12 +219,18 @@ def task_dsp_benchmarks():
                 else False
             ),
         )
-        # Only run Verilator if we don't expect failure on this architecture.
         if not (
             True
             if ("expect_fail" in benchmark and "intel" in benchmark["expect_fail"])
             else False
         ):
+            # Only collect data if we don't expect failure.
+            collected_data_output_filepaths.append(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_intel_{filepath.stem}_iter{iter}.json"
+            )
+            # Only run Verilator if we don't expect failure on this architecture.
             yield verilator.make_verilator_task(
                 name=f"simulate_{filepath.stem}_lakeroad_intel_iter{iter}",
                 obj_dir_dir=(lakeroad_intel_base_filepath / "verilator_obj_dirs"),
@@ -242,6 +274,11 @@ def task_dsp_benchmarks():
             module_name=benchmark["module_name"],
             name=f"{filepath.stem}_yosys_xilinx_ultrascale_plus_iter{iter}",
         )
+        collected_data_output_filepaths.append(
+            base_filepath
+            / "all_results"
+            / f"yosys_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
+        )
 
         yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
             collect_args={
@@ -261,6 +298,11 @@ def task_dsp_benchmarks():
             module_name=benchmark["module_name"],
             name=f"{filepath.stem}_yosys_lattice_ecp5_iter{iter}",
         )
+        collected_data_output_filepaths.append(
+            base_filepath
+            / "all_results"
+            / f"yosys_lattice_ecp5_{filepath.stem}_iter{iter}.json"
+        )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             collect_args={
@@ -277,6 +319,9 @@ def task_dsp_benchmarks():
             module_name=benchmark["module_name"],
             name=f"{filepath.stem}_vivado_iter{iter}",
         )
+        collected_data_output_filepaths.append(
+            base_filepath / "all_results" / f"vivado_{filepath.stem}_iter{iter}.json"
+        )
 
         yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
             collect_args={
@@ -292,6 +337,9 @@ def task_dsp_benchmarks():
             output_dirpath=base_filepath / "diamond" / f"iter{iter}" / filepath.stem,
             module_name=benchmark["module_name"],
             name=f"{filepath.stem}_diamond_iter{iter}",
+        )
+        collected_data_output_filepaths.append(
+            base_filepath / "all_results" / f"diamond_{filepath.stem}_iter{iter}.json"
         )
 
         if manifest["use_quartus"]:
@@ -329,3 +377,26 @@ def task_dsp_benchmarks():
                     / "quartus.time"
                 ),
             )
+            collected_data_output_filepaths.append(
+                base_filepath
+                / "all_results"
+                / f"quartus_{filepath.stem}_iter{iter}.json"
+            )
+
+    # Final collection task.
+    csv_output = utils.output_dir() / "collected_data" / "dsp_benchmark_results.csv"
+    yield {
+        "name": "collect",
+        "file_dep": collected_data_output_filepaths,
+        "targets": [csv_output],
+        "actions": [
+            (
+                _collect_dsp_benchmarks,
+                [],
+                {
+                    "filepaths": collected_data_output_filepaths,
+                    "output_filepath": csv_output,
+                },
+            )
+        ],
+    }
