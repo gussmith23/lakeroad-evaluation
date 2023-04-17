@@ -239,7 +239,14 @@ def task_dsp_benchmarks():
 
         if manifest["use_quartus"]:
             yield quartus.make_quartus_task(
-                name=f"{filepath.stem}_quartus_iter{iter}",
+                task_name=f"{filepath.stem}_quartus_iter{iter}",
+                identifier=f"{filepath.stem}",
+                collected_data_output_filepath=(
+                    base_filepath
+                    / "all_results"
+                    / f"quartus_{filepath.stem}_iter{iter}.json"
+                ),
+                iteration=iter,
                 top_module_name=benchmark["module_name"],
                 # Note that we need to use the absolute path here.
                 source_input_filepath=(utils.lakeroad_evaluation_dir() / filepath),

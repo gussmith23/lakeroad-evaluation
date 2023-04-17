@@ -6,7 +6,7 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
-from typing import Optional, Union
+from typing import Dict, List, Optional, Union
 import time
 
 
@@ -71,23 +71,100 @@ def run_quartus(
         )
 
 
-def make_quartus_task(name: Optional[str], **kwargs):
+def collect_quartus(
+    identifier: str,
+    iteration: int,
+    time_input_filepath: Union[str, Path],
+    json_input_filepath: Union[str, Path],
+    collected_data_output_filepath: Union[str, Path],
+):
+    """_summary_
+
+    Args:
+        identifier (str): Identifier for the module being compiled.
+        iteration (int): _description_
+        time_input_filepath (Union[str, Path]): _description_
+        json_input_filepath (Union[str, Path]): _description_
+        collected_data_output_filepath (Union[str, Path]): _description_
+    """
+    with open(json_input_filepath, "r") as f:
+        data = json.load(f)
+    with open(time_input_filepath, "r") as f:
+        time = float(f.read().removesuffix("s\n"))
+
+    assert "time_s" not in data
+    data["time_s"] = time
+
+    assert "iteration" not in data
+    data["iteration"] = iteration
+
+    assert "tool" not in data
+    data["tool"] = "quartus"
+
+    assert "architecture" not in data
+    data["architecture"] = "intel"
+
+    assert "identifier" not in data
+    data["identifier"] = identifier
+
+    Path(collected_data_output_filepath).parent.mkdir(parents=True, exist_ok=True)
+    with open(collected_data_output_filepath, "w") as f:
+        json.dump(data, f)
+
+
+def make_quartus_task(
+    identifier: str,
+    top_module_name: str,
+    source_input_filepath: Union[str, Path],
+    summary_output_filepath: Union[str, Path],
+    json_output_filepath: Union[str, Path],
+    time_output_filepath: Union[str, Path],
+    collected_data_output_filepath: Union[str, Path],
+    iteration: int,
+    task_name: Optional[str] = None,
+) -> List:
+    """Generate tasks for Quartus.
+
+    See documentation for `run_quartus` and `collect_quartus` for more details."""
 
     task = {}
 
-    if name is not None:
-        task["name"] = name
+    if task_name is not None:
+        task["name"] = task_name
 
-    task["actions"] = [(run_quartus, [], kwargs)]
+    task["actions"] = [
+        (
+            run_quartus,
+            [],
+            {
+                "top_module_name": top_module_name,
+                "source_input_filepath": source_input_filepath,
+                "summary_output_filepath": summary_output_filepath,
+                "json_output_filepath": json_output_filepath,
+                "time_output_filepath": time_output_filepath,
+            },
+        ),
+        (
+            collect_quartus,
+            [],
+            {
+                "iteration": iteration,
+                "json_input_filepath": json_output_filepath,
+                "time_input_filepath": time_output_filepath,
+                "collected_data_output_filepath": collected_data_output_filepath,
+                "identifier": identifier,
+            },
+        ),
+    ]
 
     task["targets"] = [
-        kwargs["summary_output_filepath"],
-        kwargs["json_output_filepath"],
+        summary_output_filepath,
+        json_output_filepath,
+        time_output_filepath,
+        collected_data_output_filepath,
     ]
 
-    task["file_dep"] = [
-        kwargs["source_input_filepath"],
-    ]
+    task["file_dep"] = [source_input_filepath]
 
     return task
 
