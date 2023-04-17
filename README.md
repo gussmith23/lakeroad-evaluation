@@ -51,6 +51,11 @@ We give some additional detail here.
   TODO(@gussmith23): Figure out how to use Python packaging, so we could install
     the utilities as a package within a virtual environment.
 
+## Environment Variables to Set
+
+- `PYTHONPATH`
+- TODO(@gussmith23): document Quartus, Diamond, Vivado
+
 ## Output Location
 
 The location of the experiment output
