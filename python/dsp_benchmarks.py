@@ -225,6 +225,15 @@ def task_dsp_benchmarks():
             )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            collect_args={
+                "collected_data_filepath": (
+                    base_filepath
+                    / "all_results"
+                    / f"yosys_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
+                ),
+                "iteration": iter,
+                "identifier": filepath.stem,
+            },
             input_filepath=filepath,
             output_dirpath=base_filepath
             / "yosys_xilinx_ultrascale_plus"
@@ -235,6 +244,15 @@ def task_dsp_benchmarks():
         )
 
         yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
+            collect_args={
+                "collected_data_filepath": (
+                    base_filepath
+                    / "all_results"
+                    / f"yosys_lattice_ecp5_{filepath.stem}_iter{iter}.json"
+                ),
+                "iteration": iter,
+                "identifier": filepath.stem,
+            },
             input_filepath=filepath,
             output_dirpath=base_filepath
             / "yosys_lattice_ecp5"
@@ -245,6 +263,15 @@ def task_dsp_benchmarks():
         )
 
         yield hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            collect_args={
+                "collected_data_filepath": (
+                    base_filepath
+                    / "all_results"
+                    / f"vivado_{filepath.stem}_iter{iter}.json"
+                ),
+                "iteration": iter,
+                "identifier": filepath.stem,
+            },
             input_filepath=filepath,
             output_dirpath=base_filepath / "vivado" / f"iter{iter}" / filepath.stem,
             module_name=benchmark["module_name"],
@@ -252,6 +279,15 @@ def task_dsp_benchmarks():
         )
 
         yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
+            collect_args={
+                "collected_data_filepath": (
+                    base_filepath
+                    / "all_results"
+                    / f"diamond_{filepath.stem}_iter{iter}.json"
+                ),
+                "iteration": iter,
+                "identifier": filepath.stem,
+            },
             input_filepath=filepath,
             output_dirpath=base_filepath / "diamond" / f"iter{iter}" / filepath.stem,
             module_name=benchmark["module_name"],
