@@ -1,9 +1,7 @@
 import json
-import logging
-import os
 from pathlib import Path
 from typing import List, Union
-
+import numpy as np
 import pandas
 from lakeroad import make_lakeroad_task
 import utils
@@ -13,13 +11,137 @@ import verilator
 import quartus
 
 
-def _collect_dsp_benchmarks(
+def _collect_dsp_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
+    """Collect DSP benchmark results into a file, but do not process them."""
     Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
     pandas.DataFrame.from_records(map(lambda f: json.load(open(f)), filepaths)).to_csv(
-        output_filepath
+        output_filepath, index=False
     )
+
+
+def _clean_dsp_benchmark_data(
+    in_filepath: Union[str, Path],
+    out_filepath: Union[str, Path],
+):
+    """Process DSP benchmark results.
+
+    - Collapse multiple iterations into one.
+    - Remove unnecessary columns."""
+
+    df = pandas.read_csv(in_filepath)
+
+    # Make archirtecture consistent.
+    df.architecture.replace(
+        "xilinx-ultrascale-plus", "xilinx_ultrascale_plus", inplace=True
+    )
+    df.architecture.replace("lattice-ecp5", "lattice_ecp5", inplace=True)
+
+    def _assert_one(df: pandas.Series):
+        assert type(df) == pandas.Series
+        assert df.count() == 1, f"Expected only one value in {df}"
+        return df.dropna().unique()[0]
+
+    # Combine LUT columns.
+    df["luts"] = (
+        df["clb_luts"].fillna(0) + df["num_LUT4"].fillna(0) + df["LUT2"].fillna(0)
+    )
+
+    # Combine carry columns.
+    df["carries"] = df["carry8s"].fillna(0) + df["CARRY4"].fillna(0)
+
+    # Combine mux columns.
+    df["muxes"] = (
+        df["num_PFUMX"].fillna(0)
+        + df["num_L6MUX21"].fillna(0)
+        + df["f7muxes"].fillna(0)
+        + df["f8muxes"].fillna(0)
+        + df["f9muxes"].fillna(0)
+    )
+
+    # Combine DSP columns.
+    # Count 2 9X9Ds as 1 DSP (rounding up).
+    df["dsps"] = (
+        df["dsps"].fillna(0)
+        + df["altmult_accum"].fillna(0)
+        + df["dsp48e2s"].fillna(0)
+        + df["DSP48E2"].fillna(0)
+        + df["num_MULT18X18D"].fillna(0)
+        + df["MULT18X18D"].fillna(0)
+        + (df["num_MULT9X9D"].fillna(0) / 2).apply(np.ceil)
+        + df["num_ALU54B"].fillna(0)
+    )
+
+    # Aggregate time into one column..
+    df["time_s"] = df[
+        ["time_s", "yosys_runtime_s", "synth_time", "diamond_cpu_time"]
+    ].aggregate(axis="columns", func=_assert_one)
+
+    # Drop unused columns.
+    df.drop(
+        columns=[
+            "yosys_runtime_s",
+            "synth_time",
+            "diamond_cpu_time",
+            "altmult_accum",
+            "opt_time",
+            "dsp48e2s",
+            "DSP48E2",
+            "num_MULT18X18D",
+            "MULT18X18D",
+            "num_MULT9X9D",
+            "num_ALU54B",
+            "BUFG",
+            "FDRE",
+            "IBUF",
+            "OBUF",
+            "TRELLIS_FF",
+            "clb_regs",
+            "carry8s",
+            "clb_luts",
+            "f7muxes",
+            "f8muxes",
+            "f9muxes",
+            "user_constraints_met",
+            "worst_negative_slack",
+            "clock_name",
+            "clock_period_ns",
+            "clock_frequency_MHz",
+            "num_LUT4",
+            "num_CCU2C",
+            "num_PFUMX",
+            "CARRY4",
+            "FDCE",
+            "LUT2",
+            "num_L6MUX21",
+        ],
+        inplace=True,
+    )
+
+    def _all_equal(series: pandas.Series):
+        """Check that all elements are equal, and return that element."""
+        assert type(series) == pandas.Series
+        assert series.unique().size == 1
+        assert (series == series.unique()[0]).all()
+        return series.unique()[0]
+
+    # Combine all iterations for the same (arch, tool, benchmark).
+    df = (
+        df.groupby(["architecture", "tool", "identifier"])
+        .agg(
+            {
+                "time_s": np.median,
+                "luts": _all_equal,
+                "dsps": _all_equal,
+                "carries": _all_equal,
+                "muxes": _all_equal,
+            }
+        )
+        .reset_index()
+    )
+
+    df.to_csv(out_filepath, index=False)
 
 
 def task_dsp_benchmarks():
@@ -383,19 +505,37 @@ def task_dsp_benchmarks():
                 / f"quartus_{filepath.stem}_iter{iter}.json"
             )
 
-    # Final collection task.
-    csv_output = utils.output_dir() / "collected_data" / "dsp_benchmark_results.csv"
+    # Data collection task.
+    csv_output = base_filepath / "all_results" / "all_results_collected.csv"
     yield {
-        "name": "collect",
+        "name": "collect_data",
         "file_dep": collected_data_output_filepaths,
         "targets": [csv_output],
         "actions": [
             (
-                _collect_dsp_benchmarks,
+                _collect_dsp_benchmark_data,
                 [],
                 {
                     "filepaths": collected_data_output_filepaths,
                     "output_filepath": csv_output,
+                },
+            )
+        ],
+    }
+
+    # Data cleaning task.
+    cleaned_csv_output = utils.output_dir() / "collected_data" / "dsp_benchmarks.csv"
+    yield {
+        "name": "clean_data",
+        "file_dep": [csv_output],
+        "targets": [cleaned_csv_output],
+        "actions": [
+            (
+                _clean_dsp_benchmark_data,
+                [],
+                {
+                    "in_filepath": csv_output,
+                    "out_filepath": cleaned_csv_output,
                 },
             )
         ],
