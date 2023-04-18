@@ -111,6 +111,7 @@ Number of register bits => .*?$
         "DP16KD",
         "OFS1P3JX",
         "IFS1P3DX",
+        "DPR16X4C", # "Distributed Pseudo Dual Port RAM"
     }
     if not set(primitives_dict.keys()).issubset(all_known_primitives_set):
         raise Exception(
