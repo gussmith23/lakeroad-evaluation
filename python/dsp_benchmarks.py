@@ -197,44 +197,69 @@ def task_dsp_benchmarks():
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
+            timeout=(
+                benchmark["timeout"]["xilinx_ultrascale_plus"]
+                if (
+                    "timeout" in benchmark
+                    and "xilinx_ultrascale_plus" in benchmark["timeout"]
+                )
+                else None
+            ),
+            expect_fail=(
+                True
+                if (
+                    "expect_fail" in benchmark
+                    and "xilinx_ultrascale_plus" in benchmark["expect_fail"]
+                )
+                else False
+            ),
         )
-        collected_data_output_filepaths.append(
-            base_filepath
-            / "all_results"
-            / f"lakeroad_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
-        )
-
-        yield verilator.make_verilator_task(
-            name=f"simulate_{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
-            obj_dir_dir=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / "verilator_obj_dirs"
-            ),
-            test_module_filepath=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name
-            ),
-            ground_truth_module_filepath=benchmark["filepath"],
-            include_dirs=benchmark["verilator_include_dirs"]["xilinx_ultrascale_plus"],
-            extra_args=benchmark["extra_verilator_args"]["xilinx_ultrascale_plus"],
-            module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
-            testbench_cc_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
-            / "testbench.cc",
-            testbench_exe_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
-            / "testbench",
-            testbench_inputs_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
-            / "testbench_inputs.txt",
-            testbench_stdout_log_filepath=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stdout"
-            ),
-            testbench_stderr_log_filepath=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stderr"
-            ),
-            makefile_filepath=(
-                lakeroad_xilinx_ultrascale_plus_base_filepath / "Makefile"
-            ),
-            clock_name=benchmark["clock_name"],
-            initiation_interval=benchmark["initiation_interval"],
-            output_signal=benchmark["outputs"][0][0],
-        )
+        if not (
+            True
+            if (
+                "expect_fail" in benchmark
+                and "xilinx_ultrascale_plus" in benchmark["expect_fail"]
+            )
+            else False
+        ):
+            collected_data_output_filepaths.append(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_xilinx_ultrascale_plus_{filepath.stem}_iter{iter}.json"
+            )
+            yield verilator.make_verilator_task(
+                name=f"simulate_{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
+                obj_dir_dir=(
+                    lakeroad_xilinx_ultrascale_plus_base_filepath / "verilator_obj_dirs"
+                ),
+                test_module_filepath=(
+                    lakeroad_xilinx_ultrascale_plus_base_filepath / filepath.name
+                ),
+                ground_truth_module_filepath=benchmark["filepath"],
+                include_dirs=benchmark["verilator_include_dirs"][
+                    "xilinx_ultrascale_plus"
+                ],
+                extra_args=benchmark["extra_verilator_args"]["xilinx_ultrascale_plus"],
+                module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+                testbench_cc_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+                / "testbench.cc",
+                testbench_exe_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+                / "testbench",
+                testbench_inputs_filepath=lakeroad_xilinx_ultrascale_plus_base_filepath
+                / "testbench_inputs.txt",
+                testbench_stdout_log_filepath=(
+                    lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stdout"
+                ),
+                testbench_stderr_log_filepath=(
+                    lakeroad_xilinx_ultrascale_plus_base_filepath / "testbench.stderr"
+                ),
+                makefile_filepath=(
+                    lakeroad_xilinx_ultrascale_plus_base_filepath / "Makefile"
+                ),
+                clock_name=benchmark["clock_name"],
+                initiation_interval=benchmark["initiation_interval"],
+                output_signal=benchmark["outputs"][0][0],
+            )
 
         lakeroad_lattice_ecp5_base_filepath = (
             base_filepath / "lakeroad_lattice_ecp5" / f"iter{iter}" / filepath.stem
@@ -266,36 +291,62 @@ def task_dsp_benchmarks():
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
-        )
-        collected_data_output_filepaths.append(
-            base_filepath
-            / "all_results"
-            / f"lakeroad_lattice_ecp5_{filepath.stem}_iter{iter}.json"
-        )
-
-        yield verilator.make_verilator_task(
-            name=f"simulate_{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
-            obj_dir_dir=(lakeroad_lattice_ecp5_base_filepath / "verilator_obj_dirs"),
-            test_module_filepath=(lakeroad_lattice_ecp5_base_filepath / filepath.name),
-            ground_truth_module_filepath=benchmark["filepath"],
-            include_dirs=benchmark["verilator_include_dirs"]["lattice_ecp5"],
-            extra_args=benchmark["extra_verilator_args"]["lattice_ecp5"],
-            module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
-            testbench_cc_filepath=lakeroad_lattice_ecp5_base_filepath / "testbench.cc",
-            testbench_exe_filepath=lakeroad_lattice_ecp5_base_filepath / "testbench",
-            testbench_inputs_filepath=lakeroad_lattice_ecp5_base_filepath
-            / "testbench_inputs.txt",
-            testbench_stdout_log_filepath=(
-                lakeroad_lattice_ecp5_base_filepath / "testbench.stdout"
+            timeout=(
+                benchmark["timeout"]["lattice_ecp5"]
+                if ("timeout" in benchmark and "lattice_ecp5" in benchmark["timeout"])
+                else None
             ),
-            testbench_stderr_log_filepath=(
-                lakeroad_lattice_ecp5_base_filepath / "testbench.stderr"
+            expect_fail=(
+                True
+                if (
+                    "expect_fail" in benchmark
+                    and "lattice_ecp5" in benchmark["expect_fail"]
+                )
+                else False
             ),
-            makefile_filepath=(lakeroad_lattice_ecp5_base_filepath / "Makefile"),
-            clock_name=benchmark["clock_name"],
-            initiation_interval=benchmark["initiation_interval"],
-            output_signal=benchmark["outputs"][0][0],
         )
+        if not (
+            True
+            if (
+                "expect_fail" in benchmark
+                and "lattice_ecp5" in benchmark["expect_fail"]
+            )
+            else False
+        ):
+            collected_data_output_filepaths.append(
+                base_filepath
+                / "all_results"
+                / f"lakeroad_lattice_ecp5_{filepath.stem}_iter{iter}.json"
+            )
+            yield verilator.make_verilator_task(
+                name=f"simulate_{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
+                obj_dir_dir=(
+                    lakeroad_lattice_ecp5_base_filepath / "verilator_obj_dirs"
+                ),
+                test_module_filepath=(
+                    lakeroad_lattice_ecp5_base_filepath / filepath.name
+                ),
+                ground_truth_module_filepath=benchmark["filepath"],
+                include_dirs=benchmark["verilator_include_dirs"]["lattice_ecp5"],
+                extra_args=benchmark["extra_verilator_args"]["lattice_ecp5"],
+                module_inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
+                testbench_cc_filepath=lakeroad_lattice_ecp5_base_filepath
+                / "testbench.cc",
+                testbench_exe_filepath=lakeroad_lattice_ecp5_base_filepath
+                / "testbench",
+                testbench_inputs_filepath=lakeroad_lattice_ecp5_base_filepath
+                / "testbench_inputs.txt",
+                testbench_stdout_log_filepath=(
+                    lakeroad_lattice_ecp5_base_filepath / "testbench.stdout"
+                ),
+                testbench_stderr_log_filepath=(
+                    lakeroad_lattice_ecp5_base_filepath / "testbench.stderr"
+                ),
+                makefile_filepath=(lakeroad_lattice_ecp5_base_filepath / "Makefile"),
+                clock_name=benchmark["clock_name"],
+                initiation_interval=benchmark["initiation_interval"],
+                output_signal=benchmark["outputs"][0][0],
+            )
 
         # Intel
         lakeroad_intel_base_filepath = (
