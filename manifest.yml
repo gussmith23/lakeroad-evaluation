@@ -67,6 +67,173 @@ dsp_benchmarks:
     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
 
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_combinational.v
+  module_name: signed_mul_combinational
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 0
+  clock_name: unused
+  reset_name: unused
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [lattice_ecp5, intel]
+
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mul_combinational.v
+  module_name: unsigned_mul_combinational
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 0
+  clock_name: unused
+  reset_name: unused
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [xilinx_ultrascale_plus, lattice_ecp5, intel]
+
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mul_2_stage.v
+  module_name: unsigned_mul_2_stage
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 2
+  clock_name: clk
+  reset_name: rst
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [lattice_ecp5]
+  
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_2_stage.v
+  module_name: signed_mul_2_stage
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 2
+  clock_name: clk
+  reset_name: rst
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [lattice_ecp5]
+
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mul_1_stage.v
+  module_name: unsigned_mul_1_stage
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 1
+  clock_name: clk
+  reset_name: rst
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [lattice_ecp5]
+  
+- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_1_stage.v
+  module_name: signed_mul_1_stage
+  outputs: [[mul_out, 36]]
+  inputs: [[a, 16], [b, 16]]
+  initiation_interval: 1
+  clock_name: clk
+  reset_name: rst
+  verilator_include_dirs:
+    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+    intel: ["lakeroad-private/altera_mf/"]
+  extra_verilator_args:
+    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+  expect_fail: [lattice_ecp5]
+
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_mac_1_stage.v
+#   module_name: mac_1_stage
+#   outputs: [[mac_out, 36]]
+#   initiation_interval: 1
+#   inputs: [[a, 16], [b, 16], [c, 36]]
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad-private/DSP48E2"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#   expect_fail: [lattice_ecp5, intel]
+
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mac_3_stage.v
+#   module_name: signed_mac_3_stage
+#   outputs: [[mac_out, 36]]
+#   initiation_interval: 3
+#   inputs: [[a, 18], [b, 18], [c, 18]]
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad-private/DSP48E2"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mac_3_stage.v
+#   module_name: unsigned_mac_3_stage
+#   outputs: [[mac_out, 36]]
+#   initiation_interval: 3
+#   inputs: [[a, 18], [b, 18], [c, 18]]
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad-private/DSP48E2"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mul_3_stage.v
+#   module_name: unsigned_mul_3_stage
+#   outputs: [[mul_out, 36]]
+#   initiation_interval: 3
+#   inputs: [[a, 18], [b, 18]]
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad-private/DSP48E2"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+
 # - filepath: fpga-dsp-mapping-benchmarks/benchmarks/chhsiao121_HLS__final_gesture_vivado_project_base_project_1_project_1_srcs_sources_1_bd_base_ipshared_b9a3_hdl_verilog_color_convert_macbkb.v
 #   module_name: color_convert_macbkb_DSP48_0
 #   output_signal: dout
