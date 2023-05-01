@@ -255,20 +255,20 @@ def invoke_lakeroad(
             f"Didn't expect instruction ({instruction}) and verilog_module_filepath ({verilog_module_filepath})"
         )
 
-    if initiation_interval:
+    if initiation_interval != None:
         cmd += ["--initiation-interval", str(initiation_interval)]
 
-    if inputs:
+    if inputs != None:
         for (name, bitwidth) in inputs:
             cmd += ["--input-signal", f"{name}:{bitwidth}"]
 
-    if clock_name:
+    if clock_name != None:
         cmd += ["--clock-name", clock_name]
 
-    if reset_name:
+    if reset_name != None:
         cmd += ["--reset-name", reset_name]
 
-    if timeout:
+    if timeout != None:
         cmd += ["--timeout", str(timeout)]
 
     logging.info(
