@@ -46,7 +46,12 @@ int main(int argc, char** argv) {{
     }}
     printf("\n");
 
-
+#if INITIATION_INTERVAL == 0
+    SET_MODULE_INPUTS(test_module, inputs)
+    test_module->eval();
+    SET_MODULE_INPUTS(ground_truth_module, inputs)
+    ground_truth_module->eval();
+#else
     // CLOCK CYCLE 1
 
     // Set inputs to desired inputs.
@@ -89,6 +94,7 @@ int main(int argc, char** argv) {{
       ground_truth_module->eval();
       
     }}
+#endif
 
   printf("actual, expected = %lu, %lu\n", test_module->{output_signal}, ground_truth_module->{output_signal});
   assert(test_module->{output_signal} == ground_truth_module->{output_signal});
