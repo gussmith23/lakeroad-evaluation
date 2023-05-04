@@ -918,6 +918,8 @@ def collect(
     json_filepath: Union[Path, str],
     collected_data_filepath: Union[Path, str],
 ):
+    collected_data_filepath = Path(collected_data_filepath)
+
     with open(json_filepath, "r") as f:
         data = json.load(f)
 
@@ -934,6 +936,7 @@ def collect(
     assert "tool" not in data
     data["tool"] = tool
 
+    collected_data_filepath.parent.mkdir(parents=True, exist_ok=True)
     with open(collected_data_filepath, "w") as f:
         json.dump(data, f)
 
