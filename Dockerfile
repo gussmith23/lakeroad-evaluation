@@ -19,6 +19,7 @@ RUN apt-get update \
   gcc \
   git \
   graphviz \
+  help2man \
   jq \
   libboost-all-dev \
   libedit-dev \
