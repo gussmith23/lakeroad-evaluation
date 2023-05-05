@@ -17,3 +17,6 @@
 [submodule "lakeroad-private"]
 	path = lakeroad-private
 	url = git@github.com:uwsampl/lakeroad-private
+[submodule "verilator"]
+	path = verilator
+	url = git@github.com:verilator/verilator

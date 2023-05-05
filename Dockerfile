@@ -192,5 +192,16 @@ ENV PATH=/root/sv2v/bin:${PATH}
 WORKDIR /root
 ADD verilog/ verilog/
 
+# Install Verilator, set environment variable.
+WORKDIR /root
+ADD verilator/ verilator/
+RUN unset VERILATOR_ROOT \
+  && cd verilator/ \
+  && autoconf \
+  && ./configure \
+  && make -j `nproc` \
+  && sudo make install
+ENV VERILATOR_INCLUDE_DIR=/usr/local/share/verilator/include
+
 WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]
