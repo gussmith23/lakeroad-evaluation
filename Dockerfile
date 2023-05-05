@@ -5,13 +5,16 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y \
+  autoconf \
   bison \
   build-essential \
+  ccache \
   clang \
   cmake \
   curl \
   dvipng \
   flex \
+  g++ \
   gawk \
   gcc \
   git \
@@ -20,21 +23,28 @@ RUN apt-get update \
   libboost-all-dev \
   libedit-dev \
   libffi-dev \
-  libtinfo-dev \
-  libtinfo5 \
-  libreadline8 \
+  libfl-dev \
+  libfl2 \
+  libgoogle-perftools-dev \
   libreadline-dev \
+  libreadline8 \
   libssl-dev \
   libtcl8.6 \
+  libtinfo-dev \
+  libtinfo5 \
   libx11-6 \
   libxml2-dev \
   llvm-14 \
   locales \
+  make \
   ninja-build \
+  numactl \
   ocl-icd-opencl-dev \
   opencl-headers \
   openjdk-11-jre \
   parallel \
+  perl \
+  perl-doc \
   pkg-config \
   python3 \
   python3-dev \
@@ -49,7 +59,9 @@ RUN apt-get update \
   texlive-latex-extra \
   verilator \
   wget \
-  zlib1g-dev 
+  zlib1g \
+  zlib1g-dev
+
 
 # Set the locale. Necessary for Vivado.
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
