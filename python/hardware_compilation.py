@@ -358,6 +358,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path],
     json_filepath: Union[str, Path],
+    resource_utilization_json_filepath: Union[str, Path],
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
@@ -489,6 +490,16 @@ report_utilization
                 log_stats.user_constraints_met is None
                 or log_stats.user_constraints_met is True
             ), "Vivado reports that user constraints were not met!"
+    
+    # TODO(@ninehusky)
+    # call count_resources_in_verilog_source
+    # take another argument that specifies where the output of that function should be written to
+    # json.dump(
+    #     count_resources_in_verilog_src(
+    #         verilog_src=out_filepath.read_text(), module_name=module_name
+    #     ),
+    #     fp=open(resource_utilization_json_filepath,"w"),
+    # )
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(

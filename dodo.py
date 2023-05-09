@@ -1,3 +1,4 @@
+
 """DoIt main file.
 
 The dodo.py file is like a Makefile for Python's DoIt library. Running `doit` in
@@ -12,3 +13,5 @@ from lakeroad import task_instruction_experiments
 from gather_data import *
 from yosys_experiments import *
 from figures_and_tables import *
+from robustness_experiments import *
+
