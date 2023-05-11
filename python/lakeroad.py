@@ -332,6 +332,7 @@ def collect_lakeroad(
     assert "architecture" not in out_data
     out_data["architecture"] = architecture
 
+    Path(collected_data_output_filepath).parent.mkdir(parents=True, exist_ok=True)
     with open(collected_data_output_filepath, "w") as f:
         json.dump(out_data, f)
 
