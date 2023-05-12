@@ -17,9 +17,9 @@ from typing import Dict, Optional, Tuple, Union
 from tempfile import NamedTemporaryFile
 
 
-def count_resources_in_verilog_src(verilog_src: str, module_name: str) -> Dict[str, int]:
-
-
+def count_resources_in_verilog_src(
+    verilog_src: str, module_name: str
+) -> Dict[str, int]:
     with NamedTemporaryFile(mode="w") as f:
         with f.file as file_object:
             file_object.write(verilog_src)
@@ -35,8 +35,9 @@ def count_resources_in_verilog_src(verilog_src: str, module_name: str) -> Dict[s
             check=True,
         ).stdout
 
-    #print(out)
+    # print(out)
     return parse_yosys_log(out)
+
 
 @dataclass
 class DiamondSynthesisStats:
@@ -490,7 +491,15 @@ report_utilization
                 log_stats.user_constraints_met is None
                 or log_stats.user_constraints_met is True
             ), "Vivado reports that user constraints were not met!"
-    
+
+    json.dump(
+        count_resources_in_verilog_src(
+            verilog_src=synth_opt_place_route_output_filepath.read_text(),
+            module_name=module_name,
+        ),
+        fp=open(resource_utilization_json_filepath, "w"),
+    )
+
     # TODO(@ninehusky)
     # call count_resources_in_verilog_source
     # take another argument that specifies where the output of that function should be written to
@@ -605,7 +614,6 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
 
 
 def parse_yosys_log(log_txt: str):
-
     matches = list(
         re.finditer(
             r"""
@@ -639,6 +647,7 @@ def yosys_synthesis(
     synth_command: str,
     log_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
+    resources_filepath: Union[str, Path],
 ):
     output_filepath.parent.mkdir(parents=True, exist_ok=True)
     log_filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -701,6 +710,11 @@ def yosys_synthesis(
     with open(json_filepath, "w") as f:
         json.dump(parsed, f)
 
+    # Count resources.
+    resources = count_resources_in_verilog_src(output_filepath.read_text(), module_name)
+    with open(resources_filepath, "w") as f:
+        json.dump(resources, f)
+
 
 def make_lattice_ecp5_yosys_synthesis_task(
     input_filepath: Union[str, Path],
@@ -718,6 +732,7 @@ def make_lattice_ecp5_yosys_synthesis_task(
     output_filepath = output_dirpath / f"{module_name}.sv"
     time_filepath = output_dirpath / f"{module_name}.time"
     log_filepath = output_dirpath / f"{module_name}.log"
+    resources_filepath = output_dirpath / f"{module_name}.resources.json"
 
     return {
         "actions": [
@@ -732,11 +747,18 @@ def make_lattice_ecp5_yosys_synthesis_task(
                     "time_filepath": time_filepath,
                     "synth_command": "synth_ecp5",
                     "log_filepath": log_filepath,
+                    "resources_filepath": resources_filepath,
                 },
             )
         ],
         "file_dep": [input_filepath],
-        "targets": [json_filepath, output_filepath, time_filepath, log_filepath],
+        "targets": [
+            json_filepath,
+            output_filepath,
+            time_filepath,
+            log_filepath,
+            resources_filepath,
+        ],
     }
 
 
@@ -756,6 +778,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     output_filepath = output_dirpath / f"{module_name}.sv"
     time_filepath = output_dirpath / f"{module_name}.time"
     log_filepath = output_dirpath / f"{module_name}.log"
+    resources_filepath = output_dirpath / f"{module_name}.resources.json"
 
     return {
         "actions": [
@@ -770,11 +793,18 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
                     "time_filepath": time_filepath,
                     "synth_command": "synth_xilinx -family xcup",
                     "log_filepath": log_filepath,
+                    "resources_filepath": resources_filepath,
                 },
             )
         ],
         "file_dep": [input_filepath],
-        "targets": [json_filepath, output_filepath, time_filepath, log_filepath],
+        "targets": [
+            json_filepath,
+            output_filepath,
+            time_filepath,
+            log_filepath,
+            resources_filepath,
+        ],
     }
 
 
