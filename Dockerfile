@@ -58,7 +58,6 @@ RUN apt-get update \
   tcl8.6-dev \
   texlive \
   texlive-latex-extra \
-  verilator \
   wget \
   zlib1g \
   zlib1g-dev
@@ -146,6 +145,9 @@ RUN if [ "$(uname -m)" = "x86_64" ] ; then \
   fi \
   && tar xf oss-cad-suite.tgz
 ENV PATH="/root/oss-cad-suite/bin:${PATH}"
+# Remove Verilator installed in the oss-cad-suite, as we will build and install our own.
+# TODO(@gussmith23): Either don't add oss-cad-suite to path, or clean this up some other way.
+RUN rm /root/oss-cad-suite/bin/verilator
 
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
