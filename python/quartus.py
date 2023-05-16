@@ -30,12 +30,16 @@ def run_quartus(
     json_output_filepath = Path(json_output_filepath)
     time_output_filepath = Path(time_output_filepath)
 
+    # Assumes that Quartus is on the PATH. Could make this an argument if we
+    # want to be able to configure the location of Quartus.
+    quartus_bin = "quartus_map"
+
     with tempfile.TemporaryDirectory() as temp_dir_str:
         temp_dir = Path(temp_dir_str)
         start = time.time()
         subprocess.run(
             args=[
-                utils.quartus_bin_dir() / "quartus_map",
+                quartus_bin,
                 top_module_name,
                 "--source",
                 source_input_filepath,
