@@ -97,7 +97,9 @@ def simulate_with_verilator(
 
     # Generate the input to the testbench.
     with testbench_inputs_filepath.open("w") as f:
-        MAX_NUM_TESTS = 2**20
+        # We can expose this as an argument. You can use this to tune how long
+        # the tests take, at the cost of test coverage.
+        MAX_NUM_TESTS = 2**18
         if 2 ** (sum([width for _, width in module_inputs])) > MAX_NUM_TESTS:
             logging.warning(
                 "Exhaustive testing space is too large, doing random testing."
