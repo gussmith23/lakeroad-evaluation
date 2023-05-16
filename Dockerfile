@@ -189,8 +189,13 @@ WORKDIR /root
 # Docker best practices.
 ADD . .
 
+# Set up external tools. These tools should be mounted into the container at
+# runtime with e.g.:
+# `-v /tools/intelFPGA_lite/22.1std:/tools/intelFPGA_lite/22.1std`
 ARG VIVADO_BIN_DIR
 ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
+ARG QUARTUS_BIN_DIR
+ENV PATH="${QUARTUS_BIN_DIR}:${PATH}"
 
 # Build sv2v, a SystemVerilog to Verilog compiler.
 # Install Haskell Stack and build
