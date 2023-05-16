@@ -1,6 +1,5 @@
 """Utilities for simulating with Verilator."""
 
-import io
 import itertools
 import logging
 import os
