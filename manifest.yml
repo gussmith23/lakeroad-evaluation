@@ -46,10 +46,10 @@ dsp_benchmarks:
     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-  # Timeouts on Lakeroad synthesis. (shown as example)
- # timeout: { intel: 10 }
-  # Whether we expect Lakeroad to fail on a given architecture for this benchmark.
- expect_fail: [ intel ]
+    # Timeouts on Lakeroad synthesis. (shown as example)
+  # timeout: { intel: 10 }
+    # Whether we expect Lakeroad to fail on a given architecture for this benchmark.
+  expect_fail: [ intel ]
 
 - filepath: fpga-dsp-mapping-benchmarks/benchmarks/lattice_ecp5_sysdsp_manual_2_stage_mult.v
   module_name: mult
@@ -66,7 +66,7 @@ dsp_benchmarks:
     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
- expect_fail: [ intel ]
+  expect_fail: [ intel ]
 
 - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_combinational.v
   module_name: signed_mul_combinational
