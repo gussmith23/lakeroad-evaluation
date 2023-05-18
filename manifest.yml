@@ -119,22 +119,23 @@ dsp_benchmarks:
     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
   expect_fail: [lattice_ecp5, intel]
   
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_2_stage.v
-  module_name: signed_mul_2_stage
-  outputs: [[mul_out, 36]]
-  inputs: [[a, 16], [b, 16]]
-  initiation_interval: 2
-  clock_name: clk
-  reset_name: rst
-  verilator_include_dirs:
-    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
-    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
-    intel: ["lakeroad-private/altera_mf/"]
-  extra_verilator_args:
-    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
-    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-  expect_fail: [lattice_ecp5, intel]
+# See uwsampl/lakeroad#253
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_2_stage.v
+#   module_name: signed_mul_2_stage
+#   outputs: [[mul_out, 36]]
+#   inputs: [[a, 16], [b, 16]]
+#   initiation_interval: 2
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#   expect_fail: [lattice_ecp5, intel]
 
 - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_unsigned_mul_1_stage.v
   module_name: unsigned_mul_1_stage
@@ -153,22 +154,23 @@ dsp_benchmarks:
     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
   expect_fail: [lattice_ecp5, intel]
   
-- filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_1_stage.v
-  module_name: signed_mul_1_stage
-  outputs: [[mul_out, 36]]
-  inputs: [[a, 16], [b, 16]]
-  initiation_interval: 1
-  clock_name: clk
-  reset_name: rst
-  verilator_include_dirs:
-    xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
-    lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
-    intel: ["lakeroad-private/altera_mf/"]
-  extra_verilator_args:
-    xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-    lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
-    intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
-  expect_fail: [lattice_ecp5, intel]
+# See uwsampl/lakeroad#253
+# - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_signed_mul_1_stage.v
+#   module_name: signed_mul_1_stage
+#   outputs: [[mul_out, 36]]
+#   inputs: [[a, 16], [b, 16]]
+#   initiation_interval: 1
+#   clock_name: clk
+#   reset_name: rst
+#   verilator_include_dirs:
+#     xilinx_ultrascale_plus: ["lakeroad/verilator-unisims"]
+#     lattice_ecp5: ["lakeroad-private/lattice_ecp5/"]
+#     intel: ["lakeroad-private/altera_mf/"]
+#   extra_verilator_args:
+#     xilinx_ultrascale_plus: [-DXIL_XECLIB, -Wno-UNOPTFLAT, -Wno-LATCH, -Wno-WIDTH, -Wno-STMTDLY, -Wno-CASEX, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#     lattice_ecp5: ["-Wno-COMBDLY", "-Wno-LATCH", "-Wno-WIDTH", "-Wno-TIMESCALEMOD"]
+#     intel: [-Wno-LATCH, -Wno-WIDTH, -Wno-TIMESCALEMOD, -Wno-PINMISSING]
+#   expect_fail: [lattice_ecp5, intel]
 
 # - filepath: fpga-dsp-mapping-benchmarks/benchmarks/synthetic_mac_1_stage.v
 #   module_name: mac_1_stage
