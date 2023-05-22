@@ -80,6 +80,8 @@ def _clean_dsp_benchmark_data(
 
     # Drop unused columns.
     df.drop(
+        # Don't throw an error if a column isn't present.
+        errors="ignore",
         columns=[
             "yosys_runtime_s",
             "synth_time",
