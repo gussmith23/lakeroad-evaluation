@@ -143,6 +143,7 @@ def _clean_dsp_benchmark_data(
         .reset_index()
     )
 
+    out_filepath.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out_filepath, index=False)
 
 
