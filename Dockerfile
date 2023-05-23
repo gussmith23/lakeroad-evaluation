@@ -5,36 +5,47 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
   && apt-get install -y \
+  autoconf \
   bison \
   build-essential \
+  ccache \
   clang \
   cmake \
   curl \
   dvipng \
   flex \
+  g++ \
   gawk \
   gcc \
   git \
   graphviz \
+  help2man \
   jq \
   libboost-all-dev \
   libedit-dev \
   libffi-dev \
-  libtinfo-dev \
-  libtinfo5 \
-  libreadline8 \
+  libfl-dev \
+  libfl2 \
+  libgoogle-perftools-dev \
   libreadline-dev \
+  libreadline8 \
   libssl-dev \
   libtcl8.6 \
+  libtinfo-dev \
+  libtinfo5 \
   libx11-6 \
   libxml2-dev \
   llvm-14 \
   locales \
+  make \
   ninja-build \
+  numactl \
   ocl-icd-opencl-dev \
   opencl-headers \
   openjdk-11-jre \
   parallel \
+  perl \
+  perl-doc \
   pkg-config \
   python3 \
   python3-dev \
@@ -47,9 +58,10 @@ RUN apt-get update \
   tcl8.6-dev \
   texlive \
   texlive-latex-extra \
-  verilator \
   wget \
-  zlib1g-dev 
+  zlib1g \
+  zlib1g-dev
+
 
 # Set the locale. Necessary for Vivado.
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
@@ -133,6 +145,9 @@ RUN if [ "$(uname -m)" = "x86_64" ] ; then \
   fi \
   && tar xf oss-cad-suite.tgz
 ENV PATH="/root/oss-cad-suite/bin:${PATH}"
+# Remove Verilator installed in the oss-cad-suite, as we will build and install our own.
+# TODO(@gussmith23): Either don't add oss-cad-suite to path, or clean this up some other way.
+RUN rm /root/oss-cad-suite/bin/verilator
 
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
@@ -176,8 +191,13 @@ WORKDIR /root
 # Docker best practices.
 ADD . .
 
+# Set up external tools. These tools should be mounted into the container at
+# runtime with e.g.:
+# `-v /tools/intelFPGA_lite/22.1std:/tools/intelFPGA_lite/22.1std`
 ARG VIVADO_BIN_DIR
 ENV PATH="${VIVADO_BIN_DIR}:${PATH}"
+ARG QUARTUS_BIN_DIR
+ENV PATH="${QUARTUS_BIN_DIR}:${PATH}"
 
 # Build sv2v, a SystemVerilog to Verilog compiler.
 # Install Haskell Stack and build
@@ -191,6 +211,17 @@ ENV PATH=/root/sv2v/bin:${PATH}
 
 WORKDIR /root
 ADD verilog/ verilog/
+
+# Install Verilator, set environment variable.
+WORKDIR /root
+ADD verilator/ verilator/
+RUN unset VERILATOR_ROOT \
+  && cd verilator/ \
+  && autoconf \
+  && ./configure \
+  && make -j `nproc` \
+  && make install
+ENV VERILATOR_INCLUDE_DIR=/usr/local/share/verilator/include
 
 WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]

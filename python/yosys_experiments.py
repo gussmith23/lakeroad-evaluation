@@ -101,6 +101,7 @@ def test_file(
     json.dump(out_data, open(json_output_filepath, "w"))
 
 
+# TODO(@gussmith23): Build a better Yosys evaluation.
 @doit.task_params(
     [
         {
@@ -112,7 +113,7 @@ def test_file(
         },
     ]
 )
-def task_yosys_lakeroad_pass_tests(gathered_data_filepath: str):
+def disabled_task_yosys_lakeroad_pass_tests(gathered_data_filepath: str):
     json_filepaths = []
 
     def _make_test(**kwargs):
