@@ -500,16 +500,6 @@ report_utilization
         fp=open(resource_utilization_json_filepath, "w"),
     )
 
-    # TODO(@ninehusky)
-    # call count_resources_in_verilog_source
-    # take another argument that specifies where the output of that function should be written to
-    # json.dump(
-    #     count_resources_in_verilog_src(
-    #         verilog_src=out_filepath.read_text(), module_name=module_name
-    #     ),
-    #     fp=open(resource_utilization_json_filepath,"w"),
-    # )
-
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
