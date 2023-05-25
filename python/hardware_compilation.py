@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
 from time import time
-from typing import Dict, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 from tempfile import NamedTemporaryFile
 
 
@@ -111,6 +111,7 @@ Number of register bits => .*?$
         "DP16KD",
         "OFS1P3JX",
         "IFS1P3DX",
+        "DPR16X4C", # "Distributed Pseudo Dual Port RAM"
     }
     if not set(primitives_dict.keys()).issubset(all_known_primitives_set):
         raise Exception(
@@ -166,6 +167,7 @@ class VivadoLogStats:
     f7muxes: int
     f8muxes: int
     f9muxes: int
+    dsp48e2s: int
 
     # Timing stats won't be present if there was not a clock constraint
     # provided, thus all timing stats are Optional.
@@ -209,7 +211,8 @@ def parse_ultrascale_log(log_text: str, identifier: str) -> VivadoLogStats:
         log_text[start_index:end_index],
         flags=re.MULTILINE,
     )
-    primitives = [(m[0], int(m[1])) for m in matches]
+    primitives = {m[0]: int(m[1]) for m in matches}
+    dsp48e2s = primitives["DSP48E2"] if "DSP48E2" in primitives else 0
 
     ## CLB usage.
     matches = list(
@@ -340,6 +343,7 @@ Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
         f7muxes=f7muxes,
         f8muxes=f8muxes,
         f9muxes=f9muxes,
+        dsp48e2s=dsp48e2s,
         user_constraints_met=user_constraints_met,
         worst_negative_slack=worst_negative_slack,
         clock_name=clock_name,
@@ -506,6 +510,8 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
+    collect_args: Optional[Dict[str, Any]] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -519,7 +525,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
-    return {
+    task = {
         "actions": [
             (
                 xilinx_ultrascale_plus_vivado_synthesis,
@@ -548,6 +554,28 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             json_filepath,
         ],
     }
+
+    if name is not None:
+        task["name"] = name
+
+    if collect_args is not None:
+        task["actions"].append(
+            (
+                collect,
+                [],
+                {
+                    "iteration": collect_args["iteration"],
+                    "identifier": collect_args["identifier"],
+                    "json_filepath": json_filepath,
+                    "collected_data_filepath": collect_args["collected_data_filepath"],
+                    "architecture": "xilinx_ultrascale_plus",
+                    "tool": "vivado",
+                },
+            )
+        )
+        task["targets"].append(collect_args["collected_data_filepath"])
+
+    return task
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
@@ -711,6 +739,8 @@ def make_lattice_ecp5_yosys_synthesis_task(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
+    collect_args: Optional[Dict[str, Any]] = None,
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -724,7 +754,7 @@ def make_lattice_ecp5_yosys_synthesis_task(
     log_filepath = output_dirpath / f"{module_name}.log"
     resources_filepath = output_dirpath / f"{module_name}.resources.json"
 
-    return {
+    task = {
         "actions": [
             (
                 yosys_synthesis,
@@ -751,12 +781,36 @@ def make_lattice_ecp5_yosys_synthesis_task(
         ],
     }
 
+    if name is not None:
+        task["name"] = name
+
+    if collect_args is not None:
+        task["actions"].append(
+            (
+                collect,
+                [],
+                {
+                    "iteration": collect_args["iteration"],
+                    "identifier": collect_args["identifier"],
+                    "json_filepath": json_filepath,
+                    "collected_data_filepath": collect_args["collected_data_filepath"],
+                    "architecture": "lattice_ecp5",
+                    "tool": "yosys",
+                },
+            )
+        )
+        task["targets"].append(collect_args["collected_data_filepath"])
+
+    return task
+
 
 def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
+    collect_args: Optional[Dict[str, Any]] = None,
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -770,7 +824,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     log_filepath = output_dirpath / f"{module_name}.log"
     resources_filepath = output_dirpath / f"{module_name}.resources.json"
 
-    return {
+    task = {
         "actions": [
             (
                 yosys_synthesis,
@@ -797,6 +851,28 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
         ],
     }
 
+    if name is not None:
+        task["name"] = name
+
+    if collect_args is not None:
+        task["actions"].append(
+            (
+                collect,
+                [],
+                {
+                    "iteration": collect_args["iteration"],
+                    "identifier": collect_args["identifier"],
+                    "json_filepath": json_filepath,
+                    "collected_data_filepath": collect_args["collected_data_filepath"],
+                    "architecture": "xilinx_ultrascale_plus",
+                    "tool": "yosys",
+                },
+            )
+        )
+        task["targets"].append(collect_args["collected_data_filepath"])
+
+    return task
+
 
 def lattice_ecp5_diamond_synthesis(
     src_filepath: Union[Path, str],
@@ -808,10 +884,26 @@ def lattice_ecp5_diamond_synthesis(
     output_dirpath.mkdir(parents=True, exist_ok=True)
 
     # Diamond's synthesis routine won't accept SystemVerilog, so we use sv2v to
-    # convert.
+    # convert. sv2v doesn't like Verilog 2001 attributes, so we remove them with
+    # Yosys.
     sv2v_result_filepath = output_dirpath / f"{module_name}.v"
-    with open(sv2v_result_filepath, "w") as f:
-        subprocess.run(["sv2v", src_filepath], check=True, stdout=f)
+    subprocess.run(
+        [
+            "yosys",
+            "-p",
+            # We need proc, otherwise we get things like
+            # always @ (posedge clk) r <= ...
+            # always @ (posedge rst) r <= ...
+            # Which is an error in most tools.
+            f"read_verilog -sv {src_filepath}; proc; write_verilog -noattr {sv2v_result_filepath}",
+        ],
+        capture_output=True,
+        check=True,
+    )
+    subprocess.run(
+        ["sv2v", "-w", sv2v_result_filepath, sv2v_result_filepath],
+        check=True,
+    )
 
     assert (
         "DIAMOND_BINDIR" in os.environ
@@ -849,11 +941,44 @@ def lattice_ecp5_diamond_synthesis(
         json.dump(dataclasses.asdict(log_stats), f)
 
 
+def collect(
+    iteration: int,
+    identifier: str,
+    architecture: str,
+    tool: str,
+    json_filepath: Union[Path, str],
+    collected_data_filepath: Union[Path, str],
+):
+    collected_data_filepath = Path(collected_data_filepath)
+
+    with open(json_filepath, "r") as f:
+        data = json.load(f)
+
+    assert "iteration" not in data
+    data["iteration"] = iteration
+
+    if "identifier" in data:
+        logging.warn(f"Overwriting identifier in {data} with {identifier}")
+    data["identifier"] = identifier
+
+    assert "architecture" not in data
+    data["architecture"] = architecture
+
+    assert "tool" not in data
+    data["tool"] = tool
+
+    collected_data_filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(collected_data_filepath, "w") as f:
+        json.dump(data, f)
+
+
 def make_lattice_ecp5_diamond_synthesis_task(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    name: Optional[str] = None,
+    collect_args: Optional[Dict[str, Any]] = None,
 ):
     """Wrapper over Diamond synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -863,7 +988,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
     output_dirpath = Path(output_dirpath)
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
-    return {
+    task = {
         "actions": [
             (
                 lattice_ecp5_diamond_synthesis,
@@ -883,6 +1008,28 @@ def make_lattice_ecp5_diamond_synthesis_task(
             json_filepath,
         ],
     }
+
+    if name is not None:
+        task["name"] = name
+
+    if collect_args is not None:
+        task["actions"].append(
+            (
+                collect,
+                [],
+                {
+                    "iteration": collect_args["iteration"],
+                    "identifier": collect_args["identifier"],
+                    "json_filepath": json_filepath,
+                    "collected_data_filepath": collect_args["collected_data_filepath"],
+                    "architecture": "lattice_ecp5",
+                    "tool": "diamond",
+                },
+            )
+        )
+        task["targets"].append(collect_args["collected_data_filepath"])
+
+    return task
 
 
 def make_yosys_nextpnr_synthesis_task(

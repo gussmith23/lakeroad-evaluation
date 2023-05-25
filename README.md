@@ -51,6 +51,11 @@ We give some additional detail here.
   TODO(@gussmith23): Figure out how to use Python packaging, so we could install
     the utilities as a package within a virtual environment.
 
+## Environment Variables to Set
+
+- `PYTHONPATH`
+- TODO(@gussmith23): document Quartus, Diamond, Vivado
+
 ## Output Location
 
 The location of the experiment output
@@ -240,6 +245,20 @@ To do so, we use the following syntax:
   replacing `/usr/local/diamond` with the path
   to your Diamond installation.
   
+## Quartus
+
+Similarly to Vivado and Diamond,
+  the evaluation depends on Quartus.
+A free version of Quartus can be downloaded
+  from Intel's website.
+Quartus must appear on the `PATH`.
+In the future, it would be ideal to
+  (1) make Quartus optional and
+  (2) specify its location via an environment variable.
+Quartus must similarly also be mounted into the Docker container.
+See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.yml)
+  for an example invocation of the Docker container.
+
 ## [./runs](./runs)
 
 This folder contains our output runs.
