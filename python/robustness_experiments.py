@@ -1,27 +1,14 @@
 from typing import Optional, Union
+
+import yaml
 import hardware_compilation
+import lakeroad
 import utils
 import json
 import logging
+import verilator
 
 from pathlib import Path
-
-manifest = {
-    "robustness_experiments": [
-        {
-            "filepath": utils.lakeroad_evaluation_dir()
-            / "robustness-testing-verilog-files"
-            / "two_stage_mult.v",
-            "module_name": "two_stage_mult",
-        },
-        {
-            "filepath": utils.lakeroad_evaluation_dir()
-            / "robustness-testing-verilog-files"
-            / "three_stage_mult.v",
-            "module_name": "three_stage_mult",
-        },
-    ]
-}
 
 
 def check_for_dsp(
@@ -40,22 +27,25 @@ def check_for_dsp(
     dsp_used = any(resource_utilization[dsp] for dsp in dsp_list)
     message = f"Expected DSP? {expect_dsp}\n DSP used? {dsp_used}"
 
+    # Verify no LUTs
+    resources = resource_utilization.keys()
+    luts_used = any(
+        resource_utilization[resource] for resource in resources if "LUT" in resource
+    )
+    if luts_used:
+        error = resource_utilization["bad key"]
+        logging.ERROR(f"Expected 0 LUTs, got {luts_used}")
+
     if dsp_used != expect_dsp:
         logging.ERROR(message)
 
 
-"""
-0. adding more tools to the high-level testing function
-2. finish check_for_dsp --> every compilation task should yield a checking task
-3. more verilog
-
-"""
-
-
 def task_robustness_experiments():
     """Robustness experiments: finding Verilog files that existing tools can't map"""
+    # first, read list from robustness-manifest.yml
+    experiments = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
 
-    for experiment in manifest["robustness_experiments"]:
+    for experiment in experiments:
         base_path = (
             utils.output_dir()
             / "robustness_experiments"
@@ -107,6 +97,84 @@ def task_robustness_experiments():
             utils.output_dir()
             / "robustness_experiments"
             / experiment["module_name"]
+            / "lakeroad"
+        )
+
+        task = lakeroad.make_lakeroad_task(
+            # TODO: correct?
+            iteration=0,
+            identifier=experiment["module_name"],
+            collected_data_output_filepath=base_path / "collected_data.json",
+            template="dsp",
+            out_module_name="output",
+            out_filepath=base_path / "output.v",
+            architecture="xilinx-ultrascale-plus",
+            time_filepath=base_path / "out.time",
+            json_filepath=base_path / "out.json",
+            verilog_module_filepath=experiment["filepath"],
+            top_module_name=experiment["module_name"],
+            clock_name="clk",
+            name=experiment["module_name"] + ":lakeroad",
+            initiation_interval=experiment["stages"],
+            inputs=experiment["inputs"],
+            verilog_module_out_signal=("out", experiment["bitwidth"]),
+        )
+
+        yield task
+
+        yield {
+            "name": f"{experiment['module_name']}:lakeroad:dsp_check",
+            "actions": [
+                (
+                    check_for_dsp,
+                    [],
+                    {
+                        "resource_utilization_json_filepath": base_path
+                        / "collected_data.json",
+                        "module_name": experiment["module_name"],
+                    },
+                )
+            ],
+            "file_dep": [base_path / "collected_data.json"],
+        }
+
+        yield verilator.make_verilator_task(
+            f"{experiment['module_name']}:lakeroad:verilator",
+            obj_dir_dir=base_path / "verilator_obj_dir",
+            test_module_filepath=base_path / "output.v",
+            ground_truth_module_filepath=experiment["filepath"],
+            module_inputs=experiment["inputs"],
+            clock_name="clk",
+            initiation_interval=experiment["stages"],
+            testbench_cc_filepath=base_path / "testbench.cc",
+            testbench_exe_filepath=base_path / "testbench",
+            testbench_inputs_filepath=base_path / "testbench_inputs.txt",
+            testbench_stdout_log_filepath=base_path / "testbench_stdout.log",
+            testbench_stderr_log_filepath=base_path / "testbench_stderr.log",
+            makefile_filepath=base_path / "Makefile",
+            output_signal="out",
+            include_dirs=[
+                "/home/acheung8/lakeroad-evaluation/lakeroad-private/DSP48E2"
+            ],
+            extra_args=[
+                "-DXIL_XECLIB",
+                "-Wno-UNOPTFLAT",
+                "-Wno-LATCH",
+                "-Wno-WIDTH",
+                "-Wno-STMTDLY",
+                "-Wno-CASEX",
+                "-Wno-TIMESCALEMOD",
+                "-Wno-PINMISSING",
+            ],
+            max_num_tests=10000,
+        )
+
+        # BELOW IS YOSYS EXPERIMENTS
+
+        base_path = (
+            utils.output_dir()
+            / "robustness_experiments"
+            / experiment["module_name"]
             / "yosys_xilinx_ultrascale_plus"
         )
 
@@ -135,3 +203,7 @@ def task_robustness_experiments():
             ],
             "file_dep": [resources_filepath],
         }
+
+
+if __name__ == "__main__":
+    print(create_manifest())
