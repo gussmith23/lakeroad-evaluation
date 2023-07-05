@@ -64,33 +64,6 @@ The location of the experiment output
   `OUTPUT_DIR` environment variable.
 By default, the experiment results
   write to `out/`.
-
-## Design
-
-Conceptually, our evaluation is
-  a tree of experiments.
-There is one root/top-level experiment,
-  which has a number of sub-experiments;
-  sub-experiments can also have sub-experiments,
-  thus forming a tree.
-
-Practically, each experiment is a Python script.
-The root/top-level experiment
-  is in [`/run.py`](/run.py).
-This experiment
-  then calls in to the sub-experiment scripts
-  defined in [`/experiments/`](/experiments/).
-Each sub-experiment
-  in [`/experiments/`](/experiments/)
-  is also a freestanding script which can be run individually.
-
-The `Experiment` class itself is defined in
-  [`/python/experiment.py`](/python/experiment.py).
-Please see the documentation in that file to understand
-  the design of the class,
-  and refer to the various experiments
-  in [`/experiments/`](/experiments/)
-  for examples of how to use the class.
   
 ## Calyx
 
