@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 from utils import lakeroad_evaluation_dir
 
+placeholder = "placeholder"
 def make_title(
     workload: str, bitwidth: int, is_signed: bool, stages: int, xor_reduction: bool
 ):
@@ -148,6 +149,9 @@ def generate_designs(design_dir: Union[str, Path]):
                             xor_reduction=apply_xor_reduction,
                         )
                         filename = design_dir / (title + ".sv")
+                        tools = ["vivado"]
+                        if (not apply_xor_reduction and workload == "mult"): 
+                            tools.append("diamond")
                         metadata = {
                             "module_name": title,
                             "workload": workload,
@@ -157,6 +161,7 @@ def generate_designs(design_dir: Union[str, Path]):
                             "xor_reduction": apply_xor_reduction,
                             "inputs": input_tuples,
                             "filepath": str(filename),
+                            "tool": tools
                         }
 
                         experiments.append(metadata)

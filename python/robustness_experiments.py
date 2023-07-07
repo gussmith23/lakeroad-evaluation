@@ -97,7 +97,7 @@ def task_robustness_experiments():
             utils.output_dir()
             / "robustness_experiments"
             / experiment["module_name"]
-            / "lakeroad"
+            / "lakeroad-xilinx"
         )
 
         task = lakeroad.make_lakeroad_task(
@@ -114,7 +114,7 @@ def task_robustness_experiments():
             verilog_module_filepath=experiment["filepath"],
             top_module_name=experiment["module_name"],
             clock_name="clk",
-            name=experiment["module_name"] + ":lakeroad",
+            name=experiment["module_name"] + ":lakeroad-xilinx",
             initiation_interval=experiment["stages"],
             inputs=experiment["inputs"],
             verilog_module_out_signal=("out", experiment["bitwidth"]),
@@ -123,7 +123,7 @@ def task_robustness_experiments():
         yield task
 
         yield {
-            "name": f"{experiment['module_name']}:lakeroad:dsp_check",
+            "name": f"{experiment['module_name']}:lakeroad-xilinx:dsp_check",
             "actions": [
                 (
                     check_for_dsp,
@@ -203,6 +203,56 @@ def task_robustness_experiments():
             ],
             "file_dep": [resources_filepath],
         }
+        # right now lakeroad-xilinx, vivado-xilinx, yosys-xilinx
+
+        # diamond-lattice, lakeroad-lattice, yosys-lattice
+        base_path = (
+            utils.output_dir()
+            / "robustness_experiments"
+            / experiment["module_name"]
+            / "lakeroad-lattice"
+        )
+
+# def make_lattice_ecp5_diamond_synthesis_task(
+    # input_filepath: Union[str, Path],
+    # output_dirpath: Union[str, Path],
+    # module_name: str,
+    # clock_info: Optional[Tuple[str, float]] = None,
+    # name: Optional[str] = None,
+    # collect_args: Optional[Dict[str, Any]] = None,
+# ):
+        yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
+            input_filepath=experiment["filepath"],
+            output_dirpath=(
+                utils.output_dir()
+                / "robustness_experiments"
+                / experiment["module_name"]
+                / "diamond"
+            ),
+            module_name=experiment['module_name'],
+            name=f"{experiment['module_name']}:diamond"
+        )
+        task = lakeroad.make_lakeroad_task(
+            # TODO: correct?
+            iteration=0,
+            identifier=experiment["module_name"],
+            collected_data_output_filepath=base_path / "collected_data.json",
+            template="dsp",
+            out_module_name="output",
+            out_filepath=base_path / "output.v",
+            architecture="lattice-ecp5",
+            time_filepath=base_path / "out.time",
+            json_filepath=base_path / "out.json",
+            verilog_module_filepath=experiment["filepath"],
+            top_module_name=experiment["module_name"],
+            clock_name="clk",
+            name=experiment["module_name"] + ":lakeroad-lattice",
+            initiation_interval=experiment["stages"],
+            inputs=experiment["inputs"],
+            verilog_module_out_signal=("out", experiment["bitwidth"]),
+        )
+
+        yield task
 
 
 if __name__ == "__main__":

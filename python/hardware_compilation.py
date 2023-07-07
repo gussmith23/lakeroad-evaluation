@@ -986,6 +986,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
         logging.warn("clock_info not supported for Lattice yet.")
 
     output_dirpath = Path(output_dirpath)
+    input_filepath = Path(input_filepath)
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
     task = {
