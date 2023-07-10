@@ -22,7 +22,7 @@ def check_for_dsp(
 
     # TODO : maybe we want a way to distinguish between architectures, but I doubt
     # we'll need to separate them
-    dsp_list = ["DSP48E2"]
+    dsp_list = ["DSP48E2", ""]
 
     dsp_used = any(resource_utilization[dsp] for dsp in dsp_list)
     message = f"Expected DSP? {expect_dsp}\n DSP used? {dsp_used}"
@@ -33,7 +33,7 @@ def check_for_dsp(
         resource_utilization[resource] for resource in resources if "LUT" in resource
     )
     if luts_used:
-        error = resource_utilization["bad key"]
+        raise Exception("luts are used")
         logging.ERROR(f"Expected 0 LUTs, got {luts_used}")
 
     if dsp_used != expect_dsp:
@@ -52,52 +52,52 @@ def task_robustness_experiments():
             / experiment["module_name"]
             / "vivado"
         )
-        yield {
-            "name": f"{experiment['module_name']}:vivado",
-            "actions": [
-                (
-                    hardware_compilation.xilinx_ultrascale_plus_vivado_synthesis,
-                    [],
-                    {
-                        "instr_src_file": experiment["filepath"],
-                        "synth_opt_place_route_output_filepath": (
-                            base_path / "test_output.v"
-                        ),
-                        "module_name": experiment["module_name"],
-                        "time_filepath": base_path / "test_output.time",
-                        "tcl_script_filepath": base_path / "test_output.tcl",
-                        "log_path": base_path / "test_output.log",
-                        "json_filepath": base_path / "test_output.json",
-                        "resource_utilization_json_filepath": (
-                            base_path / "test_resources.json"
-                        ),
-                    },
-                )
-            ],
-            "targets": [base_path / "test_output.v", base_path / "test_resources.json"],
-        }
-
-        yield {
-            "name": f"{experiment['module_name']}:vivado:dsp_check",
-            "actions": [
-                (
-                    check_for_dsp,
-                    [],
-                    {
-                        "resource_utilization_json_filepath": base_path
-                        / "test_resources.json",
-                        "module_name": experiment["module_name"],
-                    },
-                )
-            ],
-            "file_dep": [base_path / "test_resources.json"],
-        }
+        if ("vivado" in experiment['tool']):
+            yield {
+                "name": f"{experiment['module_name']}:vivado",
+                "actions": [
+                    (
+                        hardware_compilation.xilinx_ultrascale_plus_vivado_synthesis,
+                        [],
+                        {
+                            "instr_src_file": experiment["filepath"],
+                            "synth_opt_place_route_output_filepath": (
+                                base_path / "test_output.v"
+                            ),
+                            "module_name": experiment["module_name"],
+                            "time_filepath": base_path / "test_output.time",
+                            "tcl_script_filepath": base_path / "test_output.tcl",
+                            "log_path": base_path / "test_output.log",
+                            "json_filepath": base_path / "test_output.json",
+                            "resource_utilization_json_filepath": (
+                                base_path / "test_resources.json"
+                            ),
+                        },
+                    )
+                ],
+                "targets": [base_path / "test_output.v", base_path / "test_resources.json"],
+            }
+            yield {
+                "name": f"{experiment['module_name']}:vivado:dsp_check",
+                "actions": [
+                    (
+                        check_for_dsp,
+                        [],
+                        {
+                            "resource_utilization_json_filepath": base_path
+                            / "test_resources.json",
+                            "module_name": experiment["module_name"],
+                        },
+                    )
+                ],
+                "file_dep": [base_path / "test_resources.json"],
+            }
 
         base_path = (
             utils.output_dir()
             / "robustness_experiments"
             / experiment["module_name"]
-            / "lakeroad-xilinx"
+            / "lakeroad_xilinx_ultrascale_plus"
         )
 
         task = lakeroad.make_lakeroad_task(
@@ -170,68 +170,89 @@ def task_robustness_experiments():
         )
 
         # BELOW IS YOSYS EXPERIMENTS
+        if ("yosys" in experiment['tool']):
 
-        base_path = (
-            utils.output_dir()
-            / "robustness_experiments"
-            / experiment["module_name"]
-            / "yosys_xilinx_ultrascale_plus"
-        )
-
-        task = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-            input_filepath=experiment["filepath"],
-            output_dirpath=base_path,
-            module_name=experiment["module_name"],
-        )
-
-        task["name"] = f"{experiment['module_name']}:yosys_xilinx_ultrascale_plus"
-        yield task
-
-        resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
-
-        yield {
-            "name": f"{experiment['module_name']}:yosys:dsp_check",
-            "actions": [
-                (
-                    check_for_dsp,
-                    [],
-                    {
-                        "resource_utilization_json_filepath": resources_filepath,
-                        "module_name": experiment["module_name"],
-                    },
-                )
-            ],
-            "file_dep": [resources_filepath],
-        }
-        # right now lakeroad-xilinx, vivado-xilinx, yosys-xilinx
-
-        # diamond-lattice, lakeroad-lattice, yosys-lattice
-        base_path = (
-            utils.output_dir()
-            / "robustness_experiments"
-            / experiment["module_name"]
-            / "lakeroad-lattice"
-        )
-
-# def make_lattice_ecp5_diamond_synthesis_task(
-    # input_filepath: Union[str, Path],
-    # output_dirpath: Union[str, Path],
-    # module_name: str,
-    # clock_info: Optional[Tuple[str, float]] = None,
-    # name: Optional[str] = None,
-    # collect_args: Optional[Dict[str, Any]] = None,
-# ):
-        yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
-            input_filepath=experiment["filepath"],
-            output_dirpath=(
+            base_path = (
                 utils.output_dir()
                 / "robustness_experiments"
                 / experiment["module_name"]
-                / "diamond"
-            ),
-            module_name=experiment['module_name'],
-            name=f"{experiment['module_name']}:diamond"
-        )
+                / "yosys_xilinx_ultrascale_plus"
+            )
+
+            task = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+                input_filepath=experiment["filepath"],
+                output_dirpath=base_path,
+                module_name=experiment["module_name"],
+            )
+
+            task["name"] = f"{experiment['module_name']}:yosys_xilinx_ultrascale_plus"
+            yield task
+
+            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
+
+            yield {
+                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "actions": [
+                    (
+                        check_for_dsp,
+                        [],
+                        {
+                            "resource_utilization_json_filepath": resources_filepath,
+                            "module_name": experiment["module_name"],
+                        },
+                    )
+                ],
+                "file_dep": [resources_filepath],
+            }
+        # right now lakeroad-xilinx, vivado-xilinx, yosys-xilinx
+
+        # diamond-lattice, lakeroad-lattice, yosys-lattice
+        if ("diamond" in experiment['tool']):
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / experiment["module_name"]
+                / "lakeroad_lattice_ecp5"
+            )
+            yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
+                input_filepath=experiment["filepath"],
+                output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / experiment["module_name"]
+                    / "diamond"
+                ),
+                module_name=experiment['module_name'],
+                name=f"{experiment['module_name']}:diamond"
+            )
+
+            yield {
+                "name": f"{experiment['module_name']}:diamond:dsp_check",
+                "actions": [
+                    (
+                        check_for_dsp,
+                        [],
+                        {
+                            "resource_utilization_json_filepath": base_path
+                            / "test_resources.json",
+                            "module_name": experiment["module_name"],
+                        },
+                    )
+                ],
+                "file_dep": [base_path / "test_resources.json"],
+            }
+            yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
+                input_filepath=experiment["filepath"],
+                output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / experiment["module_name"]
+                    / "yosys_lattice_ecp5"
+                ),
+                module_name=experiment["module_name"],
+                name=f"{experiment['module_name']}:yosys_lattice_ecp5"
+            )
+
         task = lakeroad.make_lakeroad_task(
             # TODO: correct?
             iteration=0,
@@ -253,6 +274,17 @@ def task_robustness_experiments():
         )
 
         yield task
+
+#         def make_lattice_ecp5_yosys_synthesis_task(
+#     input_filepath: Union[str, Path],
+#     output_dirpath: Union[str, Path],
+#     module_name: str,
+#     clock_info: Optional[Tuple[str, float]] = None,
+#     name: Optional[str] = None,
+#     collect_args: Optional[Dict[str, Any]] = None,
+# ):
+
+
 
 
 if __name__ == "__main__":

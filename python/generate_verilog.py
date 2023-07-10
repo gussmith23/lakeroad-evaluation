@@ -149,7 +149,7 @@ def generate_designs(design_dir: Union[str, Path]):
                             xor_reduction=apply_xor_reduction,
                         )
                         filename = design_dir / (title + ".sv")
-                        tools = ["vivado"]
+                        tools = ["vivado", "lakeroad"]
                         if (not apply_xor_reduction and workload == "mult"): 
                             tools.append("diamond")
                         metadata = {
