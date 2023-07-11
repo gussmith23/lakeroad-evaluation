@@ -22,7 +22,7 @@ def check_for_dsp(
 
     # TODO : maybe we want a way to distinguish between architectures, but I doubt
     # we'll need to separate them
-    dsp_list = ["DSP48E2", ""]
+    dsp_list = ["DSP48E2", "MULT18X18D", "ALU54A"]
 
     dsp_used = any(resource_utilization[dsp] for dsp in dsp_list)
     message = f"Expected DSP? {expect_dsp}\n DSP used? {dsp_used}"
@@ -92,6 +92,38 @@ def task_robustness_experiments():
                 ],
                 "file_dep": [base_path / "test_resources.json"],
             }
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / experiment["module_name"]
+                / "yosys_xilinx_ultrascale_plus"
+            )
+
+            task = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+                input_filepath=experiment["filepath"],
+                output_dirpath=base_path,
+                module_name=experiment["module_name"],
+            )
+
+            task["name"] = f"{experiment['module_name']}:yosys_xilinx_ultrascale_plus"
+            yield task
+
+            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
+
+            yield {
+                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "actions": [
+                    (
+                        check_for_dsp,
+                        [],
+                        {
+                            "resource_utilization_json_filepath": resources_filepath,
+                            "module_name": experiment["module_name"],
+                        },
+                    )
+                ],
+                "file_dep": [resources_filepath],
+            }            
 
         base_path = (
             utils.output_dir()
@@ -137,7 +169,6 @@ def task_robustness_experiments():
             ],
             "file_dep": [base_path / "collected_data.json"],
         }
-
         yield verilator.make_verilator_task(
             f"{experiment['module_name']}:lakeroad:verilator",
             obj_dir_dir=base_path / "verilator_obj_dir",
@@ -169,44 +200,7 @@ def task_robustness_experiments():
             max_num_tests=10000,
         )
 
-        # BELOW IS YOSYS EXPERIMENTS
-        if ("yosys" in experiment['tool']):
-
-            base_path = (
-                utils.output_dir()
-                / "robustness_experiments"
-                / experiment["module_name"]
-                / "yosys_xilinx_ultrascale_plus"
-            )
-
-            task = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=experiment["filepath"],
-                output_dirpath=base_path,
-                module_name=experiment["module_name"],
-            )
-
-            task["name"] = f"{experiment['module_name']}:yosys_xilinx_ultrascale_plus"
-            yield task
-
-            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
-
-            yield {
-                "name": f"{experiment['module_name']}:yosys:dsp_check",
-                "actions": [
-                    (
-                        check_for_dsp,
-                        [],
-                        {
-                            "resource_utilization_json_filepath": resources_filepath,
-                            "module_name": experiment["module_name"],
-                        },
-                    )
-                ],
-                "file_dep": [resources_filepath],
-            }
-        # right now lakeroad-xilinx, vivado-xilinx, yosys-xilinx
-
-        # diamond-lattice, lakeroad-lattice, yosys-lattice
+        # # diamond-lattice, lakeroad-lattice, yosys-lattice
         if ("diamond" in experiment['tool']):
             base_path = (
                 utils.output_dir()
@@ -226,21 +220,21 @@ def task_robustness_experiments():
                 name=f"{experiment['module_name']}:diamond"
             )
 
-            yield {
-                "name": f"{experiment['module_name']}:diamond:dsp_check",
-                "actions": [
-                    (
-                        check_for_dsp,
-                        [],
-                        {
-                            "resource_utilization_json_filepath": base_path
-                            / "test_resources.json",
-                            "module_name": experiment["module_name"],
-                        },
-                    )
-                ],
-                "file_dep": [base_path / "test_resources.json"],
-            }
+            # yield {
+            #     "name": f"{experiment['module_name']}:diamond:dsp_check",
+            #     "actions": [
+            #         (
+            #             check_for_dsp,
+            #             [],
+            #             {
+            #                 "resource_utilization_json_filepath": base_path
+            #                 / "test_resources.json",
+            #                 "module_name": experiment["module_name"],
+            #             },
+            #         )
+            #     ],
+            #     "file_dep": [base_path / "test_resources.json"],
+            # }
             yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
                 input_filepath=experiment["filepath"],
                 output_dirpath=(
@@ -252,28 +246,43 @@ def task_robustness_experiments():
                 module_name=experiment["module_name"],
                 name=f"{experiment['module_name']}:yosys_lattice_ecp5"
             )
+            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
 
-        task = lakeroad.make_lakeroad_task(
-            # TODO: correct?
-            iteration=0,
-            identifier=experiment["module_name"],
-            collected_data_output_filepath=base_path / "collected_data.json",
-            template="dsp",
-            out_module_name="output",
-            out_filepath=base_path / "output.v",
-            architecture="lattice-ecp5",
-            time_filepath=base_path / "out.time",
-            json_filepath=base_path / "out.json",
-            verilog_module_filepath=experiment["filepath"],
-            top_module_name=experiment["module_name"],
-            clock_name="clk",
-            name=experiment["module_name"] + ":lakeroad-lattice",
-            initiation_interval=experiment["stages"],
-            inputs=experiment["inputs"],
-            verilog_module_out_signal=("out", experiment["bitwidth"]),
-        )
+            yield {
+                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "actions": [
+                    (
+                        check_for_dsp,
+                        [],
+                        {
+                            "resource_utilization_json_filepath": resources_filepath,
+                            "module_name": experiment["module_name"],
+                        },
+                    )
+                ],
+                "file_dep": [resources_filepath],
+            }
 
-        yield task
+            task = lakeroad.make_lakeroad_task(
+                # TODO: correct?
+                iteration=0,
+                identifier=experiment["module_name"],
+                collected_data_output_filepath=base_path / "collected_data.json",
+                template="dsp",
+                out_module_name="output",
+                out_filepath=base_path / "output.v",
+                architecture="lattice-ecp5",
+                time_filepath=base_path / "out.time",
+                json_filepath=base_path / "out.json",
+                verilog_module_filepath=experiment["filepath"],
+                top_module_name=experiment["module_name"],
+                clock_name="clk",
+                name=experiment["module_name"] + ":lakeroad-lattice",
+                initiation_interval=experiment["stages"],
+                inputs=experiment["inputs"],
+                verilog_module_out_signal=("out", experiment["bitwidth"]),
+            )
+            yield task
 
 #         def make_lattice_ecp5_yosys_synthesis_task(
 #     input_filepath: Union[str, Path],
