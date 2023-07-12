@@ -72,6 +72,9 @@ def task_robustness_experiments():
                             "resource_utilization_json_filepath": (
                                 base_path / "test_resources.json"
                             ),
+                            # "Lower threshold for dedicated DSP block inference."
+                            # Using USE_DSP should already do this, I think, but we're covering our bases.
+                            "directive": "AreaMultThresholdDSP",
                         },
                     )
                 ],
