@@ -362,13 +362,14 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     time_filepath: Union[str, Path],
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path],
+    # I think the next two args are essentially "old" and "new" resource filepaths. We should get rid of one.
     json_filepath: Union[str, Path],
     resource_utilization_json_filepath: Union[str, Path],
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
     synth_design_rtl_flags: bool = False,
-    clock_info: Optional[Tuple[str, float]] = None,
+    clock_info: Optional[Tuple[str, float, Tuple[float, float]]] = None,
     fail_if_constraints_not_met=True,
     place_directive: str = "default",
     route_directive: str = "default",
@@ -403,11 +404,11 @@ def xilinx_ultrascale_plus_vivado_synthesis(
 
     with open(xdc_filepath, "w") as f:
         if clock_info:
-            clock_name, clock_period = clock_info
+            clock_name, clock_period, (rising_edge, falling_edge) = clock_info
             # We use 7 because that's what the Calyx team used for their eval.
             # We could try to refine the clock period per design. Rachit's notes:
             #
-            set_clock_command = f"create_clock -period {clock_period} -name {clock_name} -waveform {{0.0 1}} [get_ports {clock_name}]"
+            set_clock_command = f"create_clock -period {clock_period} -name {clock_name} -waveform {{{rising_edge} {falling_edge}}} [get_ports {clock_name}]"
         else:
             set_clock_command = "# No clock provided; not creating a clock."
         f.write(set_clock_command)
