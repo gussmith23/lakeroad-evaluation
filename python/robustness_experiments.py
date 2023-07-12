@@ -249,7 +249,7 @@ def task_robustness_experiments():
             resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
 
             yield {
-                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "name": f"{experiment['module_name']}:yosys_lattice_ecp5:dsp_check",
                 "actions": [
                     (
                         check_for_dsp,
