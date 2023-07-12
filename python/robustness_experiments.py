@@ -77,13 +77,14 @@ def task_robustness_experiments():
                         check_for_dsp,
                         [],
                         {
-                            "resource_utilization_json_filepath": base_path
-                            / "test_resources.json",
+                            "resource_utilization_json_filepath": (
+                                base_path / f"{Path(experiment['filepath']).stem}_resource_utilization.json"
+                            ),
                             "module_name": experiment["module_name"],
                         },
                     )
                 ],
-                "file_dep": [base_path / "test_resources.json"],
+                "file_dep": [(base_path / f"{Path(experiment['filepath']).stem}_resource_utilization.json")],
             }
             base_path = (
                 utils.output_dir()
