@@ -52,34 +52,24 @@ def task_robustness_experiments():
             / experiment["module_name"]
             / "vivado"
         )
-        if ("vivado" in experiment['tool']):
-            yield {
-                "name": f"{experiment['module_name']}:vivado",
-                "actions": [
-                    (
-                        hardware_compilation.xilinx_ultrascale_plus_vivado_synthesis,
-                        [],
-                        {
-                            "instr_src_file": experiment["filepath"],
-                            "synth_opt_place_route_output_filepath": (
-                                base_path / "test_output.v"
-                            ),
-                            "module_name": experiment["module_name"],
-                            "time_filepath": base_path / "test_output.time",
-                            "tcl_script_filepath": base_path / "test_output.tcl",
-                            "log_path": base_path / "test_output.log",
-                            "json_filepath": base_path / "test_output.json",
-                            "resource_utilization_json_filepath": (
-                                base_path / "test_resources.json"
-                            ),
-                            # "Lower threshold for dedicated DSP block inference."
-                            # Using USE_DSP should already do this, I think, but we're covering our bases.
-                            "directive": "AreaMultThresholdDSP",
-                        },
-                    )
-                ],
-                "targets": [base_path / "test_output.v", base_path / "test_resources.json"],
-            }
+        if "vivado" in experiment["tool"]:
+            yield hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+                input_filepath=experiment["filepath"],
+                output_dirpath=base_path,
+                module_name=experiment["module_name"],
+                # TODO(@gussmith23): Hardcoding clock name and period here.
+                # 0.5ns chosen after a few iterations.
+                clock_info=("clk", 0.5, (0.0, 0.25)),
+                name=f"{experiment['module_name']}:vivado",
+                # Makes Vivado try harder to put things on DSPs.
+                directive="AreaMultThresholdDSP",
+                # If our timing constraints are aggressive enough, it won't meet
+                # timing. This is okay; don't fail. We want aggressive
+                # constraints so that we know Vivado is trying as hard as it
+                # can.
+                fail_if_constraints_not_met=False,
+            )
+
             yield {
                 "name": f"{experiment['module_name']}:vivado:dsp_check",
                 "actions": [
