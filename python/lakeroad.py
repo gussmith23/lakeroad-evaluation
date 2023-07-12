@@ -516,8 +516,11 @@ def task_instruction_experiments(experiments_file: str):
                 yield diamond_synthesis_task
 
             case "xilinx_ultrascale_plus":
+                # Previously this used the noopt version of synthesis. These
+                # experiments don't matter as much anymore, but I also don't
+                # think that's correct anymore.
                 vivado_synthesis_task = (
-                    make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
+                    make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                         input_filepath=verilog_filepath,
                         module_name=module_name,
                         output_dirpath=output_dirpath / "vivado",
