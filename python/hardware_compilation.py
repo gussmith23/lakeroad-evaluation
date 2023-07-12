@@ -513,6 +513,8 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
     collect_args: Optional[Dict[str, Any]] = None,
+    directive: Optional[str] = None,
+    fail_if_constraints_not_met: Optional[bool] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -525,25 +527,36 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     log_filepath = output_dirpath / f"{input_filepath.stem}.log"
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
+    resource_utilization_json_filepath = (
+        output_dirpath / f"{input_filepath.stem}_resource_utilization.json"
+    )
+
+    synth_args = {
+        "instr_src_file": input_filepath,
+        "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+        "module_name": module_name,
+        "time_filepath": time_filepath,
+        "log_path": log_filepath,
+        "tcl_script_filepath": tcl_script_filepath,
+        "opt_design": True,
+        "synth_design": True,
+        "json_filepath": json_filepath,
+        "resource_utilization_json_filepath": resource_utilization_json_filepath,
+    }
+
+    if directive is not None:
+        synth_args["directive"] = directive
+    if clock_info is not None:
+        synth_args["clock_info"] = clock_info
+    if fail_if_constraints_not_met is not None:
+        synth_args["fail_if_constraints_not_met"] = fail_if_constraints_not_met
 
     task = {
         "actions": [
             (
                 xilinx_ultrascale_plus_vivado_synthesis,
                 [],
-                {
-                    "instr_src_file": input_filepath,
-                    "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
-                    "module_name": module_name,
-                    "time_filepath": time_filepath,
-                    "log_path": log_filepath,
-                    "tcl_script_filepath": tcl_script_filepath,
-                    "directive": "default",
-                    "opt_design": True,
-                    "clock_info": clock_info,
-                    "synth_design": True,
-                    "json_filepath": json_filepath,
-                },
+                synth_args,
             )
         ],
         "file_dep": [input_filepath],
@@ -553,6 +566,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             log_filepath,
             tcl_script_filepath,
             json_filepath,
+            resource_utilization_json_filepath,
         ],
     }
 
