@@ -93,16 +93,20 @@ def task_robustness_experiments():
                 / "yosys_xilinx_ultrascale_plus"
             )
 
-            task = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=experiment["filepath"],
-                output_dirpath=base_path,
-                module_name=experiment["module_name"],
+            task = (
+                hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+                    input_filepath=experiment["filepath"],
+                    output_dirpath=base_path,
+                    module_name=experiment["module_name"],
+                )
             )
 
             task["name"] = f"{experiment['module_name']}:yosys_xilinx_ultrascale_plus"
             yield task
 
-            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
+            resources_filepath = (
+                base_path / f"{experiment['module_name']}.resources.json"
+            )
 
             yield {
                 "name": f"{experiment['module_name']}:yosys:dsp_check",
@@ -117,7 +121,7 @@ def task_robustness_experiments():
                     )
                 ],
                 "file_dep": [resources_filepath],
-            }            
+            }
 
         base_path = (
             utils.output_dir()
@@ -195,7 +199,7 @@ def task_robustness_experiments():
         )
 
         # # diamond-lattice, lakeroad-lattice, yosys-lattice
-        if ("diamond" in experiment['tool']):
+        if "diamond" in experiment["tool"]:
             base_path = (
                 utils.output_dir()
                 / "robustness_experiments"
@@ -210,8 +214,8 @@ def task_robustness_experiments():
                     / experiment["module_name"]
                     / "diamond"
                 ),
-                module_name=experiment['module_name'],
-                name=f"{experiment['module_name']}:diamond"
+                module_name=experiment["module_name"],
+                name=f"{experiment['module_name']}:diamond",
             )
 
             # yield {
@@ -238,9 +242,11 @@ def task_robustness_experiments():
                     / "yosys_lattice_ecp5"
                 ),
                 module_name=experiment["module_name"],
-                name=f"{experiment['module_name']}:yosys_lattice_ecp5"
+                name=f"{experiment['module_name']}:yosys_lattice_ecp5",
             )
-            resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
+            resources_filepath = (
+                base_path / f"{experiment['module_name']}.resources.json"
+            )
 
             yield {
                 "name": f"{experiment['module_name']}:yosys_lattice_ecp5:dsp_check",
@@ -278,6 +284,7 @@ def task_robustness_experiments():
             )
             yield task
 
+
 #         def make_lattice_ecp5_yosys_synthesis_task(
 #     input_filepath: Union[str, Path],
 #     output_dirpath: Union[str, Path],
@@ -286,8 +293,6 @@ def task_robustness_experiments():
 #     name: Optional[str] = None,
 #     collect_args: Optional[Dict[str, Any]] = None,
 # ):
-
-
 
 
 if __name__ == "__main__":
