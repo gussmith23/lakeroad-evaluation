@@ -7,6 +7,7 @@ import utils
 import json
 import logging
 import verilator
+import quartus
 
 from pathlib import Path
 
@@ -111,7 +112,7 @@ def task_robustness_experiments():
             resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
 
             yield {
-                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "name": f"{experiment['module_name']}:yosys_xilinx:dsp_check",
                 "actions": [
                     (
                         check_for_dsp,
@@ -169,36 +170,36 @@ def task_robustness_experiments():
             ],
             "file_dep": [base_path / "collected_data.json"],
         }
-        yield verilator.make_verilator_task(
-            f"{experiment['module_name']}:lakeroad:verilator",
-            obj_dir_dir=base_path / "verilator_obj_dir",
-            test_module_filepath=base_path / "output.v",
-            ground_truth_module_filepath=experiment["filepath"],
-            module_inputs=experiment["inputs"],
-            clock_name="clk",
-            initiation_interval=experiment["stages"],
-            testbench_cc_filepath=base_path / "testbench.cc",
-            testbench_exe_filepath=base_path / "testbench",
-            testbench_inputs_filepath=base_path / "testbench_inputs.txt",
-            testbench_stdout_log_filepath=base_path / "testbench_stdout.log",
-            testbench_stderr_log_filepath=base_path / "testbench_stderr.log",
-            makefile_filepath=base_path / "Makefile",
-            output_signal="out",
-            include_dirs=[
-                "/home/acheung8/lakeroad-evaluation/lakeroad-private/DSP48E2"
-            ],
-            extra_args=[
-                "-DXIL_XECLIB",
-                "-Wno-UNOPTFLAT",
-                "-Wno-LATCH",
-                "-Wno-WIDTH",
-                "-Wno-STMTDLY",
-                "-Wno-CASEX",
-                "-Wno-TIMESCALEMOD",
-                "-Wno-PINMISSING",
-            ],
-            max_num_tests=10000,
-        )
+        # yield verilator.make_verilator_task(
+        #     f"{experiment['module_name']}:lakeroad:verilator",
+        #     obj_dir_dir=base_path / "verilator_obj_dir",
+        #     test_module_filepath=base_path / "output.v",
+        #     ground_truth_module_filepath=experiment["filepath"],
+        #     module_inputs=experiment["inputs"],
+        #     clock_name="clk",
+        #     initiation_interval=experiment["stages"],
+        #     testbench_cc_filepath=base_path / "testbench.cc",
+        #     testbench_exe_filepath=base_path / "testbench",
+        #     testbench_inputs_filepath=base_path / "testbench_inputs.txt",
+        #     testbench_stdout_log_filepath=base_path / "testbench_stdout.log",
+        #     testbench_stderr_log_filepath=base_path / "testbench_stderr.log",
+        #     makefile_filepath=base_path / "Makefile",
+        #     output_signal="out",
+        #     include_dirs=[
+        #         "/home/acheung8/lakeroad-evaluation/lakeroad-private/DSP48E2"
+        #     ],
+        #     extra_args=[
+        #         "-DXIL_XECLIB",
+        #         "-Wno-UNOPTFLAT",
+        #         "-Wno-LATCH",
+        #         "-Wno-WIDTH",
+        #         "-Wno-STMTDLY",
+        #         "-Wno-CASEX",
+        #         "-Wno-TIMESCALEMOD",
+        #         "-Wno-PINMISSING",
+        #     ],
+        #     max_num_tests=10000,
+        # )
 
         # # diamond-lattice, lakeroad-lattice, yosys-lattice
         if ("diamond" in experiment['tool']):
@@ -206,16 +207,11 @@ def task_robustness_experiments():
                 utils.output_dir()
                 / "robustness_experiments"
                 / experiment["module_name"]
-                / "lakeroad_lattice_ecp5"
+                / "diamond"
             )
             yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
                 input_filepath=experiment["filepath"],
-                output_dirpath=(
-                    utils.output_dir()
-                    / "robustness_experiments"
-                    / experiment["module_name"]
-                    / "diamond"
-                ),
+                output_dirpath=base_path,
                 module_name=experiment['module_name'],
                 name=f"{experiment['module_name']}:diamond"
             )
@@ -249,7 +245,7 @@ def task_robustness_experiments():
             resources_filepath = base_path / f"{experiment['module_name']}.resources.json"
 
             yield {
-                "name": f"{experiment['module_name']}:yosys:dsp_check",
+                "name": f"{experiment['module_name']}:yosys_lattice:dsp_check",
                 "actions": [
                     (
                         check_for_dsp,
@@ -262,7 +258,12 @@ def task_robustness_experiments():
                 ],
                 "file_dep": [resources_filepath],
             }
-
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / experiment["module_name"]
+                / "lakeroad_lattice_ecp5"
+            )
             task = lakeroad.make_lakeroad_task(
                 # TODO: correct?
                 iteration=0,
@@ -283,6 +284,12 @@ def task_robustness_experiments():
                 verilog_module_out_signal=("out", experiment["bitwidth"]),
             )
             yield task
+        base_path = (
+            utils.output_dir()
+            / "robustness_experiments"
+            / experiment["module_name"]
+            / "quartus_intel"
+        )
 
 #         def make_lattice_ecp5_yosys_synthesis_task(
 #     input_filepath: Union[str, Path],
