@@ -5,6 +5,7 @@ from pathlib import Path
 import yaml
 from utils import lakeroad_evaluation_dir
 
+
 placeholder = "placeholder"
 def make_title(
     workload: str, bitwidth: int, is_signed: bool, stages: int, xor_reduction: bool
@@ -90,6 +91,20 @@ def generate_design(
         function = "((d + a) * b) ^ c"
     elif workload == "submulxor":
         function = "((d - a) * b) ^ c"
+    elif workload == "muladdadd":
+        function = "(a * b) + (c + d)"
+    elif workload == "muladdsub":
+        function = "(a * b) + (c - d)"
+    elif workload == "mulsubadd":
+        function = "(a * b) - (c + d)"
+    elif workload == "mulsubsub":
+        function = "(a * b) - (c - d)"
+    elif workload == "muland":
+        function = "(a * b) & c"
+    elif workload == "mulor":
+        function = "(a * b) | c"
+    elif workload == "mulxor":
+        function = "(a * b) ^ c"
     else:
         raise ValueError(f"Unknown workload {workload}")
 
@@ -109,7 +124,7 @@ def generate_design(
     return result
 
 
-def generate_designs(design_dir: Union[str, Path]):
+def generate_designs_old(design_dir: Union[str, Path]):
     bitwidth_max = 18
     inputs_dict = {
         "mult": ["a", "b"],
@@ -183,6 +198,120 @@ def generate_designs(design_dir: Union[str, Path]):
 
     with open("robustness-manifest.yml", "a+") as output_file:
         yaml.dump(experiments, stream=output_file)
+
+def generate_designs(design_dir: Union[str, Path]):
+    # the max bitwidth for the workloads
+    bitwidth_max = 18
+    # the workloads, their inputs, and the compilers that support them
+    inputs_dict = {
+        "mult": [["a", "b"], ["xilinx", "intel", "lattice"]],
+        "muladd": [["a", "b", "c"], ["xilinx", "lakeroad", "lattice"]], 
+        "mulsub": [["a", "b", "c"], ["xilinx", "lakeroad", "lattice"]],
+
+        "addmuladd": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "addmulsub": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "submuladd": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "submulsub": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "addmuland": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "submuland": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "addmulor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "presubmul": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "submulor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "addmulxor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "submulxor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
+        "preaddmul": [["d", "a", "b"], ["xilinx", "lakeroad"]],
+
+        "muladdadd": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
+        "muladdsub": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
+        "mulsubadd": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
+        "mulsubsub": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
+        "muland": [["a", "b", "c"], ["lattice", "lakeroad"]],
+        "mulor": [["a", "b", "c"], ["lattice", "lakeroad"]],
+        "mulxor": [["a", "b", "c"], ["lattice", "lakeroad"]]
+    }
+    workloads = [key for key in inputs_dict.keys()]
+    max_stages = 3
+
+    # first, clear robustness-manifest.yml
+    with open("robustness-manifest.yml", "w+") as output_file:
+        output_file.write("")
+    experiments = []
+    for workload in workloads:
+        inputs = inputs_dict[workload][0]
+        backends = inputs_dict[workload][1]
+        for bitwidth in range(8, bitwidth_max + 1):
+            input_tuples = [[input, bitwidth] for input in inputs]
+            for is_signed in [True, False]:
+                for stages in range(1, max_stages + 1):
+                    if "xilinx" in backends:
+                        title = make_title(
+                            workload=workload,
+                            bitwidth=bitwidth,
+                            is_signed=is_signed,
+                            stages=stages,
+                            xor_reduction=True,
+                        )
+                        filename = design_dir / (title + ".sv")
+                        metadata = {
+                            "module_name": title,
+                            "workload": workload,
+                            "bitwidth": bitwidth,
+                            "is_signed": is_signed,
+                            "stages": stages,
+                            "xor_reduction": True,
+                            "inputs": input_tuples,
+                            "filepath": str(filename),
+                            "backends": ["xilinx", "lakeroad"]
+                        }
+                        experiments.append(metadata)
+                        with open(filename, "w+") as f:
+                            f.write(
+                                generate_design(
+                                    workload,
+                                    bitwidth,
+                                    is_signed,
+                                    stages,
+                                    inputs,
+                                    True,
+                                )
+                            )
+                    title = make_title(
+                        workload=workload,
+                        bitwidth=bitwidth,
+                        is_signed=is_signed,
+                        stages=stages,
+                        xor_reduction=False,
+                    )
+                    filename = design_dir / (title + ".sv")
+                    metadata = {
+                        "module_name": title,
+                        "workload": workload,
+                        "bitwidth": bitwidth,
+                        "is_signed": is_signed,
+                        "stages": stages,
+                        "xor_reduction": False,
+                        "inputs": input_tuples,
+                        "filepath": str(filename),
+                        "backends": backends
+                    }
+                    experiments.append(metadata)
+
+                    with open(filename, "w+") as f:
+                        f.write(
+                            generate_design(
+                                workload,
+                                bitwidth,
+                                is_signed,
+                                stages,
+                                inputs,
+                                False,
+                            )
+                        )
+    with open("robustness-manifest.yml", "a+") as output_file:
+        # Keep this line below if you want to remove the aliases
+        # yaml.Dumper.ignore_aliases = lambda self, data: True 
+        yaml.dump(experiments, stream=output_file)                        
+
 
 
 if __name__ == "__main__":
