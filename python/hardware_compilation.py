@@ -954,7 +954,13 @@ def lattice_ecp5_diamond_synthesis(
             open(Path(output_dirpath) / "synthesis.log").read(), identifier=module_name
         )
         json.dump(dataclasses.asdict(log_stats), f)
-
+    json.dump(
+        count_resources_in_verilog_src(
+            verilog_src=(output_dirpath / f"{module_name}_prim.v").read_text(),
+            module_name=module_name,
+        ),
+        fp=open(output_dirpath / f"{module_name}_resource_utilization.json", "w"),
+    )
 
 def collect(
     iteration: int,
@@ -1002,7 +1008,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
 
     output_dirpath = Path(output_dirpath)
     input_filepath = Path(input_filepath)
-    json_filepath = output_dirpath / f"{input_filepath.stem}.json"
+    json_filepath = output_dirpath / f"{input_filepath.stem}_resource_utilization.json"
 
     task = {
         "actions": [
