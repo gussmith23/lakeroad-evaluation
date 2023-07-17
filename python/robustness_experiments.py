@@ -601,5 +601,21 @@ def task_robustness_experiments():
                 verilog_module_out_signal=("out", entry["bitwidth"]),
             )
 
+            yield quartus.make_intel_yosys_synthesis_task(
+                input_filepath=entry["filepath"],
+                output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "yosys_intel"
+                ),
+                module_name=entry["module_name"],
+                name=f"{entry['module_name']}:yosys_intel",
+
+            )
+
+
+
+
 if __name__ == "__main__":
     print(create_manifest())
