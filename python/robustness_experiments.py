@@ -575,9 +575,31 @@ def task_robustness_experiments():
                 iteration = 0,
                 task_name = f"{entry['module_name']}:quartus_intel"
             )
-
-            # TODO(@vcanumalla): Add rest of quartus (lakeroad, yosys)
-            
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "lakeroad_intel"
+            )
+            # TODO(@vcanumalla): Add rest of quartus (yosys)
+            yield lakeroad.make_lakeroad_task(
+                iteration=0,
+                identifier=entry["module_name"],
+                collected_data_output_filepath=base_path / "collected_data.json",
+                template="dsp",
+                out_module_name="output",
+                out_filepath=base_path / "output.v",
+                architecture="intel",
+                time_filepath=base_path / "out.time",
+                json_filepath=base_path / "out.json",
+                verilog_module_filepath=entry["filepath"],
+                top_module_name=entry["module_name"],
+                clock_name="clk",
+                name=entry["module_name"] + ":lakeroad-intel",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+            )
 
 if __name__ == "__main__":
     print(create_manifest())
