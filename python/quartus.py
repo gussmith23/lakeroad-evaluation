@@ -205,7 +205,7 @@ def make_intel_yosys_synthesis_task(
     output_filepath = output_dirpath / f"{module_name}.sv"
     time_filepath = output_dirpath / f"{module_name}.time"
     log_filepath = output_dirpath / f"{module_name}.log"
-    resources_filepath = output_dirpath / f"{module_name}.resources.json"
+    resources_filepath = output_dirpath / f"{module_name}_resource_utilization.json"
 
     task = {
         "actions": [
