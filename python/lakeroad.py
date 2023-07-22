@@ -280,25 +280,21 @@ def invoke_lakeroad(
         cmd,
     )
     end_time = time()
+    with open(time_filepath, "w") as f:
+        print(f"{end_time-start_time}s", file=f)
 
     if expect_fail:
         assert proc.returncode != 0, "Expected Lakeroad to fail, but it didn't!"
-        # Exit early.
-        return
     else:
         if proc.returncode != 0:
             logging.error(" " + " ".join(map(str, cmd)))
         proc.check_returncode()
-
-    with open(time_filepath, "w") as f:
-        print(f"{end_time-start_time}s", file=f)
-
-    json.dump(
-        count_resources_in_verilog_src(
-            verilog_src=out_filepath.read_text(), module_name=module_name
-        ),
-        fp=open(json_filepath, "w"),
-    )
+        json.dump(
+            count_resources_in_verilog_src(
+                verilog_src=out_filepath.read_text(), module_name=module_name
+            ),
+            fp=open(json_filepath, "w"),
+        )
 
 
 def collect_lakeroad(
@@ -533,7 +529,8 @@ def task_instruction_experiments(experiments_file: str):
                 yield vivado_synthesis_task
 
             case "sofa":
-                logging.warn("No synthesis implemented for SOFA.")
+                # logging.warn("No synthesis implemented for SOFA.")
+                pass
 
             case _:
                 raise Exception(

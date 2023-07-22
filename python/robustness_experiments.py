@@ -200,6 +200,8 @@ def task_robustness_experiments():
 
             # lakeroad failures occur at synthesis time, not dsp check. Make
             # sure task expects failure.
+            if (contains_compiler_fail(entry, "lakeroad-xilinx")):
+                print(entry)
             yield lakeroad.make_lakeroad_task(
                 # TODO: correct?
                 iteration=0,
@@ -221,7 +223,7 @@ def task_robustness_experiments():
                 expect_fail=contains_compiler_fail(entry, "lakeroad-xilinx"),
             )
             # skip if we expect a failure for lakeroad
-            if contains_compiler_fail(entry, "lakeroad-xilinx"):
+            if not contains_compiler_fail(entry, "lakeroad-xilinx"):
                 yield {
                     "name": f"{entry['module_name']}:lakeroad-xilinx:dsp_check",
                     "actions": [
