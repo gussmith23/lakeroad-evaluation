@@ -158,7 +158,7 @@ def generate_designs(design_dir: Union[str, Path]):
     # On proprietary tools, this means that we expect the tool to not map 
     # workload to a single DSP. For Lakeroad, this means we expect a synthesis
     # failure.
-    expect_fail= {make_title("addmulor", 9, False, 3, False) : ["lakeroad-xilinx"]}
+    expect_fail= {make_title("addmulor", 9, False, 3, False) : ["lakeroad-xilinx", "vivado", "yosys-xilinx"]}
     # first, clear robustness-manifest.yml
     with open("robustness-manifest.yml", "w+") as output_file:
         output_file.write("")

@@ -308,14 +308,15 @@ def collect_lakeroad(
     collected_data_output_filepath: Union[str, Path],
     time_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
+    task_succeeded: bool,
 ):
     with open(time_filepath) as f:
         time = float(f.read().removesuffix("s\n"))
-
-    with open(json_filepath) as f:
-        resources = json.load(f)
-
-    out_data = resources
+    out_data = {}
+    if (task_succeeded):
+        with open(json_filepath) as f:
+            resources = json.load(f)
+        out_data = resources
 
     assert "time_s" not in out_data
     out_data["time_s"] = time
@@ -387,21 +388,21 @@ def make_lakeroad_task(
             },
         )
     ]
-    if not expect_fail:
-        task["actions"] += [
-            (
-                collect_lakeroad,
-                [],
-                {
-                    "iteration": iteration,
-                    "identifier": identifier,
-                    "collected_data_output_filepath": collected_data_output_filepath,
-                    "time_filepath": time_filepath,
-                    "json_filepath": json_filepath,
-                    "architecture": architecture,
-                },
-            ),
-        ]
+    task["actions"] += [
+        (
+            collect_lakeroad,
+            [],
+            {
+                "iteration": iteration,
+                "identifier": identifier,
+                "collected_data_output_filepath": collected_data_output_filepath,
+                "time_filepath": time_filepath,
+                "json_filepath": json_filepath,
+                "architecture": architecture,
+                "task_succeeded": not expect_fail,
+            },
+        ),
+    ]
 
     task["file_dep"] = []
     if verilog_module_filepath:
