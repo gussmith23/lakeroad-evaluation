@@ -129,33 +129,36 @@ def generate_designs(design_dir: Union[str, Path]):
     # the workloads, their inputs, and the compilers that support them
     inputs_dict = {
         "mult": [["a", "b"], ["xilinx", "intel", "lattice"]],
-        "muladd": [["a", "b", "c"], ["xilinx", "lakeroad", "lattice"]], 
-        "mulsub": [["a", "b", "c"], ["xilinx", "lakeroad", "lattice"]],
+        "muladd": [["a", "b", "c"], ["xilinx", "lattice"]], 
+        "mulsub": [["a", "b", "c"], ["xilinx", "lattice"]],
 
-        "addmuladd": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "addmulsub": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "submuladd": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "submulsub": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "addmuland": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "submuland": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "addmulor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "presubmul": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "submulor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "addmulxor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "submulxor": [["a", "b", "c", "d"], ["xilinx", "lakeroad"]],
-        "preaddmul": [["d", "a", "b"], ["xilinx", "lakeroad"]],
+        "addmuladd": [["a", "b", "c", "d"], ["xilinx"]],
+        "addmulsub": [["a", "b", "c", "d"], ["xilinx"]],
+        "submuladd": [["a", "b", "c", "d"], ["xilinx"]],
+        "submulsub": [["a", "b", "c", "d"], ["xilinx"]],
+        "addmuland": [["a", "b", "c", "d"], ["xilinx"]],
+        "submuland": [["a", "b", "c", "d"], ["xilinx"]],
+        "addmulor": [["a", "b", "c", "d"], ["xilinx"]],
+        "presubmul": [["a", "b", "c", "d"], ["xilinx"]],
+        "submulor": [["a", "b", "c", "d"], ["xilinx"]],
+        "addmulxor": [["a", "b", "c", "d"], ["xilinx"]],
+        "submulxor": [["a", "b", "c", "d"], ["xilinx"]],
+        "preaddmul": [["d", "a", "b"], ["xilinx"]],
 
-        "muladdadd": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
-        "muladdsub": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
-        "mulsubadd": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
-        "mulsubsub": [["a", "b", "c", "d"], ["lattice", "lakeroad"]],
-        "muland": [["a", "b", "c"], ["lattice", "lakeroad"]],
-        "mulor": [["a", "b", "c"], ["lattice", "lakeroad"]],
-        "mulxor": [["a", "b", "c"], ["lattice", "lakeroad"]]
+        "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
+        "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
+        "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],
+        "mulsubsub": [["a", "b", "c", "d"], ["lattice"]],
+        "muland": [["a", "b", "c"], ["lattice"]],
+        "mulor": [["a", "b", "c"], ["lattice"]],
+        "mulxor": [["a", "b", "c"], ["lattice"]]
     }
     workloads = [key for key in inputs_dict.keys()]
     max_stages = 3
-
+    # On proprietary tools, this means that we expect the tool to not map 
+    # workload to a single DSP. For Lakeroad, this means we expect a synthesis
+    # failure.
+    expect_fail= {make_title("addmulor", 9, False, 3, False) : ["lakeroad-xilinx", "vivado", "yosys-xilinx"]}
     # first, clear robustness-manifest.yml
     with open("robustness-manifest.yml", "w+") as output_file:
         output_file.write("")
@@ -185,8 +188,10 @@ def generate_designs(design_dir: Union[str, Path]):
                             "xor_reduction": True,
                             "inputs": input_tuples,
                             "filepath": str(filename),
-                            "backends": ["xilinx", "lakeroad"]
+                            "backends": ["xilinx"]
                         }
+                        if title in expect_fail:
+                            metadata["expect_fail"] = expect_fail[title]
                         experiments.append(metadata)
                         with open(filename, "w+") as f:
                             f.write(
@@ -218,6 +223,8 @@ def generate_designs(design_dir: Union[str, Path]):
                         "filepath": str(filename),
                         "backends": backends
                     }
+                    if title in expect_fail:
+                        metadata["expect_fail"] = expect_fail[title]
                     experiments.append(metadata)
 
                     with open(filename, "w+") as f:
