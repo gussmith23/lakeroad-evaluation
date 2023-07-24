@@ -200,8 +200,6 @@ def task_robustness_experiments():
 
             # lakeroad failures occur at synthesis time, not dsp check. Make
             # sure task expects failure.
-            if (contains_compiler_fail(entry, "lakeroad-xilinx")):
-                print(entry)
             yield lakeroad.make_lakeroad_task(
                 # TODO: correct?
                 iteration=0,

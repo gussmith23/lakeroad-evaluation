@@ -190,8 +190,13 @@ def generate_designs(design_dir: Union[str, Path]):
                             "filepath": str(filename),
                             "backends": ["xilinx"]
                         }
+                        # if custom expect failure, add it to the metadata
+                        metadata["expect_fail"] = []
                         if title in expect_fail:
                             metadata["expect_fail"] = expect_fail[title]
+                        # xor_reduction is not supported on yosys-xilinx or lakeroad-xilinx
+                        metadata["expect_fail"].append("yosys-xilinx")
+                        metadata["expect_fail"].append("lakeroad-xilinx")
                         experiments.append(metadata)
                         with open(filename, "w+") as f:
                             f.write(
@@ -204,6 +209,7 @@ def generate_designs(design_dir: Union[str, Path]):
                                     True,
                                 )
                             )
+                    #no xor reduction, use the rest of the workloads (and xilinx)
                     title = make_title(
                         workload=workload,
                         bitwidth=bitwidth,
@@ -223,8 +229,12 @@ def generate_designs(design_dir: Union[str, Path]):
                         "filepath": str(filename),
                         "backends": backends
                     }
+                    metadata["expect_fail"] = []
                     if title in expect_fail:
                         metadata["expect_fail"] = expect_fail[title]
+                    if workload != "mult" and "xilinx" in backends:
+                        # yosys will only map mults to a dsp on xilinx backends, so it will fail on anything else.
+                        metadata["expect_fail"].append("yosys-xilinx")
                     experiments.append(metadata)
 
                     with open(filename, "w+") as f:
