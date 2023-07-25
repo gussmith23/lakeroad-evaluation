@@ -12,7 +12,8 @@ import yaml
 from hardware_compilation import *
 from schema import *
 
-
+TIMEOUT_RETURN_CODE = 25
+SYNTHESIS_FAIL_RETURN_CODE = 26
 def invoke_lakeroad(
     module_name: str,
     # TODO(@gussmith23): Give this a default value of None. Will break
@@ -32,6 +33,7 @@ def invoke_lakeroad(
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
     expect_fail: bool = False,
+    expect_timeout: bool = False,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -284,7 +286,9 @@ def invoke_lakeroad(
         print(f"{end_time-start_time}s", file=f)
     # raise Exception(proc.returncode)
     if expect_fail:
-        assert proc.returncode != 0, "Expected Lakeroad to fail, but it didn't!"
+        assert proc.returncode == 25, "Expected Lakeroad to fail, but it didn't!"
+    elif expect_timeout:
+        assert proc.returncode == 26, "Expected Lakeroad to timeout, but it didn't!"
     else:
         if proc.returncode != 0:
             logging.error(" " + " ".join(map(str, cmd)))
@@ -305,6 +309,7 @@ def collect_lakeroad(
     time_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
     task_succeeded: bool,
+    timeout: bool
 ):
     with open(time_filepath) as f:
         time = float(f.read().removesuffix("s\n"))
@@ -314,7 +319,7 @@ def collect_lakeroad(
             resources = json.load(f)
         out_data = resources
     out_data["expected_success"] = task_succeeded
-
+    out_data["timeout"] = timeout
     assert "time_s" not in out_data
     out_data["time_s"] = time
 
@@ -355,6 +360,7 @@ def make_lakeroad_task(
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
     expect_fail: bool = False,
+    expect_timeout: bool = False,
 ):
     task = {}
 
@@ -382,6 +388,7 @@ def make_lakeroad_task(
                 "reset_name": reset_name,
                 "timeout": timeout,
                 "expect_fail": expect_fail,
+                "expect_timeout": expect_timeout,
             },
         )
     ]
@@ -397,6 +404,7 @@ def make_lakeroad_task(
                 "json_filepath": json_filepath,
                 "architecture": architecture,
                 "task_succeeded": not expect_fail,
+                "lakeroad_timeout": expect_timeout,
             },
         ),
     ]
