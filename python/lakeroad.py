@@ -54,7 +54,7 @@ def invoke_lakeroad(
         synthesis. A list of tuples, (<name>, <bitwidth>).
       initiation_interval: The initiation interval of the module, for sequential
         synthesis.
-      timeout: Timeout arg to pass to Lakeroad.
+      timeout: Timeout arg to pass to Lakeroad (in seconds).
       expect_fail: If True, error if Lakeroad doesn't fail.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
@@ -282,7 +282,7 @@ def invoke_lakeroad(
     end_time = time()
     with open(time_filepath, "w") as f:
         print(f"{end_time-start_time}s", file=f)
-
+    # raise Exception(proc.returncode)
     if expect_fail:
         assert proc.returncode != 0, "Expected Lakeroad to fail, but it didn't!"
     else:
@@ -313,6 +313,7 @@ def collect_lakeroad(
         with open(json_filepath) as f:
             resources = json.load(f)
         out_data = resources
+    out_data["expected_success"] = task_succeeded
 
     assert "time_s" not in out_data
     out_data["time_s"] = time

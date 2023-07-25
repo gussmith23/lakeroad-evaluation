@@ -159,6 +159,7 @@ def generate_designs(design_dir: Union[str, Path]):
     # workload to a single DSP. For Lakeroad, this means we expect a synthesis
     # failure.
     expect_fail= {make_title("addmulor", 9, False, 3, False) : ["lakeroad-xilinx", "vivado", "yosys-xilinx"]}
+    expect_timeout = {}
     # first, clear robustness-manifest.yml
     with open("robustness-manifest.yml", "w+") as output_file:
         output_file.write("")
@@ -194,6 +195,8 @@ def generate_designs(design_dir: Union[str, Path]):
                         metadata["expect_fail"] = []
                         if title in expect_fail:
                             metadata["expect_fail"] = expect_fail[title]
+                        if title in expect_timeout:
+                            metadata["expect_timeout"] = expect_timeout[title]
                         # xor_reduction is not supported on yosys-xilinx or lakeroad-xilinx
                         metadata["expect_fail"].append("yosys-xilinx")
                         metadata["expect_fail"].append("lakeroad-xilinx")
@@ -232,6 +235,8 @@ def generate_designs(design_dir: Union[str, Path]):
                     metadata["expect_fail"] = []
                     if title in expect_fail:
                         metadata["expect_fail"] = expect_fail[title]
+                    if title in expect_timeout:
+                        metadata["expect_timeout"] = expect_timeout[title]
                     if workload != "mult" and "xilinx" in backends:
                         # yosys will only map mults to a dsp on xilinx backends, so it will fail on anything else.
                         metadata["expect_fail"].append("yosys-xilinx")

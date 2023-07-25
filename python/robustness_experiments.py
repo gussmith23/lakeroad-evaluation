@@ -143,6 +143,12 @@ def task_robustness_experiments():
             if tool_name in entry["expect_fail"]:
                 return True
         return False
+    # if there is a timeout for lakeroad
+    def contains_compiler_timeout(entry):
+        if "expect_timeout" in entry:
+            return True
+        return False
+    
     for entry in entries:
         backends = entry["backends"]
         if "xilinx" in backends:
@@ -219,6 +225,8 @@ def task_robustness_experiments():
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 expect_fail=contains_compiler_fail(entry, "lakeroad-xilinx"),
+                timeout=1
+                expect_timeout=contains_compiler_timeout(entry),
             )
             # skip if we expect a failure for lakeroad
             if not contains_compiler_fail(entry, "lakeroad-xilinx"):
