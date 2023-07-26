@@ -403,8 +403,8 @@ def make_lakeroad_task(
                 "time_filepath": time_filepath,
                 "json_filepath": json_filepath,
                 "architecture": architecture,
-                "task_succeeded": not expect_fail,
-                "lakeroad_timeout": expect_timeout,
+                "task_succeeded": not (expect_fail or expect_timeout),
+                "timeout": expect_timeout,
             },
         ),
     ]
