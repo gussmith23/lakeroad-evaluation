@@ -5,13 +5,21 @@ import hardware_compilation
 import lakeroad
 import utils
 import json
+from typing import List
+import pandas
 import logging
 import verilator
 import quartus
-
 from pathlib import Path
 
-
+def _collect_robustness_benchmark_data(
+    filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
+):
+    """Collect Robustness benchmark results into a file, but do not process them."""
+    Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
+    pandas.DataFrame.from_records(map(lambda f: json.load(open(f)), filepaths)).to_csv(
+        output_filepath, index=False
+    )
 def check_dsp_usage(
     module_name: str,
     tool_name: str,
@@ -135,8 +143,10 @@ def task_robustness_experiments():
     """Robustness experiments: finding Verilog files that existing tools can't map"""
 
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
-    # each entry process the workloads that go along with it
-
+    # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
+ 
+    # .json file that contains metadata is produced for each entry's synthesis.
+    collected_data_output_filepaths = []
     # determines if the compiler fails for the workload we're looking at 
     def contains_compiler_fail(entry, tool_name):
         if "expect_fail" in entry:
@@ -195,6 +205,9 @@ def task_robustness_experiments():
                 ],
                 "file_dep": [(base_path / f"{Path(entry['filepath']).stem}_resource_utilization.json")],
             }
+            collected_data_output_filepaths.append(
+                base_path / f"{Path(entry['filepath']).stem}.json"
+            )
             if entry["xor_reduction"] == False:
             # Lakeroad Synthesis for xilinx backend
                 base_path = (
@@ -249,6 +262,10 @@ def task_robustness_experiments():
                         ],
                         "file_dep": [base_path / "collected_data.json"],
                     }
+                # lakeroad should produce a collected_data.json regardless of whether it fails or not
+                collected_data_output_filepaths.append(
+                    base_path / "collected_data.json"
+                )
             # yield verilator.make_verilator_task(
             #     f"{entry['module_name']}:lakeroad:verilator",
             #     obj_dir_dir=base_path / "verilator_obj_dir",
@@ -315,6 +332,9 @@ def task_robustness_experiments():
                 ],
                 "file_dep": [resources_filepath],
             }
+            collected_data_output_filepaths.append(
+                base_path / f"{entry['filepath']}.json"
+            )
 
         # if "lattice" in backends:
         #     # diamond-lattice, lakeroad-lattice, yosys-lattice
@@ -516,6 +536,26 @@ def task_robustness_experiments():
         #         ],
         #         "file_dep": [resources_filepath],
         #     }
+    base_path = (
+        utils.output_dir()
+        / "robustness_experiments_csv"
+    )
+    csv_output = base_path / "all_results" / "all_results_collected.csv"
+    yield {
+        "name": "collect_data",
+        "file_dep": collected_data_output_filepaths,
+        "targets": [csv_output],
+        "actions": [
+            (
+                _collect_robustness_benchmark_data,
+                [],
+                {
+                    "filepaths": collected_data_output_filepaths,
+                    "output_filepath": csv_output,
+                },
+            )
+        ],
+    }
 
 
 if __name__ == "__main__":
