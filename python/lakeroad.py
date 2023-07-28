@@ -209,8 +209,7 @@ def invoke_lakeroad(
 
     lakeroad_invoke = (
         [
-            "racket",
-            str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "main.rkt"),
+            str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "lakeroad-portfolio.py"),
         ]
         if True
         else [
