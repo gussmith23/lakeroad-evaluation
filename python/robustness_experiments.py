@@ -10,16 +10,37 @@ import pandas
 import logging
 import verilator
 import quartus
+import os
 from pathlib import Path
 
 def _collect_robustness_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
     """Collect Robustness benchmark results into a file, but do not process them."""
+    # print(filepaths)
     Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
-    pandas.DataFrame.from_records(map(lambda f: json.load(open(f)), filepaths)).to_csv(
+    failures = []
+    real = []
+    for f in filepaths:
+        if not os.path.exists(f):
+            failures.append(f)
+        else:
+            real.append(f)
+    pandas.DataFrame.from_records(filter(lambda x: x is not None, map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths))).to_csv(
         output_filepath, index=False
     )
+    # pandas.DataFrame.from_records(filter(lambda x: x is not None, map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths))
+    #     output_filepath, index=False
+    # )
+    # write failures to failures.txt
+    with open("failures.txt", "w+") as ff:
+        for f in failures:
+            ff.write(str(f)[61:(len(str(f))) - 20] + "\n")
+    ff.close()
+    with open("real.txt", "w+") as fg:
+        for f in real:
+            fg.write(str(f) + "\n")
+    fg.close()
 def check_dsp_usage(
     module_name: str,
     tool_name: str,
@@ -238,7 +259,7 @@ def task_robustness_experiments():
                     inputs=entry["inputs"],
                     verilog_module_out_signal=("out", entry["bitwidth"]),
                     expect_fail=contains_compiler_fail(entry, "lakeroad-xilinx"),
-                    timeout=300,
+                    timeout=500,
                     # only expect timeout for the specified entries
                     expect_timeout=contains_compiler_timeout(entry),
                 )
@@ -333,7 +354,7 @@ def task_robustness_experiments():
                 "file_dep": [resources_filepath],
             }
             collected_data_output_filepaths.append(
-                base_path / f"{entry['filepath']}.json"
+                base_path / f"{entry['module_name']}.json"
             )
 
         # if "lattice" in backends:
@@ -543,7 +564,7 @@ def task_robustness_experiments():
     csv_output = base_path / "all_results" / "all_results_collected.csv"
     yield {
         "name": "collect_data",
-        "file_dep": collected_data_output_filepaths,
+        # "file_dep": collected_data_output_filepaths,
         "targets": [csv_output],
         "actions": [
             (

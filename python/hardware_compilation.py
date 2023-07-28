@@ -490,7 +490,10 @@ report_utilization
 
     with open(json_filepath, "w") as f:
         log_stats = parse_ultrascale_log(open(log_path).read(), identifier=module_name)
-        json.dump(dataclasses.asdict(log_stats), f)
+        data = dataclasses.asdict(log_stats)
+        data["tool"] = "vivado"
+        data["architecture"] = "xilinx_ultrascale_plus"
+        json.dump(data, f)
         if fail_if_constraints_not_met:
             assert (
                 log_stats.user_constraints_met is None
@@ -740,6 +743,15 @@ def yosys_synthesis(
     parsed = parse_yosys_log(open(log_filepath).read())
     parsed["yosys_runtime_s"] = yosys_end_time - yosys_start_time
     parsed["identifier"] = module_name
+    parsed["tool"] = "yosys"
+
+    # for all cases of synth commands, add the tool
+    if "synth_xilinx" in synth_command:
+        parsed["architecture"] = "xilinx_ultrascale_plus"
+    elif "synth_ecp5" in synth_command:
+        parsed["architecture"] = "lattice_ecp5"
+
+    # find architecture
     with open(json_filepath, "w") as f:
         json.dump(parsed, f)
 
