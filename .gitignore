@@ -17,3 +17,5 @@ python/__pycache__/
 
 # Default evaluation output directory
 out/
+
+.doit.db.bak
