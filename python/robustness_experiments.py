@@ -259,6 +259,7 @@ def task_robustness_experiments():
                     inputs=entry["inputs"],
                     verilog_module_out_signal=("out", entry["bitwidth"]),
                     expect_fail=contains_compiler_fail(entry, "lakeroad-xilinx"),
+                    # TODO(@gussmith23 @vcanumalla): Magic number
                     timeout=500,
                     # only expect timeout for the specified entries
                     expect_timeout=contains_compiler_timeout(entry),
