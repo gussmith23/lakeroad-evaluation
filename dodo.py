@@ -13,4 +13,3 @@ from gather_data import *
 from yosys_experiments import *
 from figures_and_tables import *
 from robustness_experiments import *
-from dsp_benchmarks import *
