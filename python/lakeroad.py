@@ -35,7 +35,7 @@ def invoke_lakeroad(
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
-    check_returncode: bool = True,
+    check_returncode: bool = False,
     extra_summary_fields: Dict[str, Any] = {},
 ):
     """Invoke Lakeroad to generate an instruction implementation.
