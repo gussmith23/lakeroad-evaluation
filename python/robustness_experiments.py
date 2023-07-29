@@ -192,7 +192,7 @@ def task_robustness_experiments():
                 / "vivado"
             )
             # vivado synthesis
-            yield hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            (task, (json_filepath, _,_,_)) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                 input_filepath=entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
@@ -206,88 +206,47 @@ def task_robustness_experiments():
                 # timing. This is okay; don't fail. We want aggressive
                 # constraints so we know Vivado is trying as hard as it can.
                 fail_if_constraints_not_met=False,
+                extra_summary_fields = {"identifier":entry["module_name"],
+                                        "architecture":"xilinx-ultrascale-plus",
+                                        "tool":"vivado",},
             )
-            # dsp check should talk about expected failure for this workload
-            yield {
-                "name": f"{entry['module_name']}:vivado:dsp_check",
-                "actions": [
-                    (
-                        check_dsp_usage,
-                        [],
-                        {
-                            "resource_utilization_json_filepath": (
-                                base_path / f"{Path(entry['filepath']).stem}_resource_utilization.json"
-                            ),
-                            "module_name": entry["module_name"],
-                            "tool_name": "vivado",
-                            "expect_fail": contains_compiler_fail(entry, "vivado"),
-                        },
-                    )
-                ],
-                "file_dep": [(base_path / f"{Path(entry['filepath']).stem}_resource_utilization.json")],
-            }
+            yield task
             collected_data_output_filepaths.append(
-                base_path / f"{Path(entry['filepath']).stem}.json"
+                json_filepath
             )
-            if entry["xor_reduction"] == False:
-            # Lakeroad Synthesis for xilinx backend
-                base_path = (
-                    utils.output_dir()
-                    / "robustness_experiments"
-                    / entry["module_name"]
-                    / "lakeroad_xilinx_ultrascale_plus"
-                )
 
-                # lakeroad failures occur at synthesis time, not dsp check. Make
-                # sure task expects failure.
-                yield lakeroad.make_lakeroad_task(
-                    # TODO: correct?
-                    iteration=0,
-                    identifier=entry["module_name"],
-                    collected_data_output_filepath=base_path / "collected_data.json",
-                    template="dsp",
-                    out_module_name="output",
-                    out_filepath=base_path / "output.v",
-                    architecture="xilinx-ultrascale-plus",
-                    time_filepath=base_path / "out.time",
-                    json_filepath=base_path / "out.json",
-                    verilog_module_filepath=entry["filepath"],
-                    top_module_name=entry["module_name"],
-                    clock_name="clk",
-                    name=entry["module_name"] + ":lakeroad-xilinx",
-                    initiation_interval=entry["stages"],
-                    inputs=entry["inputs"],
-                    verilog_module_out_signal=("out", entry["bitwidth"]),
-                    expect_fail=contains_compiler_fail(entry, "lakeroad-xilinx"),
-                    # TODO(@gussmith23 @vcanumalla): Magic number
-                    timeout=500,
-                    # only expect timeout for the specified entries
-                    expect_timeout=contains_compiler_timeout(entry),
-                )
-                # skip if we expect a failure for lakeroad ()
-                if not (contains_compiler_fail(entry, "lakeroad-xilinx") or contains_compiler_timeout(entry)):
-                    yield {
-                        "name": f"{entry['module_name']}:lakeroad-xilinx:dsp_check",
-                        "actions": [
-                            (
-                                check_dsp_usage,
-                                [],
-                                {
-                                    "resource_utilization_json_filepath": base_path
-                                    / "collected_data.json",
-                                    "module_name": entry["module_name"],
-                                    "tool_name": "lakeroad-xilinx",
-                                    # resource automatically going to be fail if theres timeout or expected synthesis failure
-                                    "expect_fail": contains_compiler_fail(entry, "lakeroad-xilinx") or contains_compiler_timeout(entry),
-                                },
-                            )
-                        ],
-                        "file_dep": [base_path / "collected_data.json"],
-                    }
-                # lakeroad should produce a collected_data.json regardless of whether it fails or not
-                collected_data_output_filepaths.append(
-                    base_path / "collected_data.json"
-                )
+            # Lakeroad Synthesis for xilinx backend
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "lakeroad_xilinx_ultrascale_plus"
+            )
+
+            (task, (_, json_filepath)) = lakeroad.make_lakeroad_task(
+                out_dirpath=base_path,
+                template="dsp",
+                out_module_name="output",
+                architecture="xilinx-ultrascale-plus",
+                verilog_module_filepath=entry["filepath"],
+                top_module_name=entry["module_name"],
+                clock_name="clk",
+                name=entry["module_name"] + ":lakeroad-xilinx",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+                # TODO(@gussmith23 @vcanumalla): Magic number
+                timeout=500,
+                extra_summary_fields = {"identifier":entry["module_name"],
+                                        "architecture":"xilinx-ultrascale-plus",
+                                        "tool":"lakeroad",},
+            )
+            yield task
+
+            collected_data_output_filepaths.append(
+                json_filepath
+            )
+
             # yield verilator.make_verilator_task(
             #     f"{entry['module_name']}:lakeroad:verilator",
             #     obj_dir_dir=base_path / "verilator_obj_dir",
@@ -318,6 +277,7 @@ def task_robustness_experiments():
             #     ],
             #     max_num_tests=10000,
             # )
+
             # yosys synthesis for xilinx backend
             base_path = (
                 utils.output_dir()
@@ -325,37 +285,18 @@ def task_robustness_experiments():
                 / entry["module_name"]
                 / "yosys_xilinx_ultrascale_plus"
             )
-            task = (
-                hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            (task, (json_filepath, _,_)) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
                     input_filepath=entry["filepath"],
                     output_dirpath=base_path,
                     module_name=entry["module_name"],
+                    name=f"{entry['module_name']}:yosys_xilinx_ultrascale_plus",
+                    extra_summary_fields = {"identifier":entry["module_name"],
+                                        "architecture":"xilinx-ultrascale-plus",
+                                        "tool":"yosys",},
                 )
-            )
-            task["name"] = f"{entry['module_name']}:yosys_xilinx_ultrascale_plus"
             yield task
-
-            resources_filepath = (
-                base_path / f"{entry['module_name']}_resource_utilization.json"
-            )
-            yield {
-                "name": f"{entry['module_name']}:yosys_xilinx:dsp_check",
-                "actions": [
-                    (
-                        check_dsp_usage,
-                        [],
-                        {
-                            "resource_utilization_json_filepath": resources_filepath,
-                            "module_name": entry["module_name"],
-                            "tool_name": "yosys-xilinx",
-                            "expect_fail": contains_compiler_fail(entry, "yosys-xilinx"),
-                        },
-                    )
-                ],
-                "file_dep": [resources_filepath],
-            }
             collected_data_output_filepaths.append(
-                base_path / f"{entry['module_name']}.json"
+                json_filepath
             )
 
         # if "lattice" in backends:

@@ -359,12 +359,9 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     instr_src_file: Union[str, Path],
     synth_opt_place_route_output_filepath: Union[str, Path],
     module_name: str,
-    time_filepath: Union[str, Path],
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path],
-    # I think the next two args are essentially "old" and "new" resource filepaths. We should get rid of one.
-    json_filepath: Union[str, Path],
-    resource_utilization_json_filepath: Union[str, Path],
+    summary_filepath: Union[str, Path],
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
@@ -373,6 +370,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     fail_if_constraints_not_met=True,
     place_directive: str = "default",
     route_directive: str = "default",
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -388,11 +386,11 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         opt_design: Whether or not to run Vivado's opt_design command.
         synth_design_rtl_flags: Whether or not to pass the -rtl and all
           -rtl_skip_* flags to synth_design.
-        json_filepath: Filepath of the output JSON file where results parsed
-          from the Vivado logfile should be written.
+        summary_filepath: Output JSON summary filepath.
         clock_info: Clock name and period in nanoseconds. When provided, a
           constraint file will be created and loaded using the given clock
           information.
+        extra_summary_fields: Extra fields to add to the summary JSON.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -485,28 +483,36 @@ report_utilization
         )
         end_time = time()
 
-    with open(time_filepath, "w") as f:
-        print(f"{end_time-start_time}s", file=f)
+    # We no longer really use this, other than to determine whether user
+    # constraints were met (and we don't really use that info anymore, either!)
+    log_stats = parse_ultrascale_log(open(log_path).read(), identifier=module_name)
+    # data = dataclasses.asdict(log_stats)
+    # data["tool"] = "vivado"
+    # data["architecture"] = "xilinx_ultrascale_plus"
+    # json.dump(data, f)
+    if fail_if_constraints_not_met:
+        assert (
+            log_stats.user_constraints_met is None
+            or log_stats.user_constraints_met is True
+        ), "Vivado reports that user constraints were not met!"
 
-    with open(json_filepath, "w") as f:
-        log_stats = parse_ultrascale_log(open(log_path).read(), identifier=module_name)
-        data = dataclasses.asdict(log_stats)
-        data["tool"] = "vivado"
-        data["architecture"] = "xilinx_ultrascale_plus"
-        json.dump(data, f)
-        if fail_if_constraints_not_met:
-            assert (
-                log_stats.user_constraints_met is None
-                or log_stats.user_constraints_met is True
-            ), "Vivado reports that user constraints were not met!"
+    summary =count_resources_in_verilog_src(
+        verilog_src=synth_opt_place_route_output_filepath.read_text(),
+        module_name=module_name,
+    )
+
+    assert "time_s" not in summary
+    summary["time_s"] = end_time - start_time
+
+    for key in extra_summary_fields:
+        assert key not in summary
+        summary[key] = extra_summary_fields[key]
 
     json.dump(
-        count_resources_in_verilog_src(
-            verilog_src=synth_opt_place_route_output_filepath.read_text(),
-            module_name=module_name,
-        ),
-        fp=open(resource_utilization_json_filepath, "w"),
+        summary,
+        fp=open(summary_filepath, "w"),
     )
+
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
@@ -515,36 +521,38 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
-    collect_args: Optional[Dict[str, Any]] = None,
     directive: Optional[str] = None,
     fail_if_constraints_not_met: Optional[bool] = None,
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
-    This task will run Vivado with optimizations."""
+    This task will run Vivado with optimizations.
+    
+    Returns:
+        (task, (json_filepath, verilog_filepath, log_filepath, tcl_filepath)).
+    """ 
 
     input_filepath = Path(input_filepath)
     output_dirpath = Path(output_dirpath)
-    synth_opt_place_route_output_filepath = output_dirpath / input_filepath.name
-    time_filepath = output_dirpath / f"{input_filepath.stem}.time"
-    log_filepath = output_dirpath / f"{input_filepath.stem}.log"
-    tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
-    json_filepath = output_dirpath / f"{input_filepath.stem}.json"
-    resource_utilization_json_filepath = (
-        output_dirpath / f"{input_filepath.stem}_resource_utilization.json"
-    )
+
+    output_filepaths = {
+        "synth_opt_place_route_output_filepath": output_dirpath / input_filepath.name,
+        "log_filepath" : output_dirpath / f"{input_filepath.stem}.log",
+        "tcl_script_filepath": output_dirpath / f"{input_filepath.stem}.tcl",
+        "summary_filepath": output_dirpath / f"{input_filepath.stem}_summary.json",
+    }
 
     synth_args = {
         "instr_src_file": input_filepath,
-        "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+        "synth_opt_place_route_output_filepath": output_filepaths["synth_opt_place_route_output_filepath"],
         "module_name": module_name,
-        "time_filepath": time_filepath,
-        "log_path": log_filepath,
-        "tcl_script_filepath": tcl_script_filepath,
+        "log_path": output_filepaths["log_filepath"],
+        "tcl_script_filepath": output_filepaths["tcl_script_filepath"],
         "opt_design": True,
         "synth_design": True,
-        "json_filepath": json_filepath,
-        "resource_utilization_json_filepath": resource_utilization_json_filepath,
+        "summary_filepath": output_filepaths["summary_filepath"],
+        "extra_summary_fields": extra_summary_fields,
     }
 
     if directive is not None:
@@ -563,37 +571,13 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
             )
         ],
         "file_dep": [input_filepath],
-        "targets": [
-            synth_opt_place_route_output_filepath,
-            time_filepath,
-            log_filepath,
-            tcl_script_filepath,
-            json_filepath,
-            resource_utilization_json_filepath,
-        ],
+        "targets": list(output_filepaths.values()),
     }
 
     if name is not None:
         task["name"] = name
 
-    if collect_args is not None:
-        task["actions"].append(
-            (
-                collect,
-                [],
-                {
-                    "iteration": collect_args["iteration"],
-                    "identifier": collect_args["identifier"],
-                    "json_filepath": json_filepath,
-                    "collected_data_filepath": collect_args["collected_data_filepath"],
-                    "architecture": "xilinx_ultrascale_plus",
-                    "tool": "vivado",
-                },
-            )
-        )
-        task["targets"].append(collect_args["collected_data_filepath"])
-
-    return task
+    return (task, (output_filepaths["summary_filepath"],output_filepaths["synth_opt_place_route_output_filepath"], output_filepaths["log_filepath"], output_filepaths["tcl_script_filepath"]))
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
@@ -679,11 +663,10 @@ def yosys_synthesis(
     input_filepath: Union[str, Path],
     module_name: str,
     output_filepath: str,
-    time_filepath: Union[str, Path],
     synth_command: str,
     log_filepath: Union[str, Path],
-    json_filepath: Union[str, Path],
-    resources_filepath: Union[str, Path],
+    summary_filepath: Union[str, Path],
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     output_filepath.parent.mkdir(parents=True, exist_ok=True)
     log_filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -714,51 +697,18 @@ def yosys_synthesis(
             print(f"Error log in {(str(logfile))}", file=sys.stderr)
             raise e
 
-    with open(time_filepath, "w") as f:
-        print(f"{yosys_end_time-yosys_start_time}s", file=f)
+    # Generate summary
+    summary = count_resources_in_verilog_src(output_filepath.read_text(), module_name)
 
-    # We don't need to PnR with nextpnr anymore. All Lakeroad instructions are
-    # validated through PnR with Vivado/Diamond. And we only need synthesis (not
-    # pnr) results for baseline.
-    # # Place and route with nextpnr.
-    # # Runs in out-of-context mode, which doesn't insert I/O cells.
-    # with open(nextpnr_log_path, "w") as logfile:
-    #     logging.info("Running nextpnr place-and-route on %s", instr_src_file)
-    #     try:
-    #         nextpnr_start_time = time()
-    #         subprocess.run(
-    #             ["nextpnr-ecp5", "--out-of-context", "--json", synth_out_json],
-    #             check=True,
-    #             stdout=logfile,
-    #             stderr=logfile,
-    #         )
-    #         nextpnr_end_time = time()
-    #     except subprocess.CalledProcessError as e:
-    #         print(f"Error log in {(str(logfile))}", file=sys.stderr)
-    #         raise e
+    assert "time_s" not in summary
+    summary["time_s"] = yosys_end_time - yosys_start_time
 
-    # with open(nextpnr_time_path, "w") as f:
-    #     print(f"{nextpnr_end_time-nextpnr_start_time}s", file=f)
+    for key in extra_summary_fields:
+        assert key not in summary
+        summary[key] = extra_summary_fields[key]
 
-    parsed = parse_yosys_log(open(log_filepath).read())
-    parsed["yosys_runtime_s"] = yosys_end_time - yosys_start_time
-    parsed["identifier"] = module_name
-    parsed["tool"] = "yosys"
-
-    # for all cases of synth commands, add the tool
-    if "synth_xilinx" in synth_command:
-        parsed["architecture"] = "xilinx_ultrascale_plus"
-    elif "synth_ecp5" in synth_command:
-        parsed["architecture"] = "lattice_ecp5"
-
-    # find architecture
-    with open(json_filepath, "w") as f:
-        json.dump(parsed, f)
-
-    # Count resources.
-    resources = count_resources_in_verilog_src(output_filepath.read_text(), module_name)
-    with open(resources_filepath, "w") as f:
-        json.dump(resources, f)
+    with open(summary_filepath, "w") as f:
+        json.dump(summary, f)
 
 
 def make_lattice_ecp5_yosys_synthesis_task(
@@ -837,7 +787,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
-    collect_args: Optional[Dict[str, Any]] = None,
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -845,11 +795,11 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
         logging.warn("clock_info not supported for Yosys.")
 
     output_dirpath = Path(output_dirpath)
-    json_filepath = output_dirpath / f"{module_name}.json"
-    output_filepath = output_dirpath / f"{module_name}.sv"
-    time_filepath = output_dirpath / f"{module_name}.time"
-    log_filepath = output_dirpath / f"{module_name}.log"
-    resources_filepath = output_dirpath / f"{module_name}_resource_utilization.json"
+    output_filepaths = {
+        "json_filepath" : output_dirpath / f"{module_name}.json",
+        "output_filepath" : output_dirpath / f"{module_name}.sv",
+        "log_filepath" : output_dirpath / f"{module_name}.log",
+    }
 
     task = {
         "actions": [
@@ -857,48 +807,24 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
                 yosys_synthesis,
                 [],
                 {
-                    "json_filepath": json_filepath,
+                    "summary_filepath": output_filepaths["json_filepath"],
                     "input_filepath": input_filepath,
                     "module_name": module_name,
-                    "output_filepath": output_filepath,
-                    "time_filepath": time_filepath,
+                    "output_filepath": output_filepaths["output_filepath"],
                     "synth_command": "synth_xilinx -family xcup",
-                    "log_filepath": log_filepath,
-                    "resources_filepath": resources_filepath,
+                    "log_filepath": output_filepaths["log_filepath"],
+                    "extra_summary_fields": extra_summary_fields,
                 },
             )
         ],
         "file_dep": [input_filepath],
-        "targets": [
-            json_filepath,
-            output_filepath,
-            time_filepath,
-            log_filepath,
-            resources_filepath,
-        ],
+        "targets": list(output_filepaths.values()),
     }
 
     if name is not None:
         task["name"] = name
 
-    if collect_args is not None:
-        task["actions"].append(
-            (
-                collect,
-                [],
-                {
-                    "iteration": collect_args["iteration"],
-                    "identifier": collect_args["identifier"],
-                    "json_filepath": json_filepath,
-                    "collected_data_filepath": collect_args["collected_data_filepath"],
-                    "architecture": "xilinx_ultrascale_plus",
-                    "tool": "yosys",
-                },
-            )
-        )
-        task["targets"].append(collect_args["collected_data_filepath"])
-
-    return task
+    return (task, (output_filepaths["json_filepath"], output_filepaths["output_filepath"], output_filepaths["log_filepath"]))
 
 
 def lattice_ecp5_diamond_synthesis(

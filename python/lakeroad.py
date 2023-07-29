@@ -25,7 +25,6 @@ def invoke_lakeroad(
     template: str,
     out_filepath: Union[str, Path],
     architecture: str,
-    time_filepath: Union[str, Path],
     json_filepath: Union[str, Path],
     verilog_module_filepath: Optional[Union[str, Path]] = None,
     top_module_name: Optional[str] = None,
@@ -35,8 +34,8 @@ def invoke_lakeroad(
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
-    expect_fail: bool = False,
-    expect_timeout: bool = False,
+    check_returncode: bool = True,
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -60,7 +59,9 @@ def invoke_lakeroad(
       initiation_interval: The initiation interval of the module, for sequential
         synthesis.
       timeout: Timeout arg to pass to Lakeroad (in seconds).
-      expect_fail: If True, error if Lakeroad doesn't fail.
+      check_returncode: Whether or not to run check_returncode(). Defaults to
+        False.
+      extra_summary_fields: Extra fields to write into the final JSON summary.
 
     TODO Could also allow users to specify whether Lakeroad should fail. E.g.
     addition isn't implemented on SOFA, so we could allow users to attempt to
@@ -144,74 +145,48 @@ def invoke_lakeroad(
         cmd,
     )
     end_time = time()
-    with open(time_filepath, "w") as f:
-        print(f"{end_time-start_time}s", file=f)
-    # raise Exception(proc.returncode)
-    if expect_fail:
-        assert proc.returncode == 25, "Expected Lakeroad to fail, but it didn't!"
-    elif expect_timeout:
-        assert proc.returncode == 26, "Expected Lakeroad to timeout, but it didn't!"
-    else:
-        if proc.returncode != 0:
-            logging.error(" " + " ".join(map(str, cmd)))
-        proc.check_returncode()
-        json.dump(
-            count_resources_in_verilog_src(
+
+    summary = {}
+    if proc.returncode == 0:
+        summary = count_resources_in_verilog_src(
                 verilog_src=out_filepath.read_text(), module_name=module_name
-            ),
+            )
+        
+    assert "time_s" not in summary
+    summary["time_s"] = end_time-start_time
+
+    assert "returncode" not in summary
+    summary["returncode"] = proc.returncode
+
+    assert "lakeroad_synthesis_success" not in summary
+    summary["lakeroad_synthesis_success"] = proc.returncode == SYNTHESIS_SUCCESS_RETURN_CODE
+
+    assert "lakeroad_synthesis_timeout" not in summary
+    summary["lakeroad_synthesis_timeout"] = proc.returncode == TIMEOUT_RETURN_CODE
+
+    assert "lakeroad_synthesis_failure" not in summary
+    summary["lakeroad_synthesis_failure"] = proc.returncode == SYNTHESIS_FAIL_RETURN_CODE
+
+    for extra_field in extra_summary_fields:
+        assert extra_field not in summary
+        summary[extra_field] = extra_summary_fields[extra_field]
+
+    json.dump(
+        summary,
             fp=open(json_filepath, "w"),
         )
 
+    if proc.returncode != 0:
+        logging.error(" " + " ".join(map(str, cmd)))
+    if check_returncode: proc.check_returncode()
 
-def collect_lakeroad(
-    iteration: int,
-    identifier: str,
-    architecture: str,
-    collected_data_output_filepath: Union[str, Path],
-    time_filepath: Union[str, Path],
-    json_filepath: Union[str, Path],
-    task_succeeded: bool,
-    timeout: bool
-):
-    with open(time_filepath) as f:
-        time = float(f.read().removesuffix("s\n"))
-    out_data = {}
-    if (task_succeeded):
-        with open(json_filepath) as f:
-            resources = json.load(f)
-        out_data = resources
-    out_data["expected_success"] = task_succeeded
-    out_data["timeout"] = timeout
-    assert "time_s" not in out_data
-    out_data["time_s"] = time
-
-    assert "iteration" not in out_data
-    out_data["iteration"] = iteration
-
-    assert "identifier" not in out_data
-    out_data["identifier"] = identifier
-
-    assert "tool" not in out_data
-    out_data["tool"] = "lakeroad"
-
-    assert "architecture" not in out_data
-    out_data["architecture"] = architecture
-
-    Path(collected_data_output_filepath).parent.mkdir(parents=True, exist_ok=True)
-    with open(collected_data_output_filepath, "w") as f:
-        json.dump(out_data, f)
 
 
 def make_lakeroad_task(
-    iteration: int,
-    identifier: str,
-    collected_data_output_filepath: Union[str, Path],
     template: str,
     out_module_name: str,
-    out_filepath: Union[str, Path],
+    out_dirpath: Union[str, Path],
     architecture: str,
-    time_filepath: Union[str, Path],
-    json_filepath: Union[str, Path],
     verilog_module_filepath: Optional[Union[str, Path]] = None,
     top_module_name: Optional[str] = None,
     verilog_module_out_signal: Optional[str] = None,
@@ -221,13 +196,32 @@ def make_lakeroad_task(
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
-    expect_fail: bool = False,
-    expect_timeout: bool = False,
-):
+    extra_summary_fields: Dict[str, Any] = {},
+) -> Tuple[Tuple, Dict]:
+    """Creates a DoIt task for invoking Lakeroad.
+
+    Many of this function's args are documented in invoke_lakeroad.
+    
+    Args:
+        out_dirpath: Where output files should be written.
+
+    Returns:
+        A tuple of (task, (output verilog filepath, output summary json
+        filepath). The filepath tuple is the list of output file paths within
+        the `out_dirpath` directory.
+    """
+
     task = {}
 
     if name:
         task["name"] = name
+
+    out_dirpath = Path(out_dirpath)
+
+    output_filepaths = {
+        "lakeroad_output_verilog": out_dirpath / "lakeroad_result.sv",
+        "lakeroad_summary_json": out_dirpath / "lakeroad_summary.json",
+    }
 
     task["actions"] = [
         (
@@ -236,11 +230,10 @@ def make_lakeroad_task(
             {
                 "instruction": None,
                 "template": template,
-                "out_filepath": out_filepath,
+                "out_filepath": output_filepaths["lakeroad_output_verilog"],
                 "module_name": out_module_name,
                 "architecture": architecture,
-                "time_filepath": time_filepath,
-                "json_filepath": json_filepath,
+                "json_filepath": output_filepaths["lakeroad_summary_json"],
                 "verilog_module_filepath": verilog_module_filepath,
                 "top_module_name": top_module_name,
                 "verilog_module_out_signal": verilog_module_out_signal,
@@ -249,40 +242,19 @@ def make_lakeroad_task(
                 "clock_name": clock_name,
                 "reset_name": reset_name,
                 "timeout": timeout,
-                "expect_fail": expect_fail,
-                "expect_timeout": expect_timeout,
+                "extra_summary_fields": extra_summary_fields
             },
         )
-    ]
-    task["actions"] += [
-        (
-            collect_lakeroad,
-            [],
-            {
-                "iteration": iteration,
-                "identifier": identifier,
-                "collected_data_output_filepath": collected_data_output_filepath,
-                "time_filepath": time_filepath,
-                "json_filepath": json_filepath,
-                "architecture": architecture,
-                "task_succeeded": not (expect_fail or expect_timeout),
-                "timeout": expect_timeout,
-            },
-        ),
     ]
 
     task["file_dep"] = []
     if verilog_module_filepath:
         task["file_dep"].append(verilog_module_filepath)
 
-    task["targets"] = [
-        out_filepath,
-        time_filepath,
-        json_filepath,
-        collected_data_output_filepath,
-    ]
 
-    return task
+    task["targets"] = list(output_filepaths.values())
+
+    return (task, (output_filepaths["lakeroad_output_verilog"], output_filepaths["lakeroad_summary_json"]))
 
 
 @doit.task_params(
@@ -387,7 +359,7 @@ def task_instruction_experiments(experiments_file: str):
                 # Previously this used the noopt version of synthesis. These
                 # experiments don't matter as much anymore, but I also don't
                 # think that's correct anymore.
-                vivado_synthesis_task = (
+                (vivado_synthesis_task, _) = (
                     make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                         input_filepath=verilog_filepath,
                         module_name=module_name,
