@@ -519,7 +519,3 @@ def task_robustness_experiments():
             )
         ],
     }
-
-
-if __name__ == "__main__":
-    print(create_manifest())
