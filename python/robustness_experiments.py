@@ -13,6 +13,7 @@ import quartus
 import os
 from pathlib import Path
 
+
 def _collect_robustness_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
@@ -26,21 +27,26 @@ def _collect_robustness_benchmark_data(
             failures.append(f)
         else:
             real.append(f)
-    pandas.DataFrame.from_records(filter(lambda x: x is not None, map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths))).to_csv(
-        output_filepath, index=False
-    )
+    pandas.DataFrame.from_records(
+        filter(
+            lambda x: x is not None,
+            map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths),
+        )
+    ).to_csv(output_filepath, index=False)
     # pandas.DataFrame.from_records(filter(lambda x: x is not None, map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths))
     #     output_filepath, index=False
     # )
     # write failures to failures.txt
     with open("failures.txt", "w+") as ff:
         for f in failures:
-            ff.write(str(f)[61:(len(str(f))) - 20] + "\n")
+            ff.write(str(f)[61 : (len(str(f))) - 20] + "\n")
     ff.close()
     with open("real.txt", "w+") as fg:
         for f in real:
             fg.write(str(f) + "\n")
     fg.close()
+
+
 def check_dsp_usage(
     module_name: str,
     tool_name: str,
@@ -48,7 +54,6 @@ def check_dsp_usage(
     expect_only_dsp: Optional[bool] = True,
     expect_fail: Optional[bool] = False,
 ):
-
     # raise Exception("incorrect dsp usage without expecting a failed mapping")
     with open(resource_utilization_json_filepath, "r") as f:
         resource_utilization = json.load(f)
@@ -60,44 +65,77 @@ def check_dsp_usage(
         # if we only expect a dsp, raise exceptions if we see conflicting results in the resource utilization
         if expect_only_dsp:
             # NO DSP USED
-            if "DSP48E2" not in resource_utilization or resource_utilization["DSP48E2"] > 1:
+            if (
+                "DSP48E2" not in resource_utilization
+                or resource_utilization["DSP48E2"] > 1
+            ):
                 if not expect_fail:
-                    raise Exception("incorrect dsp usage without expecting a failed mapping")
-            # OTHER PRIMITIVES USED 
+                    raise Exception(
+                        "incorrect dsp usage without expecting a failed mapping"
+                    )
+            # OTHER PRIMITIVES USED
             if "LUT2" in resource_utilization:
                 if not expect_fail:
                     raise Exception("lut used without expecting a failed mapping")
-                    
+
     if tool_name == "lakeroad-xilinx":
-        resource_list = ["DSP48E2", "LUT2"] 
+        resource_list = ["DSP48E2", "LUT2"]
         if expect_only_dsp:
-            if "DSP48E2" not in resource_utilization or resource_utilization["DSP48E2"] > 1:
+            if (
+                "DSP48E2" not in resource_utilization
+                or resource_utilization["DSP48E2"] > 1
+            ):
                 if not expect_fail:
-                    raise Exception("incorrect dsp usage without expecting a failed mapping")
+                    raise Exception(
+                        "incorrect dsp usage without expecting a failed mapping"
+                    )
             if "LUT2" in resource_utilization:
                 if not expect_fail:
                     raise Exception("lut used without expecting a failed mapping")
     if tool_name == "yosys-xilinx":
-        resource_list = ["DSP48E2", "LUT2"] 
+        resource_list = ["DSP48E2", "LUT2"]
         if expect_only_dsp:
-            if "DSP48E2" not in resource_utilization or resource_utilization["DSP48E2"] > 1:
+            if (
+                "DSP48E2" not in resource_utilization
+                or resource_utilization["DSP48E2"] > 1
+            ):
                 if not expect_fail:
-                    raise Exception("incorrect dsp usage without expecting a failed mapping")
+                    raise Exception(
+                        "incorrect dsp usage without expecting a failed mapping"
+                    )
             if "LUT2" in resource_utilization:
                 if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")                          
+                    raise Exception("lut used without expecting a failed mapping")
     if tool_name == "diamond":
         # Skip all of the non-computational primitives
-        resource_skip_set = set(["FD1S3AX", "GSR", "IB", "OB", "OFS1P3DX", "PUR", "VHI", "VLO", "DPR16X4C", "IFS1P3DX"])
+        resource_skip_set = set(
+            [
+                "FD1S3AX",
+                "GSR",
+                "IB",
+                "OB",
+                "OFS1P3DX",
+                "PUR",
+                "VHI",
+                "VLO",
+                "DPR16X4C",
+                "IFS1P3DX",
+            ]
+        )
         computational = resource_utilization.keys() - resource_skip_set
 
         # check to make sure only dsps are in the computational primitives based off what we expect
         if expect_only_dsp:
-            if "MULT9X9D" not in resource_utilization and "MULT18X18D" not in resource_utilization:
+            if (
+                "MULT9X9D" not in resource_utilization
+                and "MULT18X18D" not in resource_utilization
+            ):
                 if not expect_fail:
                     with open(error_folder_path / "diamond.json", "w+") as f:
                         json.dump(resource_utilization, f)
-                    raise Exception("incorrect dsp usage without expecting a failed mapping")
+                    raise Exception(
+                        "incorrect dsp usage without expecting a failed mapping"
+                    )
                     # raise Exception("lut used without expecting a failed mapping")
             if len(computational) != 1:
                 if not expect_fail:
@@ -107,7 +145,10 @@ def check_dsp_usage(
                     raise Exception("extra primitives used" + str(computational))
     if tool_name == "lakeroad-lattice":
         if expect_only_dsp:
-            if "MULT18X18D" not in resource_utilization or resource_utilization["MULT18X18D"] > 1:
+            if (
+                "MULT18X18D" not in resource_utilization
+                or resource_utilization["MULT18X18D"] > 1
+            ):
                 if not expect_fail:
                     with open(error_folder_path / "diamond.json", "w+") as f:
                         json.dump(resource_utilization, f)
@@ -116,10 +157,13 @@ def check_dsp_usage(
                 if not expect_fail:
                     with open(error_folder_path / "diamond.json", "w+") as f:
                         json.dump(resource_utilization, f)
-                    # raise Exception("lut used without expecting a failed mapping")                   
+                    # raise Exception("lut used without expecting a failed mapping")
     if tool_name == "yosys-lattice":
         if expect_only_dsp:
-            if "MULT18X18D" not in resource_utilization or resource_utilization["MULT18X18D"] > 1:
+            if (
+                "MULT18X18D" not in resource_utilization
+                or resource_utilization["MULT18X18D"] > 1
+            ):
                 if not expect_fail:
                     with open(error_folder_path / "diamond.json", "w+") as f:
                         json.dump(resource_utilization, f)
@@ -147,7 +191,10 @@ def check_dsp_usage(
                     # raise Exception("lut used without expecting a failed mapping")
     if tool_name == "lakeroad-intel":
         if expect_only_dsp:
-            if "altmult_accum" not in resource_utilization or resource_utilization["altmult_accum"] > 1:
+            if (
+                "altmult_accum" not in resource_utilization
+                or resource_utilization["altmult_accum"] > 1
+            ):
                 if not expect_fail:
                     with open(error_folder_path / "diamond.json", "w+") as f:
                         json.dump(resource_utilization, f)
@@ -160,30 +207,32 @@ def check_dsp_usage(
                     # raise Exception("incorrect dsp usage without expecting a failed mapping")
                     # raise Exception("lut used without expecting a failed mapping")
 
+
 def task_robustness_experiments():
     """Robustness experiments: finding Verilog files that existing tools can't map"""
 
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
- 
+
     # .json file that contains metadata is produced for each entry's synthesis.
     collected_data_output_filepaths = []
-    # determines if the compiler fails for the workload we're looking at 
+
+    # determines if the compiler fails for the workload we're looking at
     def contains_compiler_fail(entry, tool_name):
         if "expect_fail" in entry:
             if tool_name in entry["expect_fail"]:
                 return True
         return False
+
     # if there is a timeout for lakeroad
     def contains_compiler_timeout(entry):
         if "expect_timeout" in entry:
             return True
         return False
-    
+
     for entry in entries:
         backends = entry["backends"]
         if "xilinx" in backends:
-
             # base path for vivado tasks for this entry
             base_path = (
                 utils.output_dir()
@@ -192,7 +241,10 @@ def task_robustness_experiments():
                 / "vivado"
             )
             # vivado synthesis
-            (task, (json_filepath, _,_,_)) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            (
+                task,
+                (json_filepath, _, _, _),
+            ) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                 input_filepath=entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
@@ -206,14 +258,14 @@ def task_robustness_experiments():
                 # timing. This is okay; don't fail. We want aggressive
                 # constraints so we know Vivado is trying as hard as it can.
                 fail_if_constraints_not_met=False,
-                extra_summary_fields = {"identifier":entry["module_name"],
-                                        "architecture":"xilinx-ultrascale-plus",
-                                        "tool":"vivado",},
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-ultrascale-plus",
+                    "tool": "vivado",
+                },
             )
             yield task
-            collected_data_output_filepaths.append(
-                json_filepath
-            )
+            collected_data_output_filepaths.append(json_filepath)
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
@@ -237,15 +289,15 @@ def task_robustness_experiments():
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 # TODO(@gussmith23 @vcanumalla): Magic number
                 timeout=500,
-                extra_summary_fields = {"identifier":entry["module_name"],
-                                        "architecture":"xilinx-ultrascale-plus",
-                                        "tool":"lakeroad",},
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-ultrascale-plus",
+                    "tool": "lakeroad",
+                },
             )
             yield task
 
-            collected_data_output_filepaths.append(
-                json_filepath
-            )
+            collected_data_output_filepaths.append(json_filepath)
 
             # yield verilator.make_verilator_task(
             #     f"{entry['module_name']}:lakeroad:verilator",
@@ -285,19 +337,22 @@ def task_robustness_experiments():
                 / entry["module_name"]
                 / "yosys_xilinx_ultrascale_plus"
             )
-            (task, (json_filepath, _,_)) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                    input_filepath=entry["filepath"],
-                    output_dirpath=base_path,
-                    module_name=entry["module_name"],
-                    name=f"{entry['module_name']}:yosys_xilinx_ultrascale_plus",
-                    extra_summary_fields = {"identifier":entry["module_name"],
-                                        "architecture":"xilinx-ultrascale-plus",
-                                        "tool":"yosys",},
-                )
-            yield task
-            collected_data_output_filepaths.append(
-                json_filepath
+            (
+                task,
+                (json_filepath, _, _),
+            ) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+                input_filepath=entry["filepath"],
+                output_dirpath=base_path,
+                module_name=entry["module_name"],
+                name=f"{entry['module_name']}:yosys_xilinx_ultrascale_plus",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-ultrascale-plus",
+                    "tool": "yosys",
+                },
             )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
 
         # if "lattice" in backends:
         #     # diamond-lattice, lakeroad-lattice, yosys-lattice
@@ -499,10 +554,7 @@ def task_robustness_experiments():
         #         ],
         #         "file_dep": [resources_filepath],
         #     }
-    base_path = (
-        utils.output_dir()
-        / "robustness_experiments_csv"
-    )
+    base_path = utils.output_dir() / "robustness_experiments_csv"
     csv_output = base_path / "all_results" / "all_results_collected.csv"
     yield {
         "name": "collect_data",

@@ -7,6 +7,8 @@ from utils import lakeroad_evaluation_dir
 
 
 placeholder = "placeholder"
+
+
 def make_title(
     workload: str, bitwidth: int, is_signed: bool, stages: int, xor_reduction: bool
 ):
@@ -123,15 +125,15 @@ def generate_design(
 
     return result
 
+
 def generate_designs(design_dir: Union[str, Path]):
     # the max bitwidth for the workloads
     bitwidth_max = 18
     # the workloads, their inputs, and the compilers that support them
     inputs_dict = {
         "mult": [["a", "b"], ["xilinx", "intel", "lattice"]],
-        "muladd": [["a", "b", "c"], ["xilinx", "lattice"]], 
+        "muladd": [["a", "b", "c"], ["xilinx", "lattice"]],
         "mulsub": [["a", "b", "c"], ["xilinx", "lattice"]],
-
         "addmuladd": [["a", "b", "c", "d"], ["xilinx"]],
         "addmulsub": [["a", "b", "c", "d"], ["xilinx"]],
         "submuladd": [["a", "b", "c", "d"], ["xilinx"]],
@@ -144,21 +146,26 @@ def generate_designs(design_dir: Union[str, Path]):
         "addmulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "submulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "preaddmul": [["d", "a", "b"], ["xilinx"]],
-
         "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
         "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
         "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],
         "mulsubsub": [["a", "b", "c", "d"], ["lattice"]],
         "muland": [["a", "b", "c"], ["lattice"]],
         "mulor": [["a", "b", "c"], ["lattice"]],
-        "mulxor": [["a", "b", "c"], ["lattice"]]
+        "mulxor": [["a", "b", "c"], ["lattice"]],
     }
     workloads = [key for key in inputs_dict.keys()]
     max_stages = 3
-    # On proprietary tools, this means that we expect the tool to not map 
+    # On proprietary tools, this means that we expect the tool to not map
     # workload to a single DSP. For Lakeroad, this means we expect a synthesis
     # failure.
-    expect_fail= {make_title("addmulor", 9, False, 3, False) : ["lakeroad-xilinx", "vivado", "yosys-xilinx"]}
+    expect_fail = {
+        make_title("addmulor", 9, False, 3, False): [
+            "lakeroad-xilinx",
+            "vivado",
+            "yosys-xilinx",
+        ]
+    }
     expect_timeout = {}
     # first, clear robustness-manifest.yml
     with open("robustness-manifest.yml", "w+") as output_file:
@@ -188,7 +195,7 @@ def generate_designs(design_dir: Union[str, Path]):
                         "xor_reduction": False,
                         "inputs": input_tuples,
                         "filepath": str(filename),
-                        "backends": backends
+                        "backends": backends,
                     }
                     metadata["expect_fail"] = []
                     if title in expect_fail:
@@ -213,9 +220,8 @@ def generate_designs(design_dir: Union[str, Path]):
                         )
     with open("robustness-manifest.yml", "a+") as output_file:
         # Keep this line below if you want to remove the aliases
-        # yaml.Dumper.ignore_aliases = lambda self, data: True 
-        yaml.dump(experiments, stream=output_file)                        
-
+        # yaml.Dumper.ignore_aliases = lambda self, data: True
+        yaml.dump(experiments, stream=output_file)
 
 
 if __name__ == "__main__":

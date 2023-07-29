@@ -17,6 +17,7 @@ TIMEOUT_RETURN_CODE = 25
 SYNTHESIS_FAIL_RETURN_CODE = 26
 SYNTHESIS_SUCCESS_RETURN_CODE = 0
 
+
 def invoke_lakeroad(
     module_name: str,
     # TODO(@gussmith23): Give this a default value of None. Will break
@@ -73,7 +74,12 @@ def invoke_lakeroad(
 
     lakeroad_invoke = (
         [
-            str(utils.lakeroad_evaluation_dir() / "lakeroad" / "bin" / "lakeroad-portfolio.py"),
+            str(
+                utils.lakeroad_evaluation_dir()
+                / "lakeroad"
+                / "bin"
+                / "lakeroad-portfolio.py"
+            ),
         ]
         if True
         else [
@@ -124,7 +130,7 @@ def invoke_lakeroad(
         cmd += ["--initiation-interval", str(initiation_interval)]
 
     if inputs != None:
-        for (name, bitwidth) in inputs:
+        for name, bitwidth in inputs:
             cmd += ["--input-signal", f"{name}:{bitwidth}"]
 
     if clock_name != None:
@@ -149,23 +155,27 @@ def invoke_lakeroad(
     summary = {}
     if proc.returncode == 0:
         summary = count_resources_in_verilog_src(
-                verilog_src=out_filepath.read_text(), module_name=module_name
-            )
-        
+            verilog_src=out_filepath.read_text(), module_name=module_name
+        )
+
     assert "time_s" not in summary
-    summary["time_s"] = end_time-start_time
+    summary["time_s"] = end_time - start_time
 
     assert "returncode" not in summary
     summary["returncode"] = proc.returncode
 
     assert "lakeroad_synthesis_success" not in summary
-    summary["lakeroad_synthesis_success"] = proc.returncode == SYNTHESIS_SUCCESS_RETURN_CODE
+    summary["lakeroad_synthesis_success"] = (
+        proc.returncode == SYNTHESIS_SUCCESS_RETURN_CODE
+    )
 
     assert "lakeroad_synthesis_timeout" not in summary
     summary["lakeroad_synthesis_timeout"] = proc.returncode == TIMEOUT_RETURN_CODE
 
     assert "lakeroad_synthesis_failure" not in summary
-    summary["lakeroad_synthesis_failure"] = proc.returncode == SYNTHESIS_FAIL_RETURN_CODE
+    summary["lakeroad_synthesis_failure"] = (
+        proc.returncode == SYNTHESIS_FAIL_RETURN_CODE
+    )
 
     for extra_field in extra_summary_fields:
         assert extra_field not in summary
@@ -173,13 +183,13 @@ def invoke_lakeroad(
 
     json.dump(
         summary,
-            fp=open(json_filepath, "w"),
-        )
+        fp=open(json_filepath, "w"),
+    )
 
     if proc.returncode != 0:
         logging.error(" " + " ".join(map(str, cmd)))
-    if check_returncode: proc.check_returncode()
-
+    if check_returncode:
+        proc.check_returncode()
 
 
 def make_lakeroad_task(
@@ -201,7 +211,7 @@ def make_lakeroad_task(
     """Creates a DoIt task for invoking Lakeroad.
 
     Many of this function's args are documented in invoke_lakeroad.
-    
+
     Args:
         out_dirpath: Where output files should be written.
 
@@ -242,7 +252,7 @@ def make_lakeroad_task(
                 "clock_name": clock_name,
                 "reset_name": reset_name,
                 "timeout": timeout,
-                "extra_summary_fields": extra_summary_fields
+                "extra_summary_fields": extra_summary_fields,
             },
         )
     ]
@@ -251,10 +261,15 @@ def make_lakeroad_task(
     if verilog_module_filepath:
         task["file_dep"].append(verilog_module_filepath)
 
-
     task["targets"] = list(output_filepaths.values())
 
-    return (task, (output_filepaths["lakeroad_output_verilog"], output_filepaths["lakeroad_summary_json"]))
+    return (
+        task,
+        (
+            output_filepaths["lakeroad_output_verilog"],
+            output_filepaths["lakeroad_summary_json"],
+        ),
+    )
 
 
 @doit.task_params(
@@ -359,12 +374,13 @@ def task_instruction_experiments(experiments_file: str):
                 # Previously this used the noopt version of synthesis. These
                 # experiments don't matter as much anymore, but I also don't
                 # think that's correct anymore.
-                (vivado_synthesis_task, _) = (
-                    make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                        input_filepath=verilog_filepath,
-                        module_name=module_name,
-                        output_dirpath=output_dirpath / "vivado",
-                    )
+                (
+                    vivado_synthesis_task,
+                    _,
+                ) = make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+                    input_filepath=verilog_filepath,
+                    module_name=module_name,
+                    output_dirpath=output_dirpath / "vivado",
                 )
                 vivado_synthesis_task[
                     "name"

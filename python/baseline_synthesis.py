@@ -21,12 +21,13 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
     output_dir_base = utils.output_dir() / "baseline"
 
     for instruction_file in Path(baseline_instructions_dir).glob("*"):
-        (vivado_baseline_synthesis_task, _) = (
-            make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                input_filepath=instruction_file,
-                output_dirpath=output_dir_base / "vivado" / instruction_file.stem,
-                module_name=instruction_file.stem,
-            )
+        (
+            vivado_baseline_synthesis_task,
+            _,
+        ) = make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base / "vivado" / instruction_file.stem,
+            module_name=instruction_file.stem,
         )
         vivado_baseline_synthesis_task["name"] = f"vivado_{instruction_file.stem}"
         yield vivado_baseline_synthesis_task
@@ -43,14 +44,15 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         ] = f"yosys_lattice_ecp5_{instruction_file.stem}"
         yield yosys_lattice_baseline_synthesis_task
 
-        (yosys_xilinx_ultrascale_plus_baseline_synthesis_task,_) = (
-            make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=instruction_file,
-                output_dirpath=output_dir_base
-                / "yosys_xilinx_ultrascale_plus"
-                / instruction_file.stem,
-                module_name=instruction_file.stem,
-            )
+        (
+            yosys_xilinx_ultrascale_plus_baseline_synthesis_task,
+            _,
+        ) = make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base
+            / "yosys_xilinx_ultrascale_plus"
+            / instruction_file.stem,
+            module_name=instruction_file.stem,
         )
         yosys_xilinx_ultrascale_plus_baseline_synthesis_task[
             "name"

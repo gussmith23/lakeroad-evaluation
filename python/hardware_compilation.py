@@ -111,7 +111,7 @@ Number of register bits => .*?$
         "DP16KD",
         "OFS1P3JX",
         "IFS1P3DX",
-        "DPR16X4C", # "Distributed Pseudo Dual Port RAM"
+        "DPR16X4C",  # "Distributed Pseudo Dual Port RAM"
     }
     if not set(primitives_dict.keys()).issubset(all_known_primitives_set):
         raise Exception(
@@ -496,7 +496,7 @@ report_utilization
             or log_stats.user_constraints_met is True
         ), "Vivado reports that user constraints were not met!"
 
-    summary =count_resources_in_verilog_src(
+    summary = count_resources_in_verilog_src(
         verilog_src=synth_opt_place_route_output_filepath.read_text(),
         module_name=module_name,
     )
@@ -514,7 +514,6 @@ report_utilization
     )
 
 
-
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
@@ -528,24 +527,26 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
     This task will run Vivado with optimizations.
-    
+
     Returns:
         (task, (json_filepath, verilog_filepath, log_filepath, tcl_filepath)).
-    """ 
+    """
 
     input_filepath = Path(input_filepath)
     output_dirpath = Path(output_dirpath)
 
     output_filepaths = {
         "synth_opt_place_route_output_filepath": output_dirpath / input_filepath.name,
-        "log_filepath" : output_dirpath / f"{input_filepath.stem}.log",
+        "log_filepath": output_dirpath / f"{input_filepath.stem}.log",
         "tcl_script_filepath": output_dirpath / f"{input_filepath.stem}.tcl",
         "summary_filepath": output_dirpath / f"{input_filepath.stem}_summary.json",
     }
 
     synth_args = {
         "instr_src_file": input_filepath,
-        "synth_opt_place_route_output_filepath": output_filepaths["synth_opt_place_route_output_filepath"],
+        "synth_opt_place_route_output_filepath": output_filepaths[
+            "synth_opt_place_route_output_filepath"
+        ],
         "module_name": module_name,
         "log_path": output_filepaths["log_filepath"],
         "tcl_script_filepath": output_filepaths["tcl_script_filepath"],
@@ -577,7 +578,15 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     if name is not None:
         task["name"] = name
 
-    return (task, (output_filepaths["summary_filepath"],output_filepaths["synth_opt_place_route_output_filepath"], output_filepaths["log_filepath"], output_filepaths["tcl_script_filepath"]))
+    return (
+        task,
+        (
+            output_filepaths["summary_filepath"],
+            output_filepaths["synth_opt_place_route_output_filepath"],
+            output_filepaths["log_filepath"],
+            output_filepaths["tcl_script_filepath"],
+        ),
+    )
 
 
 def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
@@ -796,9 +805,9 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
 
     output_dirpath = Path(output_dirpath)
     output_filepaths = {
-        "json_filepath" : output_dirpath / f"{module_name}.json",
-        "output_filepath" : output_dirpath / f"{module_name}.sv",
-        "log_filepath" : output_dirpath / f"{module_name}.log",
+        "json_filepath": output_dirpath / f"{module_name}.json",
+        "output_filepath": output_dirpath / f"{module_name}.sv",
+        "log_filepath": output_dirpath / f"{module_name}.log",
     }
 
     task = {
@@ -824,7 +833,14 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
     if name is not None:
         task["name"] = name
 
-    return (task, (output_filepaths["json_filepath"], output_filepaths["output_filepath"], output_filepaths["log_filepath"]))
+    return (
+        task,
+        (
+            output_filepaths["json_filepath"],
+            output_filepaths["output_filepath"],
+            output_filepaths["log_filepath"],
+        ),
+    )
 
 
 def lattice_ecp5_diamond_synthesis(
@@ -899,6 +915,7 @@ def lattice_ecp5_diamond_synthesis(
         ),
         fp=open(output_dirpath / f"{module_name}_resource_utilization.json", "w"),
     )
+
 
 def collect(
     iteration: int,

@@ -11,6 +11,7 @@ import time
 import hardware_compilation
 import logging
 
+
 def run_quartus(
     top_module_name: str,
     source_input_filepath: Union[str, Path],
@@ -188,6 +189,7 @@ def parse_quartus_map_summary(summary_txt: str) -> QuartusMapSummary:
     dsps = int(matches[0].group(1))
 
     return QuartusMapSummary(dsps=dsps)
+
 
 def make_intel_yosys_synthesis_task(
     input_filepath: Union[str, Path],
