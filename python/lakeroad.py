@@ -12,8 +12,11 @@ import yaml
 from hardware_compilation import *
 from schema import *
 
+# These are defined in Lakeroad's main.rkt file.
 TIMEOUT_RETURN_CODE = 25
 SYNTHESIS_FAIL_RETURN_CODE = 26
+SYNTHESIS_SUCCESS_RETURN_CODE = 0
+
 def invoke_lakeroad(
     module_name: str,
     # TODO(@gussmith23): Give this a default value of None. Will break
