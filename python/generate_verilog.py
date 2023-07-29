@@ -171,48 +171,6 @@ def generate_designs(design_dir: Union[str, Path]):
             input_tuples = [[input, bitwidth] for input in inputs]
             for is_signed in [True, False]:
                 for stages in range(1, max_stages + 1):
-                    if "xilinx" in backends:
-                        title = make_title(
-                            workload=workload,
-                            bitwidth=bitwidth,
-                            is_signed=is_signed,
-                            stages=stages,
-                            xor_reduction=True,
-                        )
-                        filename = design_dir / (title + ".sv")
-                        metadata = {
-                            "module_name": title,
-                            "workload": workload,
-                            "bitwidth": bitwidth,
-                            "is_signed": is_signed,
-                            "stages": stages,
-                            "xor_reduction": True,
-                            "inputs": input_tuples,
-                            "filepath": str(filename),
-                            "backends": ["xilinx"]
-                        }
-                        # if custom expect failure, add it to the metadata
-                        metadata["expect_fail"] = []
-                        if title in expect_fail:
-                            metadata["expect_fail"] = expect_fail[title]
-                        if title in expect_timeout:
-                            metadata["expect_timeout"] = expect_timeout[title]
-                        # xor_reduction is not supported on yosys-xilinx or lakeroad-xilinx
-                        metadata["expect_fail"].append("yosys-xilinx")
-                        metadata["expect_fail"].append("lakeroad-xilinx")
-                        experiments.append(metadata)
-                        with open(filename, "w+") as f:
-                            f.write(
-                                generate_design(
-                                    workload,
-                                    bitwidth,
-                                    is_signed,
-                                    stages,
-                                    inputs,
-                                    True,
-                                )
-                            )
-                    #no xor reduction, use the rest of the workloads (and xilinx)
                     title = make_title(
                         workload=workload,
                         bitwidth=bitwidth,
