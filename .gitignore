@@ -19,3 +19,4 @@ python/__pycache__/
 out/
 
 .doit.db.bak
+.vscode/
