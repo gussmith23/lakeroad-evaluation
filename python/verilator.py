@@ -101,9 +101,9 @@ def simulate_with_verilator(
     # Generate the input to the testbench.
     with testbench_inputs_filepath.open("w") as f:
         if 2 ** (sum([width for _, width in module_inputs])) > max_num_tests:
-            logging.warning(
-                "Exhaustive testing space is too large, doing random testing."
-            )
+            # logging.warning(
+            #     "Exhaustive testing space is too large, doing random testing."
+            # )
 
             # Generate a random subset of the inputs.
             def generate_one():
