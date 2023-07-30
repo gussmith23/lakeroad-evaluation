@@ -655,7 +655,8 @@ def task_robustness_experiments():
     csv_output = base_path / "all_results" / "all_results_collected.csv"
     yield {
         "name": "collect_data",
-        # "file_dep": collected_data_output_filepaths,
+        # To generate the CSV with incomplete data, you can comment out the following line.
+        "file_dep": collected_data_output_filepaths,
         "targets": [csv_output],
         "actions": [
             (
