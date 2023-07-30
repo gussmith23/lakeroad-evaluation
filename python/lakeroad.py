@@ -208,8 +208,6 @@ def invoke_lakeroad(
     ):
         os.remove(out_filepath)
 
-    if proc.returncode != 0:
-        logging.error(" " + " ".join(map(str, cmd)))
     if check_returncode:
         proc.check_returncode()
 
