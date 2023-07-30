@@ -12,6 +12,101 @@ import verilator
 import quartus
 import os
 from pathlib import Path
+import numpy as np
+
+
+def _visualize_succeeded_vs_failed(
+    csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
+):
+    df = pandas.read_csv(csv_filepath)
+
+    # Make sure we're aware of all columns that may exist. This is so we're sure
+    # that we're not forgetting to take some columns into account.
+    assert set(df.columns).issubset(
+        set(
+            [
+                "LUT2",
+                "LUT3",
+                "LUT4",
+                "LUT5",
+                "LUT6",
+                "DSP48E2",
+                "tool",
+                "architecture",
+                "time_s",
+                "returncode",
+                "lakeroad_synthesis_success",
+                "lakeroad_synthesis_timeout",
+                "lakeroad_synthesis_failure",
+                "identifier",
+            ]
+        )
+    )
+
+    # Column which checks whether the experiment uses one DSP and no other
+    # computational units (LUTs).
+    df["only_use_one_dsp"] = (df.get("DSP48E2", 0) == 1) & (
+        (
+            df.get("LUT2", 0)
+            + df.get("LUT3", 0)
+            + df.get("LUT4", 0)
+            + df.get("LUT5", 0)
+            + df.get("LUT6", 0)
+        )
+        == 0
+    )
+
+    suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "vivado", "yosys"]})
+    suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
+        lambda t: (df["tool"] == t).sum()
+    )
+    suc_v_unsuc["num_successful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & df["only_use_one_dsp"]).sum()
+    )
+    # We ignore Lakeroad, because we'll calculate different
+    # successful/unsuccessful columns for Lakeroad.
+    suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+        if t != "lakeroad"
+        else 0
+    )
+    # Lakeroad unsuccessful columns.
+    suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_failure"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+    suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_timeout"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+
+    # Sanity check.
+    assert suc_v_unsuc["num_experiments"].equals(
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+
+    ax = suc_v_unsuc.plot.bar(
+        x="tool",
+        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
+        stacked=True,
+        rot=0,
+    )
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    ax.get_figure().savefig(plot_output_filepath)
 
 
 def _collect_robustness_benchmark_data(
@@ -569,6 +664,23 @@ def task_robustness_experiments():
                 {
                     "filepaths": collected_data_output_filepaths,
                     "output_filepath": csv_output,
+                },
+            )
+        ],
+    }
+
+    yield {
+        "name": "visualize_succeeded_vs_failed",
+        "file_dep": [csv_output],
+        "actions": [
+            (
+                _visualize_succeeded_vs_failed,
+                [],
+                {
+                    "csv_filepath": csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir() / "figures" / "succeeded_vs_failed.png"
+                    ),
                 },
             )
         ],
