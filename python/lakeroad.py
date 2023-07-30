@@ -142,6 +142,13 @@ def invoke_lakeroad(
     if timeout != None:
         cmd += ["--timeout", str(timeout)]
 
+    # Add requested solvers and seeds
+    manifest = utils.get_manifest()
+    for solver in manifest["completeness_experiments"]["lakeroad"]["solvers"]:
+        cmd += [f"--{solver}"]
+    for seed in manifest["completeness_experiments"]["lakeroad"]["seeds"]:
+        cmd += [f"--seed", str(seed)]
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )

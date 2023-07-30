@@ -288,7 +288,7 @@ def task_robustness_experiments():
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 # TODO(@gussmith23 @vcanumalla): Magic number
-                timeout=500,
+                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"]["timeout"],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
                     "architecture": "xilinx-ultrascale-plus",
