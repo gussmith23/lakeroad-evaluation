@@ -382,7 +382,6 @@ def task_robustness_experiments():
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
-                # TODO(@gussmith23 @vcanumalla): Magic number
                 timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
                     "timeout"
                 ],
