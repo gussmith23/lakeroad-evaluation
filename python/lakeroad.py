@@ -158,10 +158,7 @@ def invoke_lakeroad(
     stderr_file = open(stderr_filepath, "w") if stderr_filepath else None
 
     start_time = time()
-    proc = subprocess.run(
-        cmd,
-        stderr=stderr_file
-    )
+    proc = subprocess.run(cmd, stderr=stderr_file)
     end_time = time()
 
     # Close stderr file if necessary.
