@@ -211,6 +211,9 @@ def invoke_lakeroad(
     if check_returncode:
         proc.check_returncode()
 
+    # Always fail on general, unexpected errors (errorcode 1).
+    assert proc.returncode != 1, "Unexpected error from Lakeroad, returncode 1."
+
 
 def make_lakeroad_task(
     template: str,
