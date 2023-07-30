@@ -275,7 +275,7 @@ def task_robustness_experiments():
                 / "lakeroad_xilinx_ultrascale_plus"
             )
 
-            (task, (_, json_filepath)) = lakeroad.make_lakeroad_task(
+            (task, (json_filepath, _, _)) = lakeroad.make_lakeroad_task(
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="output",

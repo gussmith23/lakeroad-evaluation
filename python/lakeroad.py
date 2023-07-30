@@ -37,6 +37,7 @@ def invoke_lakeroad(
     timeout: Optional[int] = None,
     check_returncode: bool = False,
     extra_summary_fields: Dict[str, Any] = {},
+    stderr_filepath: Optional[Union[str, Path]] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -153,11 +154,19 @@ def invoke_lakeroad(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
 
+    # Open stderr file if necessary.
+    stderr_file = open(stderr_filepath, "w") if stderr_filepath else None
+
     start_time = time()
     proc = subprocess.run(
         cmd,
+        stderr=stderr_file
     )
     end_time = time()
+
+    # Close stderr file if necessary.
+    if stderr_file:
+        stderr_file.close()
 
     summary = {}
     if proc.returncode == 0:
@@ -223,9 +232,9 @@ def make_lakeroad_task(
         out_dirpath: Where output files should be written.
 
     Returns:
-        A tuple of (task, (output verilog filepath, output summary json
-        filepath). The filepath tuple is the list of output file paths within
-        the `out_dirpath` directory.
+        A tuple of (task, filepath tuple). The filepath tuple is the list of
+        output file paths within the `out_dirpath` directory. See return
+        statement for order.
     """
 
     task = {}
@@ -238,6 +247,7 @@ def make_lakeroad_task(
     output_filepaths = {
         "lakeroad_output_verilog": out_dirpath / "lakeroad_result.sv",
         "lakeroad_summary_json": out_dirpath / "lakeroad_summary.json",
+        "lakeroad_stderr": out_dirpath / "lakeroad_stderr.txt",
     }
 
     task["actions"] = [
@@ -260,6 +270,7 @@ def make_lakeroad_task(
                 "reset_name": reset_name,
                 "timeout": timeout,
                 "extra_summary_fields": extra_summary_fields,
+                "stderr_filepath": output_filepaths["lakeroad_stderr"],
             },
         )
     ]
@@ -273,8 +284,9 @@ def make_lakeroad_task(
     return (
         task,
         (
-            output_filepaths["lakeroad_output_verilog"],
             output_filepaths["lakeroad_summary_json"],
+            output_filepaths["lakeroad_output_verilog"],
+            output_filepaths["lakeroad_stderr"],
         ),
     )
 
