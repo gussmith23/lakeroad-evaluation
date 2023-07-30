@@ -682,7 +682,7 @@ def task_robustness_experiments():
     base_path = utils.output_dir() / "robustness_experiments_csv"
     lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
     yield {
-        "name": "collect_xilinx_data",
+        "name": "collect_lattice_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
         "file_dep": lattice_collected_data_output_filepaths,
         "targets": [lattice_csv_output],
