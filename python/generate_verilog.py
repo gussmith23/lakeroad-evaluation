@@ -93,14 +93,14 @@ def generate_design(
         function = "((d + a) * b) ^ c"
     elif workload == "submulxor":
         function = "((d - a) * b) ^ c"
-    elif workload == "muladdadd":
-        function = "(a * b) + (c + d)"
-    elif workload == "muladdsub":
-        function = "(a * b) + (c - d)"
-    elif workload == "mulsubadd":
-        function = "(a * b) - (c + d)"
-    elif workload == "mulsubsub":
-        function = "(a * b) - (c - d)"
+    # elif workload == "muladdadd":
+    #     function = "(a * b) + (c + d)"
+    # elif workload == "muladdsub":
+    #     function = "(a * b) + (c - d)"
+    # elif workload == "mulsubadd":
+    #     function = "(a * b) - (c + d)"
+    # elif workload == "mulsubsub":
+    #     function = "(a * b) - (c - d)"
     elif workload == "muland":
         function = "(a * b) & c"
     elif workload == "mulor":
@@ -146,10 +146,10 @@ def generate_designs(design_dir: Union[str, Path]):
         "addmulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "submulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "preaddmul": [["d", "a", "b"], ["xilinx"]],
-        "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
-        "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
-        "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],
-        "mulsubsub": [["a", "b", "c", "d"], ["lattice"]],
+        # "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
+        # "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
+        # "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],
+        # "mulsubsub": [["a", "b", "c", "d"], ["lattice"]],
         "muland": [["a", "b", "c"], ["lattice"]],
         "mulor": [["a", "b", "c"], ["lattice"]],
         "mulxor": [["a", "b", "c"], ["lattice"]],

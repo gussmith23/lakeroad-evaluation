@@ -12058,3004 +12058,8 @@
   - lattice
   bitwidth: 8
   expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_8_bit.sv
-  inputs: &id182
-  - - a
-    - 8
-  - - b
-    - 8
-  - - c
-    - 8
-  - - d
-    - 8
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_8_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_8_bit.sv
-  inputs: *id182
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_8_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_8_bit.sv
-  inputs: *id182
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_8_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_8_bit.sv
-  inputs: *id182
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_8_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_8_bit.sv
-  inputs: *id182
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_8_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_8_bit.sv
-  inputs: *id182
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_8_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_9_bit.sv
-  inputs: &id183
-  - - a
-    - 9
-  - - b
-    - 9
-  - - c
-    - 9
-  - - d
-    - 9
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_9_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_9_bit.sv
-  inputs: *id183
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_9_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_9_bit.sv
-  inputs: *id183
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_9_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_9_bit.sv
-  inputs: *id183
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_9_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_9_bit.sv
-  inputs: *id183
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_9_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_9_bit.sv
-  inputs: *id183
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_9_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_10_bit.sv
-  inputs: &id184
-  - - a
-    - 10
-  - - b
-    - 10
-  - - c
-    - 10
-  - - d
-    - 10
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_10_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_10_bit.sv
-  inputs: *id184
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_10_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_10_bit.sv
-  inputs: *id184
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_10_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_10_bit.sv
-  inputs: *id184
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_10_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_10_bit.sv
-  inputs: *id184
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_10_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_10_bit.sv
-  inputs: *id184
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_10_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_11_bit.sv
-  inputs: &id185
-  - - a
-    - 11
-  - - b
-    - 11
-  - - c
-    - 11
-  - - d
-    - 11
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_11_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_11_bit.sv
-  inputs: *id185
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_11_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_11_bit.sv
-  inputs: *id185
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_11_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_11_bit.sv
-  inputs: *id185
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_11_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_11_bit.sv
-  inputs: *id185
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_11_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_11_bit.sv
-  inputs: *id185
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_11_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_12_bit.sv
-  inputs: &id186
-  - - a
-    - 12
-  - - b
-    - 12
-  - - c
-    - 12
-  - - d
-    - 12
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_12_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_12_bit.sv
-  inputs: *id186
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_12_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_12_bit.sv
-  inputs: *id186
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_12_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_12_bit.sv
-  inputs: *id186
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_12_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_12_bit.sv
-  inputs: *id186
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_12_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_12_bit.sv
-  inputs: *id186
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_12_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_13_bit.sv
-  inputs: &id187
-  - - a
-    - 13
-  - - b
-    - 13
-  - - c
-    - 13
-  - - d
-    - 13
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_13_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_13_bit.sv
-  inputs: *id187
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_13_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_13_bit.sv
-  inputs: *id187
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_13_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_13_bit.sv
-  inputs: *id187
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_13_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_13_bit.sv
-  inputs: *id187
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_13_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_13_bit.sv
-  inputs: *id187
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_13_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_14_bit.sv
-  inputs: &id188
-  - - a
-    - 14
-  - - b
-    - 14
-  - - c
-    - 14
-  - - d
-    - 14
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_14_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_14_bit.sv
-  inputs: *id188
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_14_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_14_bit.sv
-  inputs: *id188
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_14_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_14_bit.sv
-  inputs: *id188
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_14_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_14_bit.sv
-  inputs: *id188
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_14_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_14_bit.sv
-  inputs: *id188
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_14_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_15_bit.sv
-  inputs: &id189
-  - - a
-    - 15
-  - - b
-    - 15
-  - - c
-    - 15
-  - - d
-    - 15
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_15_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_15_bit.sv
-  inputs: *id189
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_15_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_15_bit.sv
-  inputs: *id189
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_15_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_15_bit.sv
-  inputs: *id189
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_15_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_15_bit.sv
-  inputs: *id189
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_15_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_15_bit.sv
-  inputs: *id189
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_15_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_16_bit.sv
-  inputs: &id190
-  - - a
-    - 16
-  - - b
-    - 16
-  - - c
-    - 16
-  - - d
-    - 16
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_16_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_16_bit.sv
-  inputs: *id190
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_16_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_16_bit.sv
-  inputs: *id190
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_16_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_16_bit.sv
-  inputs: *id190
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_16_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_16_bit.sv
-  inputs: *id190
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_16_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_16_bit.sv
-  inputs: *id190
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_16_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_17_bit.sv
-  inputs: &id191
-  - - a
-    - 17
-  - - b
-    - 17
-  - - c
-    - 17
-  - - d
-    - 17
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_17_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_17_bit.sv
-  inputs: *id191
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_17_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_17_bit.sv
-  inputs: *id191
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_17_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_17_bit.sv
-  inputs: *id191
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_17_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_17_bit.sv
-  inputs: *id191
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_17_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_17_bit.sv
-  inputs: *id191
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_17_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_signed_18_bit.sv
-  inputs: &id192
-  - - a
-    - 18
-  - - b
-    - 18
-  - - c
-    - 18
-  - - d
-    - 18
-  is_signed: true
-  module_name: muladdadd_1_stage_signed_18_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_signed_18_bit.sv
-  inputs: *id192
-  is_signed: true
-  module_name: muladdadd_2_stage_signed_18_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_signed_18_bit.sv
-  inputs: *id192
-  is_signed: true
-  module_name: muladdadd_3_stage_signed_18_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_1_stage_unsigned_18_bit.sv
-  inputs: *id192
-  is_signed: false
-  module_name: muladdadd_1_stage_unsigned_18_bit
-  stages: 1
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_2_stage_unsigned_18_bit.sv
-  inputs: *id192
-  is_signed: false
-  module_name: muladdadd_2_stage_unsigned_18_bit
-  stages: 2
-  workload: muladdadd
-  xor_reduction: false
-- backends: *id181
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdadd_3_stage_unsigned_18_bit.sv
-  inputs: *id192
-  is_signed: false
-  module_name: muladdadd_3_stage_unsigned_18_bit
-  stages: 3
-  workload: muladdadd
-  xor_reduction: false
-- backends: &id193
-  - lattice
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_8_bit.sv
-  inputs: &id194
-  - - a
-    - 8
-  - - b
-    - 8
-  - - c
-    - 8
-  - - d
-    - 8
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_8_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_8_bit.sv
-  inputs: *id194
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_8_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_8_bit.sv
-  inputs: *id194
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_8_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_8_bit.sv
-  inputs: *id194
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_8_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_8_bit.sv
-  inputs: *id194
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_8_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_8_bit.sv
-  inputs: *id194
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_8_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_9_bit.sv
-  inputs: &id195
-  - - a
-    - 9
-  - - b
-    - 9
-  - - c
-    - 9
-  - - d
-    - 9
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_9_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_9_bit.sv
-  inputs: *id195
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_9_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_9_bit.sv
-  inputs: *id195
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_9_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_9_bit.sv
-  inputs: *id195
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_9_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_9_bit.sv
-  inputs: *id195
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_9_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_9_bit.sv
-  inputs: *id195
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_9_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_10_bit.sv
-  inputs: &id196
-  - - a
-    - 10
-  - - b
-    - 10
-  - - c
-    - 10
-  - - d
-    - 10
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_10_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_10_bit.sv
-  inputs: *id196
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_10_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_10_bit.sv
-  inputs: *id196
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_10_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_10_bit.sv
-  inputs: *id196
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_10_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_10_bit.sv
-  inputs: *id196
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_10_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_10_bit.sv
-  inputs: *id196
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_10_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_11_bit.sv
-  inputs: &id197
-  - - a
-    - 11
-  - - b
-    - 11
-  - - c
-    - 11
-  - - d
-    - 11
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_11_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_11_bit.sv
-  inputs: *id197
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_11_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_11_bit.sv
-  inputs: *id197
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_11_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_11_bit.sv
-  inputs: *id197
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_11_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_11_bit.sv
-  inputs: *id197
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_11_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_11_bit.sv
-  inputs: *id197
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_11_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_12_bit.sv
-  inputs: &id198
-  - - a
-    - 12
-  - - b
-    - 12
-  - - c
-    - 12
-  - - d
-    - 12
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_12_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_12_bit.sv
-  inputs: *id198
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_12_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_12_bit.sv
-  inputs: *id198
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_12_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_12_bit.sv
-  inputs: *id198
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_12_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_12_bit.sv
-  inputs: *id198
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_12_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_12_bit.sv
-  inputs: *id198
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_12_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_13_bit.sv
-  inputs: &id199
-  - - a
-    - 13
-  - - b
-    - 13
-  - - c
-    - 13
-  - - d
-    - 13
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_13_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_13_bit.sv
-  inputs: *id199
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_13_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_13_bit.sv
-  inputs: *id199
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_13_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_13_bit.sv
-  inputs: *id199
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_13_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_13_bit.sv
-  inputs: *id199
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_13_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_13_bit.sv
-  inputs: *id199
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_13_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_14_bit.sv
-  inputs: &id200
-  - - a
-    - 14
-  - - b
-    - 14
-  - - c
-    - 14
-  - - d
-    - 14
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_14_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_14_bit.sv
-  inputs: *id200
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_14_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_14_bit.sv
-  inputs: *id200
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_14_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_14_bit.sv
-  inputs: *id200
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_14_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_14_bit.sv
-  inputs: *id200
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_14_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_14_bit.sv
-  inputs: *id200
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_14_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_15_bit.sv
-  inputs: &id201
-  - - a
-    - 15
-  - - b
-    - 15
-  - - c
-    - 15
-  - - d
-    - 15
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_15_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_15_bit.sv
-  inputs: *id201
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_15_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_15_bit.sv
-  inputs: *id201
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_15_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_15_bit.sv
-  inputs: *id201
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_15_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_15_bit.sv
-  inputs: *id201
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_15_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_15_bit.sv
-  inputs: *id201
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_15_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_16_bit.sv
-  inputs: &id202
-  - - a
-    - 16
-  - - b
-    - 16
-  - - c
-    - 16
-  - - d
-    - 16
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_16_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_16_bit.sv
-  inputs: *id202
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_16_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_16_bit.sv
-  inputs: *id202
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_16_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_16_bit.sv
-  inputs: *id202
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_16_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_16_bit.sv
-  inputs: *id202
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_16_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_16_bit.sv
-  inputs: *id202
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_16_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_17_bit.sv
-  inputs: &id203
-  - - a
-    - 17
-  - - b
-    - 17
-  - - c
-    - 17
-  - - d
-    - 17
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_17_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_17_bit.sv
-  inputs: *id203
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_17_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_17_bit.sv
-  inputs: *id203
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_17_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_17_bit.sv
-  inputs: *id203
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_17_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_17_bit.sv
-  inputs: *id203
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_17_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_17_bit.sv
-  inputs: *id203
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_17_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_signed_18_bit.sv
-  inputs: &id204
-  - - a
-    - 18
-  - - b
-    - 18
-  - - c
-    - 18
-  - - d
-    - 18
-  is_signed: true
-  module_name: muladdsub_1_stage_signed_18_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_signed_18_bit.sv
-  inputs: *id204
-  is_signed: true
-  module_name: muladdsub_2_stage_signed_18_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_signed_18_bit.sv
-  inputs: *id204
-  is_signed: true
-  module_name: muladdsub_3_stage_signed_18_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_1_stage_unsigned_18_bit.sv
-  inputs: *id204
-  is_signed: false
-  module_name: muladdsub_1_stage_unsigned_18_bit
-  stages: 1
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_2_stage_unsigned_18_bit.sv
-  inputs: *id204
-  is_signed: false
-  module_name: muladdsub_2_stage_unsigned_18_bit
-  stages: 2
-  workload: muladdsub
-  xor_reduction: false
-- backends: *id193
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muladdsub_3_stage_unsigned_18_bit.sv
-  inputs: *id204
-  is_signed: false
-  module_name: muladdsub_3_stage_unsigned_18_bit
-  stages: 3
-  workload: muladdsub
-  xor_reduction: false
-- backends: &id205
-  - lattice
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_8_bit.sv
-  inputs: &id206
-  - - a
-    - 8
-  - - b
-    - 8
-  - - c
-    - 8
-  - - d
-    - 8
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_8_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_8_bit.sv
-  inputs: *id206
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_8_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_8_bit.sv
-  inputs: *id206
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_8_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_8_bit.sv
-  inputs: *id206
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_8_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_8_bit.sv
-  inputs: *id206
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_8_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_8_bit.sv
-  inputs: *id206
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_8_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_9_bit.sv
-  inputs: &id207
-  - - a
-    - 9
-  - - b
-    - 9
-  - - c
-    - 9
-  - - d
-    - 9
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_9_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_9_bit.sv
-  inputs: *id207
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_9_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_9_bit.sv
-  inputs: *id207
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_9_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_9_bit.sv
-  inputs: *id207
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_9_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_9_bit.sv
-  inputs: *id207
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_9_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_9_bit.sv
-  inputs: *id207
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_9_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_10_bit.sv
-  inputs: &id208
-  - - a
-    - 10
-  - - b
-    - 10
-  - - c
-    - 10
-  - - d
-    - 10
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_10_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_10_bit.sv
-  inputs: *id208
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_10_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_10_bit.sv
-  inputs: *id208
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_10_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_10_bit.sv
-  inputs: *id208
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_10_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_10_bit.sv
-  inputs: *id208
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_10_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_10_bit.sv
-  inputs: *id208
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_10_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_11_bit.sv
-  inputs: &id209
-  - - a
-    - 11
-  - - b
-    - 11
-  - - c
-    - 11
-  - - d
-    - 11
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_11_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_11_bit.sv
-  inputs: *id209
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_11_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_11_bit.sv
-  inputs: *id209
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_11_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_11_bit.sv
-  inputs: *id209
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_11_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_11_bit.sv
-  inputs: *id209
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_11_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_11_bit.sv
-  inputs: *id209
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_11_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_12_bit.sv
-  inputs: &id210
-  - - a
-    - 12
-  - - b
-    - 12
-  - - c
-    - 12
-  - - d
-    - 12
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_12_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_12_bit.sv
-  inputs: *id210
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_12_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_12_bit.sv
-  inputs: *id210
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_12_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_12_bit.sv
-  inputs: *id210
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_12_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_12_bit.sv
-  inputs: *id210
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_12_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_12_bit.sv
-  inputs: *id210
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_12_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_13_bit.sv
-  inputs: &id211
-  - - a
-    - 13
-  - - b
-    - 13
-  - - c
-    - 13
-  - - d
-    - 13
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_13_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_13_bit.sv
-  inputs: *id211
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_13_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_13_bit.sv
-  inputs: *id211
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_13_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_13_bit.sv
-  inputs: *id211
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_13_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_13_bit.sv
-  inputs: *id211
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_13_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_13_bit.sv
-  inputs: *id211
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_13_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_14_bit.sv
-  inputs: &id212
-  - - a
-    - 14
-  - - b
-    - 14
-  - - c
-    - 14
-  - - d
-    - 14
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_14_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_14_bit.sv
-  inputs: *id212
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_14_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_14_bit.sv
-  inputs: *id212
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_14_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_14_bit.sv
-  inputs: *id212
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_14_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_14_bit.sv
-  inputs: *id212
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_14_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_14_bit.sv
-  inputs: *id212
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_14_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_15_bit.sv
-  inputs: &id213
-  - - a
-    - 15
-  - - b
-    - 15
-  - - c
-    - 15
-  - - d
-    - 15
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_15_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_15_bit.sv
-  inputs: *id213
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_15_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_15_bit.sv
-  inputs: *id213
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_15_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_15_bit.sv
-  inputs: *id213
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_15_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_15_bit.sv
-  inputs: *id213
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_15_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_15_bit.sv
-  inputs: *id213
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_15_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_16_bit.sv
-  inputs: &id214
-  - - a
-    - 16
-  - - b
-    - 16
-  - - c
-    - 16
-  - - d
-    - 16
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_16_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_16_bit.sv
-  inputs: *id214
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_16_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_16_bit.sv
-  inputs: *id214
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_16_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_16_bit.sv
-  inputs: *id214
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_16_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_16_bit.sv
-  inputs: *id214
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_16_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_16_bit.sv
-  inputs: *id214
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_16_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_17_bit.sv
-  inputs: &id215
-  - - a
-    - 17
-  - - b
-    - 17
-  - - c
-    - 17
-  - - d
-    - 17
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_17_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_17_bit.sv
-  inputs: *id215
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_17_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_17_bit.sv
-  inputs: *id215
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_17_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_17_bit.sv
-  inputs: *id215
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_17_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_17_bit.sv
-  inputs: *id215
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_17_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_17_bit.sv
-  inputs: *id215
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_17_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_signed_18_bit.sv
-  inputs: &id216
-  - - a
-    - 18
-  - - b
-    - 18
-  - - c
-    - 18
-  - - d
-    - 18
-  is_signed: true
-  module_name: mulsubadd_1_stage_signed_18_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_signed_18_bit.sv
-  inputs: *id216
-  is_signed: true
-  module_name: mulsubadd_2_stage_signed_18_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_signed_18_bit.sv
-  inputs: *id216
-  is_signed: true
-  module_name: mulsubadd_3_stage_signed_18_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_1_stage_unsigned_18_bit.sv
-  inputs: *id216
-  is_signed: false
-  module_name: mulsubadd_1_stage_unsigned_18_bit
-  stages: 1
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_2_stage_unsigned_18_bit.sv
-  inputs: *id216
-  is_signed: false
-  module_name: mulsubadd_2_stage_unsigned_18_bit
-  stages: 2
-  workload: mulsubadd
-  xor_reduction: false
-- backends: *id205
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubadd_3_stage_unsigned_18_bit.sv
-  inputs: *id216
-  is_signed: false
-  module_name: mulsubadd_3_stage_unsigned_18_bit
-  stages: 3
-  workload: mulsubadd
-  xor_reduction: false
-- backends: &id217
-  - lattice
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_8_bit.sv
-  inputs: &id218
-  - - a
-    - 8
-  - - b
-    - 8
-  - - c
-    - 8
-  - - d
-    - 8
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_8_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_8_bit.sv
-  inputs: *id218
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_8_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_8_bit.sv
-  inputs: *id218
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_8_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_8_bit.sv
-  inputs: *id218
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_8_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_8_bit.sv
-  inputs: *id218
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_8_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 8
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_8_bit.sv
-  inputs: *id218
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_8_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_9_bit.sv
-  inputs: &id219
-  - - a
-    - 9
-  - - b
-    - 9
-  - - c
-    - 9
-  - - d
-    - 9
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_9_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_9_bit.sv
-  inputs: *id219
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_9_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_9_bit.sv
-  inputs: *id219
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_9_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_9_bit.sv
-  inputs: *id219
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_9_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_9_bit.sv
-  inputs: *id219
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_9_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 9
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_9_bit.sv
-  inputs: *id219
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_9_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_10_bit.sv
-  inputs: &id220
-  - - a
-    - 10
-  - - b
-    - 10
-  - - c
-    - 10
-  - - d
-    - 10
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_10_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_10_bit.sv
-  inputs: *id220
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_10_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_10_bit.sv
-  inputs: *id220
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_10_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_10_bit.sv
-  inputs: *id220
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_10_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_10_bit.sv
-  inputs: *id220
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_10_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 10
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_10_bit.sv
-  inputs: *id220
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_10_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_11_bit.sv
-  inputs: &id221
-  - - a
-    - 11
-  - - b
-    - 11
-  - - c
-    - 11
-  - - d
-    - 11
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_11_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_11_bit.sv
-  inputs: *id221
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_11_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_11_bit.sv
-  inputs: *id221
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_11_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_11_bit.sv
-  inputs: *id221
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_11_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_11_bit.sv
-  inputs: *id221
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_11_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 11
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_11_bit.sv
-  inputs: *id221
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_11_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_12_bit.sv
-  inputs: &id222
-  - - a
-    - 12
-  - - b
-    - 12
-  - - c
-    - 12
-  - - d
-    - 12
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_12_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_12_bit.sv
-  inputs: *id222
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_12_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_12_bit.sv
-  inputs: *id222
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_12_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_12_bit.sv
-  inputs: *id222
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_12_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_12_bit.sv
-  inputs: *id222
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_12_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 12
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_12_bit.sv
-  inputs: *id222
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_12_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_13_bit.sv
-  inputs: &id223
-  - - a
-    - 13
-  - - b
-    - 13
-  - - c
-    - 13
-  - - d
-    - 13
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_13_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_13_bit.sv
-  inputs: *id223
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_13_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_13_bit.sv
-  inputs: *id223
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_13_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_13_bit.sv
-  inputs: *id223
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_13_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_13_bit.sv
-  inputs: *id223
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_13_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 13
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_13_bit.sv
-  inputs: *id223
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_13_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_14_bit.sv
-  inputs: &id224
-  - - a
-    - 14
-  - - b
-    - 14
-  - - c
-    - 14
-  - - d
-    - 14
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_14_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_14_bit.sv
-  inputs: *id224
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_14_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_14_bit.sv
-  inputs: *id224
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_14_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_14_bit.sv
-  inputs: *id224
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_14_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_14_bit.sv
-  inputs: *id224
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_14_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 14
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_14_bit.sv
-  inputs: *id224
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_14_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_15_bit.sv
-  inputs: &id225
-  - - a
-    - 15
-  - - b
-    - 15
-  - - c
-    - 15
-  - - d
-    - 15
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_15_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_15_bit.sv
-  inputs: *id225
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_15_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_15_bit.sv
-  inputs: *id225
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_15_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_15_bit.sv
-  inputs: *id225
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_15_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_15_bit.sv
-  inputs: *id225
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_15_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 15
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_15_bit.sv
-  inputs: *id225
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_15_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_16_bit.sv
-  inputs: &id226
-  - - a
-    - 16
-  - - b
-    - 16
-  - - c
-    - 16
-  - - d
-    - 16
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_16_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_16_bit.sv
-  inputs: *id226
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_16_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_16_bit.sv
-  inputs: *id226
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_16_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_16_bit.sv
-  inputs: *id226
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_16_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_16_bit.sv
-  inputs: *id226
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_16_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 16
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_16_bit.sv
-  inputs: *id226
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_16_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_17_bit.sv
-  inputs: &id227
-  - - a
-    - 17
-  - - b
-    - 17
-  - - c
-    - 17
-  - - d
-    - 17
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_17_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_17_bit.sv
-  inputs: *id227
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_17_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_17_bit.sv
-  inputs: *id227
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_17_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_17_bit.sv
-  inputs: *id227
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_17_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_17_bit.sv
-  inputs: *id227
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_17_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 17
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_17_bit.sv
-  inputs: *id227
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_17_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_signed_18_bit.sv
-  inputs: &id228
-  - - a
-    - 18
-  - - b
-    - 18
-  - - c
-    - 18
-  - - d
-    - 18
-  is_signed: true
-  module_name: mulsubsub_1_stage_signed_18_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_signed_18_bit.sv
-  inputs: *id228
-  is_signed: true
-  module_name: mulsubsub_2_stage_signed_18_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_signed_18_bit.sv
-  inputs: *id228
-  is_signed: true
-  module_name: mulsubsub_3_stage_signed_18_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_1_stage_unsigned_18_bit.sv
-  inputs: *id228
-  is_signed: false
-  module_name: mulsubsub_1_stage_unsigned_18_bit
-  stages: 1
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_2_stage_unsigned_18_bit.sv
-  inputs: *id228
-  is_signed: false
-  module_name: mulsubsub_2_stage_unsigned_18_bit
-  stages: 2
-  workload: mulsubsub
-  xor_reduction: false
-- backends: *id217
-  bitwidth: 18
-  expect_fail: []
-  filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulsubsub_3_stage_unsigned_18_bit.sv
-  inputs: *id228
-  is_signed: false
-  module_name: mulsubsub_3_stage_unsigned_18_bit
-  stages: 3
-  workload: mulsubsub
-  xor_reduction: false
-- backends: &id229
-  - lattice
-  bitwidth: 8
-  expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_8_bit.sv
-  inputs: &id230
+  inputs: &id182
   - - a
     - 8
   - - b
@@ -15067,61 +12071,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_8_bit.sv
-  inputs: *id230
+  inputs: *id182
   is_signed: true
   module_name: muland_2_stage_signed_8_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_8_bit.sv
-  inputs: *id230
+  inputs: *id182
   is_signed: true
   module_name: muland_3_stage_signed_8_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_8_bit.sv
-  inputs: *id230
+  inputs: *id182
   is_signed: false
   module_name: muland_1_stage_unsigned_8_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_8_bit.sv
-  inputs: *id230
+  inputs: *id182
   is_signed: false
   module_name: muland_2_stage_unsigned_8_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_8_bit.sv
-  inputs: *id230
+  inputs: *id182
   is_signed: false
   module_name: muland_3_stage_unsigned_8_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_9_bit.sv
-  inputs: &id231
+  inputs: &id183
   - - a
     - 9
   - - b
@@ -15133,61 +12137,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_9_bit.sv
-  inputs: *id231
+  inputs: *id183
   is_signed: true
   module_name: muland_2_stage_signed_9_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_9_bit.sv
-  inputs: *id231
+  inputs: *id183
   is_signed: true
   module_name: muland_3_stage_signed_9_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_9_bit.sv
-  inputs: *id231
+  inputs: *id183
   is_signed: false
   module_name: muland_1_stage_unsigned_9_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_9_bit.sv
-  inputs: *id231
+  inputs: *id183
   is_signed: false
   module_name: muland_2_stage_unsigned_9_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_9_bit.sv
-  inputs: *id231
+  inputs: *id183
   is_signed: false
   module_name: muland_3_stage_unsigned_9_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_10_bit.sv
-  inputs: &id232
+  inputs: &id184
   - - a
     - 10
   - - b
@@ -15199,61 +12203,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_10_bit.sv
-  inputs: *id232
+  inputs: *id184
   is_signed: true
   module_name: muland_2_stage_signed_10_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_10_bit.sv
-  inputs: *id232
+  inputs: *id184
   is_signed: true
   module_name: muland_3_stage_signed_10_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_10_bit.sv
-  inputs: *id232
+  inputs: *id184
   is_signed: false
   module_name: muland_1_stage_unsigned_10_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_10_bit.sv
-  inputs: *id232
+  inputs: *id184
   is_signed: false
   module_name: muland_2_stage_unsigned_10_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_10_bit.sv
-  inputs: *id232
+  inputs: *id184
   is_signed: false
   module_name: muland_3_stage_unsigned_10_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_11_bit.sv
-  inputs: &id233
+  inputs: &id185
   - - a
     - 11
   - - b
@@ -15265,61 +12269,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_11_bit.sv
-  inputs: *id233
+  inputs: *id185
   is_signed: true
   module_name: muland_2_stage_signed_11_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_11_bit.sv
-  inputs: *id233
+  inputs: *id185
   is_signed: true
   module_name: muland_3_stage_signed_11_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_11_bit.sv
-  inputs: *id233
+  inputs: *id185
   is_signed: false
   module_name: muland_1_stage_unsigned_11_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_11_bit.sv
-  inputs: *id233
+  inputs: *id185
   is_signed: false
   module_name: muland_2_stage_unsigned_11_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_11_bit.sv
-  inputs: *id233
+  inputs: *id185
   is_signed: false
   module_name: muland_3_stage_unsigned_11_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_12_bit.sv
-  inputs: &id234
+  inputs: &id186
   - - a
     - 12
   - - b
@@ -15331,61 +12335,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_12_bit.sv
-  inputs: *id234
+  inputs: *id186
   is_signed: true
   module_name: muland_2_stage_signed_12_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_12_bit.sv
-  inputs: *id234
+  inputs: *id186
   is_signed: true
   module_name: muland_3_stage_signed_12_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_12_bit.sv
-  inputs: *id234
+  inputs: *id186
   is_signed: false
   module_name: muland_1_stage_unsigned_12_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_12_bit.sv
-  inputs: *id234
+  inputs: *id186
   is_signed: false
   module_name: muland_2_stage_unsigned_12_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_12_bit.sv
-  inputs: *id234
+  inputs: *id186
   is_signed: false
   module_name: muland_3_stage_unsigned_12_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_13_bit.sv
-  inputs: &id235
+  inputs: &id187
   - - a
     - 13
   - - b
@@ -15397,61 +12401,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_13_bit.sv
-  inputs: *id235
+  inputs: *id187
   is_signed: true
   module_name: muland_2_stage_signed_13_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_13_bit.sv
-  inputs: *id235
+  inputs: *id187
   is_signed: true
   module_name: muland_3_stage_signed_13_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_13_bit.sv
-  inputs: *id235
+  inputs: *id187
   is_signed: false
   module_name: muland_1_stage_unsigned_13_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_13_bit.sv
-  inputs: *id235
+  inputs: *id187
   is_signed: false
   module_name: muland_2_stage_unsigned_13_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_13_bit.sv
-  inputs: *id235
+  inputs: *id187
   is_signed: false
   module_name: muland_3_stage_unsigned_13_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_14_bit.sv
-  inputs: &id236
+  inputs: &id188
   - - a
     - 14
   - - b
@@ -15463,61 +12467,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_14_bit.sv
-  inputs: *id236
+  inputs: *id188
   is_signed: true
   module_name: muland_2_stage_signed_14_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_14_bit.sv
-  inputs: *id236
+  inputs: *id188
   is_signed: true
   module_name: muland_3_stage_signed_14_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_14_bit.sv
-  inputs: *id236
+  inputs: *id188
   is_signed: false
   module_name: muland_1_stage_unsigned_14_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_14_bit.sv
-  inputs: *id236
+  inputs: *id188
   is_signed: false
   module_name: muland_2_stage_unsigned_14_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_14_bit.sv
-  inputs: *id236
+  inputs: *id188
   is_signed: false
   module_name: muland_3_stage_unsigned_14_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_15_bit.sv
-  inputs: &id237
+  inputs: &id189
   - - a
     - 15
   - - b
@@ -15529,61 +12533,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_15_bit.sv
-  inputs: *id237
+  inputs: *id189
   is_signed: true
   module_name: muland_2_stage_signed_15_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_15_bit.sv
-  inputs: *id237
+  inputs: *id189
   is_signed: true
   module_name: muland_3_stage_signed_15_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_15_bit.sv
-  inputs: *id237
+  inputs: *id189
   is_signed: false
   module_name: muland_1_stage_unsigned_15_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_15_bit.sv
-  inputs: *id237
+  inputs: *id189
   is_signed: false
   module_name: muland_2_stage_unsigned_15_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_15_bit.sv
-  inputs: *id237
+  inputs: *id189
   is_signed: false
   module_name: muland_3_stage_unsigned_15_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_16_bit.sv
-  inputs: &id238
+  inputs: &id190
   - - a
     - 16
   - - b
@@ -15595,61 +12599,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_16_bit.sv
-  inputs: *id238
+  inputs: *id190
   is_signed: true
   module_name: muland_2_stage_signed_16_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_16_bit.sv
-  inputs: *id238
+  inputs: *id190
   is_signed: true
   module_name: muland_3_stage_signed_16_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_16_bit.sv
-  inputs: *id238
+  inputs: *id190
   is_signed: false
   module_name: muland_1_stage_unsigned_16_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_16_bit.sv
-  inputs: *id238
+  inputs: *id190
   is_signed: false
   module_name: muland_2_stage_unsigned_16_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_16_bit.sv
-  inputs: *id238
+  inputs: *id190
   is_signed: false
   module_name: muland_3_stage_unsigned_16_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_17_bit.sv
-  inputs: &id239
+  inputs: &id191
   - - a
     - 17
   - - b
@@ -15661,61 +12665,61 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_17_bit.sv
-  inputs: *id239
+  inputs: *id191
   is_signed: true
   module_name: muland_2_stage_signed_17_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_17_bit.sv
-  inputs: *id239
+  inputs: *id191
   is_signed: true
   module_name: muland_3_stage_signed_17_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_17_bit.sv
-  inputs: *id239
+  inputs: *id191
   is_signed: false
   module_name: muland_1_stage_unsigned_17_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_17_bit.sv
-  inputs: *id239
+  inputs: *id191
   is_signed: false
   module_name: muland_2_stage_unsigned_17_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_17_bit.sv
-  inputs: *id239
+  inputs: *id191
   is_signed: false
   module_name: muland_3_stage_unsigned_17_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_signed_18_bit.sv
-  inputs: &id240
+  inputs: &id192
   - - a
     - 18
   - - b
@@ -15727,62 +12731,62 @@
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_signed_18_bit.sv
-  inputs: *id240
+  inputs: *id192
   is_signed: true
   module_name: muland_2_stage_signed_18_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_signed_18_bit.sv
-  inputs: *id240
+  inputs: *id192
   is_signed: true
   module_name: muland_3_stage_signed_18_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_1_stage_unsigned_18_bit.sv
-  inputs: *id240
+  inputs: *id192
   is_signed: false
   module_name: muland_1_stage_unsigned_18_bit
   stages: 1
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_2_stage_unsigned_18_bit.sv
-  inputs: *id240
+  inputs: *id192
   is_signed: false
   module_name: muland_2_stage_unsigned_18_bit
   stages: 2
   workload: muland
   xor_reduction: false
-- backends: *id229
+- backends: *id181
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/muland_3_stage_unsigned_18_bit.sv
-  inputs: *id240
+  inputs: *id192
   is_signed: false
   module_name: muland_3_stage_unsigned_18_bit
   stages: 3
   workload: muland
   xor_reduction: false
-- backends: &id241
+- backends: &id193
   - lattice
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_8_bit.sv
-  inputs: &id242
+  inputs: &id194
   - - a
     - 8
   - - b
@@ -15794,61 +12798,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_8_bit.sv
-  inputs: *id242
+  inputs: *id194
   is_signed: true
   module_name: mulor_2_stage_signed_8_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_8_bit.sv
-  inputs: *id242
+  inputs: *id194
   is_signed: true
   module_name: mulor_3_stage_signed_8_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_8_bit.sv
-  inputs: *id242
+  inputs: *id194
   is_signed: false
   module_name: mulor_1_stage_unsigned_8_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_8_bit.sv
-  inputs: *id242
+  inputs: *id194
   is_signed: false
   module_name: mulor_2_stage_unsigned_8_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_8_bit.sv
-  inputs: *id242
+  inputs: *id194
   is_signed: false
   module_name: mulor_3_stage_unsigned_8_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_9_bit.sv
-  inputs: &id243
+  inputs: &id195
   - - a
     - 9
   - - b
@@ -15860,61 +12864,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_9_bit.sv
-  inputs: *id243
+  inputs: *id195
   is_signed: true
   module_name: mulor_2_stage_signed_9_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_9_bit.sv
-  inputs: *id243
+  inputs: *id195
   is_signed: true
   module_name: mulor_3_stage_signed_9_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_9_bit.sv
-  inputs: *id243
+  inputs: *id195
   is_signed: false
   module_name: mulor_1_stage_unsigned_9_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_9_bit.sv
-  inputs: *id243
+  inputs: *id195
   is_signed: false
   module_name: mulor_2_stage_unsigned_9_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_9_bit.sv
-  inputs: *id243
+  inputs: *id195
   is_signed: false
   module_name: mulor_3_stage_unsigned_9_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_10_bit.sv
-  inputs: &id244
+  inputs: &id196
   - - a
     - 10
   - - b
@@ -15926,61 +12930,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_10_bit.sv
-  inputs: *id244
+  inputs: *id196
   is_signed: true
   module_name: mulor_2_stage_signed_10_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_10_bit.sv
-  inputs: *id244
+  inputs: *id196
   is_signed: true
   module_name: mulor_3_stage_signed_10_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_10_bit.sv
-  inputs: *id244
+  inputs: *id196
   is_signed: false
   module_name: mulor_1_stage_unsigned_10_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_10_bit.sv
-  inputs: *id244
+  inputs: *id196
   is_signed: false
   module_name: mulor_2_stage_unsigned_10_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_10_bit.sv
-  inputs: *id244
+  inputs: *id196
   is_signed: false
   module_name: mulor_3_stage_unsigned_10_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_11_bit.sv
-  inputs: &id245
+  inputs: &id197
   - - a
     - 11
   - - b
@@ -15992,61 +12996,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_11_bit.sv
-  inputs: *id245
+  inputs: *id197
   is_signed: true
   module_name: mulor_2_stage_signed_11_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_11_bit.sv
-  inputs: *id245
+  inputs: *id197
   is_signed: true
   module_name: mulor_3_stage_signed_11_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_11_bit.sv
-  inputs: *id245
+  inputs: *id197
   is_signed: false
   module_name: mulor_1_stage_unsigned_11_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_11_bit.sv
-  inputs: *id245
+  inputs: *id197
   is_signed: false
   module_name: mulor_2_stage_unsigned_11_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_11_bit.sv
-  inputs: *id245
+  inputs: *id197
   is_signed: false
   module_name: mulor_3_stage_unsigned_11_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_12_bit.sv
-  inputs: &id246
+  inputs: &id198
   - - a
     - 12
   - - b
@@ -16058,61 +13062,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_12_bit.sv
-  inputs: *id246
+  inputs: *id198
   is_signed: true
   module_name: mulor_2_stage_signed_12_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_12_bit.sv
-  inputs: *id246
+  inputs: *id198
   is_signed: true
   module_name: mulor_3_stage_signed_12_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_12_bit.sv
-  inputs: *id246
+  inputs: *id198
   is_signed: false
   module_name: mulor_1_stage_unsigned_12_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_12_bit.sv
-  inputs: *id246
+  inputs: *id198
   is_signed: false
   module_name: mulor_2_stage_unsigned_12_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_12_bit.sv
-  inputs: *id246
+  inputs: *id198
   is_signed: false
   module_name: mulor_3_stage_unsigned_12_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_13_bit.sv
-  inputs: &id247
+  inputs: &id199
   - - a
     - 13
   - - b
@@ -16124,61 +13128,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_13_bit.sv
-  inputs: *id247
+  inputs: *id199
   is_signed: true
   module_name: mulor_2_stage_signed_13_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_13_bit.sv
-  inputs: *id247
+  inputs: *id199
   is_signed: true
   module_name: mulor_3_stage_signed_13_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_13_bit.sv
-  inputs: *id247
+  inputs: *id199
   is_signed: false
   module_name: mulor_1_stage_unsigned_13_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_13_bit.sv
-  inputs: *id247
+  inputs: *id199
   is_signed: false
   module_name: mulor_2_stage_unsigned_13_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_13_bit.sv
-  inputs: *id247
+  inputs: *id199
   is_signed: false
   module_name: mulor_3_stage_unsigned_13_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_14_bit.sv
-  inputs: &id248
+  inputs: &id200
   - - a
     - 14
   - - b
@@ -16190,61 +13194,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_14_bit.sv
-  inputs: *id248
+  inputs: *id200
   is_signed: true
   module_name: mulor_2_stage_signed_14_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_14_bit.sv
-  inputs: *id248
+  inputs: *id200
   is_signed: true
   module_name: mulor_3_stage_signed_14_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_14_bit.sv
-  inputs: *id248
+  inputs: *id200
   is_signed: false
   module_name: mulor_1_stage_unsigned_14_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_14_bit.sv
-  inputs: *id248
+  inputs: *id200
   is_signed: false
   module_name: mulor_2_stage_unsigned_14_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_14_bit.sv
-  inputs: *id248
+  inputs: *id200
   is_signed: false
   module_name: mulor_3_stage_unsigned_14_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_15_bit.sv
-  inputs: &id249
+  inputs: &id201
   - - a
     - 15
   - - b
@@ -16256,61 +13260,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_15_bit.sv
-  inputs: *id249
+  inputs: *id201
   is_signed: true
   module_name: mulor_2_stage_signed_15_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_15_bit.sv
-  inputs: *id249
+  inputs: *id201
   is_signed: true
   module_name: mulor_3_stage_signed_15_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_15_bit.sv
-  inputs: *id249
+  inputs: *id201
   is_signed: false
   module_name: mulor_1_stage_unsigned_15_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_15_bit.sv
-  inputs: *id249
+  inputs: *id201
   is_signed: false
   module_name: mulor_2_stage_unsigned_15_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_15_bit.sv
-  inputs: *id249
+  inputs: *id201
   is_signed: false
   module_name: mulor_3_stage_unsigned_15_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_16_bit.sv
-  inputs: &id250
+  inputs: &id202
   - - a
     - 16
   - - b
@@ -16322,61 +13326,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_16_bit.sv
-  inputs: *id250
+  inputs: *id202
   is_signed: true
   module_name: mulor_2_stage_signed_16_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_16_bit.sv
-  inputs: *id250
+  inputs: *id202
   is_signed: true
   module_name: mulor_3_stage_signed_16_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_16_bit.sv
-  inputs: *id250
+  inputs: *id202
   is_signed: false
   module_name: mulor_1_stage_unsigned_16_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_16_bit.sv
-  inputs: *id250
+  inputs: *id202
   is_signed: false
   module_name: mulor_2_stage_unsigned_16_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_16_bit.sv
-  inputs: *id250
+  inputs: *id202
   is_signed: false
   module_name: mulor_3_stage_unsigned_16_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_17_bit.sv
-  inputs: &id251
+  inputs: &id203
   - - a
     - 17
   - - b
@@ -16388,61 +13392,61 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_17_bit.sv
-  inputs: *id251
+  inputs: *id203
   is_signed: true
   module_name: mulor_2_stage_signed_17_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_17_bit.sv
-  inputs: *id251
+  inputs: *id203
   is_signed: true
   module_name: mulor_3_stage_signed_17_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_17_bit.sv
-  inputs: *id251
+  inputs: *id203
   is_signed: false
   module_name: mulor_1_stage_unsigned_17_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_17_bit.sv
-  inputs: *id251
+  inputs: *id203
   is_signed: false
   module_name: mulor_2_stage_unsigned_17_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_17_bit.sv
-  inputs: *id251
+  inputs: *id203
   is_signed: false
   module_name: mulor_3_stage_unsigned_17_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_signed_18_bit.sv
-  inputs: &id252
+  inputs: &id204
   - - a
     - 18
   - - b
@@ -16454,62 +13458,62 @@
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_signed_18_bit.sv
-  inputs: *id252
+  inputs: *id204
   is_signed: true
   module_name: mulor_2_stage_signed_18_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_signed_18_bit.sv
-  inputs: *id252
+  inputs: *id204
   is_signed: true
   module_name: mulor_3_stage_signed_18_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_1_stage_unsigned_18_bit.sv
-  inputs: *id252
+  inputs: *id204
   is_signed: false
   module_name: mulor_1_stage_unsigned_18_bit
   stages: 1
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_2_stage_unsigned_18_bit.sv
-  inputs: *id252
+  inputs: *id204
   is_signed: false
   module_name: mulor_2_stage_unsigned_18_bit
   stages: 2
   workload: mulor
   xor_reduction: false
-- backends: *id241
+- backends: *id193
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulor_3_stage_unsigned_18_bit.sv
-  inputs: *id252
+  inputs: *id204
   is_signed: false
   module_name: mulor_3_stage_unsigned_18_bit
   stages: 3
   workload: mulor
   xor_reduction: false
-- backends: &id253
+- backends: &id205
   - lattice
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_8_bit.sv
-  inputs: &id254
+  inputs: &id206
   - - a
     - 8
   - - b
@@ -16521,61 +13525,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_8_bit.sv
-  inputs: *id254
+  inputs: *id206
   is_signed: true
   module_name: mulxor_2_stage_signed_8_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_8_bit.sv
-  inputs: *id254
+  inputs: *id206
   is_signed: true
   module_name: mulxor_3_stage_signed_8_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_8_bit.sv
-  inputs: *id254
+  inputs: *id206
   is_signed: false
   module_name: mulxor_1_stage_unsigned_8_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_8_bit.sv
-  inputs: *id254
+  inputs: *id206
   is_signed: false
   module_name: mulxor_2_stage_unsigned_8_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 8
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_8_bit.sv
-  inputs: *id254
+  inputs: *id206
   is_signed: false
   module_name: mulxor_3_stage_unsigned_8_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_9_bit.sv
-  inputs: &id255
+  inputs: &id207
   - - a
     - 9
   - - b
@@ -16587,61 +13591,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_9_bit.sv
-  inputs: *id255
+  inputs: *id207
   is_signed: true
   module_name: mulxor_2_stage_signed_9_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_9_bit.sv
-  inputs: *id255
+  inputs: *id207
   is_signed: true
   module_name: mulxor_3_stage_signed_9_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_9_bit.sv
-  inputs: *id255
+  inputs: *id207
   is_signed: false
   module_name: mulxor_1_stage_unsigned_9_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_9_bit.sv
-  inputs: *id255
+  inputs: *id207
   is_signed: false
   module_name: mulxor_2_stage_unsigned_9_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 9
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_9_bit.sv
-  inputs: *id255
+  inputs: *id207
   is_signed: false
   module_name: mulxor_3_stage_unsigned_9_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_10_bit.sv
-  inputs: &id256
+  inputs: &id208
   - - a
     - 10
   - - b
@@ -16653,61 +13657,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_10_bit.sv
-  inputs: *id256
+  inputs: *id208
   is_signed: true
   module_name: mulxor_2_stage_signed_10_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_10_bit.sv
-  inputs: *id256
+  inputs: *id208
   is_signed: true
   module_name: mulxor_3_stage_signed_10_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_10_bit.sv
-  inputs: *id256
+  inputs: *id208
   is_signed: false
   module_name: mulxor_1_stage_unsigned_10_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_10_bit.sv
-  inputs: *id256
+  inputs: *id208
   is_signed: false
   module_name: mulxor_2_stage_unsigned_10_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 10
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_10_bit.sv
-  inputs: *id256
+  inputs: *id208
   is_signed: false
   module_name: mulxor_3_stage_unsigned_10_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_11_bit.sv
-  inputs: &id257
+  inputs: &id209
   - - a
     - 11
   - - b
@@ -16719,61 +13723,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_11_bit.sv
-  inputs: *id257
+  inputs: *id209
   is_signed: true
   module_name: mulxor_2_stage_signed_11_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_11_bit.sv
-  inputs: *id257
+  inputs: *id209
   is_signed: true
   module_name: mulxor_3_stage_signed_11_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_11_bit.sv
-  inputs: *id257
+  inputs: *id209
   is_signed: false
   module_name: mulxor_1_stage_unsigned_11_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_11_bit.sv
-  inputs: *id257
+  inputs: *id209
   is_signed: false
   module_name: mulxor_2_stage_unsigned_11_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 11
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_11_bit.sv
-  inputs: *id257
+  inputs: *id209
   is_signed: false
   module_name: mulxor_3_stage_unsigned_11_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_12_bit.sv
-  inputs: &id258
+  inputs: &id210
   - - a
     - 12
   - - b
@@ -16785,61 +13789,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_12_bit.sv
-  inputs: *id258
+  inputs: *id210
   is_signed: true
   module_name: mulxor_2_stage_signed_12_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_12_bit.sv
-  inputs: *id258
+  inputs: *id210
   is_signed: true
   module_name: mulxor_3_stage_signed_12_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_12_bit.sv
-  inputs: *id258
+  inputs: *id210
   is_signed: false
   module_name: mulxor_1_stage_unsigned_12_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_12_bit.sv
-  inputs: *id258
+  inputs: *id210
   is_signed: false
   module_name: mulxor_2_stage_unsigned_12_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 12
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_12_bit.sv
-  inputs: *id258
+  inputs: *id210
   is_signed: false
   module_name: mulxor_3_stage_unsigned_12_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_13_bit.sv
-  inputs: &id259
+  inputs: &id211
   - - a
     - 13
   - - b
@@ -16851,61 +13855,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_13_bit.sv
-  inputs: *id259
+  inputs: *id211
   is_signed: true
   module_name: mulxor_2_stage_signed_13_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_13_bit.sv
-  inputs: *id259
+  inputs: *id211
   is_signed: true
   module_name: mulxor_3_stage_signed_13_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_13_bit.sv
-  inputs: *id259
+  inputs: *id211
   is_signed: false
   module_name: mulxor_1_stage_unsigned_13_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_13_bit.sv
-  inputs: *id259
+  inputs: *id211
   is_signed: false
   module_name: mulxor_2_stage_unsigned_13_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 13
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_13_bit.sv
-  inputs: *id259
+  inputs: *id211
   is_signed: false
   module_name: mulxor_3_stage_unsigned_13_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_14_bit.sv
-  inputs: &id260
+  inputs: &id212
   - - a
     - 14
   - - b
@@ -16917,61 +13921,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_14_bit.sv
-  inputs: *id260
+  inputs: *id212
   is_signed: true
   module_name: mulxor_2_stage_signed_14_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_14_bit.sv
-  inputs: *id260
+  inputs: *id212
   is_signed: true
   module_name: mulxor_3_stage_signed_14_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_14_bit.sv
-  inputs: *id260
+  inputs: *id212
   is_signed: false
   module_name: mulxor_1_stage_unsigned_14_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_14_bit.sv
-  inputs: *id260
+  inputs: *id212
   is_signed: false
   module_name: mulxor_2_stage_unsigned_14_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 14
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_14_bit.sv
-  inputs: *id260
+  inputs: *id212
   is_signed: false
   module_name: mulxor_3_stage_unsigned_14_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_15_bit.sv
-  inputs: &id261
+  inputs: &id213
   - - a
     - 15
   - - b
@@ -16983,61 +13987,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_15_bit.sv
-  inputs: *id261
+  inputs: *id213
   is_signed: true
   module_name: mulxor_2_stage_signed_15_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_15_bit.sv
-  inputs: *id261
+  inputs: *id213
   is_signed: true
   module_name: mulxor_3_stage_signed_15_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_15_bit.sv
-  inputs: *id261
+  inputs: *id213
   is_signed: false
   module_name: mulxor_1_stage_unsigned_15_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_15_bit.sv
-  inputs: *id261
+  inputs: *id213
   is_signed: false
   module_name: mulxor_2_stage_unsigned_15_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 15
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_15_bit.sv
-  inputs: *id261
+  inputs: *id213
   is_signed: false
   module_name: mulxor_3_stage_unsigned_15_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_16_bit.sv
-  inputs: &id262
+  inputs: &id214
   - - a
     - 16
   - - b
@@ -17049,61 +14053,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_16_bit.sv
-  inputs: *id262
+  inputs: *id214
   is_signed: true
   module_name: mulxor_2_stage_signed_16_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_16_bit.sv
-  inputs: *id262
+  inputs: *id214
   is_signed: true
   module_name: mulxor_3_stage_signed_16_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_16_bit.sv
-  inputs: *id262
+  inputs: *id214
   is_signed: false
   module_name: mulxor_1_stage_unsigned_16_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_16_bit.sv
-  inputs: *id262
+  inputs: *id214
   is_signed: false
   module_name: mulxor_2_stage_unsigned_16_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 16
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_16_bit.sv
-  inputs: *id262
+  inputs: *id214
   is_signed: false
   module_name: mulxor_3_stage_unsigned_16_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_17_bit.sv
-  inputs: &id263
+  inputs: &id215
   - - a
     - 17
   - - b
@@ -17115,61 +14119,61 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_17_bit.sv
-  inputs: *id263
+  inputs: *id215
   is_signed: true
   module_name: mulxor_2_stage_signed_17_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_17_bit.sv
-  inputs: *id263
+  inputs: *id215
   is_signed: true
   module_name: mulxor_3_stage_signed_17_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_17_bit.sv
-  inputs: *id263
+  inputs: *id215
   is_signed: false
   module_name: mulxor_1_stage_unsigned_17_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_17_bit.sv
-  inputs: *id263
+  inputs: *id215
   is_signed: false
   module_name: mulxor_2_stage_unsigned_17_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 17
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_17_bit.sv
-  inputs: *id263
+  inputs: *id215
   is_signed: false
   module_name: mulxor_3_stage_unsigned_17_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_signed_18_bit.sv
-  inputs: &id264
+  inputs: &id216
   - - a
     - 18
   - - b
@@ -17181,51 +14185,51 @@
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_signed_18_bit.sv
-  inputs: *id264
+  inputs: *id216
   is_signed: true
   module_name: mulxor_2_stage_signed_18_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_signed_18_bit.sv
-  inputs: *id264
+  inputs: *id216
   is_signed: true
   module_name: mulxor_3_stage_signed_18_bit
   stages: 3
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_1_stage_unsigned_18_bit.sv
-  inputs: *id264
+  inputs: *id216
   is_signed: false
   module_name: mulxor_1_stage_unsigned_18_bit
   stages: 1
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_2_stage_unsigned_18_bit.sv
-  inputs: *id264
+  inputs: *id216
   is_signed: false
   module_name: mulxor_2_stage_unsigned_18_bit
   stages: 2
   workload: mulxor
   xor_reduction: false
-- backends: *id253
+- backends: *id205
   bitwidth: 18
   expect_fail: []
   filepath: /home/gus/lakeroad-evaluation/robustness-testing-verilog-files/generated/mulxor_3_stage_unsigned_18_bit.sv
-  inputs: *id264
+  inputs: *id216
   is_signed: false
   module_name: mulxor_3_stage_unsigned_18_bit
   stages: 3
