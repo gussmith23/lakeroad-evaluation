@@ -188,7 +188,6 @@ def _visualize_succeeded_vs_failed_lattice(
     ax.get_figure().savefig(plot_output_filepath)
 
 
-
 def _visualize_succeeded_vs_failed_xilinx(
     csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
 ):
