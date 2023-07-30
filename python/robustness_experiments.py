@@ -18,40 +18,61 @@ import numpy as np
 def _visualize_succeeded_vs_failed(
     csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
 ):
-    df = pandas.read_csv(csv_filepath)
+    # Note, we fill NaNs with 0.
+    df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Resources we care about: things that do computation
+    # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
+    # SRL16E).
+    COMPUTATION_PRIMITIVES = [
+        "DSP48E2",
+        "CARRY4",
+        "LUT2",
+        "LUT3",
+        "LUT4",
+        "LUT5",
+        "LUT6",
+        "SRL16E",
+        "MUXF7",
+        "MUXF8",
+        "MUXF9",
+    ]
 
     # Make sure we're aware of all columns that may exist. This is so we're sure
     # that we're not forgetting to take some columns into account.
     assert set(df.columns).issubset(
         set(
-            [
-                "LUT2",
-                "LUT3",
-                "LUT4",
-                "LUT5",
-                "LUT6",
-                "DSP48E2",
-                "tool",
-                "architecture",
+            COMPUTATION_PRIMITIVES
+            + [
+                # Columns we added
                 "time_s",
+                "identifier",
+                "architecture",
+                "tool",
                 "returncode",
                 "lakeroad_synthesis_success",
                 "lakeroad_synthesis_timeout",
                 "lakeroad_synthesis_failure",
-                "identifier",
+                # Resources we don't care about: things the tools insert that
+                # don't do computation.
+                "GND",
+                "VCC",
+                "BUFG",
+                "FDRE",
+                "IBUF",
+                "OBUF",
             ]
         )
     )
 
     # Column which checks whether the experiment uses one DSP and no other
-    # computational units (LUTs).
+    # computational units.
     df["only_use_one_dsp"] = (df.get("DSP48E2", 0) == 1) & (
-        (
-            df.get("LUT2", 0)
-            + df.get("LUT3", 0)
-            + df.get("LUT4", 0)
-            + df.get("LUT5", 0)
-            + df.get("LUT6", 0)
+        sum(
+            map(
+                lambda col: df.get(col, 0),
+                list(set(COMPUTATION_PRIMITIVES) - set(["DSP48E2"])),
+            )
         )
         == 0
     )
