@@ -135,8 +135,6 @@ def _visualize_succeeded_vs_failed_lattice(
         )
     )
 
-    df.to_csv("tmp.csv")
-
     suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "diamond", "yosys"]})
     suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
         lambda t: (df["tool"] == t).sum()
