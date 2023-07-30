@@ -726,7 +726,7 @@ def make_lattice_ecp5_yosys_synthesis_task(
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
-    collect_args: Optional[Dict[str, Any]] = None,
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Wrapper over Yosys synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -736,9 +736,7 @@ def make_lattice_ecp5_yosys_synthesis_task(
     output_dirpath = Path(output_dirpath)
     json_filepath = output_dirpath / f"{module_name}.json"
     output_filepath = output_dirpath / f"{module_name}.sv"
-    time_filepath = output_dirpath / f"{module_name}.time"
     log_filepath = output_dirpath / f"{module_name}.log"
-    resources_filepath = output_dirpath / f"{module_name}_resource_utilization.json"
 
     task = {
         "actions": [
@@ -746,14 +744,13 @@ def make_lattice_ecp5_yosys_synthesis_task(
                 yosys_synthesis,
                 [],
                 {
-                    "json_filepath": json_filepath,
+                    "summary_filepath": json_filepath,
                     "input_filepath": input_filepath,
                     "module_name": module_name,
                     "output_filepath": output_filepath,
-                    "time_filepath": time_filepath,
                     "synth_command": "synth_ecp5",
                     "log_filepath": log_filepath,
-                    "resources_filepath": resources_filepath,
+                    "extra_summary_fields": extra_summary_fields,
                 },
             )
         ],
@@ -761,33 +758,14 @@ def make_lattice_ecp5_yosys_synthesis_task(
         "targets": [
             json_filepath,
             output_filepath,
-            time_filepath,
             log_filepath,
-            resources_filepath,
         ],
     }
 
     if name is not None:
         task["name"] = name
 
-    if collect_args is not None:
-        task["actions"].append(
-            (
-                collect,
-                [],
-                {
-                    "iteration": collect_args["iteration"],
-                    "identifier": collect_args["identifier"],
-                    "json_filepath": json_filepath,
-                    "collected_data_filepath": collect_args["collected_data_filepath"],
-                    "architecture": "lattice_ecp5",
-                    "tool": "yosys",
-                },
-            )
-        )
-        task["targets"].append(collect_args["collected_data_filepath"])
-
-    return task
+    return (task, (json_filepath, output_filepath, log_filepath))
 
 
 def make_xilinx_ultrascale_plus_yosys_synthesis_task(

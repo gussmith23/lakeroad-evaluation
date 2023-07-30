@@ -490,7 +490,7 @@ def task_robustness_experiments():
                 input_filepath=entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
-                name=f"{entry['module_name']}:diamond",
+                name=f"{entry['module_name']}:lattice-ecp5-diamond",
                 extra_summary_fields={
                     "identifier": entry["module_name"],
                     "architecture": "lattice-ecp5",
@@ -500,87 +500,63 @@ def task_robustness_experiments():
             yield task
             lattice_collected_data_output_filepaths.append(json_filepath)
 
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "lakeroad_lattice_ecp5"
-        #     )
-        #     task = lakeroad.make_lakeroad_task(
-        #         iteration=0,
-        #         identifier=entry["module_name"],
-        #         collected_data_output_filepath=base_path / "collected_data.json",
-        #         template="dsp",
-        #         out_module_name="output",
-        #         out_filepath=base_path / "output.v",
-        #         architecture="lattice-ecp5",
-        #         time_filepath=base_path / "out.time",
-        #         json_filepath=base_path / "out.json",
-        #         verilog_module_filepath=entry["filepath"],
-        #         top_module_name=entry["module_name"],
-        #         clock_name="clk",
-        #         name=entry["module_name"] + ":lakeroad-lattice",
-        #         initiation_interval=entry["stages"],
-        #         inputs=entry["inputs"],
-        #         verilog_module_out_signal=("out", entry["bitwidth"]),
-        #     )
-        #     yield task
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "lakeroad_lattice_ecp5"
+            )
+            (
+                task,
+                (json_filepath, lakeroad_output_verilog, _),
+            ) = lakeroad.make_lakeroad_task(
+                out_dirpath=base_path,
+                template="dsp",
+                out_module_name="output",
+                architecture="lattice-ecp5",
+                verilog_module_filepath=entry["filepath"],
+                top_module_name=entry["module_name"],
+                clock_name="clk",
+                name=entry["module_name"] + ":lattice-ecp5-lakeroad",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                    "timeout"
+                ],
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "lattice-ecp5",
+                    "tool": "lakeroad",
+                },
+            )
+            yield task
+            lattice_collected_data_output_filepaths.append(json_filepath)
 
-        #     yield {
-        #         "name": f"{entry['module_name']}:lakeroad-lattice:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": base_path
-        #                     / "collected_data.json",
-        #                     "module_name": entry["module_name"],
-        #                     "tool_name": "lakeroad-lattice",
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [base_path / "collected_data.json"],
-        #     }
+            # TODO(@vcanumalla @gussmith) Add Verilator for Lattice
 
-        #     # TODO(@vcanumalla): ADD dsp check and verilator sim
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "yosys_lattice_ecp5"
-        #     )
-        #     # yosys for diamond backend
-        #     yield hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
-        #         input_filepath=entry["filepath"],
-        #         output_dirpath=(
-        #             utils.output_dir()
-        #             / "robustness_experiments"
-        #             / entry["module_name"]
-        #             / "yosys_lattice_ecp5"
-        #         ),
-        #         module_name=entry["module_name"],
-        #         name=f"{entry['module_name']}:yosys_lattice_ecp5",
-        #     )
-        #     resources_filepath = (
-        #         base_path / f"{entry['module_name']}_resource_utilization.json"
-        #     )
-
-        #     yield {
-        #         "name": f"{entry['module_name']}:yosys_lattice_ecp5:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": resources_filepath,
-        #                     "module_name": entry["module_name"],
-        #                     "tool_name": "yosys-lattice",
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [resources_filepath],
-        #     }
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "yosys_lattice_ecp5"
+            )
+            (
+                task,
+                (json_filepath, _, _),
+            ) = hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
+                input_filepath=entry["filepath"],
+                output_dirpath=base_path,
+                module_name=entry["module_name"],
+                name=f"{entry['module_name']}:lattice-ecp5-yosys",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "lattice-ecp5",
+                    "tool": "yosys",
+                },
+            )
+            yield task
+            lattice_collected_data_output_filepaths.append(json_filepath)
 
         # if "intel" in backends:
         #     base_path = (
