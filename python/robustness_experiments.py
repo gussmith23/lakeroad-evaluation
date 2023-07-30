@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 
 
-def _visualize_succeeded_vs_failed(
+def _visualize_succeeded_vs_failed_xilinx(
     csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
 ):
     # Note, we fill NaNs with 0.
@@ -663,16 +663,16 @@ def task_robustness_experiments():
     }
 
     yield {
-        "name": "visualize_succeeded_vs_failed",
+        "name": "visualize_succeeded_vs_failed_xilinx",
         "file_dep": [xilinx_csv_output],
         "actions": [
             (
-                _visualize_succeeded_vs_failed,
+                _visualize_succeeded_vs_failed_xilinx,
                 [],
                 {
                     "csv_filepath": xilinx_csv_output,
                     "plot_output_filepath": (
-                        utils.output_dir() / "figures" / "succeeded_vs_failed.png"
+                        utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png"
                     ),
                 },
             )
