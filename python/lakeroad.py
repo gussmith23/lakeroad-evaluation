@@ -383,15 +383,12 @@ def task_instruction_experiments(experiments_file: str):
 
         match experiment.architecture:
             case "lattice_ecp5":
-                diamond_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
+                yield make_lattice_ecp5_diamond_synthesis_task(
                     input_filepath=verilog_filepath,
                     output_dirpath=output_dirpath / "diamond",
                     module_name=module_name,
-                )
-                diamond_synthesis_task[
-                    "name"
-                ] = f"diamond_synthesize_{template}_{module_name}"
-                yield diamond_synthesis_task
+                    name=f"diamond_synthesize_{template}_{module_name}",
+                )[0]
 
             case "xilinx_ultrascale_plus":
                 # Previously this used the noopt version of synthesis. These

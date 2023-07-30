@@ -848,6 +848,7 @@ def lattice_ecp5_diamond_synthesis(
     module_name: str,
     output_dirpath: Union[Path, str],
     json_filepath: Union[Path, str],
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     output_dirpath = Path(output_dirpath)
     output_dirpath.mkdir(parents=True, exist_ok=True)
@@ -882,6 +883,7 @@ def lattice_ecp5_diamond_synthesis(
     # results to the cwd.
     env = os.environ.copy()
     env["bindir"] = os.environ["DIAMOND_BINDIR"]
+    diamond_start = time()
     out = subprocess.run(
         [
             "bash",
@@ -893,6 +895,7 @@ def lattice_ecp5_diamond_synthesis(
         cwd=output_dirpath,
         env=env,
     ).returncode
+    diamond_end = time()
 
     # Currently, Diamond will likely take issue with Calyx's designs when
     # running DRC. However, Diamond will still produce correct output. So we
@@ -903,17 +906,21 @@ def lattice_ecp5_diamond_synthesis(
 
     assert (output_dirpath / f"{module_name}_prim.v").exists()
 
-    with open(json_filepath, "w") as f:
-        log_stats = parse_diamond_log(
-            open(Path(output_dirpath) / "synthesis.log").read(), identifier=module_name
-        )
-        json.dump(dataclasses.asdict(log_stats), f)
+    # Generate summary JSON.
+    summary = count_resources_in_verilog_src(
+        verilog_src=(output_dirpath / f"{module_name}_prim.v").read_text(),
+        module_name=module_name,
+    )
+
+    summary["time_s"] = diamond_end - diamond_start
+
+    for key in extra_summary_fields:
+        assert key not in summary
+        summary[key] = extra_summary_fields[key]
+
     json.dump(
-        count_resources_in_verilog_src(
-            verilog_src=(output_dirpath / f"{module_name}_prim.v").read_text(),
-            module_name=module_name,
-        ),
-        fp=open(output_dirpath / f"{module_name}_resource_utilization.json", "w"),
+        summary,
+        fp=open(json_filepath, "w"),
     )
 
 
@@ -955,6 +962,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
     collect_args: Optional[Dict[str, Any]] = None,
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Wrapper over Diamond synthesis function which creates a DoIt task."""
     # TODO(@gussmith23): Support clocks on Lattice.
@@ -970,7 +978,10 @@ def make_lattice_ecp5_diamond_synthesis_task(
             (
                 lattice_ecp5_diamond_synthesis,
                 [input_filepath, module_name, output_dirpath],
-                {"json_filepath": json_filepath},
+                {
+                    "json_filepath": json_filepath,
+                    "extra_summary_fields": extra_summary_fields,
+                },
             )
         ],
         "file_dep": [input_filepath],
@@ -989,24 +1000,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
     if name is not None:
         task["name"] = name
 
-    if collect_args is not None:
-        task["actions"].append(
-            (
-                collect,
-                [],
-                {
-                    "iteration": collect_args["iteration"],
-                    "identifier": collect_args["identifier"],
-                    "json_filepath": json_filepath,
-                    "collected_data_filepath": collect_args["collected_data_filepath"],
-                    "architecture": "lattice_ecp5",
-                    "tool": "diamond",
-                },
-            )
-        )
-        task["targets"].append(collect_args["collected_data_filepath"])
-
-    return task
+    return (task, (json_filepath,))
 
 
 def make_yosys_nextpnr_synthesis_task(

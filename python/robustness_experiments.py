@@ -331,7 +331,8 @@ def task_robustness_experiments():
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
 
     # .json file that contains metadata is produced for each entry's synthesis.
-    collected_data_output_filepaths = []
+    xilinx_collected_data_output_filepaths = []
+    lattice_collected_data_output_filepaths = []
 
     # determines if the compiler fails for the workload we're looking at
     def contains_compiler_fail(entry, tool_name):
@@ -381,7 +382,7 @@ def task_robustness_experiments():
                 },
             )
             yield task
-            collected_data_output_filepaths.append(json_filepath)
+            xilinx_collected_data_output_filepaths.append(json_filepath)
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
@@ -417,7 +418,7 @@ def task_robustness_experiments():
             )
             yield task
 
-            collected_data_output_filepaths.append(json_filepath)
+            xilinx_collected_data_output_filepaths.append(json_filepath)
 
             yield verilator.make_verilator_task(
                 name=f"{entry['module_name']}:lakeroad:verilator",
@@ -472,40 +473,32 @@ def task_robustness_experiments():
                 },
             )
             yield task
-            collected_data_output_filepaths.append(json_filepath)
+            xilinx_collected_data_output_filepaths.append(json_filepath)
 
-        # if "lattice" in backends:
-        #     # diamond-lattice, lakeroad-lattice, yosys-lattice
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "diamond"
-        #     )
-        #     yield hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
-        #         input_filepath=entry["filepath"],
-        #         output_dirpath=base_path,
-        #         module_name=entry["module_name"],
-        #         name=f"{entry['module_name']}:diamond"
-        #     )
-        #     # TODO(@vcanumalla): ADD lattice backend dsp check
-        #     yield {
-        #         "name": f"{entry['module_name']}:diamond:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": (
-        #                         base_path / f"{Path(entry['filepath']).stem}_resource_utilization.json"
-        #                     ),
-        #                     "module_name": entry["module_name"],
-        #                     "tool_name": "diamond",
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [(base_path / f"{Path(entry['filepath']).stem}_resource_utilization.json")],
-        #     }
+        if "lattice" in backends:
+            # diamond-lattice, lakeroad-lattice, yosys-lattice
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "diamond"
+            )
+            (
+                task,
+                (json_filepath,),
+            ) = hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
+                input_filepath=entry["filepath"],
+                output_dirpath=base_path,
+                module_name=entry["module_name"],
+                name=f"{entry['module_name']}:diamond",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "lattice-ecp5",
+                    "tool": "diamond",
+                },
+            )
+            yield task
+            lattice_collected_data_output_filepaths.append(json_filepath)
 
         #     base_path = (
         #         utils.output_dir()
@@ -675,19 +668,19 @@ def task_robustness_experiments():
         #         "file_dep": [resources_filepath],
         #     }
     base_path = utils.output_dir() / "robustness_experiments_csv"
-    csv_output = base_path / "all_results" / "all_results_collected.csv"
+    xilinx_csv_output = base_path / "all_results" / "all_xilinx_results_collected.csv"
     yield {
-        "name": "collect_data",
+        "name": "collect_xilinx_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": collected_data_output_filepaths,
-        "targets": [csv_output],
+        "file_dep": xilinx_collected_data_output_filepaths,
+        "targets": [xilinx_csv_output],
         "actions": [
             (
                 _collect_robustness_benchmark_data,
                 [],
                 {
-                    "filepaths": collected_data_output_filepaths,
-                    "output_filepath": csv_output,
+                    "filepaths": xilinx_collected_data_output_filepaths,
+                    "output_filepath": xilinx_csv_output,
                 },
             )
         ],
@@ -695,13 +688,13 @@ def task_robustness_experiments():
 
     yield {
         "name": "visualize_succeeded_vs_failed",
-        "file_dep": [csv_output],
+        "file_dep": [xilinx_csv_output],
         "actions": [
             (
                 _visualize_succeeded_vs_failed,
                 [],
                 {
-                    "csv_filepath": csv_output,
+                    "csv_filepath": xilinx_csv_output,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "succeeded_vs_failed.png"
                     ),
