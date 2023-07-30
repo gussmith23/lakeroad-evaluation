@@ -199,6 +199,15 @@ def invoke_lakeroad(
         fp=open(json_filepath, "w"),
     )
 
+    # TODO(@gussmith23): There's a bug somewhere where we will produce an empty
+    # file on failure. Delete that file. Figure out where the bug is.
+    if (
+        proc.returncode != 0
+        and out_filepath.exists()
+        and out_filepath.read_text() == ""
+    ):
+        os.remove(out_filepath)
+
     if proc.returncode != 0:
         logging.error(" " + " ".join(map(str, cmd)))
     if check_returncode:
