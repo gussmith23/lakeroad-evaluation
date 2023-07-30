@@ -284,3 +284,5 @@ completeness_experiments:
     seeds: [0]
     # Timeout for Lakeroad.
     timeout: 180
+    # The number of random inputs to sample when simulating each experiment with Verilator.
+    verilator_simulation_iterations: 5000
