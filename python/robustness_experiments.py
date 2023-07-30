@@ -15,6 +15,182 @@ from pathlib import Path
 import numpy as np
 
 
+def _visualize_succeeded_vs_failed_lattice(
+    csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
+):
+    # Note, we fill NaNs with 0.
+    df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Resources we care about: things that do computation
+    # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
+    COMPUTATION_PRIMITIVES = [
+        "MULT9X9D",
+        "MULT18X18D",
+        "MULT18X18C",
+        "ALU54A",
+        "ALU54B",
+        "LUT4",
+        "CCU2C",
+        # I'm not sure we can really classify these as computation
+        # primitives...otherwise everything is classified as a failure for Yosys
+        # and Diamond!
+        # "TRELLIS_FF",
+        # "FD1S3AX",
+        # "OFS1P3DX",
+        # "DPR16X4C",
+        # "IFS1P3DX",
+        # "OFS1P3JX",
+        # "IFS1P3JX",
+    ]
+
+    # Make sure we're aware of all columns that may exist. This is so we're sure
+    # that we're not forgetting to take some columns into account.
+    assert set(df.columns).issubset(
+        set(
+            COMPUTATION_PRIMITIVES
+            + [
+                # Columns we added.
+                "time_s",
+                "identifier",
+                "architecture",
+                "tool",
+                "returncode",
+                "lakeroad_synthesis_success",
+                "lakeroad_synthesis_timeout",
+                "lakeroad_synthesis_failure",
+                # Resources we don't care about.
+                "GSR",
+                "IB",
+                "OB",
+                "PUR",
+                "VHI",
+                "VLO",
+                # Registers...see note above.
+                "TRELLIS_FF",
+                "FD1S3AX",
+                "OFS1P3DX",
+                "DPR16X4C",
+                "IFS1P3DX",
+                "OFS1P3JX",
+                "IFS1P3JX",
+            ]
+        )
+    )
+
+    # Column which checks whether the experiment uses one DSP and no other
+    # computational units.
+    #
+    # For lattice, we define "one DSP" as at most one multiplier and at most one
+    # ALU.
+    #
+    # The first clause says that, if we're using Lakeroad, then Lakeroad must
+    # have succeeded. This filters out cases where Lakeroad succeeds, and thus
+    # uses no resources at all, and thus passes the rest of the checks.
+    df["only_use_one_dsp"] = (
+        (~(df["tool"] == "lakeroad") | (df["lakeroad_synthesis_success"] == True))
+        & (
+            sum(
+                map(
+                    lambda col: df.get(col, 0),
+                    [
+                        "MULT9X9D",
+                        "MULT18X18D",
+                        "MULT18X18C",
+                    ],
+                )
+            )
+            <= 1
+        )
+        & (
+            sum(
+                map(
+                    lambda col: df.get(col, 0),
+                    [
+                        "ALU54A",
+                        "ALU54B",
+                    ],
+                )
+            )
+            <= 1
+        )
+        & (
+            sum(
+                map(
+                    lambda col: df.get(col, 0),
+                    list(
+                        set(COMPUTATION_PRIMITIVES)
+                        - set(
+                            [
+                                "MULT9X9D",
+                                "MULT18X18D",
+                                "MULT18X18C",
+                                "ALU54A",
+                                "ALU54B",
+                            ]
+                        )
+                    ),
+                )
+            )
+            == 0
+        )
+    )
+
+    df.to_csv("tmp.csv")
+
+    suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "diamond", "yosys"]})
+    suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
+        lambda t: (df["tool"] == t).sum()
+    )
+    suc_v_unsuc["num_successful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & df["only_use_one_dsp"]).sum()
+    )
+    # We ignore Lakeroad, because we'll calculate different
+    # successful/unsuccessful columns for Lakeroad.
+    suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+        if t != "lakeroad"
+        else 0
+    )
+    # Lakeroad unsuccessful columns.
+    suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_failure"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+    suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_timeout"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+
+    # Sanity check.
+    assert suc_v_unsuc["num_experiments"].equals(
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+
+    ax = suc_v_unsuc.plot.bar(
+        x="tool",
+        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
+        stacked=True,
+        rot=0,
+    )
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    ax.get_figure().savefig(plot_output_filepath)
+
+
+
 def _visualize_succeeded_vs_failed_xilinx(
     csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
 ):
@@ -672,7 +848,9 @@ def task_robustness_experiments():
                 {
                     "csv_filepath": xilinx_csv_output,
                     "plot_output_filepath": (
-                        utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png"
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_xilinx.png"
                     ),
                 },
             )
@@ -693,6 +871,25 @@ def task_robustness_experiments():
                 {
                     "filepaths": lattice_collected_data_output_filepaths,
                     "output_filepath": lattice_csv_output,
+                },
+            )
+        ],
+    }
+
+    yield {
+        "name": "visualize_succeeded_vs_failed_lattice",
+        "file_dep": [lattice_csv_output],
+        "actions": [
+            (
+                _visualize_succeeded_vs_failed_lattice,
+                [],
+                {
+                    "csv_filepath": lattice_csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_lattice.png"
+                    ),
                 },
             )
         ],
