@@ -30,6 +30,7 @@ def simulate_with_verilator(
     include_dirs: List[Union[str, Path]] = [],
     extra_args: List[str] = [],
     max_num_tests: int = MAX_NUM_TESTS,
+    ignore_missing_test_module_file: bool = False,
 ):
     """
 
@@ -44,7 +45,32 @@ def simulate_with_verilator(
       testbench_{c,exe}_output_filepath: Filepath to write the testbench
         code/executable to.
       testbench_log_filepath: Filepath to write the testbench output to.
+      ignore_missing_test_module_file: If True, we will not raise an exception
+        if the test module file does not exist. This is our current hacky solution
+        to handling the fact that Lakeroad doesn't always produce output.
     """
+
+    if ignore_missing_test_module_file and not Path(test_module_filepath).exists():
+        logging.warning(
+            f"Test module file {test_module_filepath} does not exist. "
+            "Skipping simulation."
+        )
+        return
+
+    obj_dir_dir = Path(obj_dir_dir)
+    obj_dir_dir.mkdir(parents=True, exist_ok=True)
+    testbench_cc_filepath = Path(testbench_cc_filepath)
+    testbench_cc_filepath.parent.mkdir(parents=True, exist_ok=True)
+    testbench_exe_filepath = Path(testbench_exe_filepath)
+    testbench_exe_filepath.parent.mkdir(parents=True, exist_ok=True)
+    testbench_inputs_filepath = Path(testbench_inputs_filepath)
+    testbench_inputs_filepath.parent.mkdir(parents=True, exist_ok=True)
+    testbench_stdout_log_filepath = Path(testbench_stdout_log_filepath)
+    testbench_stdout_log_filepath.parent.mkdir(parents=True, exist_ok=True)
+    testbench_stderr_log_filepath = Path(testbench_stderr_log_filepath)
+    testbench_stderr_log_filepath.parent.mkdir(parents=True, exist_ok=True)
+    makefile_filepath = Path(makefile_filepath)
+    makefile_filepath.parent.mkdir(parents=True, exist_ok=True)
 
     # Instantiate Makefile template for our code.
     if "VERILATOR_INCLUDE_DIR" not in os.environ:
@@ -131,7 +157,20 @@ def simulate_with_verilator(
     proc.check_returncode()
 
 
-def make_verilator_task(name: Optional[str] = None, **kwargs):
+def make_verilator_task(
+    output_dirpath: Union[Path, str],
+    test_module_filepath: List[Union[str, Path]],
+    ground_truth_module_filepath: List[Union[str, Path]],
+    module_inputs: List[Tuple[str, int]],
+    clock_name: str,
+    initiation_interval: int,
+    output_signal: str,
+    include_dirs: List[Union[str, Path]] = [],
+    extra_args: List[str] = [],
+    max_num_tests: int = MAX_NUM_TESTS,
+    ignore_missing_test_module_file: bool = False,
+    name: Optional[str] = None,
+):
     """Make DoIt task for simulating with Verilator.
 
     See the args for `simulate_with_verilator` for the kwargs."""
@@ -141,21 +180,52 @@ def make_verilator_task(name: Optional[str] = None, **kwargs):
     if name is not None:
         task["name"] = name
 
-    task["actions"] = [(simulate_with_verilator, [], kwargs)]
+    output_dirpath = Path(output_dirpath)
 
-    task["targets"] = [
-        kwargs["obj_dir_dir"],
-        kwargs["testbench_exe_filepath"],
-        kwargs["testbench_stdout_log_filepath"],
-        kwargs["testbench_stderr_log_filepath"],
-        kwargs["makefile_filepath"],
-        kwargs["testbench_inputs_filepath"],
-        kwargs["testbench_cc_filepath"],
+    output_filepaths = {
+        "obj_dir_dir": output_dirpath / "verilator_obj_dir",
+        "testbench_exe_filepath": output_dirpath / "testbench",
+        "testbench_stdout_log_filepath": output_dirpath / "testbench_stdout.log",
+        "testbench_stderr_log_filepath": output_dirpath / "testbench_stderr.log",
+        "makefile_filepath": output_dirpath / "Makefile",
+        "testbench_inputs_filepath": output_dirpath / "testbench_inputs.txt",
+        "testbench_cc_filepath": output_dirpath / "testbench.cc",
+    }
+
+    task["actions"] = [
+        (
+            simulate_with_verilator,
+            [],
+            {
+                "obj_dir_dir": output_filepaths["obj_dir_dir"],
+                "testbench_exe_filepath": output_filepaths["testbench_exe_filepath"],
+                "testbench_stdout_log_filepath": output_filepaths[
+                    "testbench_stdout_log_filepath"
+                ],
+                "testbench_stderr_log_filepath": output_filepaths[
+                    "testbench_stderr_log_filepath"
+                ],
+                "makefile_filepath": output_filepaths["makefile_filepath"],
+                "testbench_inputs_filepath": output_filepaths[
+                    "testbench_inputs_filepath"
+                ],
+                "testbench_cc_filepath": output_filepaths["testbench_cc_filepath"],
+                "test_module_filepath": test_module_filepath,
+                "ground_truth_module_filepath": ground_truth_module_filepath,
+                "module_inputs": module_inputs,
+                "clock_name": clock_name,
+                "initiation_interval": initiation_interval,
+                "output_signal": output_signal,
+                "include_dirs": include_dirs,
+                "extra_args": extra_args,
+                "max_num_tests": max_num_tests,
+                "ignore_missing_test_module_file": ignore_missing_test_module_file,
+            },
+        )
     ]
 
-    task["file_dep"] = [
-        kwargs["test_module_filepath"],
-        kwargs["ground_truth_module_filepath"],
-    ]
+    task["targets"] = list(output_filepaths.values())
 
-    return task
+    task["file_dep"] = [test_module_filepath, ground_truth_module_filepath]
+
+    return (task,)
