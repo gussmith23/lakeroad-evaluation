@@ -314,7 +314,6 @@ def task_instruction_experiments(experiments_file: str):
     def _make_instruction_implementation_with_lakeroad_task(
         experiment: LakeroadInstructionExperiment,
         verilog_filepath: Union[str, Path],
-        time_filepath: Union[str, Path],
         json_filepath: Union[str, Path],
     ):
         instruction_str = experiment.instruction.expr
@@ -328,17 +327,14 @@ def task_instruction_experiments(experiments_file: str):
             "actions": [
                 (
                     invoke_lakeroad,
-                    [
-                        verilog_module_name,
-                        instruction_str,
-                        template,
-                        verilog_filepath,
-                        experiment.architecture.replace("_", "-"),
-                        time_filepath,
-                    ],
+                    [],
                     {
+                        "module_name": verilog_module_name,
+                        "instruction": instruction_str,
+                        "template": template,
+                        "out_filepath": verilog_filepath,
+                        "architecture": experiment.architecture.replace("_", "-"),
                         "json_filepath": json_filepath,
-                        ""
                         "verilog_module_out_signal": (
                             "out",
                             experiment.instruction.bitwidth,
@@ -357,7 +353,7 @@ def task_instruction_experiments(experiments_file: str):
             # Note: Leaving the file_dep empty is fine; it will just re-run
             # Lakeroad on each instruction each time.
             "file_dep": [experiments_file],
-            "targets": [verilog_filepath, time_filepath, json_filepath],
+            "targets": [verilog_filepath, json_filepath],
         }
 
     with open(experiments_file) as f:
@@ -373,13 +369,11 @@ def task_instruction_experiments(experiments_file: str):
             utils.output_dir() / "lakeroad" / architecture / module_name / template
         )
 
-        time_filepath = output_dirpath / f"{module_name}.time"
         verilog_filepath = output_dirpath / f"{module_name}.sv"
         json_filepath = output_dirpath / f"{module_name}.json"
 
         yield _make_instruction_implementation_with_lakeroad_task(
             experiment,
-            time_filepath=time_filepath,
             verilog_filepath=verilog_filepath,
             json_filepath=json_filepath,
         )
