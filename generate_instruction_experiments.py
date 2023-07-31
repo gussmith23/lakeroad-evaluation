@@ -131,10 +131,11 @@ def _make_instructions():
                 ("sofa", "bitwise"),
             ]
             # Only do DSP for <= 16 bits.
-            if bw <= 16:
-                templates += [
-                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
-                ]
+            # We don't do DSP anymore b/c of new completeness eval.
+            # if bw <= 16:
+            #     templates += [
+            #         ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+            #     ]
 
             for architecture, template in templates:
                 yield _make_experiment(architecture, instruction, template)
@@ -163,10 +164,11 @@ def _make_instructions():
                 ("sofa", "bitwise-with-carry"),
             ]
             # Only do DSP for <= 16 bits.
-            if bw <= 16:
-                templates += [
-                    ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
-                ]
+            # We don't do DSP anymore b/c of new completeness eval.
+            # if bw <= 16:
+            #     templates += [
+            #         ("xilinx_ultrascale_plus", "xilinx-ultrascale-plus-dsp48e2")
+            #     ]
 
             for architecture, template in templates:
                 yield _make_experiment(architecture, instruction, template)
@@ -262,22 +264,23 @@ def _make_instructions():
                 ]:
                     yield _make_experiment(architecture, instruction, template)
 
-        if bw <= 16:
-            for instruction in [
-                Instruction(
-                    name="mul",
-                    bitwidth=bw,
-                    arity=2,
-                    expr=f"(bvmul (var a {bw}) (var b {bw}))",
-                ),
-            ]:
-                for architecture, template in [
-                    (
-                        "xilinx_ultrascale_plus",
-                        "xilinx-ultrascale-plus-dsp48e2",
-                    ),
-                ]:
-                    yield _make_experiment(architecture, instruction, template)
+        # We don't do DSP anymore b/c of new completeness eval.
+        # if bw <= 16:
+        #     for instruction in [
+        #         Instruction(
+        #             name="mul",
+        #             bitwidth=bw,
+        #             arity=2,
+        #             expr=f"(bvmul (var a {bw}) (var b {bw}))",
+        #         ),
+        #     ]:
+        #         for architecture, template in [
+        #             (
+        #                 "xilinx_ultrascale_plus",
+        #                 "xilinx-ultrascale-plus-dsp48e2",
+        #             ),
+        #         ]:
+        #             yield _make_experiment(architecture, instruction, template)
 
 
 def main(output_file):

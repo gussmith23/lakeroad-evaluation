@@ -23,12 +23,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and1_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id001
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or1_2
     template: bitwise
   instruction: &id002 !!python/object:schema.Instruction
@@ -47,12 +41,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or1_2
     template: bitwise
-  instruction: *id002
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or1_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id002
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -79,12 +67,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor1_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id003
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not1_1
     template: bitwise
   instruction: &id004 !!python/object:schema.Instruction
@@ -107,12 +89,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not1_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id004
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux1_3
     template: bitwise
   instruction: &id005 !!python/object:schema.Instruction
@@ -131,12 +107,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux1_3
     template: bitwise
-  instruction: *id005
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux1_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id005
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -169,12 +139,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add1_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id006
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub1_2
     template: bitwise-with-carry
   instruction: &id007 !!python/object:schema.Instruction
@@ -199,12 +163,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub1_2
     template: bitwise-with-carry
-  instruction: *id007
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub1_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id007
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -407,16 +365,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul1_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 1
-    expr: (bvmul (var a 1) (var b 1))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl2_2
     template: shift
   instruction: &id017 !!python/object:schema.Instruction
@@ -497,12 +445,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and2_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id020
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or2_2
     template: bitwise
   instruction: &id021 !!python/object:schema.Instruction
@@ -521,12 +463,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or2_2
     template: bitwise
-  instruction: *id021
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or2_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id021
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -553,12 +489,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor2_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id022
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not2_1
     template: bitwise
   instruction: &id023 !!python/object:schema.Instruction
@@ -581,12 +511,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not2_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id023
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux2_3
     template: bitwise
   instruction: &id024 !!python/object:schema.Instruction
@@ -605,12 +529,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux2_3
     template: bitwise
-  instruction: *id024
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux2_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id024
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -643,12 +561,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add2_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id025
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub2_2
     template: bitwise-with-carry
   instruction: &id026 !!python/object:schema.Instruction
@@ -673,12 +585,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub2_2
     template: bitwise-with-carry
-  instruction: *id026
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub2_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id026
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -881,16 +787,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul2_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 2
-    expr: (bvmul (var a 2) (var b 2))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl3_2
     template: shift
   instruction: &id036 !!python/object:schema.Instruction
@@ -971,12 +867,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and3_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id039
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or3_2
     template: bitwise
   instruction: &id040 !!python/object:schema.Instruction
@@ -995,12 +885,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or3_2
     template: bitwise
-  instruction: *id040
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or3_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id040
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1027,12 +911,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor3_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id041
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not3_1
     template: bitwise
   instruction: &id042 !!python/object:schema.Instruction
@@ -1055,12 +933,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not3_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id042
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux3_3
     template: bitwise
   instruction: &id043 !!python/object:schema.Instruction
@@ -1079,12 +951,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux3_3
     template: bitwise
-  instruction: *id043
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux3_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id043
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1117,12 +983,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add3_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id044
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub3_2
     template: bitwise-with-carry
   instruction: &id045 !!python/object:schema.Instruction
@@ -1147,12 +1007,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub3_2
     template: bitwise-with-carry
-  instruction: *id045
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub3_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id045
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1355,16 +1209,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul3_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 3
-    expr: (bvmul (var a 3) (var b 3))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl4_2
     template: shift
   instruction: &id055 !!python/object:schema.Instruction
@@ -1445,12 +1289,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and4_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id058
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or4_2
     template: bitwise
   instruction: &id059 !!python/object:schema.Instruction
@@ -1469,12 +1307,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or4_2
     template: bitwise
-  instruction: *id059
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or4_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id059
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1501,12 +1333,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor4_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id060
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not4_1
     template: bitwise
   instruction: &id061 !!python/object:schema.Instruction
@@ -1529,12 +1355,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not4_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id061
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux4_3
     template: bitwise
   instruction: &id062 !!python/object:schema.Instruction
@@ -1553,12 +1373,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux4_3
     template: bitwise
-  instruction: *id062
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux4_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id062
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1591,12 +1405,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add4_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id063
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub4_2
     template: bitwise-with-carry
   instruction: &id064 !!python/object:schema.Instruction
@@ -1621,12 +1429,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub4_2
     template: bitwise-with-carry
-  instruction: *id064
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub4_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id064
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1829,16 +1631,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul4_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 4
-    expr: (bvmul (var a 4) (var b 4))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl5_2
     template: shift
   instruction: &id074 !!python/object:schema.Instruction
@@ -1919,12 +1711,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and5_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id077
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or5_2
     template: bitwise
   instruction: &id078 !!python/object:schema.Instruction
@@ -1943,12 +1729,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or5_2
     template: bitwise
-  instruction: *id078
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or5_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id078
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -1975,12 +1755,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor5_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id079
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not5_1
     template: bitwise
   instruction: &id080 !!python/object:schema.Instruction
@@ -2003,12 +1777,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not5_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id080
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux5_3
     template: bitwise
   instruction: &id081 !!python/object:schema.Instruction
@@ -2027,12 +1795,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux5_3
     template: bitwise
-  instruction: *id081
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux5_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id081
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2065,12 +1827,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add5_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id082
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub5_2
     template: bitwise-with-carry
   instruction: &id083 !!python/object:schema.Instruction
@@ -2095,12 +1851,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub5_2
     template: bitwise-with-carry
-  instruction: *id083
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub5_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id083
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2303,16 +2053,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul5_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 5
-    expr: (bvmul (var a 5) (var b 5))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl6_2
     template: shift
   instruction: &id093 !!python/object:schema.Instruction
@@ -2393,12 +2133,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and6_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id096
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or6_2
     template: bitwise
   instruction: &id097 !!python/object:schema.Instruction
@@ -2417,12 +2151,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or6_2
     template: bitwise
-  instruction: *id097
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or6_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id097
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2449,12 +2177,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor6_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id098
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not6_1
     template: bitwise
   instruction: &id099 !!python/object:schema.Instruction
@@ -2477,12 +2199,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not6_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id099
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux6_3
     template: bitwise
   instruction: &id100 !!python/object:schema.Instruction
@@ -2501,12 +2217,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux6_3
     template: bitwise
-  instruction: *id100
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux6_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id100
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2539,12 +2249,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add6_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id101
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub6_2
     template: bitwise-with-carry
   instruction: &id102 !!python/object:schema.Instruction
@@ -2569,12 +2273,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub6_2
     template: bitwise-with-carry
-  instruction: *id102
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub6_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id102
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2777,16 +2475,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul6_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 6
-    expr: (bvmul (var a 6) (var b 6))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl7_2
     template: shift
   instruction: &id112 !!python/object:schema.Instruction
@@ -2867,12 +2555,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and7_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id115
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or7_2
     template: bitwise
   instruction: &id116 !!python/object:schema.Instruction
@@ -2891,12 +2573,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or7_2
     template: bitwise
-  instruction: *id116
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or7_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id116
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -2923,12 +2599,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor7_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id117
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not7_1
     template: bitwise
   instruction: &id118 !!python/object:schema.Instruction
@@ -2951,12 +2621,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not7_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id118
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux7_3
     template: bitwise
   instruction: &id119 !!python/object:schema.Instruction
@@ -2975,12 +2639,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux7_3
     template: bitwise
-  instruction: *id119
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux7_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id119
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3013,12 +2671,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add7_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id120
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub7_2
     template: bitwise-with-carry
   instruction: &id121 !!python/object:schema.Instruction
@@ -3043,12 +2695,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub7_2
     template: bitwise-with-carry
-  instruction: *id121
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub7_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id121
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3251,16 +2897,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul7_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 7
-    expr: (bvmul (var a 7) (var b 7))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl8_2
     template: shift
   instruction: &id131 !!python/object:schema.Instruction
@@ -3341,12 +2977,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and8_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id134
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or8_2
     template: bitwise
   instruction: &id135 !!python/object:schema.Instruction
@@ -3365,12 +2995,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or8_2
     template: bitwise
-  instruction: *id135
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or8_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id135
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3397,12 +3021,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor8_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id136
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not8_1
     template: bitwise
   instruction: &id137 !!python/object:schema.Instruction
@@ -3425,12 +3043,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not8_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id137
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux8_3
     template: bitwise
   instruction: &id138 !!python/object:schema.Instruction
@@ -3449,12 +3061,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux8_3
     template: bitwise
-  instruction: *id138
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux8_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id138
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3487,12 +3093,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add8_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id139
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub8_2
     template: bitwise-with-carry
   instruction: &id140 !!python/object:schema.Instruction
@@ -3517,12 +3117,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub8_2
     template: bitwise-with-carry
-  instruction: *id140
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub8_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id140
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3725,16 +3319,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul8_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 8
-    expr: (bvmul (var a 8) (var b 8))
-    name: mul
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_shl16_2
     template: shift
   instruction: &id150 !!python/object:schema.Instruction
@@ -3815,12 +3399,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_and16_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id153
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_or16_2
     template: bitwise
   instruction: &id154 !!python/object:schema.Instruction
@@ -3839,12 +3417,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_or16_2
     template: bitwise
-  instruction: *id154
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_or16_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id154
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3871,12 +3443,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_xor16_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id155
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_not16_1
     template: bitwise
   instruction: &id156 !!python/object:schema.Instruction
@@ -3899,12 +3465,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_not16_1
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id156
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux16_3
     template: bitwise
   instruction: &id157 !!python/object:schema.Instruction
@@ -3923,12 +3483,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_mux16_3
     template: bitwise
-  instruction: *id157
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mux16_3
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id157
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -3961,12 +3515,6 @@
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_add16_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: *id158
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub16_2
     template: bitwise-with-carry
   instruction: &id159 !!python/object:schema.Instruction
@@ -3991,12 +3539,6 @@
   implementation_action: !!python/object:schema.ImplementationAction
     implementation_module_name: lakeroad_sofa_sub16_2
     template: bitwise-with-carry
-  instruction: *id159
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_sub16_2
-    template: xilinx-ultrascale-plus-dsp48e2
   instruction: *id159
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
@@ -4174,16 +3716,6 @@
     implementation_module_name: lakeroad_sofa_neq16_2
     template: shallow-comparison
   instruction: *id167
-- !!python/object:schema.LakeroadInstructionExperiment
-  architecture: xilinx_ultrascale_plus
-  implementation_action: !!python/object:schema.ImplementationAction
-    implementation_module_name: lakeroad_xilinx_ultrascale_plus_mul16_2
-    template: xilinx-ultrascale-plus-dsp48e2
-  instruction: !!python/object:schema.Instruction
-    arity: 2
-    bitwidth: 16
-    expr: (bvmul (var a 16) (var b 16))
-    name: mul
 - !!python/object:schema.LakeroadInstructionExperiment
   architecture: xilinx_ultrascale_plus
   implementation_action: !!python/object:schema.ImplementationAction
