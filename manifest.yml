@@ -272,3 +272,17 @@ dsp_benchmarks:
 #- filepath: fpga-dsp-mapping-benchmarks/benchmarks/seyed1mehdi_G3_FPGA_Object_Classification_Accelerator_src_lenet5_neural_core_neural_core_srcs_conv.v
 #  module_name: conv
 #  output_signal: o_conv_result
+
+# Completeness experiments.
+completeness_experiments:
+  lakeroad:
+    # Solvers for Lakeroad to use. Note that the portfolio solver uses some
+    # solvers by default (currently bitwuzla and cvc5), so removing them from this
+    # list will not make them not run.
+    solvers: [bitwuzla, cvc5]
+    # Seeds to use. Default in the script is just 0.
+    seeds: [0]
+    # Timeout for Lakeroad.
+    timeout: 180
+    # The number of random inputs to sample when simulating each experiment with Verilator.
+    verilator_simulation_iterations: 5000

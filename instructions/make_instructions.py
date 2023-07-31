@@ -33,9 +33,9 @@ ops = {
     # "parity": None,
     # "replicate": None,
     # Yosys really doesn't like `signed` and `unsigned`, what's going on?
-    #"shl": f("<<"),
+    # "shl": f("<<"),
     # "shrs": f(">>"),
-    #"shru": f(">>"),
+    # "shru": f(">>"),
 }
 
 signedness = {

@@ -21,46 +21,44 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
     output_dir_base = utils.output_dir() / "baseline"
 
     for instruction_file in Path(baseline_instructions_dir).glob("*"):
-        vivado_baseline_synthesis_task = (
-            make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                input_filepath=instruction_file,
-                output_dirpath=output_dir_base / "vivado" / instruction_file.stem,
-                module_name=instruction_file.stem,
-            )
+        (
+            vivado_baseline_synthesis_task,
+            _,
+        ) = make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base / "vivado" / instruction_file.stem,
+            module_name=instruction_file.stem,
         )
         vivado_baseline_synthesis_task["name"] = f"vivado_{instruction_file.stem}"
         yield vivado_baseline_synthesis_task
 
-        yosys_lattice_baseline_synthesis_task = make_lattice_ecp5_yosys_synthesis_task(
+        yield make_lattice_ecp5_yosys_synthesis_task(
             input_filepath=instruction_file,
             output_dirpath=output_dir_base
             / "yosys_lattice_ecp5"
             / instruction_file.stem,
             module_name=instruction_file.stem,
-        )
-        yosys_lattice_baseline_synthesis_task[
-            "name"
-        ] = f"yosys_lattice_ecp5_{instruction_file.stem}"
-        yield yosys_lattice_baseline_synthesis_task
+            name=f"yosys_lattice_ecp5_{instruction_file.stem}",
+        )[0]
 
-        yosys_xilinx_ultrascale_plus_baseline_synthesis_task = (
-            make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=instruction_file,
-                output_dirpath=output_dir_base
-                / "yosys_xilinx_ultrascale_plus"
-                / instruction_file.stem,
-                module_name=instruction_file.stem,
-            )
+        (
+            yosys_xilinx_ultrascale_plus_baseline_synthesis_task,
+            _,
+        ) = make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            input_filepath=instruction_file,
+            output_dirpath=output_dir_base
+            / "yosys_xilinx_ultrascale_plus"
+            / instruction_file.stem,
+            module_name=instruction_file.stem,
         )
         yosys_xilinx_ultrascale_plus_baseline_synthesis_task[
             "name"
         ] = f"yosys_xilinx_ultrascale_plus_{instruction_file.stem}"
         yield yosys_xilinx_ultrascale_plus_baseline_synthesis_task
 
-        diamond_baseline_synthesis_task = make_lattice_ecp5_diamond_synthesis_task(
+        yield make_lattice_ecp5_diamond_synthesis_task(
             input_filepath=instruction_file,
             output_dirpath=output_dir_base / "diamond" / instruction_file.stem,
             module_name=instruction_file.stem,
-        )
-        diamond_baseline_synthesis_task["name"] = f"diamond_{instruction_file.stem}"
-        yield diamond_baseline_synthesis_task
+            name=f"diamond_{instruction_file.stem}",
+        )[0]

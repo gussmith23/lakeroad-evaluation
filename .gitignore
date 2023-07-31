@@ -6,3 +6,17 @@ vivado.jou
 vivado.log
 vivado*.jou
 vivado*.log
+
+# Doit files
+.doit.db.dat
+.doit.db.dir
+
+# Python
+__pycache__/
+python/__pycache__/
+
+# Default evaluation output directory
+out/
+
+.doit.db.bak
+.vscode/
