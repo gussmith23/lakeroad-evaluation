@@ -62,9 +62,7 @@ def create_png_from_tex(tex_filepath: Path, png_filepath: Path):
     [
         {
             "name": "gathered_data_filepath",
-            "default": str(
-                utils.output_dir() / "gathered_data" / "lakeroad_sofa_results.csv"
-            ),
+            "default": str(utils.output_dir() / "lakeroad" / "lakeroad.csv"),
             "type": str,
         },
         {
@@ -125,15 +123,17 @@ def task_make_sofa_figure(
         tex_filepath.parent.mkdir(parents=True, exist_ok=True)
         excel_filepath.parent.mkdir(parents=True, exist_ok=True)
 
-        data = pd.read_csv(gathered_data_filepath)
+        data = pd.read_csv(gathered_data_filepath).fillna(0)
         table = pd.DataFrame(columns=columns)
 
         def add_row(instr, arity, template):
             # Row of raw data that we'll convert into an output table row.
             raw_data_row = data.loc[
-                (data["module_name"] == f"lakeroad_sofa_{instr}_{arity}")
+                (data["identifier"] == f"lakeroad_sofa_{instr}_{arity}")
                 & (data["template"] == template)
+                & (data["architecture"] == "sofa")
             ].squeeze()
+            assert isinstance(raw_data_row, pd.Series)
 
             match template:
                 case "bitwise":
@@ -151,7 +151,7 @@ def task_make_sofa_figure(
                     [
                         instr,
                         short_template,
-                        raw_data_row["lakeroad_runtime_s"],
+                        raw_data_row["time_s"],
                         raw_data_row["frac_lut4"],
                         "X",
                         "X",
@@ -234,25 +234,12 @@ def task_make_sofa_figure(
     [
         {
             "name": "gathered_lakeroad_data_filepath",
-            "default": str(
-                utils.output_dir()
-                / "gathered_data"
-                / "lakeroad_lattice_ecp5_diamond_results.csv"
-            ),
+            "default": str(utils.output_dir() / "lakeroad" / "lakeroad.csv"),
             "type": str,
         },
         {
-            "name": "gathered_diamond_data_filepath",
-            "default": str(
-                utils.output_dir() / "gathered_data" / "diamond_baseline.csv"
-            ),
-            "type": str,
-        },
-        {
-            "name": "gathered_yosys_data_filepath",
-            "default": str(
-                utils.output_dir() / "gathered_data" / "yosys_lattice_ecp5_baseline.csv"
-            ),
+            "name": "gathered_baseline_data_filepath",
+            "default": str(utils.output_dir() / "baseline" / "baseline_summary.csv"),
             "type": str,
         },
         {
@@ -279,16 +266,14 @@ def task_make_sofa_figure(
 )
 def task_make_lattice_ecp5_figure(
     gathered_lakeroad_data_filepath: Union[str, Path],
-    gathered_diamond_data_filepath: Union[str, Path],
-    gathered_yosys_data_filepath: Union[str, Path],
+    gathered_baseline_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
     excel_filepath: Union[str, Path],
     png_filepath: Union[str, Path],
 ):
     gathered_lakeroad_data_filepath = Path(gathered_lakeroad_data_filepath)
-    gathered_diamond_data_filepath = Path(gathered_diamond_data_filepath)
-    gathered_yosys_data_filepath = Path(gathered_yosys_data_filepath)
+    gathered_baseline_data_filepath = Path(gathered_baseline_data_filepath)
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
     excel_filepath = Path(excel_filepath)
@@ -301,7 +286,6 @@ def task_make_lattice_ecp5_figure(
             ("Lattice ECP5", "Lakeroad", "Runtime in sec"),
             ("Lattice ECP5", "Lakeroad", "#LUTs"),
             ("Lattice ECP5", "Lakeroad", "#CCU2Cs"),
-            ("Lattice ECP5", "Lakeroad", "MUL? (sec)"),
             ("Lattice ECP5", "Yosys", "Runtime in sec"),
             ("Lattice ECP5", "Yosys", "#LUTs"),
             ("Lattice ECP5", "Yosys", "#muxes"),
@@ -321,16 +305,15 @@ def task_make_lattice_ecp5_figure(
         tex_filepath.parent.mkdir(parents=True, exist_ok=True)
         excel_filepath.parent.mkdir(parents=True, exist_ok=True)
 
-        lakeroad_data = pd.read_csv(gathered_lakeroad_data_filepath)
-        diamond_data = pd.read_csv(gathered_diamond_data_filepath)
-        yosys_data = pd.read_csv(gathered_yosys_data_filepath)
+        lakeroad_data = pd.read_csv(gathered_lakeroad_data_filepath).fillna(0)
+        baseline_data = pd.read_csv(gathered_baseline_data_filepath).fillna(0)
         table = pd.DataFrame(columns=columns)
 
         def add_row(instr, arity, template):
             # Row of raw data that we'll convert into an output table row.
             raw_lakeroad_data_row = lakeroad_data.loc[
                 (
-                    lakeroad_data["module_name"]
+                    lakeroad_data["identifier"]
                     == f"lakeroad_lattice_ecp5_{instr}_{arity}"
                 )
                 & (lakeroad_data["template"] == template)
@@ -339,22 +322,17 @@ def task_make_lattice_ecp5_figure(
                 raw_lakeroad_data_row, pd.Series
             )
 
-            dsp_impl = lakeroad_data.loc[
-                (
-                    lakeroad_data["module_name"]
-                    == f"lakeroad_lattice_ecp5_{instr}_{arity}"
-                )
-                & (lakeroad_data["template"] == "lattice-ecp5-dsp")
-            ].squeeze()
-            assert dsp_impl.empty or isinstance(dsp_impl, pd.Series)
-
-            raw_yosys_data_row = yosys_data.loc[
-                yosys_data["identifier"] == f"{instr}_{arity}"
+            raw_yosys_data_row = baseline_data.loc[
+                (baseline_data["identifier"] == f"{instr}_{arity}")
+                & (baseline_data["tool"] == "yosys")
+                & (baseline_data["architecture"] == "lattice-ecp5")
             ].squeeze()
             assert isinstance(raw_yosys_data_row, pd.Series)
 
-            raw_diamond_data_row = diamond_data.loc[
-                diamond_data["identifier"] == f"{instr}_{arity}"
+            raw_diamond_data_row = baseline_data.loc[
+                (baseline_data["identifier"] == f"{instr}_{arity}")
+                & (baseline_data["tool"] == "diamond")
+                & (baseline_data["architecture"] == "lattice-ecp5")
             ].squeeze()
             assert isinstance(raw_diamond_data_row, pd.Series)
 
@@ -379,7 +357,7 @@ def task_make_lattice_ecp5_figure(
                     [
                         instr,
                         short_template,
-                        raw_lakeroad_data_row["lakeroad_runtime_s"]
+                        raw_lakeroad_data_row["time_s"]
                         if not raw_lakeroad_data_row.empty
                         else None,
                         raw_lakeroad_data_row["LUT4"]
@@ -388,20 +366,17 @@ def task_make_lattice_ecp5_figure(
                         raw_lakeroad_data_row["CCU2C"]
                         if not raw_lakeroad_data_row.empty
                         else None,
-                        None
-                        if dsp_impl.empty
-                        else f"✓({dsp_impl['lakeroad_runtime_s']})",
-                        raw_yosys_data_row["yosys_runtime_s"],
+                        raw_yosys_data_row["time_s"],
                         raw_yosys_data_row["LUT4"],
                         raw_yosys_data_row["L6MUX21"] + raw_yosys_data_row["PFUMX"],
                         raw_yosys_data_row["CCU2C"],
                         raw_yosys_data_row["MULT18X18D"],
-                        raw_diamond_data_row["diamond_cpu_time"],
-                        raw_diamond_data_row["num_LUT4"],
-                        raw_diamond_data_row["num_CCU2C"],
-                        raw_diamond_data_row["num_MULT18X18D"]
-                        + raw_diamond_data_row["num_MULT9X9D"],
-                        raw_diamond_data_row["num_ALU54B"],
+                        raw_diamond_data_row["time_s"],
+                        raw_diamond_data_row["LUT4"],
+                        raw_diamond_data_row["CCU2C"],
+                        raw_diamond_data_row["MULT18X18D"]
+                        + raw_diamond_data_row["MULT9X9D"],
+                        raw_diamond_data_row["ALU54B"],
                         "X",
                     ]
                 ],
@@ -470,18 +445,20 @@ def task_make_lattice_ecp5_figure(
             csv_filepath,
         )
         styler = table.style.format(precision=1).hide(axis="index")
+        Path(tex_filepath).parent.mkdir(parents=True, exist_ok=True)
         styler.to_latex(tex_filepath)
         # rewrite #s in tex file to \#. seems like it should be a fix in pandas.
         os.system(f"sed -i 's/#/\\\\#/g' {tex_filepath}")
+        Path(excel_filepath).parent.mkdir(parents=True, exist_ok=True)
         styler.to_excel(excel_filepath)
 
+        Path(png_filepath).parent.mkdir(parents=True, exist_ok=True)
         create_png_from_tex(tex_filepath, png_filepath)
 
     return {
         "actions": [(_impl, [])],
         "file_dep": [
-            gathered_diamond_data_filepath,
-            gathered_yosys_data_filepath,
+            gathered_baseline_data_filepath,
             gathered_lakeroad_data_filepath,
         ],
         "targets": [csv_filepath, tex_filepath, excel_filepath],
@@ -492,27 +469,12 @@ def task_make_lattice_ecp5_figure(
     [
         {
             "name": "gathered_lakeroad_data_filepath",
-            "default": str(
-                utils.output_dir()
-                / "gathered_data"
-                / "lakeroad_xilinx_ultrascale_plus_vivado_results.csv"
-            ),
+            "default": str(utils.output_dir() / "lakeroad" / "lakeroad.csv"),
             "type": str,
         },
         {
-            "name": "gathered_vivado_data_filepath",
-            "default": str(
-                utils.output_dir() / "gathered_data" / "vivado_baseline.csv"
-            ),
-            "type": str,
-        },
-        {
-            "name": "gathered_yosys_data_filepath",
-            "default": str(
-                utils.output_dir()
-                / "gathered_data"
-                / "yosys_xilinx_ultrascale_plus_baseline.csv"
-            ),
+            "name": "gathered_baseline_data_filepath",
+            "default": str(utils.output_dir() / "baseline" / "baseline_summary.csv"),
             "type": str,
         },
         {
@@ -547,16 +509,14 @@ def task_make_lattice_ecp5_figure(
 )
 def task_make_xilinx_ultrascale_plus_figure(
     gathered_lakeroad_data_filepath: Union[str, Path],
-    gathered_vivado_data_filepath: Union[str, Path],
-    gathered_yosys_data_filepath: Union[str, Path],
+    gathered_baseline_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
     excel_filepath: Union[str, Path],
     png_filepath: Union[str, Path],
 ):
     gathered_lakeroad_data_filepath = Path(gathered_lakeroad_data_filepath)
-    gathered_vivado_data_filepath = Path(gathered_vivado_data_filepath)
-    gathered_yosys_data_filepath = Path(gathered_yosys_data_filepath)
+    gathered_baseline_data_filepath = Path(gathered_baseline_data_filepath)
     csv_filepath = Path(csv_filepath)
     tex_filepath = Path(tex_filepath)
     excel_filepath = Path(excel_filepath)
@@ -569,7 +529,6 @@ def task_make_xilinx_ultrascale_plus_figure(
             ("Xilinx UltraScale+", "Lakeroad", "Runtime in sec"),
             ("Xilinx UltraScale+", "Lakeroad", "#LUTs"),
             ("Xilinx UltraScale+", "Lakeroad", "#CARRY8s"),
-            ("Xilinx UltraScale+", "Lakeroad", "DSP? (sec)"),
             ("Xilinx UltraScale+", "Yosys", "Runtime in sec"),
             ("Xilinx UltraScale+", "Yosys", "#LUTs"),
             ("Xilinx UltraScale+", "Yosys", "#muxes"),
@@ -589,40 +548,35 @@ def task_make_xilinx_ultrascale_plus_figure(
         tex_filepath.parent.mkdir(parents=True, exist_ok=True)
         excel_filepath.parent.mkdir(parents=True, exist_ok=True)
 
-        lakeroad_data = pd.read_csv(gathered_lakeroad_data_filepath)
-        vivado_data = pd.read_csv(gathered_vivado_data_filepath)
-        yosys_data = pd.read_csv(gathered_yosys_data_filepath)
+        lakeroad_data = pd.read_csv(gathered_lakeroad_data_filepath).fillna(0)
+        baseline_data = pd.read_csv(gathered_baseline_data_filepath).fillna(0)
         table = pd.DataFrame(columns=columns)
 
         def add_row(instr, arity, template):
             # Row of raw data that we'll convert into an output table row.
             raw_lakeroad_data_row = lakeroad_data.loc[
                 (
-                    lakeroad_data["module_name"]
+                    lakeroad_data["identifier"]
                     == f"lakeroad_xilinx_ultrascale_plus_{instr}_{arity}"
                 )
                 & (lakeroad_data["template"] == template)
+                & (lakeroad_data["architecture"] == "xilinx-ultrascale-plus")
             ].squeeze()
             assert raw_lakeroad_data_row.empty or isinstance(
                 raw_lakeroad_data_row, pd.Series
             )
 
-            dsp_impl = lakeroad_data.loc[
-                (
-                    lakeroad_data["module_name"]
-                    == f"lakeroad_xilinx_ultrascale_plus_{instr}_{arity}"
-                )
-                & (lakeroad_data["template"] == "xilinx-ultrascale-plus-dsp48e2")
-            ].squeeze()
-            assert dsp_impl.empty or isinstance(dsp_impl, pd.Series)
-
-            raw_yosys_data_row = yosys_data.loc[
-                yosys_data["identifier"] == f"{instr}_{arity}"
+            raw_yosys_data_row = baseline_data.loc[
+                (baseline_data["identifier"] == f"{instr}_{arity}")
+                & (baseline_data["architecture"] == "xilinx-ultrascale-plus")
+                & (baseline_data["tool"] == "yosys")
             ].squeeze()
             assert isinstance(raw_yosys_data_row, pd.Series)
 
-            raw_vivado_data_row = vivado_data.loc[
-                vivado_data["identifier"] == f"{instr}_{arity}"
+            raw_vivado_data_row = baseline_data.loc[
+                (baseline_data["identifier"] == f"{instr}_{arity}")
+                & (baseline_data["architecture"] == "xilinx-ultrascale-plus")
+                & (baseline_data["tool"] == "vivado")
             ].squeeze()
             assert isinstance(raw_vivado_data_row, pd.Series)
 
@@ -647,7 +601,7 @@ def task_make_xilinx_ultrascale_plus_figure(
                     [
                         instr,
                         short_template,
-                        raw_lakeroad_data_row["lakeroad_runtime_s"]
+                        raw_lakeroad_data_row["time_s"]
                         if not raw_lakeroad_data_row.empty
                         else None,
                         # LUTs
@@ -700,19 +654,30 @@ def task_make_xilinx_ultrascale_plus_figure(
                         )
                         if not raw_lakeroad_data_row.empty
                         else None,
-                        None
-                        if dsp_impl.empty
-                        else f"✓({dsp_impl['lakeroad_runtime_s']})",
-                        raw_yosys_data_row["yosys_runtime_s"],
-                        raw_yosys_data_row["LUT4"],
+                        raw_yosys_data_row["time_s"],
+                        raw_yosys_data_row.get("LUT4", 0),
                         # Yosys muxes
-                        raw_yosys_data_row["MUXF7"] + raw_yosys_data_row["MUXF8"],
-                        raw_yosys_data_row["CARRY4"],
-                        raw_yosys_data_row["INV"],
-                        raw_yosys_data_row["DSP48E2"],
-                        raw_vivado_data_row["synth_time"],
-                        raw_vivado_data_row["clb_luts"],
-                        raw_vivado_data_row["carry8s"],
+                        raw_yosys_data_row.get("MUXF7", 0)
+                        + raw_yosys_data_row.get("MUXF8", 0),
+                        raw_yosys_data_row.get("CARRY4", 0),
+                        raw_yosys_data_row.get("INV", 0),
+                        raw_yosys_data_row.get("DSP48E2", 0),
+                        raw_vivado_data_row["time_s"],
+                        sum(
+                            map(
+                                lambda k: raw_vivado_data_row.get(k, 0),
+                                [
+                                    "LUT1",
+                                    "LUT2",
+                                    "LUT3",
+                                    "LUT4",
+                                    "LUT5",
+                                    "LUT6",
+                                    "LUT6_2",
+                                ],
+                            )
+                        ),
+                        raw_vivado_data_row.get("CARRY8", 0),
                         "TODO",
                         "X",
                     ]
@@ -792,8 +757,7 @@ def task_make_xilinx_ultrascale_plus_figure(
     return {
         "actions": [(_impl, [])],
         "file_dep": [
-            gathered_vivado_data_filepath,
-            gathered_yosys_data_filepath,
+            gathered_baseline_data_filepath,
             gathered_lakeroad_data_filepath,
         ],
         "targets": [csv_filepath, tex_filepath, excel_filepath],

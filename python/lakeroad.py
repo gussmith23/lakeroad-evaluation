@@ -7,6 +7,7 @@ from time import time
 from typing import List, Union
 
 import doit
+import pandas as pd
 import utils
 import yaml
 from hardware_compilation import *
@@ -322,42 +323,55 @@ def task_instruction_experiments(experiments_file: str):
         )
         template = experiment.implementation_action.template
 
-        return {
-            "name": f"lakeroad_generate_{template}_{verilog_module_name}",
-            "actions": [
-                (
-                    invoke_lakeroad,
-                    [],
-                    {
-                        "module_name": verilog_module_name,
-                        "instruction": instruction_str,
-                        "template": template,
-                        "out_filepath": verilog_filepath,
-                        "architecture": experiment.architecture.replace("_", "-"),
-                        "json_filepath": json_filepath,
-                        "verilog_module_out_signal": (
-                            "out",
-                            experiment.instruction.bitwidth,
-                        ),
-                    },
-                )
-            ],
-            # If I'm understanding DoIt correctly, then I think
-            # instructions.yaml should be a dependency of these tasks, and
-            # probably other things, too, i.e. the Lakeroad version. Basically,
-            # we want to enable DoIt to figure out when instructions need to be
-            # re-implemented with Lakeroad. That's the case when something about
-            # the instruction description changes (and thus instructions.yaml
-            # will be changed) or if Lakeroad itself is different.
-            #
-            # Note: Leaving the file_dep empty is fine; it will just re-run
-            # Lakeroad on each instruction each time.
-            "file_dep": [experiments_file],
-            "targets": [verilog_filepath, json_filepath],
-        }
+        return (
+            {
+                "name": f"lakeroad_generate_{template}_{verilog_module_name}",
+                "actions": [
+                    (
+                        invoke_lakeroad,
+                        [],
+                        {
+                            "module_name": verilog_module_name,
+                            "instruction": instruction_str,
+                            "template": template,
+                            "out_filepath": verilog_filepath,
+                            "architecture": experiment.architecture.replace("_", "-"),
+                            "json_filepath": json_filepath,
+                            "verilog_module_out_signal": (
+                                "out",
+                                experiment.instruction.bitwidth,
+                            ),
+                            "extra_summary_fields": {
+                                "tool": "lakeroad",
+                                "identifier": verilog_module_name,
+                                "architecture": experiment.architecture.replace(
+                                    "_", "-"
+                                ),
+                                "template": template,
+                            },
+                        },
+                    )
+                ],
+                # If I'm understanding DoIt correctly, then I think
+                # instructions.yaml should be a dependency of these tasks, and
+                # probably other things, too, i.e. the Lakeroad version. Basically,
+                # we want to enable DoIt to figure out when instructions need to be
+                # re-implemented with Lakeroad. That's the case when something about
+                # the instruction description changes (and thus instructions.yaml
+                # will be changed) or if Lakeroad itself is different.
+                #
+                # Note: Leaving the file_dep empty is fine; it will just re-run
+                # Lakeroad on each instruction each time.
+                "file_dep": [experiments_file],
+                "targets": [verilog_filepath, json_filepath],
+            },
+            (json_filepath,),
+        )
 
     with open(experiments_file) as f:
         experiments: List[LakeroadInstructionExperiment] = yaml.load(f, yaml.Loader)
+
+    json_filepaths = []
 
     for experiment in experiments:
         module_name = experiment.implementation_action.implementation_module_name
@@ -372,43 +386,34 @@ def task_instruction_experiments(experiments_file: str):
         verilog_filepath = output_dirpath / f"{module_name}.sv"
         json_filepath = output_dirpath / f"{module_name}.json"
 
-        yield _make_instruction_implementation_with_lakeroad_task(
+        (task, (json_filepath,)) = _make_instruction_implementation_with_lakeroad_task(
             experiment,
             verilog_filepath=verilog_filepath,
             json_filepath=json_filepath,
         )
+        yield task
+        json_filepaths.append(json_filepath)
 
-        match experiment.architecture:
-            case "lattice_ecp5":
-                yield make_lattice_ecp5_diamond_synthesis_task(
-                    input_filepath=verilog_filepath,
-                    output_dirpath=output_dirpath / "diamond",
-                    module_name=module_name,
-                    name=f"diamond_synthesize_{template}_{module_name}",
-                )[0]
+    def _impl(output_csv, json_filepaths):
+        output_csv.parent.mkdir(exist_ok=True, parents=True)
+        df = pd.DataFrame.from_records(
+            json.load(open(filename)) for filename in json_filepaths
+        )
+        df.to_csv(output_csv)
 
-            case "xilinx_ultrascale_plus":
-                # Previously this used the noopt version of synthesis. These
-                # experiments don't matter as much anymore, but I also don't
-                # think that's correct anymore.
-                (
-                    vivado_synthesis_task,
-                    _,
-                ) = make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                    input_filepath=verilog_filepath,
-                    module_name=module_name,
-                    output_dirpath=output_dirpath / "vivado",
-                )
-                vivado_synthesis_task[
-                    "name"
-                ] = f"vivado_synthesize_{template}_{module_name}"
-                yield vivado_synthesis_task
-
-            case "sofa":
-                # logging.warn("No synthesis implemented for SOFA.")
-                pass
-
-            case _:
-                raise Exception(
-                    f"Unexpected architecture value {experiment.architecture}"
-                )
+    output_csv = utils.output_dir() / "lakeroad" / "lakeroad.csv"
+    yield {
+        "name": "lakeroad_generate_csv",
+        "actions": [
+            (
+                _impl,
+                [],
+                {
+                    "output_csv": output_csv,
+                    "json_filepaths": json_filepaths,
+                },
+            )
+        ],
+        "file_dep": json_filepaths,
+        "targets": [output_csv],
+    }
