@@ -307,33 +307,13 @@ def _collect_robustness_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
     """Collect Robustness benchmark results into a file, but do not process them."""
-    # print(filepaths)
     Path(output_filepath).parent.mkdir(parents=True, exist_ok=True)
-    failures = []
-    real = []
-    for f in filepaths:
-        if not os.path.exists(f):
-            failures.append(f)
-        else:
-            real.append(f)
     pandas.DataFrame.from_records(
         filter(
             lambda x: x is not None,
             map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths),
         )
     ).to_csv(output_filepath, index=False)
-    # pandas.DataFrame.from_records(filter(lambda x: x is not None, map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths))
-    #     output_filepath, index=False
-    # )
-    # write failures to failures.txt
-    with open("failures.txt", "w+") as ff:
-        for f in failures:
-            ff.write(str(f)[61 : (len(str(f))) - 20] + "\n")
-    ff.close()
-    with open("real.txt", "w+") as fg:
-        for f in real:
-            fg.write(str(f) + "\n")
-    fg.close()
 
 
 def check_dsp_usage(
