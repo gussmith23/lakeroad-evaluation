@@ -1,3 +1,4 @@
+import utils
 import sys
 from typing import List, Union
 from pathlib import Path
@@ -194,7 +195,9 @@ def generate_designs(design_dir: Union[str, Path]):
                         "stages": stages,
                         "xor_reduction": False,
                         "inputs": input_tuples,
-                        "filepath": str(filename),
+                        "filepath": str(
+                            Path(filename).relative_to(utils.lakeroad_evaluation_dir())
+                        ),
                         "backends": backends,
                     }
                     metadata["expect_fail"] = []
