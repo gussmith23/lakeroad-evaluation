@@ -170,10 +170,17 @@ def make_verilator_task(
     max_num_tests: int = MAX_NUM_TESTS,
     ignore_missing_test_module_file: bool = False,
     name: Optional[str] = None,
+    alternative_file_dep: Optional[Union[Path, str]] = None,
 ):
     """Make DoIt task for simulating with Verilator.
 
-    See the args for `simulate_with_verilator` for the kwargs."""
+    See the args for `simulate_with_verilator` for the kwargs.
+
+    Args:
+      alternative_file_dep: A stand-in for the target Verilog, which may or may
+        not exist if the tool fails. A good example: the JSON file that Lakeroad
+        produces.
+    """
 
     task = {}
 
@@ -226,6 +233,13 @@ def make_verilator_task(
 
     task["targets"] = list(output_filepaths.values())
 
-    task["file_dep"] = [test_module_filepath, ground_truth_module_filepath]
+    task["file_dep"] = [
+        ground_truth_module_filepath,
+    ]
+
+    if alternative_file_dep is not None:
+        task["file_dep"].append(alternative_file_dep)
+    else:
+        task["file_dep"].append(test_module_filepath)
 
     return (task,)

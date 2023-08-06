@@ -602,6 +602,7 @@ def task_robustness_experiments():
                 max_num_tests=utils.get_manifest()["completeness_experiments"][
                     "lakeroad"
                 ]["verilator_simulation_iterations"],
+                alternative_file_dep=json_filepath,
             )[0]
 
             # yosys synthesis for xilinx backend
@@ -715,6 +716,7 @@ def task_robustness_experiments():
                 max_num_tests=utils.get_manifest()["completeness_experiments"][
                     "lakeroad"
                 ]["verilator_simulation_iterations"],
+                alternative_file_dep=json_filepath,
             )[0]
 
             base_path = (
