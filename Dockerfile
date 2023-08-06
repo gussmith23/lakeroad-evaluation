@@ -151,6 +151,8 @@ RUN rm /root/oss-cad-suite/bin/verilator
 
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
+WORKDIR /root
+ADD rosette/ rosette/
 RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
   # For now, we use a custom Rosette install; see below.
@@ -162,6 +164,7 @@ RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch
 
 # Install Rust.
+WORKDIR /root
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
