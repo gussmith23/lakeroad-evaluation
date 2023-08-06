@@ -835,6 +835,9 @@ def lattice_ecp5_diamond_synthesis(
     # convert. sv2v doesn't like Verilog 2001 attributes, so we remove them with
     # Yosys.
     sv2v_result_filepath = output_dirpath / f"{module_name}.v"
+    # Make absolute. Resolves Diamond compilation issue of not finding the file
+    # due to relative filepaths.
+    sv2v_result_filepath = sv2v_result_filepath.resolve().absolute()
     subprocess.run(
         [
             "yosys",
@@ -882,7 +885,7 @@ def lattice_ecp5_diamond_synthesis(
         out == 0 or out == 2
     ), f"Diamond failed with exit code {out}, indicating errors other than DRC errors."
 
-    assert (output_dirpath / f"{module_name}_prim.v").exists()
+    assert (output_dirpath / f"{module_name}_prim.v").exists(), "Diamond output file doesn't exist; Diamond probably failed."
 
     # Generate summary JSON.
     summary = count_resources_in_verilog_src(
