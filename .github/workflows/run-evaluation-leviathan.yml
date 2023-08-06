@@ -1,0 +1,127 @@
+name: Run evaluation
+
+on:
+  schedule:
+    # 4am PT.
+    - cron: '0 11 * * *'
+
+jobs:
+
+  # TODO(@gussmith23) It would be nice if this wasn't necessary
+  cleaner:
+    runs-on: [self-hosted, leviathan]
+    steps:
+      - name: Clean up previous runs
+        run: rm -rf "${{ github.workspace }}"
+
+  build-docker-image:
+    # Make sure we clean first.
+    needs: cleaner
+    runs-on: [self-hosted, leviathan]
+
+    outputs:
+      tag: ${{ steps.generate-tag.outputs.tag }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+        token: ${{ secrets.PAT }}
+        ssh-key: ${{ secrets.SSH_KEY }}
+    
+    # We don't use `submodules: recursive` above because some of the submodules
+    # we point to have many, many submodules themselves. Thus, we check out the
+    # submodules we need individually.
+    #
+    # TODO(@gussmith23): Depend less on submodules, or at least, depend on
+    # cleaner submodules with less branching.
+    - name: Checkout specific submodules
+      run: |
+        cd lakeroad
+        git submodule init
+        git submodule update f4pga-arch-defs/ Nitro-Parts-lib-Xilinx/ skywater-pdk-libs-sky130_fd_sc_hd/ SOFA/ verilator-unisims/ verilator_xilinx/
+
+    - name: Generate Docker image tag
+      id: generate-tag
+      run: |
+        export TAG=lakeroad-evaluation:$(date +%s)
+        echo "Docker image tag: $TAG"
+        echo "::set-output name=tag::$TAG"
+
+    - name: Build Docker image
+      run: |
+        docker build \
+          . \
+          --file Dockerfile \
+          --tag ${{ steps.generate-tag.outputs.tag }} \
+          --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2021.2/bin \
+          --build-arg QUARTUS_BIN_DIR=/tools/intelFPGA_lite/22.1std/quartus/bin \
+          --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
+          --build-arg MAKE_JOBS=36
+
+  run-evaluation:
+    needs: build-docker-image
+    runs-on: [self-hosted, leviathan]
+    outputs:
+      container-name: ${{ steps.run-evaluation.outputs.container-name }}
+    steps:
+    - id: run-evaluation
+      # NOTE: -n argument for doit controls # simultaneous processes. I have to
+      # set it manually -- if it's too high, too many Vivados running at once
+      # will cause out-of-memory errors.
+      run: |
+        CONTAINER_NAME=lakeroad-evaluation-run-$(date +%s)
+        echo "Docker container name: $CONTAINER_NAME"
+        echo "::set-output name=container-name::$CONTAINER_NAME"
+        docker run \
+          --name $CONTAINER_NAME \
+          -v /tools/Xilinx:/tools/Xilinx \
+          -v /usr/local/diamond:/usr/local/diamond \
+          -v /tools/intelFPGA_lite/22.1std:/tools/intelFPGA_lite/22.1std \
+          --env LOGLEVEL=INFO \
+          --env OUTPUT_DIR=/root/results \
+          ${{ needs.build-docker-image.outputs.tag }} \
+          doit --always-execute --continue -n 22
+
+  send-results-to-slack:
+    needs: run-evaluation
+    runs-on: [self-hosted, leviathan]
+    steps:
+    - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
+    - run: |
+        # Send initial message to start the thread.
+        THREAD_TS=$(curl -F "channel=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+            -F "text=Results from CI run" \
+            -X POST https://slack.com/api/chat.postMessage \
+            | jq .ts)
+
+        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+            -F "file=@results/figures/sofa_figure.png" \
+            -F "thread_ts=$THREAD_TS" \
+            -X POST https://slack.com/api/files.upload 
+        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+            -F "file=@results/figures/lattice_ecp5_figure.png" \
+            -F "thread_ts=$THREAD_TS" \
+            -X POST https://slack.com/api/files.upload 
+        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+            -F "file=@results/figures/xilinx_ultrascale_plus_figure.png" \
+            -F "thread_ts=$THREAD_TS" \
+            -X POST https://slack.com/api/files.upload 
+
+  upload-artifact:
+    # Runs even if evaluation failed. Lets us inspect partial results and logs.
+    if: always()
+    needs: run-evaluation
+    runs-on: [self-hosted, leviathan]
+    steps:
+    - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
+    - run: zip -r results.zip results/
+    - uses: actions/upload-artifact@v3
+      with:
+        name: evaluation-results
+        path: results.zip
+
