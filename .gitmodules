@@ -20,3 +20,6 @@
 [submodule "verilator"]
 	path = verilator
 	url = git@github.com:verilator/verilator
+[submodule "rosette"]
+	path = rosette
+	url = git@github.com:gussmith23/rosette
