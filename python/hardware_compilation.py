@@ -885,7 +885,9 @@ def lattice_ecp5_diamond_synthesis(
         out == 0 or out == 2
     ), f"Diamond failed with exit code {out}, indicating errors other than DRC errors."
 
-    assert (output_dirpath / f"{module_name}_prim.v").exists(), "Diamond output file doesn't exist; Diamond probably failed."
+    assert (
+        output_dirpath / f"{module_name}_prim.v"
+    ).exists(), "Diamond output file doesn't exist; Diamond probably failed."
 
     # Generate summary JSON.
     summary = count_resources_in_verilog_src(
