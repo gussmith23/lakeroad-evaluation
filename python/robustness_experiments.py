@@ -515,7 +515,7 @@ def task_robustness_experiments():
                 task,
                 (json_filepath, _, _, _),
             ) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                input_filepath=entry["filepath"],
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 # TODO(@gussmith23): Hardcoding clock name and period here.
@@ -553,7 +553,8 @@ def task_robustness_experiments():
                 template="dsp",
                 out_module_name="output",
                 architecture="xilinx-ultrascale-plus",
-                verilog_module_filepath=entry["filepath"],
+                verilog_module_filepath=utils.lakeroad_evaluation_dir()
+                / entry["filepath"],
                 top_module_name=entry["module_name"],
                 clock_name="clk",
                 name=entry["module_name"] + ":lakeroad-xilinx",
@@ -581,7 +582,8 @@ def task_robustness_experiments():
                 ignore_missing_test_module_file=True,
                 output_dirpath=base_path / "verilator",
                 test_module_filepath=lakeroad_output_verilog,
-                ground_truth_module_filepath=entry["filepath"],
+                ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                / entry["filepath"],
                 module_inputs=entry["inputs"],
                 clock_name="clk",
                 initiation_interval=entry["stages"],
@@ -616,7 +618,7 @@ def task_robustness_experiments():
                 task,
                 (json_filepath, _, _),
             ) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=entry["filepath"],
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:yosys_xilinx_ultrascale_plus",
@@ -641,7 +643,7 @@ def task_robustness_experiments():
                 task,
                 (json_filepath,),
             ) = hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
-                input_filepath=entry["filepath"],
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:lattice-ecp5-diamond",
@@ -668,7 +670,8 @@ def task_robustness_experiments():
                 template="dsp",
                 out_module_name="output",
                 architecture="lattice-ecp5",
-                verilog_module_filepath=entry["filepath"],
+                verilog_module_filepath=utils.lakeroad_evaluation_dir()
+                / entry["filepath"],
                 top_module_name=entry["module_name"],
                 clock_name="clk",
                 name=entry["module_name"] + ":lattice-ecp5-lakeroad",
@@ -695,7 +698,8 @@ def task_robustness_experiments():
                 ignore_missing_test_module_file=True,
                 output_dirpath=base_path / "verilator",
                 test_module_filepath=lakeroad_output_verilog,
-                ground_truth_module_filepath=entry["filepath"],
+                ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                / entry["filepath"],
                 module_inputs=entry["inputs"],
                 clock_name="clk",
                 initiation_interval=entry["stages"],
@@ -729,7 +733,7 @@ def task_robustness_experiments():
                 task,
                 (json_filepath, _, _),
             ) = hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
-                input_filepath=entry["filepath"],
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:lattice-ecp5-yosys",
@@ -752,7 +756,7 @@ def task_robustness_experiments():
         #     yield quartus.make_quartus_task(
         #         identifier = entry["module_name"],
         #         top_module_name = entry["module_name"],
-        #         source_input_filepath = entry["filepath"],
+        #         source_input_filepath = utils.lakeroad_evaluation_dir()/ entry["filepath"],
         #         summary_output_filepath = base_path / "summary.map.summary",
         #         json_output_filepath = base_path / f"{entry['module_name']}_resource_utilization.json",
         #         time_output_filepath = base_path / "out.time",
@@ -777,7 +781,7 @@ def task_robustness_experiments():
         #         architecture="intel",
         #         time_filepath=base_path / "out.time",
         #         json_filepath=base_path / "out.json",
-        #         verilog_module_filepath=entry["filepath"],
+        #         verilog_module_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
         #         top_module_name=entry["module_name"],
         #         clock_name="clk",
         #         name=entry["module_name"] + ":lakeroad-intel",
@@ -802,7 +806,7 @@ def task_robustness_experiments():
         #         "file_dep": [base_path / "collected_data.json"],
         #     }
         #     yield quartus.make_intel_yosys_synthesis_task(
-        #         input_filepath=entry["filepath"],
+        #         input_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
         #         output_dirpath=(
         #             utils.output_dir()
         #             / "robustness_experiments"
