@@ -10,6 +10,7 @@ RUN apt-get update \
   build-essential \
   ccache \
   clang \
+  cloc \
   cmake \
   curl \
   dvipng \
