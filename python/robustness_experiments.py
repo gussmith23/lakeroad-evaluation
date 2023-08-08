@@ -15,6 +15,7 @@ from pathlib import Path
 import numpy as np
 import re
 
+
 def _visualize_succeeded_vs_failed_lattice(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
@@ -137,8 +138,8 @@ def _visualize_succeeded_vs_failed_lattice(
         )
     )
 
-# Use boolean indexing to filter the DataFrame
-    df = df[~df['identifier'].str.match('.*3_stage.*', case=False)]
+    # Use boolean indexing to filter the DataFrame
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
     Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(cleaned_data_filepath)
 
@@ -1014,7 +1015,6 @@ def task_robustness_experiments():
 
     base_path = utils.output_dir() / "robustness_experiments_csv"
     lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
-    # lattice_csv_output = base_path / "all_results" / "filtered_lattice.csv"
 
     yield {
         "name": "collect_lattice_data",
