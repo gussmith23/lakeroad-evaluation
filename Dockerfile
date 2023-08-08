@@ -27,6 +27,7 @@ RUN apt-get update \
   libffi-dev \
   libfl-dev \
   libfl2 \
+  libgmp-dev \
   libgoogle-perftools-dev \
   libreadline-dev \
   libreadline8 \
