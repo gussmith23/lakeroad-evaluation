@@ -178,9 +178,8 @@ def _visualize_succeeded_vs_failed_lattice(
             return "Yosys"
         else:
             return t
-    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-        lambda t: match(t)
-    )
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
     # Sanity check.
     assert suc_v_unsuc["num_experiments"].equals(
         suc_v_unsuc["num_successful"]
@@ -198,29 +197,47 @@ def _visualize_succeeded_vs_failed_lattice(
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     ax.get_figure().savefig(plot_output_filepath)
-    suc_v_unsuc["total_experiments"] = suc_v_unsuc["num_successful"] + suc_v_unsuc["num_unsuccessful"] + suc_v_unsuc["num_lr_unsat"] + suc_v_unsuc["num_lr_timeout"]
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
 
     # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
-    suc_v_unsuc["percentage_successful"] = (suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_unsuccessful"] = (suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_lr_unsat"] = (suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_lr_timeout"] = (suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]) * 100
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
 
     # Plotting the stacked bar chart with percentages on the Y-axis.
     ax = suc_v_unsuc.plot.bar(
         x="tool",
-        y=["percentage_successful", "percentage_unsuccessful", "percentage_lr_unsat", "percentage_lr_timeout"],
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
         stacked=True,
         rot=0,
-    ) 
-    ax.set_yticklabels(['{:.0f}%'.format(x) for x in ax.get_yticks()])
+    )
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
 
     # # Save the plot to the specified output filepath.
     # plot_output_filepath = Path(plot_output_filepath)
     # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
-    ax.legend(loc='upper right')
+    ax.legend(loc="upper right")
     ax.get_figure().savefig(plot_output_filepath)
 
 
@@ -318,6 +335,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         if t == "lakeroad"
         else 0
     )
+
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
     #     lambda t: "Anaxi" if t == "lakeroad" else t
@@ -337,13 +355,12 @@ def _visualize_succeeded_vs_failed_xilinx(
             return "Yosys"
         else:
             return t
-    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-        lambda t: match(t)
-    )
-            
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
+
     # raise Exception(
     #     print(suc_v_unsuc["tool"]))
-   
+
     # Sanity check.
     assert suc_v_unsuc["num_experiments"].equals(
         suc_v_unsuc["num_successful"]
@@ -361,31 +378,48 @@ def _visualize_succeeded_vs_failed_xilinx(
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
 
-    suc_v_unsuc["total_experiments"] = suc_v_unsuc["num_successful"] + suc_v_unsuc["num_unsuccessful"] + suc_v_unsuc["num_lr_unsat"] + suc_v_unsuc["num_lr_timeout"]
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
 
     # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
-    suc_v_unsuc["percentage_successful"] = (suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_unsuccessful"] = (suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_lr_unsat"] = (suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]) * 100
-    suc_v_unsuc["percentage_lr_timeout"] = (suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]) * 100
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
 
     # Plotting the stacked bar chart with percentages on the Y-axis.
     ax = suc_v_unsuc.plot.bar(
         x="tool",
-        y=["percentage_successful", "percentage_unsuccessful", "percentage_lr_unsat", "percentage_lr_timeout"],
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
         stacked=True,
         rot=0,
     )
 
-
-    ax.set_yticklabels(['{:.0f}%'.format(x) for x in ax.get_yticks()])
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
 
     # # Save the plot to the specified output filepath.
     # plot_output_filepath = Path(plot_output_filepath)
     # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
-    ax.legend(loc='upper right')
+    ax.legend(loc="upper right")
     ax.get_figure().savefig(plot_output_filepath)
 
 
