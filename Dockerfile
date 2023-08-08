@@ -27,6 +27,7 @@ RUN apt-get update \
   libffi-dev \
   libfl-dev \
   libfl2 \
+  libgmp-dev \
   libgoogle-perftools-dev \
   libreadline-dev \
   libreadline8 \
@@ -150,10 +151,23 @@ ENV PATH="/root/oss-cad-suite/bin:${PATH}"
 # TODO(@gussmith23): Either don't add oss-cad-suite to path, or clean this up some other way.
 RUN rm /root/oss-cad-suite/bin/verilator
 
+# Build latest bitwuzla.
+WORKDIR /root
+ARG MAKE_JOBS=2
+RUN git clone https://github.com/bitwuzla/bitwuzla \
+  && cd bitwuzla \
+  && git checkout 4eda0536800576cb2531ab9ce13292da8f21f0eb \
+  && ./configure.py \
+  && cd build \
+  && ninja -j${MAKE_JOBS}
+# Put it on the path. Note that there's a bitwuzla in oss-cad-suite, so we need
+# to make sure this one takes precedence.
+ENV PATH="/root/bitwuzla/build/src/main/:${PATH}"
+
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
 WORKDIR /root
-ADD rosette/ rosette/
+ADD lakeroad/rosette/ rosette/
 RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
   # For now, we use a custom Rosette install; see below.

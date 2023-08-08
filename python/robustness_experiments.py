@@ -16,7 +16,9 @@ import numpy as np
 
 
 def _visualize_succeeded_vs_failed_lattice(
-    csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    cleaned_data_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
@@ -135,6 +137,9 @@ def _visualize_succeeded_vs_failed_lattice(
         )
     )
 
+    Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cleaned_data_filepath)
+
     suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "diamond", "yosys"]})
     suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
         lambda t: (df["tool"] == t).sum()
@@ -242,7 +247,9 @@ def _visualize_succeeded_vs_failed_lattice(
 
 
 def _visualize_succeeded_vs_failed_xilinx(
-    csv_filepath: Union[str, Path], plot_output_filepath: Union[str, Path]
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    cleaned_data_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
@@ -301,6 +308,9 @@ def _visualize_succeeded_vs_failed_xilinx(
         )
         == 0
     )
+
+    Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cleaned_data_filepath)
 
     suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "vivado", "yosys"]})
     suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
@@ -984,8 +994,19 @@ def task_robustness_experiments():
                         / "figures"
                         / "succeeded_vs_failed_xilinx.png"
                     ),
+                    "cleaned_data_filepath": utils.output_dir()
+                    / "robustness_experiments_csv"
+                    / "all_results"
+                    / "all_xilinx_results_collected_cleaned.csv",
                 },
             )
+        ],
+        "targets": [
+            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png",
+            utils.output_dir()
+            / "robustness_experiments_csv"
+            / "all_results"
+            / "all_xilinx_results_collected_cleaned.csv",
         ],
     }
 
@@ -1024,7 +1045,18 @@ def task_robustness_experiments():
                         / "figures"
                         / "succeeded_vs_failed_lattice.png"
                     ),
+                    "cleaned_data_filepath": utils.output_dir()
+                    / "robustness_experiments_csv"
+                    / "all_results"
+                    / "all_lattice_results_collected_cleaned.csv",
                 },
             )
+        ],
+        "targets": [
+            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.png",
+            utils.output_dir()
+            / "robustness_experiments_csv"
+            / "all_results"
+            / "all_lattice_results_collected_cleaned.csv",
         ],
     }
