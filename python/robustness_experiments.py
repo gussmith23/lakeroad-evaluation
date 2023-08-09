@@ -70,12 +70,13 @@ def _combined_visualized(
         ],
         stacked=True,
         rot=0,
-        ax=ax
+        ax=ax,
+        xlabel= "Tool Name",
     )
     ax.set_title("Lattice")
     ax.set_ylabel("Percentage (%)")
     ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
-    ax.legend(loc="upper right")
+    ax.legend(loc="upper right", fontsize=6)
 
     # Add a subtitle for the first 3 bars in Lattice subplot
     # for i, percentage in enumerate(df_lattice["percentage_successful"][:3]):
@@ -93,12 +94,13 @@ def _combined_visualized(
         ],
         stacked=True,
         rot=0,
-        ax=ax2
+        ax=ax2,
+        xlabel= "Tool Name",
     )
     ax2.set_title("Xilinx")
     ax2.set_ylabel("Percentage (%)")
     ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])
-    ax2.legend(loc="upper right")
+    ax2.legend(loc="upper right", fontsize = 6)
 
     # Add a subtitle for the first 3 bars in Xilinx subplot
     # for i, percentage in enumerate(df_xilinx["percentage_successful"][:3]):
