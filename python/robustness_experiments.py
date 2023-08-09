@@ -12,14 +12,115 @@ import verilator
 import quartus
 import os
 from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 import numpy as np
 import re
+
+def _combined_visualized(
+    csv_xilinx_filepath: Union[str, Path],
+    csv_lattice_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path]
+):
+    # combined graph of xilinx and lattice results
+    df_lattice = pandas.read_csv(csv_lattice_filepath).fillna(0)
+    df_xilinx= pandas.read_csv(csv_xilinx_filepath).fillna(0)
+    # gs = GridSpec(1, 1, width_ratios=[1])
+    # # combine the two dataframes
+    # fig = plt.figure(figsize=(10, 5))
+    # ax = plt.subplot(gs[0])
+    # df_combined = pandas.concat([df_xilinx, df_lattice])
+    # ax = df_combined.plot.bar(
+    #     x="tool",
+    #     y=[
+    #         "percentage_successful",
+    #         "percentage_unsuccessful",
+    #         "percentage_lr_unsat",
+    #         "percentage_lr_timeout",
+    #     ],
+    #     stacked=True,
+    #     rot=0,
+    #     xlabel= "Tool Name",
+    #     ylabel= "% of Workloads Passed",
+    #     title= "Xilinx and Lattice Completeness",
+    # )
+    # plt.vlines(2.5, 0, 100, colors="k", linestyles="solid")
+    # plt.tight_layout()
+    # ax.get_figure().savefig(plot_output_filepath)
+    # plt.ylabel("Percentage of Workloads dfdf")
+    # ax.set_title("Xilinx and Lattice Completeness")
+    # plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left", borderaxespad=0.0)
+    # ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+
+
+
+
+
+    fig = plt.figure(figsize=(8, 3))
+    gs = GridSpec(1, 2, width_ratios=[1, 1])
+
+    # Plot Lattice data on the left subplot
+    ax = plt.subplot(gs[0])
+    df_lattice.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax
+    )
+    ax.set_title("Lattice")
+    ax.set_ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+    ax.legend(loc="upper right")
+
+    # Add a subtitle for the first 3 bars in Lattice subplot
+    # for i, percentage in enumerate(df_lattice["percentage_successful"][:3]):
+    #     ax.text(i, percentage + 5, f"{percentage:.1f}%", ha='center')
+
+    # Plot Xilinx data on the right subplot
+    ax2 = plt.subplot(gs[1])
+    df_xilinx.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax2
+    )
+    ax2.set_title("Xilinx")
+    ax2.set_ylabel("Percentage (%)")
+    ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])
+    ax2.legend(loc="upper right")
+
+    # Add a subtitle for the first 3 bars in Xilinx subplot
+    # for i, percentage in enumerate(df_xilinx["percentage_successful"][:3]):
+    #     ax2.text(i, percentage + 5, f"{percentage:.1f}%", ha='center')
+
+    # Create a vertical line to act as a column divider
+    plt.vlines(1, ymin=0, ymax=1, transform=fig.transFigure, color='black', linewidth=1)
+
+    # Adjust layout for better spacing
+    plt.tight_layout()
+
+    # Save the combined plot to the specified output filepath
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(plot_output_filepath)
 
 
 def _visualize_succeeded_vs_failed_lattice(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
     cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
@@ -140,6 +241,7 @@ def _visualize_succeeded_vs_failed_lattice(
 
     # Use boolean indexing to filter the DataFrame
     df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    # print timeout and failure columns
     Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(cleaned_data_filepath)
 
@@ -195,23 +297,12 @@ def _visualize_succeeded_vs_failed_lattice(
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
     )
-
-    ax = suc_v_unsuc.plot.bar(
-        x="tool",
-        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
-        stacked=True,
-        rot=0,
-    )
-    plot_output_filepath = Path(plot_output_filepath)
-    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    ax.get_figure().savefig(plot_output_filepath)
     suc_v_unsuc["total_experiments"] = (
         suc_v_unsuc["num_successful"]
         + suc_v_unsuc["num_unsuccessful"]
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
     )
-
     # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
     suc_v_unsuc["percentage_successful"] = (
         suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
@@ -225,7 +316,8 @@ def _visualize_succeeded_vs_failed_lattice(
     suc_v_unsuc["percentage_lr_timeout"] = (
         suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
     ) * 100
-
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
     # Plotting the stacked bar chart with percentages on the Y-axis.
     ax = suc_v_unsuc.plot.bar(
         x="tool",
@@ -253,6 +345,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
     cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
@@ -348,7 +441,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         if t == "lakeroad"
         else 0
     )
-
+    # raise Exception(print(df))
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
     #     lambda t: "Anaxi" if t == "lakeroad" else t
@@ -381,16 +474,6 @@ def _visualize_succeeded_vs_failed_xilinx(
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
     )
-
-    ax = suc_v_unsuc.plot.bar(
-        x="tool",
-        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
-        stacked=True,
-        rot=0,
-    )
-    plot_output_filepath = Path(plot_output_filepath)
-    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-
     suc_v_unsuc["total_experiments"] = (
         suc_v_unsuc["num_successful"]
         + suc_v_unsuc["num_unsuccessful"]
@@ -411,7 +494,8 @@ def _visualize_succeeded_vs_failed_xilinx(
     suc_v_unsuc["percentage_lr_timeout"] = (
         suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
     ) * 100
-
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
     # Plotting the stacked bar chart with percentages on the Y-axis.
     ax = suc_v_unsuc.plot.bar(
         x="tool",
@@ -424,7 +508,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         stacked=True,
         rot=0,
     )
-
+    # set aspect ratio
     ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
 
     # # Save the plot to the specified output filepath.
@@ -1001,6 +1085,11 @@ def task_robustness_experiments():
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_xilinx_results_collected_cleaned.csv",
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_xilinx.csv"
+                    ),
                 },
             )
         ],
@@ -1051,6 +1140,11 @@ def task_robustness_experiments():
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_lattice_results_collected_cleaned.csv",
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_lattice.csv"
+                    ),
                 },
             )
         ],
@@ -1060,5 +1154,28 @@ def task_robustness_experiments():
             / "robustness_experiments_csv"
             / "all_results"
             / "all_lattice_results_collected_cleaned.csv",
+        ],
+    }
+    yield {
+        "name": "visualize_succeeded_vs_failed_all",
+        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "actions": [
+            (
+                _combined_visualized,
+                [],
+                {
+                    "csv_lattice_filepath": utils.output_dir()
+                    / "figures"
+                    / "succeeded_vs_failed_lattice.csv",
+                    "csv_xilinx_filepath": utils.output_dir()
+                    / "figures"
+                    / "succeeded_vs_failed_xilinx.csv",
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_all.png"
+                    ),
+                },
+            )
         ],
     }
