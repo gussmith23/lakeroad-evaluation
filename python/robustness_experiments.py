@@ -16,6 +16,109 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import numpy as np
 import re
+def _timing_cdf_xilinx(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
+    df = pandas.read_csv(csv_filepath).fillna(0)
+    # df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    lakeroad_df = df[df["tool"] == "lakeroad"]
+    lakeroad_df = lakeroad_df[["time_s"]]
+    lattice_df = df[df["tool"] == "vivado"]
+    lattice_df = lattice_df[["time_s"]]
+    yosys_df = df[df["tool"] == "yosys"]
+    yosys_df = yosys_df[["time_s"]]
+    # raise(Exception(print(lakeroad_df)))
+    # percentile plot of timing
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(10, 5))
+    ax = plt.subplot(gs[0])
+    ax = lakeroad_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    ax = lattice_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    ax = yosys_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    ax.get_figure().savefig(plot_output_filepath)
+    
+def _timing_cdf_lattice(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
+    df = pandas.read_csv(csv_filepath).fillna(0)
+    # df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    lakeroad_df = df[df["tool"] == "lakeroad"]
+    lakeroad_df = lakeroad_df[["time_s"]]
+    lattice_df = df[df["tool"] == "diamond"]
+    lattice_df = lattice_df[["time_s"]]
+    yosys_df = df[df["tool"] == "yosys"]
+    yosys_df = yosys_df[["time_s"]]
+    # raise(Exception(print(lakeroad_df)))
+    # percentile plot of timing
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(10, 5))
+    ax = plt.subplot(gs[0])
+    ax = lakeroad_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    ax = lattice_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    ax = yosys_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    ax.get_figure().savefig(plot_output_filepath)
+
+    lakeroad_summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
+    raise(Exception(print(lakeroad_summary_df)))
+
 
 def _combined_visualized(
     csv_xilinx_filepath: Union[str, Path],
@@ -23,68 +126,18 @@ def _combined_visualized(
     plot_output_filepath: Union[str, Path]
 ):
     # combined graph of xilinx and lattice results
-    df_lattice = pandas.read_csv(csv_lattice_filepath).fillna(0)
-    df_xilinx= pandas.read_csv(csv_xilinx_filepath).fillna(0)
-    # gs = GridSpec(1, 1, width_ratios=[1])
-    # # combine the two dataframes
-    # fig = plt.figure(figsize=(10, 5))
-    # ax = plt.subplot(gs[0])
-    # df_combined = pandas.concat([df_xilinx, df_lattice])
-    # ax = df_combined.plot.bar(
-    #     x="tool",
-    #     y=[
-    #         "percentage_successful",
-    #         "percentage_unsuccessful",
-    #         "percentage_lr_unsat",
-    #         "percentage_lr_timeout",
-    #     ],
-    #     stacked=True,
-    #     rot=0,
-    #     xlabel= "Tool Name",
-    #     ylabel= "% of Workloads Passed",
-    #     title= "Xilinx and Lattice Completeness",
-    # )
-    # plt.vlines(2.5, 0, 100, colors="k", linestyles="solid")
-    # plt.tight_layout()
-    # ax.get_figure().savefig(plot_output_filepath)
-    # plt.ylabel("Percentage of Workloads dfdf")
-    # ax.set_title("Xilinx and Lattice Completeness")
-    # plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left", borderaxespad=0.0)
-    # ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
-
-
-
-
-
-    fig = plt.figure(figsize=(8, 3))
-    gs = GridSpec(1, 2, width_ratios=[1, 1])
-
-    # Plot Lattice data on the left subplot
-    ax = plt.subplot(gs[0])
-    df_lattice.plot.bar(
-        x="tool",
-        y=[
-            "percentage_successful",
-            "percentage_unsuccessful",
-            "percentage_lr_timeout",
-        ],
-        stacked=True,
-        rot=0,
-        ax=ax,
-        xlabel= "Tool Name",
-    )
-    ax.set_title("Lattice")
-    ax.set_ylabel("Percentage (%)")
-    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
-    ax.legend(loc="upper right", fontsize=6)
-
-    # Add a subtitle for the first 3 bars in Lattice subplot
-    # for i, percentage in enumerate(df_lattice["percentage_successful"][:3]):
-    #     ax.text(i, percentage + 5, f"{percentage:.1f}%", ha='center')
-
-    # Plot Xilinx data on the right subplot
-    ax2 = plt.subplot(gs[1])
-    df_xilinx.plot.bar(
+    df2 = pandas.read_csv(csv_lattice_filepath).fillna(0)
+    df2["backend"] = "Lattice"
+    df1= pandas.read_csv(csv_xilinx_filepath).fillna(0)
+    df1["backend"] = "Xilinx"
+    merged_df = pandas.concat([df1, df2])
+    merged_df.groupby("backend")
+    # raise(Exception(print(merged_df)))
+    # group the dataframe by xilinx or Yosys
+    # merged_df = merged_df.groupby(merged_df.index // 3)
+    # plot the merged df
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 5))
+    df1.plot.bar(
         x="tool",
         y=[
             "percentage_successful",
@@ -94,28 +147,48 @@ def _combined_visualized(
         ],
         stacked=True,
         rot=0,
-        ax=ax2,
-        xlabel= "Tool Name",
+        ax=ax1,
+        legend=None
     )
-    ax2.set_title("Xilinx")
-    ax2.set_ylabel("Percentage (%)")
-    ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])
-    ax2.legend(loc="upper right", fontsize = 6)
+    ax1.set_title("Xilinx")
+    ax1.set_ylabel("Percentage (%)")
+    # Plot Lattice data on the second subplot
+    df2.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax2
+    )
+    ax2.set_title("Lattice")
+    ax2.set_yticks([])
+    ax2.legend(loc="upper right", labels=["succeeded", "failed", "unsat", "timeout"], fontsize=7)
+    # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
+    # plt.ylabel("Percentage (%)")
+    ax1.set_yticklabels(["{:.0f}%".format(x) for x in ax1.get_yticks()])
+    # ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])    
+    plt.tight_layout()
+    # Rotate x-axis labels
+    for ax in fig.axes:
+        plt.sca(ax)
+        plt.xticks(rotation=25)
 
-    # Add a subtitle for the first 3 bars in Xilinx subplot
-    # for i, percentage in enumerate(df_xilinx["percentage_successful"][:3]):
-    #     ax2.text(i, percentage + 5, f"{percentage:.1f}%", ha='center')
 
-    # Create a vertical line to act as a column divider
-    plt.vlines(1, ymin=0, ymax=1, transform=fig.transFigure, color='black', linewidth=1)
+
+ 
 
     # Adjust layout for better spacing
-    plt.tight_layout()
 
     # Save the combined plot to the specified output filepath
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(plot_output_filepath)
+    plt.savefig(plot_output_filepath, dpi=900)
+    raise(Exception(merged_df.describe()))
 
 
 def _visualize_succeeded_vs_failed_lattice(
@@ -321,17 +394,29 @@ def _visualize_succeeded_vs_failed_lattice(
     Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
     suc_v_unsuc.to_csv(plot_csv_filepath)
     # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(20, 6))
+    ax = plt.subplot(gs[0])
     ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
         x="tool",
         y=[
             "percentage_successful",
             "percentage_unsuccessful",
-            "percentage_lr_unsat",
             "percentage_lr_timeout",
+            "percentage_lr_unsat"
         ],
+        color=["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"],
         stacked=True,
         rot=0,
+        xlabel= "Tool",
+        ylabel= "Percentage (%)",
     )
+    # set timeout bar to be red
+    plt.title("Lattice MULT18X18C", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
     ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
 
     # # Save the plot to the specified output filepath.
@@ -339,8 +424,10 @@ def _visualize_succeeded_vs_failed_lattice(
     # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
-    ax.legend(loc="upper right")
-    ax.get_figure().savefig(plot_output_filepath)
+    ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
+    # ax.get_legend().legendHandles[2].set_color("red")
+    # raise Exception(print(ax.get_legend().legendHandles[2]))
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
 def _visualize_succeeded_vs_failed_xilinx(
@@ -499,27 +586,37 @@ def _visualize_succeeded_vs_failed_xilinx(
     Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
     suc_v_unsuc.to_csv(plot_csv_filepath)
     # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    ax = plt.subplot(gs[0])
     ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
         x="tool",
         y=[
             "percentage_successful",
             "percentage_unsuccessful",
-            "percentage_lr_unsat",
             "percentage_lr_timeout",
+            "percentage_lr_unsat",
+
         ],
         stacked=True,
         rot=0,
-    )
-    # set aspect ratio
-    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+        xlabel= "Tool",
+        ylabel= "Percentage (%)",
 
+    )
+    plt.title("Xilinx DSP48E2", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
     # # Save the plot to the specified output filepath.
     # plot_output_filepath = Path(plot_output_filepath)
     # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
-    ax.legend(loc="upper right")
-    ax.get_figure().savefig(plot_output_filepath)
+    ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout", "unsat"], fontsize=7)
+    # ax.set_title("Xilinx DSP48E2")
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
 def _collect_robustness_benchmark_data(
@@ -1179,5 +1276,47 @@ def task_robustness_experiments():
                     ),
                 },
             )
+        ],
+    }
+
+    yield {
+        "name": "timing",
+        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "actions": [
+            (
+               _timing_cdf_lattice,
+                [],
+                {
+                    "csv_filepath": lattice_csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_lattice.png"
+                    ),
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_lattice.csv"
+                    ),
+                },
+            ),
+            (
+               _timing_cdf_xilinx,
+                [],
+                {
+                    "csv_filepath": xilinx_csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_xilinx.png"
+                    ),
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_xilinx.csv"
+                    ),
+                },
+            ),
+
         ],
     }
