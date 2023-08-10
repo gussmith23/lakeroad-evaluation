@@ -1,5 +1,6 @@
 from typing import Optional, Union
 
+import doit
 import yaml
 import hardware_compilation
 import lakeroad
@@ -487,7 +488,17 @@ def check_dsp_usage(
                     # raise Exception("lut used without expecting a failed mapping")
 
 
-def task_robustness_experiments():
+@doit.task_params(
+    [
+        {
+            "name": "skip_verilator",
+            "long": "skip_verilator",
+            "default": False,
+            "type": bool,
+        },
+    ]
+)
+def task_robustness_experiments(skip_verilator: bool):
     """Robustness experiments: finding Verilog files that existing tools can't map"""
 
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
@@ -584,38 +595,39 @@ def task_robustness_experiments():
 
             xilinx_collected_data_output_filepaths.append(json_filepath)
 
-            yield verilator.make_verilator_task(
-                name=f"{entry['module_name']}:lakeroad-xilinx:verilator",
-                # TODO(@gussmith23): Ideally, we wouldn't need this flag --
-                # instead, we would know when Lakeroad was going to fail and we
-                # wouldn't create a Verilator task.
-                ignore_missing_test_module_file=True,
-                output_dirpath=base_path / "verilator",
-                test_module_filepath=lakeroad_output_verilog,
-                ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
-                / entry["filepath"],
-                module_inputs=entry["inputs"],
-                clock_name="clk",
-                initiation_interval=entry["stages"],
-                output_signal="out",
-                include_dirs=[
-                    utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2"
-                ],
-                extra_args=[
-                    "-DXIL_XECLIB",
-                    "-Wno-UNOPTFLAT",
-                    "-Wno-LATCH",
-                    "-Wno-WIDTH",
-                    "-Wno-STMTDLY",
-                    "-Wno-CASEX",
-                    "-Wno-TIMESCALEMOD",
-                    "-Wno-PINMISSING",
-                ],
-                max_num_tests=utils.get_manifest()["completeness_experiments"][
-                    "lakeroad"
-                ]["verilator_simulation_iterations"],
-                alternative_file_dep=json_filepath,
-            )[0]
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    name=f"{entry['module_name']}:lakeroad-xilinx:verilator",
+                    # TODO(@gussmith23): Ideally, we wouldn't need this flag --
+                    # instead, we would know when Lakeroad was going to fail and we
+                    # wouldn't create a Verilator task.
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=lakeroad_output_verilog,
+                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    / entry["filepath"],
+                    module_inputs=entry["inputs"],
+                    clock_name="clk",
+                    initiation_interval=entry["stages"],
+                    output_signal="out",
+                    include_dirs=[
+                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2"
+                    ],
+                    extra_args=[
+                        "-DXIL_XECLIB",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-LATCH",
+                        "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-CASEX",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-PINMISSING",
+                    ],
+                    max_num_tests=utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["verilator_simulation_iterations"],
+                    alternative_file_dep=json_filepath,
+                )[0]
 
             # yosys synthesis for xilinx backend
             base_path = (
@@ -700,38 +712,39 @@ def task_robustness_experiments():
             yield task
             lattice_collected_data_output_filepaths.append(json_filepath)
 
-            yield verilator.make_verilator_task(
-                name=f"{entry['module_name']}:lattice-ecp5-lakeroad:verilator",
-                # TODO(@gussmith23): Ideally, we wouldn't need this flag --
-                # instead, we would know when Lakeroad was going to fail and we
-                # wouldn't create a Verilator task.
-                ignore_missing_test_module_file=True,
-                output_dirpath=base_path / "verilator",
-                test_module_filepath=lakeroad_output_verilog,
-                ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
-                / entry["filepath"],
-                module_inputs=entry["inputs"],
-                clock_name="clk",
-                initiation_interval=entry["stages"],
-                output_signal="out",
-                include_dirs=[
-                    utils.lakeroad_evaluation_dir()
-                    / "lakeroad-private"
-                    / "lattice_ecp5"
-                ],
-                extra_args=[
-                    "-Wno-CASEINCOMPLETE",
-                    "-Wno-IMPLICIT",
-                    "-Wno-PINMISSING",
-                    "-Wno-TIMESCALEMOD",
-                    "-Wno-UNOPTFLAT",
-                    "-Wno-WIDTH",
-                ],
-                max_num_tests=utils.get_manifest()["completeness_experiments"][
-                    "lakeroad"
-                ]["verilator_simulation_iterations"],
-                alternative_file_dep=json_filepath,
-            )[0]
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    name=f"{entry['module_name']}:lattice-ecp5-lakeroad:verilator",
+                    # TODO(@gussmith23): Ideally, we wouldn't need this flag --
+                    # instead, we would know when Lakeroad was going to fail and we
+                    # wouldn't create a Verilator task.
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=lakeroad_output_verilog,
+                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    / entry["filepath"],
+                    module_inputs=entry["inputs"],
+                    clock_name="clk",
+                    initiation_interval=entry["stages"],
+                    output_signal="out",
+                    include_dirs=[
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad-private"
+                        / "lattice_ecp5"
+                    ],
+                    extra_args=[
+                        "-Wno-CASEINCOMPLETE",
+                        "-Wno-IMPLICIT",
+                        "-Wno-PINMISSING",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-WIDTH",
+                    ],
+                    max_num_tests=utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["verilator_simulation_iterations"],
+                    alternative_file_dep=json_filepath,
+                )[0]
 
             base_path = (
                 utils.output_dir()
