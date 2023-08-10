@@ -19,15 +19,23 @@ import re
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
-    plot_csv_filepath: Union[str, Path],
+    timing_csv_filepath: Union[str, Path],
 ):
     df = pandas.read_csv(csv_filepath).fillna(0)
     # df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
     lakeroad_df = df[df["tool"] == "lakeroad"]
-    lakeroad_df = lakeroad_df[["time_s"]]
-    lattice_df = df[df["tool"] == "vivado"]
-    lattice_df = lattice_df[["time_s"]]
+
+    xilinx_df = df[df["tool"] == "vivado"]
+    # raise(Exception(print(xilinx_df)))
     yosys_df = df[df["tool"] == "yosys"]
+
+    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
+    summary_df = summary_df.append(xilinx_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+
+    # raise(Exception(print(summary_df)))
+    lakeroad_df = lakeroad_df[["time_s"]]
+    xilinx_df = xilinx_df[["time_s"]]
     yosys_df = yosys_df[["time_s"]]
     # raise(Exception(print(lakeroad_df)))
     # percentile plot of timing
@@ -44,7 +52,7 @@ def _timing_cdf_xilinx(
         ylabel= "Cumulative Density",
         title= "Xilinx Timing",
     )
-    ax = lattice_df.plot.hist(
+    ax = xilinx_df.plot.hist(
         bins=100,
         cumulative=True,
         density=True,
@@ -64,22 +72,33 @@ def _timing_cdf_xilinx(
         ylabel= "Cumulative Density",
         title= "Xilinx Timing",
     )
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     ax.get_figure().savefig(plot_output_filepath)
+    timing_csv_filepath = Path(timing_csv_filepath)
+    timing_csv_filepath.parent.mkdir(parents=True, exist_ok=True)
+    summary_df.to_csv(timing_csv_filepath)
     
 def _timing_cdf_lattice(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
-    plot_csv_filepath: Union[str, Path],
+    timing_csv_filepath: Union[str, Path],
 ):
     df = pandas.read_csv(csv_filepath).fillna(0)
-    # df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
     lakeroad_df = df[df["tool"] == "lakeroad"]
-    lakeroad_df = lakeroad_df[["time_s"]]
     lattice_df = df[df["tool"] == "diamond"]
-    lattice_df = lattice_df[["time_s"]]
     yosys_df = df[df["tool"] == "yosys"]
+
+    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
+    summary_df = summary_df.append(lattice_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+
+    # raise(Exception(print(summary_df)))
+    lakeroad_df = lakeroad_df[["time_s"]]
+    lattice_df = lattice_df[["time_s"]]
     yosys_df = yosys_df[["time_s"]]
-    # raise(Exception(print(lakeroad_df)))
+
     # percentile plot of timing
     gs = GridSpec(1, 1, width_ratios=[1])
     fig = plt.figure(figsize=(10, 5))
@@ -114,10 +133,12 @@ def _timing_cdf_lattice(
         ylabel= "Cumulative Density",
         title= "Lattice Timing",
     )
-    ax.get_figure().savefig(plot_output_filepath)
+    #check if filepath exists
 
-    lakeroad_summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
-    raise(Exception(print(lakeroad_summary_df)))
+    ax.get_figure().savefig(plot_output_filepath)
+    timing_csv_filepath = Path(timing_csv_filepath)
+    timing_csv_filepath.parent.mkdir(parents=True, exist_ok=True)
+    summary_df.to_csv(timing_csv_filepath)
 
 
 def _combined_visualized(
@@ -148,9 +169,11 @@ def _combined_visualized(
         stacked=True,
         rot=0,
         ax=ax1,
-        legend=None
+        legend=None,
+        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        # hatch=['', '', '///', '']
     )
-    ax1.set_title("Xilinx")
+    ax1.set_title("Xilinx Ultrascale+")
     ax1.set_ylabel("Percentage (%)")
     # Plot Lattice data on the second subplot
     df2.plot.bar(
@@ -163,11 +186,13 @@ def _combined_visualized(
         ],
         stacked=True,
         rot=0,
-        ax=ax2
+        ax=ax2,
+        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        # hatch=['', '', '///', '']
     )
-    ax2.set_title("Lattice")
+    ax2.set_title("Lattice ECP5")
     ax2.set_yticks([])
-    ax2.legend(loc="upper right", labels=["succeeded", "failed", "unsat", "timeout"], fontsize=7)
+    ax2.legend(loc="upper right", labels=["succeeded", "failed", "unsat", "timeout"], fontsize=8)
     # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
     # plt.ylabel("Percentage (%)")
     ax1.set_yticklabels(["{:.0f}%".format(x) for x in ax1.get_yticks()])
@@ -177,18 +202,9 @@ def _combined_visualized(
     for ax in fig.axes:
         plt.sca(ax)
         plt.xticks(rotation=25)
-
-
-
- 
-
-    # Adjust layout for better spacing
-
-    # Save the combined plot to the specified output filepath
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    plt.savefig(plot_output_filepath, dpi=900)
-    raise(Exception(merged_df.describe()))
+    plt.savefig(plot_output_filepath, dpi=400)
 
 
 def _visualize_succeeded_vs_failed_lattice(
@@ -420,8 +436,8 @@ def _visualize_succeeded_vs_failed_lattice(
     ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
 
     # # Save the plot to the specified output filepath.
-    # plot_output_filepath = Path(plot_output_filepath)
-    # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
     ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
@@ -1293,7 +1309,7 @@ def task_robustness_experiments():
                         / "figures"
                         / "timing_cdf_lattice.png"
                     ),
-                    "plot_csv_filepath": (
+                    "timing_csv_filepath": (
                         utils.output_dir()
                         / "figures"
                         / "timing_cdf_lattice.csv"
@@ -1310,7 +1326,7 @@ def task_robustness_experiments():
                         / "figures"
                         / "timing_cdf_xilinx.png"
                     ),
-                    "plot_csv_filepath": (
+                    "timing_csv_filepath": (
                         utils.output_dir()
                         / "figures"
                         / "timing_cdf_xilinx.csv"
