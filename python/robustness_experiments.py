@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import numpy as np
 import re
+
+
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
@@ -30,9 +32,13 @@ def _timing_cdf_xilinx(
     # raise(Exception(print(xilinx_df)))
     yosys_df = df[df["tool"] == "yosys"]
 
-    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
-    summary_df = summary_df.append(xilinx_df.groupby('tool')['time_s'].agg(['median', 'std']))
-    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = lakeroad_df.groupby("tool")["time_s"].agg(["median", "std"])
+    summary_df = summary_df.append(
+        xilinx_df.groupby("tool")["time_s"].agg(["median", "std"])
+    )
+    summary_df = summary_df.append(
+        yosys_df.groupby("tool")["time_s"].agg(["median", "std"])
+    )
 
     # raise(Exception(print(summary_df)))
     lakeroad_df = lakeroad_df[["time_s"]]
@@ -49,9 +55,9 @@ def _timing_cdf_xilinx(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Xilinx Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Xilinx Timing",
     )
     ax = xilinx_df.plot.hist(
         bins=100,
@@ -59,9 +65,9 @@ def _timing_cdf_xilinx(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Xilinx Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Xilinx Timing",
     )
     ax = yosys_df.plot.hist(
         bins=100,
@@ -69,9 +75,9 @@ def _timing_cdf_xilinx(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Xilinx Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Xilinx Timing",
     )
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -79,7 +85,8 @@ def _timing_cdf_xilinx(
     timing_csv_filepath = Path(timing_csv_filepath)
     timing_csv_filepath.parent.mkdir(parents=True, exist_ok=True)
     summary_df.to_csv(timing_csv_filepath)
-    
+
+
 def _timing_cdf_lattice(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
@@ -91,9 +98,13 @@ def _timing_cdf_lattice(
     lattice_df = df[df["tool"] == "diamond"]
     yosys_df = df[df["tool"] == "yosys"]
 
-    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
-    summary_df = summary_df.append(lattice_df.groupby('tool')['time_s'].agg(['median', 'std']))
-    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = lakeroad_df.groupby("tool")["time_s"].agg(["median", "std"])
+    summary_df = summary_df.append(
+        lattice_df.groupby("tool")["time_s"].agg(["median", "std"])
+    )
+    summary_df = summary_df.append(
+        yosys_df.groupby("tool")["time_s"].agg(["median", "std"])
+    )
 
     # raise(Exception(print(summary_df)))
     lakeroad_df = lakeroad_df[["time_s"]]
@@ -110,9 +121,9 @@ def _timing_cdf_lattice(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Lattice Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Lattice Timing",
     )
     ax = lattice_df.plot.hist(
         bins=100,
@@ -120,9 +131,9 @@ def _timing_cdf_lattice(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Lattice Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Lattice Timing",
     )
     ax = yosys_df.plot.hist(
         bins=100,
@@ -130,11 +141,11 @@ def _timing_cdf_lattice(
         density=True,
         histtype="step",
         ax=ax,
-        xlabel= "Time (s)",
-        ylabel= "Cumulative Density",
-        title= "Lattice Timing",
+        xlabel="Time (s)",
+        ylabel="Cumulative Density",
+        title="Lattice Timing",
     )
-    #check if filepath exists
+    # check if filepath exists
 
     ax.get_figure().savefig(plot_output_filepath)
     timing_csv_filepath = Path(timing_csv_filepath)
@@ -145,12 +156,12 @@ def _timing_cdf_lattice(
 def _combined_visualized(
     csv_xilinx_filepath: Union[str, Path],
     csv_lattice_filepath: Union[str, Path],
-    plot_output_filepath: Union[str, Path]
+    plot_output_filepath: Union[str, Path],
 ):
     # combined graph of xilinx and lattice results
     df2 = pandas.read_csv(csv_lattice_filepath).fillna(0)
     df2["backend"] = "Lattice"
-    df1= pandas.read_csv(csv_xilinx_filepath).fillna(0)
+    df1 = pandas.read_csv(csv_xilinx_filepath).fillna(0)
     df1["backend"] = "Xilinx"
     merged_df = pandas.concat([df1, df2])
     merged_df.groupby("backend")
@@ -193,11 +204,15 @@ def _combined_visualized(
     )
     ax2.set_title("Lattice ECP5")
     ax2.set_yticks([])
-    ax2.legend(loc="upper right", labels=["succeeded", "failed", "unsat", "timeout"], fontsize=8)
+    ax2.legend(
+        loc="upper right",
+        labels=["succeeded", "failed", "unsat", "timeout"],
+        fontsize=8,
+    )
     # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
     # plt.ylabel("Percentage (%)")
     ax1.set_yticklabels(["{:.0f}%".format(x) for x in ax1.get_yticks()])
-    # ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])    
+    # ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])
     plt.tight_layout()
     # Rotate x-axis labels
     for ax in fig.axes:
@@ -421,13 +436,13 @@ def _visualize_succeeded_vs_failed_lattice(
             "percentage_successful",
             "percentage_unsuccessful",
             "percentage_lr_timeout",
-            "percentage_lr_unsat"
+            "percentage_lr_unsat",
         ],
         color=["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"],
         stacked=True,
         rot=0,
-        xlabel= "Tool",
-        ylabel= "Percentage (%)",
+        xlabel="Tool",
+        ylabel="Percentage (%)",
     )
     # set timeout bar to be red
     plt.title("Lattice MULT18X18C", pad=10)
@@ -547,6 +562,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         if t == "lakeroad"
         else 0
     )
+
     # raise Exception(print(df))
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
@@ -613,13 +629,11 @@ def _visualize_succeeded_vs_failed_xilinx(
             "percentage_unsuccessful",
             "percentage_lr_timeout",
             "percentage_lr_unsat",
-
         ],
         stacked=True,
         rot=0,
-        xlabel= "Tool",
-        ylabel= "Percentage (%)",
-
+        xlabel="Tool",
+        ylabel="Percentage (%)",
     )
     plt.title("Xilinx DSP48E2", pad=10)
     plt.xlabel("Tool", labelpad=10)
@@ -631,7 +645,11 @@ def _visualize_succeeded_vs_failed_xilinx(
     # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     # ax.get_figure().savefig(plot_output_filepath)
     # set legend location
-    ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout", "unsat"], fontsize=7)
+    ax.legend(
+        loc="upper right",
+        labels=["succeeded", "failed", "timeout", "unsat"],
+        fontsize=7,
+    )
     # ax.set_title("Xilinx DSP48E2")
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
@@ -1299,9 +1317,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     / "figures"
                     / "succeeded_vs_failed_xilinx.csv",
                     "plot_output_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "succeeded_vs_failed_all.png"
+                        utils.output_dir() / "figures" / "succeeded_vs_failed_all.png"
                     ),
                 },
             )
@@ -1313,39 +1329,30 @@ def task_robustness_experiments(skip_verilator: bool):
         "file_dep": [lattice_csv_output, xilinx_csv_output],
         "actions": [
             (
-               _timing_cdf_lattice,
+                _timing_cdf_lattice,
                 [],
                 {
                     "csv_filepath": lattice_csv_output,
                     "plot_output_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "timing_cdf_lattice.png"
+                        utils.output_dir() / "figures" / "timing_cdf_lattice.png"
                     ),
                     "timing_csv_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "timing_cdf_lattice.csv"
+                        utils.output_dir() / "figures" / "timing_cdf_lattice.csv"
                     ),
                 },
             ),
             (
-               _timing_cdf_xilinx,
+                _timing_cdf_xilinx,
                 [],
                 {
                     "csv_filepath": xilinx_csv_output,
                     "plot_output_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "timing_cdf_xilinx.png"
+                        utils.output_dir() / "figures" / "timing_cdf_xilinx.png"
                     ),
                     "timing_csv_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "timing_cdf_xilinx.csv"
+                        utils.output_dir() / "figures" / "timing_cdf_xilinx.csv"
                     ),
                 },
             ),
-
         ],
     }
