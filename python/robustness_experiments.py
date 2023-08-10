@@ -13,13 +13,206 @@ import verilator
 import quartus
 import os
 from pathlib import Path
+import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 import numpy as np
+import re
+def _timing_cdf_xilinx(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    timing_csv_filepath: Union[str, Path],
+):
+    df = pandas.read_csv(csv_filepath).fillna(0)
+    # df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    lakeroad_df = df[df["tool"] == "lakeroad"]
+
+    xilinx_df = df[df["tool"] == "vivado"]
+    # raise(Exception(print(xilinx_df)))
+    yosys_df = df[df["tool"] == "yosys"]
+
+    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
+    summary_df = summary_df.append(xilinx_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+
+    # raise(Exception(print(summary_df)))
+    lakeroad_df = lakeroad_df[["time_s"]]
+    xilinx_df = xilinx_df[["time_s"]]
+    yosys_df = yosys_df[["time_s"]]
+    # raise(Exception(print(lakeroad_df)))
+    # percentile plot of timing
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(10, 5))
+    ax = plt.subplot(gs[0])
+    ax = lakeroad_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    ax = xilinx_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    ax = yosys_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Xilinx Timing",
+    )
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    ax.get_figure().savefig(plot_output_filepath)
+    timing_csv_filepath = Path(timing_csv_filepath)
+    timing_csv_filepath.parent.mkdir(parents=True, exist_ok=True)
+    summary_df.to_csv(timing_csv_filepath)
+    
+def _timing_cdf_lattice(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    timing_csv_filepath: Union[str, Path],
+):
+    df = pandas.read_csv(csv_filepath).fillna(0)
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    lakeroad_df = df[df["tool"] == "lakeroad"]
+    lattice_df = df[df["tool"] == "diamond"]
+    yosys_df = df[df["tool"] == "yosys"]
+
+    summary_df = lakeroad_df.groupby('tool')['time_s'].agg(['median', 'std'])
+    summary_df = summary_df.append(lattice_df.groupby('tool')['time_s'].agg(['median', 'std']))
+    summary_df = summary_df.append(yosys_df.groupby('tool')['time_s'].agg(['median', 'std']))
+
+    # raise(Exception(print(summary_df)))
+    lakeroad_df = lakeroad_df[["time_s"]]
+    lattice_df = lattice_df[["time_s"]]
+    yosys_df = yosys_df[["time_s"]]
+
+    # percentile plot of timing
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(10, 5))
+    ax = plt.subplot(gs[0])
+    ax = lakeroad_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    ax = lattice_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    ax = yosys_df.plot.hist(
+        bins=100,
+        cumulative=True,
+        density=True,
+        histtype="step",
+        ax=ax,
+        xlabel= "Time (s)",
+        ylabel= "Cumulative Density",
+        title= "Lattice Timing",
+    )
+    #check if filepath exists
+
+    ax.get_figure().savefig(plot_output_filepath)
+    timing_csv_filepath = Path(timing_csv_filepath)
+    timing_csv_filepath.parent.mkdir(parents=True, exist_ok=True)
+    summary_df.to_csv(timing_csv_filepath)
+
+
+def _combined_visualized(
+    csv_xilinx_filepath: Union[str, Path],
+    csv_lattice_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path]
+):
+    # combined graph of xilinx and lattice results
+    df2 = pandas.read_csv(csv_lattice_filepath).fillna(0)
+    df2["backend"] = "Lattice"
+    df1= pandas.read_csv(csv_xilinx_filepath).fillna(0)
+    df1["backend"] = "Xilinx"
+    merged_df = pandas.concat([df1, df2])
+    merged_df.groupby("backend")
+    # raise(Exception(print(merged_df)))
+    # group the dataframe by xilinx or Yosys
+    # merged_df = merged_df.groupby(merged_df.index // 3)
+    # plot the merged df
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 5))
+    df1.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax1,
+        legend=None,
+        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        # hatch=['', '', '///', '']
+    )
+    ax1.set_title("Xilinx Ultrascale+")
+    ax1.set_ylabel("Percentage (%)")
+    # Plot Lattice data on the second subplot
+    df2.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax2,
+        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        # hatch=['', '', '///', '']
+    )
+    ax2.set_title("Lattice ECP5")
+    ax2.set_yticks([])
+    ax2.legend(loc="upper right", labels=["succeeded", "failed", "unsat", "timeout"], fontsize=8)
+    # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
+    # plt.ylabel("Percentage (%)")
+    ax1.set_yticklabels(["{:.0f}%".format(x) for x in ax1.get_yticks()])
+    # ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])    
+    plt.tight_layout()
+    # Rotate x-axis labels
+    for ax in fig.axes:
+        plt.sca(ax)
+        plt.xticks(rotation=25)
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(plot_output_filepath, dpi=400)
 
 
 def _visualize_succeeded_vs_failed_lattice(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
     cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
@@ -138,6 +331,9 @@ def _visualize_succeeded_vs_failed_lattice(
         )
     )
 
+    # Use boolean indexing to filter the DataFrame
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+    # print timeout and failure columns
     Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(cleaned_data_filepath)
 
@@ -175,6 +371,17 @@ def _visualize_succeeded_vs_failed_lattice(
         else 0
     )
 
+    def match(t):
+        if t == "lakeroad":
+            return "Anaxi"
+        elif t == "diamond":
+            return "SOTA Lattice"
+        elif t == "yosys":
+            return "Yosys"
+        else:
+            return t
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
     # Sanity check.
     assert suc_v_unsuc["num_experiments"].equals(
         suc_v_unsuc["num_successful"]
@@ -182,26 +389,72 @@ def _visualize_succeeded_vs_failed_lattice(
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
     )
-
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+    # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
+    # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(20, 6))
+    ax = plt.subplot(gs[0])
     ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
         x="tool",
-        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+            "percentage_lr_unsat"
+        ],
+        color=["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"],
         stacked=True,
         rot=0,
+        xlabel= "Tool",
+        ylabel= "Percentage (%)",
     )
+    # set timeout bar to be red
+    plt.title("Lattice MULT18X18C", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+
+    # # Save the plot to the specified output filepath.
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    ax.get_figure().savefig(plot_output_filepath)
+    # ax.get_figure().savefig(plot_output_filepath)
+    # set legend location
+    ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
+    # ax.get_legend().legendHandles[2].set_color("red")
+    # raise Exception(print(ax.get_legend().legendHandles[2]))
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
 def _visualize_succeeded_vs_failed_xilinx(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
     cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
-
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
     # SRL16E).
@@ -294,6 +547,31 @@ def _visualize_succeeded_vs_failed_xilinx(
         if t == "lakeroad"
         else 0
     )
+    # raise Exception(print(df))
+    # rename the tools in dataframe
+    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
+    #     lambda t: "Anaxi" if t == "lakeroad" else t
+    # )
+    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
+    #     lambda t: "SOTA Xilinx" if t == "vivado" else t
+    # )
+    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
+    #     lambda t: "Yosys" if t == "yosys" else t
+    # )
+    def match(t):
+        if t == "lakeroad":
+            return "Anaxi"
+        elif t == "vivado":
+            return "SOTA Xilinx"
+        elif t == "yosys":
+            return "Yosys"
+        else:
+            return t
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
+
+    # raise Exception(
+    #     print(suc_v_unsuc["tool"]))
 
     # Sanity check.
     assert suc_v_unsuc["num_experiments"].equals(
@@ -302,16 +580,60 @@ def _visualize_succeeded_vs_failed_xilinx(
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
     )
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
 
+    # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
+    # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    ax = plt.subplot(gs[0])
     ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
         x="tool",
-        y=["num_successful", "num_unsuccessful", "num_lr_unsat", "num_lr_timeout"],
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+            "percentage_lr_unsat",
+
+        ],
         stacked=True,
         rot=0,
+        xlabel= "Tool",
+        ylabel= "Percentage (%)",
+
     )
-    plot_output_filepath = Path(plot_output_filepath)
-    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    ax.get_figure().savefig(plot_output_filepath)
+    plt.title("Xilinx DSP48E2", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+    # # Save the plot to the specified output filepath.
+    # plot_output_filepath = Path(plot_output_filepath)
+    # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    # ax.get_figure().savefig(plot_output_filepath)
+    # set legend location
+    ax.legend(loc="upper right", labels=["succeeded", "failed", "timeout", "unsat"], fontsize=7)
+    # ax.set_title("Xilinx DSP48E2")
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
 def _collect_robustness_benchmark_data(
@@ -891,6 +1213,11 @@ def task_robustness_experiments(skip_verilator: bool):
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_xilinx_results_collected_cleaned.csv",
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_xilinx.csv"
+                    ),
                 },
             )
         ],
@@ -905,6 +1232,7 @@ def task_robustness_experiments(skip_verilator: bool):
 
     base_path = utils.output_dir() / "robustness_experiments_csv"
     lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
+
     yield {
         "name": "collect_lattice_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
@@ -940,6 +1268,11 @@ def task_robustness_experiments(skip_verilator: bool):
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_lattice_results_collected_cleaned.csv",
+                    "plot_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_lattice.csv"
+                    ),
                 },
             )
         ],
@@ -949,5 +1282,70 @@ def task_robustness_experiments(skip_verilator: bool):
             / "robustness_experiments_csv"
             / "all_results"
             / "all_lattice_results_collected_cleaned.csv",
+        ],
+    }
+    yield {
+        "name": "visualize_succeeded_vs_failed_all",
+        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "actions": [
+            (
+                _combined_visualized,
+                [],
+                {
+                    "csv_lattice_filepath": utils.output_dir()
+                    / "figures"
+                    / "succeeded_vs_failed_lattice.csv",
+                    "csv_xilinx_filepath": utils.output_dir()
+                    / "figures"
+                    / "succeeded_vs_failed_xilinx.csv",
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "succeeded_vs_failed_all.png"
+                    ),
+                },
+            )
+        ],
+    }
+
+    yield {
+        "name": "timing",
+        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "actions": [
+            (
+               _timing_cdf_lattice,
+                [],
+                {
+                    "csv_filepath": lattice_csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_lattice.png"
+                    ),
+                    "timing_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_lattice.csv"
+                    ),
+                },
+            ),
+            (
+               _timing_cdf_xilinx,
+                [],
+                {
+                    "csv_filepath": xilinx_csv_output,
+                    "plot_output_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_xilinx.png"
+                    ),
+                    "timing_csv_filepath": (
+                        utils.output_dir()
+                        / "figures"
+                        / "timing_cdf_xilinx.csv"
+                    ),
+                },
+            ),
+
         ],
     }
