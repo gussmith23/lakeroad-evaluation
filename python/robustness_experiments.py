@@ -917,7 +917,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
                 top_module_name=entry["module_name"],
-                clock_name="clk",
+                clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad-xilinx",
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
@@ -947,7 +947,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
-                    clock_name="clk",
+                    clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
                     output_signal="out",
                     include_dirs=[
@@ -1035,7 +1035,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
                 top_module_name=entry["module_name"],
-                clock_name="clk",
+                clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lattice-ecp5-lakeroad",
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
@@ -1064,7 +1064,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
-                    clock_name="clk",
+                    clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
                     output_signal="out",
                     include_dirs=[
@@ -1146,7 +1146,7 @@ def task_robustness_experiments(skip_verilator: bool):
         #         json_filepath=base_path / "out.json",
         #         verilog_module_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
         #         top_module_name=entry["module_name"],
-        #         clock_name="clk",
+        #         clock_name=("clk" if entry["stages"] != 0 else None),,
         #         name=entry["module_name"] + ":lakeroad-intel",
         #         initiation_interval=entry["stages"],
         #         inputs=entry["inputs"],
