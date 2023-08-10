@@ -182,7 +182,7 @@ def _combined_visualized(
         rot=0,
         ax=ax1,
         legend=None,
-        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax1.set_title("Xilinx Ultrascale+")
@@ -199,7 +199,7 @@ def _combined_visualized(
         stacked=True,
         rot=0,
         ax=ax2,
-        color=["#A7A7A7", "#666666", "#EAEAEA", "#3E3E3E"],
+        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax2.set_title("Lattice ECP5")
