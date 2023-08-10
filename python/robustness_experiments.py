@@ -585,7 +585,7 @@ def task_robustness_experiments():
             xilinx_collected_data_output_filepaths.append(json_filepath)
 
             yield verilator.make_verilator_task(
-                name=f"{entry['module_name']}:lakeroad:verilator",
+                name=f"{entry['module_name']}:lakeroad-xilinx:verilator",
                 # TODO(@gussmith23): Ideally, we wouldn't need this flag --
                 # instead, we would know when Lakeroad was going to fail and we
                 # wouldn't create a Verilator task.
