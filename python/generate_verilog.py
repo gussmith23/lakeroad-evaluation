@@ -60,8 +60,9 @@ def generate_design(
         result += f"\tlogic {signedness} [{reg_bitwidth - 1}:0] stage{i};\n"
 
     # Pipeline logic
-    result += "\n"
-    result += "\talways @(posedge clk) begin\n"
+    if stages != 0:
+        result += "\n"
+        result += "\talways @(posedge clk) begin\n"
 
     function = ""
     if workload == "mult":
@@ -110,6 +111,11 @@ def generate_design(
         function = "(a * b) ^ c"
     else:
         raise ValueError(f"Unknown workload {workload}")
+
+    if stages == 0:
+        result += f"\tassign out = {function};\n"
+        result += "endmodule\n"
+        return result
 
     result += f"\tstage0 <= {function};\n"
 
@@ -178,7 +184,7 @@ def generate_designs(design_dir: Union[str, Path]):
         for bitwidth in range(8, bitwidth_max + 1):
             input_tuples = [[input, bitwidth] for input in inputs]
             for is_signed in [True, False]:
-                for stages in range(1, max_stages + 1):
+                for stages in range(0, max_stages + 1):
                     title = make_title(
                         workload=workload,
                         bitwidth=bitwidth,
