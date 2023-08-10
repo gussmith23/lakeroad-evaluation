@@ -1,7 +1,7 @@
 (* use_dsp = "yes" *) module preaddmul_1_stage_signed_8_bit(
-	input signed [7:0] d,
 	input signed [7:0] a,
 	input signed [7:0] b,
+	input signed [7:0] d,
 	output [7:0] out,
 	input clk);
 

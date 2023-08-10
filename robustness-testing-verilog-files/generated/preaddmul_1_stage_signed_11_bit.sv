@@ -1,7 +1,7 @@
 (* use_dsp = "yes" *) module preaddmul_1_stage_signed_11_bit(
-	input signed [10:0] d,
 	input signed [10:0] a,
 	input signed [10:0] b,
+	input signed [10:0] d,
 	output [10:0] out,
 	input clk);
 

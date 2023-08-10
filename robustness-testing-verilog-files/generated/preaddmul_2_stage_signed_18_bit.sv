@@ -1,7 +1,7 @@
 (* use_dsp = "yes" *) module preaddmul_2_stage_signed_18_bit(
-	input signed [17:0] d,
 	input signed [17:0] a,
 	input signed [17:0] b,
+	input signed [17:0] d,
 	output [17:0] out,
 	input clk);
 

@@ -14634,11 +14634,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_8_bit.sv
   inputs: &id170
-  - - d
-    - 8
   - - a
     - 8
   - - b
+    - 8
+  - - d
     - 8
   is_signed: true
   module_name: preaddmul_0_stage_signed_8_bit
@@ -14728,11 +14728,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_9_bit.sv
   inputs: &id171
-  - - d
-    - 9
   - - a
     - 9
   - - b
+    - 9
+  - - d
     - 9
   is_signed: true
   module_name: preaddmul_0_stage_signed_9_bit
@@ -14822,11 +14822,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_10_bit.sv
   inputs: &id172
-  - - d
-    - 10
   - - a
     - 10
   - - b
+    - 10
+  - - d
     - 10
   is_signed: true
   module_name: preaddmul_0_stage_signed_10_bit
@@ -14916,11 +14916,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_11_bit.sv
   inputs: &id173
-  - - d
-    - 11
   - - a
     - 11
   - - b
+    - 11
+  - - d
     - 11
   is_signed: true
   module_name: preaddmul_0_stage_signed_11_bit
@@ -15010,11 +15010,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_12_bit.sv
   inputs: &id174
-  - - d
-    - 12
   - - a
     - 12
   - - b
+    - 12
+  - - d
     - 12
   is_signed: true
   module_name: preaddmul_0_stage_signed_12_bit
@@ -15104,11 +15104,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_13_bit.sv
   inputs: &id175
-  - - d
-    - 13
   - - a
     - 13
   - - b
+    - 13
+  - - d
     - 13
   is_signed: true
   module_name: preaddmul_0_stage_signed_13_bit
@@ -15198,11 +15198,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_14_bit.sv
   inputs: &id176
-  - - d
-    - 14
   - - a
     - 14
   - - b
+    - 14
+  - - d
     - 14
   is_signed: true
   module_name: preaddmul_0_stage_signed_14_bit
@@ -15292,11 +15292,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_15_bit.sv
   inputs: &id177
-  - - d
-    - 15
   - - a
     - 15
   - - b
+    - 15
+  - - d
     - 15
   is_signed: true
   module_name: preaddmul_0_stage_signed_15_bit
@@ -15386,11 +15386,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_16_bit.sv
   inputs: &id178
-  - - d
-    - 16
   - - a
     - 16
   - - b
+    - 16
+  - - d
     - 16
   is_signed: true
   module_name: preaddmul_0_stage_signed_16_bit
@@ -15480,11 +15480,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_17_bit.sv
   inputs: &id179
-  - - d
-    - 17
   - - a
     - 17
   - - b
+    - 17
+  - - d
     - 17
   is_signed: true
   module_name: preaddmul_0_stage_signed_17_bit
@@ -15574,11 +15574,11 @@
   - yosys-xilinx
   filepath: robustness-testing-verilog-files/generated/preaddmul_0_stage_signed_18_bit.sv
   inputs: &id180
-  - - d
-    - 18
   - - a
     - 18
   - - b
+    - 18
+  - - d
     - 18
   is_signed: true
   module_name: preaddmul_0_stage_signed_18_bit

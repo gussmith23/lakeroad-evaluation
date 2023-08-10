@@ -152,7 +152,7 @@ def generate_designs(design_dir: Union[str, Path]):
         "submulor": [["a", "b", "c", "d"], ["xilinx"]],
         "addmulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "submulxor": [["a", "b", "c", "d"], ["xilinx"]],
-        "preaddmul": [["d", "a", "b"], ["xilinx"]],
+        "preaddmul": [["a", "b", "d"], ["xilinx"]],
         # "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
         # "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
         # "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],

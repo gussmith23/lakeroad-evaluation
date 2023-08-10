@@ -1,7 +1,7 @@
 (* use_dsp = "yes" *) module preaddmul_3_stage_unsigned_15_bit(
-	input  [14:0] d,
 	input  [14:0] a,
 	input  [14:0] b,
+	input  [14:0] d,
 	output [14:0] out,
 	input clk);
 
