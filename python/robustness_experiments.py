@@ -216,6 +216,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         "MUXF7",
         "MUXF8",
         "MUXF9",
+        "FDRE",
     ]
 
     # Make sure we're aware of all columns that may exist. This is so we're sure
@@ -238,7 +239,6 @@ def _visualize_succeeded_vs_failed_xilinx(
                 "GND",
                 "VCC",
                 "BUFG",
-                "FDRE",
                 "IBUF",
                 "OBUF",
             ]
