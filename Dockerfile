@@ -132,8 +132,10 @@ ADD requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
 
 # Make Python utilities visible.
+# Also make sure we can import simulate_with_verilator.py from Lakeroad's bin/ dir.
+# TODO(@gussmith23): This is a hack. I still don't understand Python imports.
 ADD python/ /root/python/
-ENV PYTHONPATH=/root/python/:${PYTHONPATH}
+ENV PYTHONPATH="/root/python/:/root/lakeroad/bin:${PYTHONPATH}"
 
 # Install Yosys and other OSS hardware tools from prebuilt binaries.
 #
