@@ -2,8 +2,8 @@ name: Run evaluation on Leviathan
 
 on:
   schedule:
-    # 4am PT.
-    - cron: '0 11 * * *'
+    # 1am PT.
+    - cron: '0 8 * * *'
   workflow_dispatch:
 
 jobs:
