@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List, Tuple
 
 
 @dataclass
@@ -11,7 +12,7 @@ class ImplementationAction:
 class Instruction:
     name: str
     bitwidth: int
-    arity: int
+    inputs: List[Tuple[str, int]]
     expr: str
 
 

@@ -21,7 +21,7 @@ def _make_experiment(
         architecture,
         instruction.name,
         instruction.bitwidth,
-        instruction.arity,
+        len(instruction.inputs),
     )
 
     return LakeroadInstructionExperiment(
@@ -44,19 +44,19 @@ def _make_instructions():
                 Instruction(
                     name="shl",
                     bitwidth=bw,
-                    arity=2,
+                    inputs=[("a", bw), ("b", bw)],
                     expr=f"(bvshl (var a {bw}) (var b {bw}))",
                 ),
                 Instruction(
                     name="ashr",
                     bitwidth=bw,
-                    arity=2,
+                    inputs=[("a", bw), ("b", bw)],
                     expr=f"(bvashr (var a {bw}) (var b {bw}))",
                 ),
                 Instruction(
                     name="lshr",
                     bitwidth=bw,
-                    arity=2,
+                    inputs=[("a", bw), ("b", bw)],
                     expr=f"(bvlshr (var a {bw}) (var b {bw}))",
                 ),
             ]:
@@ -70,20 +70,20 @@ def _make_instructions():
                 Instruction(
                     name="shl",
                     bitwidth=bw,
-                    arity=2,
+                    inputs=[("a", bw), ("b", bw)],
                     expr=f"(bvshl (var a {bw}) (var b {bw}))",
                 ),
                 # TODO(@gussmith23): Currently only left shift works on SOFA, oddly.
                 # Instruction(
                 #     name="ashr",
                 #     bitwidth=bw,
-                #     arity=2,
+                #     inputs=[("a", bw), ("b", bw)],
                 #     expr=f"(bvashr (var a {bw}) (var b {bw}))",
                 # ),
                 # Instruction(
                 #     name="lshr",
                 #     bitwidth=bw,
-                #     arity=2,
+                #     inputs=[("a", bw), ("b", bw)],
                 #     expr=f"(bvlshr (var a {bw}) (var b {bw}))",
                 # ),
             ]:
@@ -97,31 +97,31 @@ def _make_instructions():
             Instruction(
                 name="and",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bvand (var a {bw}) (var b {bw}))",
             ),
             Instruction(
                 name="or",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bvor (var a {bw}) (var b {bw}))",
             ),
             Instruction(
                 name="xor",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bvxor (var a {bw}) (var b {bw}))",
             ),
             Instruction(
                 name="not",
                 bitwidth=bw,
-                arity=1,
+                inputs=[("a", bw)],
                 expr=f"(bvnot (var a {bw}))",
             ),
             Instruction(
                 name="mux",
                 bitwidth=bw,
-                arity=3,
+                inputs=[("a", 1), ("b", bw), ("c", bw)],
                 expr=f"(circt-comb-mux (var a 1) (var b {bw}) (var c {bw}))",
             ),
         ]:
@@ -144,13 +144,13 @@ def _make_instructions():
             Instruction(
                 name="add",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bvadd (var a {bw}) (var b {bw}))",
             ),
             Instruction(
                 name="sub",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bvsub (var a {bw}) (var b {bw}))",
             ),
         ]:
@@ -177,37 +177,37 @@ def _make_instructions():
             Instruction(
                 name="eq",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bveq (var a {bw}) (var b {bw})))",
             ),
             Instruction(
                 name="neq",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (not (bveq (var a {bw}) (var b {bw}))))",
             ),
             Instruction(
                 name="ugt",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bvugt (var a {bw}) (var b {bw})))",
             ),
             Instruction(
                 name="ult",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bvult (var a {bw}) (var b {bw})))",
             ),
             Instruction(
                 name="uge",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bvuge (var a {bw}) (var b {bw})))",
             ),
             Instruction(
                 name="ule",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bvule (var a {bw}) (var b {bw})))",
             ),
         ]:
@@ -226,13 +226,13 @@ def _make_instructions():
             Instruction(
                 name="eq",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (bveq (var a {bw}) (var b {bw})))",
             ),
             Instruction(
                 name="neq",
                 bitwidth=bw,
-                arity=2,
+                inputs=[("a", bw), ("b", bw)],
                 expr=f"(bool->bitvector (not (bveq (var a {bw}) (var b {bw}))))",
             ),
         ]:
@@ -250,7 +250,7 @@ def _make_instructions():
                 Instruction(
                     name="mul",
                     bitwidth=bw,
-                    arity=2,
+                    inputs=[("a", bw), ("b", bw)],
                     expr=f"(bvmul (var a {bw}) (var b {bw}))",
                 ),
             ]:
@@ -270,7 +270,7 @@ def _make_instructions():
         #         Instruction(
         #             name="mul",
         #             bitwidth=bw,
-        #             arity=2,
+        #             inputs=[("a", bw), ("b", bw)],
         #             expr=f"(bvmul (var a {bw}) (var b {bw}))",
         #         ),
         #     ]:

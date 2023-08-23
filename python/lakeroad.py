@@ -349,6 +349,7 @@ def task_instruction_experiments(experiments_file: str):
                                 ),
                                 "template": template,
                             },
+                            "inputs": experiment.instruction.inputs,
                         },
                     )
                 ],
