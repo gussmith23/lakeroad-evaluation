@@ -82,7 +82,7 @@ jobs:
           --env LOGLEVEL=INFO \
           --env OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
-          doit --always-execute --continue -n 22
+          doit --always-execute --continue -n 40
 
   send-results-to-slack:
     needs: run-evaluation
