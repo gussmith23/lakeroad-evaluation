@@ -61,6 +61,8 @@ jobs:
           --build-arg MAKE_JOBS=36
 
   run-evaluation:
+    # TODO(@gussmith23): Figure out what's taking so long. (probs Verilator)
+    timeout-minutes: 480
     needs: build-docker-image
     runs-on: [self-hosted, leviathan]
     outputs:
