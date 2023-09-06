@@ -122,10 +122,7 @@ def make_quartus_task(
     identifier: str,
     top_module_name: str,
     source_input_filepath: Union[str, Path],
-    summary_output_filepath: Union[str, Path],
-    json_output_filepath: Union[str, Path],
-    time_output_filepath: Union[str, Path],
-    collected_data_output_filepath: Union[str, Path],
+    base_output_dirpath: Union[str, Path],
     iteration: int,
     task_name: Optional[str] = None,
 ) -> List:
@@ -134,6 +131,15 @@ def make_quartus_task(
     See documentation for `run_quartus` and `collect_quartus` for more details."""
 
     task = {}
+
+    base_output_dirpath = Path(base_output_dirpath)
+
+    summary_output_filepath = base_output_dirpath / f"{top_module_name}.map.summary"
+    json_output_filepath = base_output_dirpath / f"{top_module_name}.map.json"
+    time_output_filepath = base_output_dirpath / f"{top_module_name}.map.time"
+    collected_data_output_filepath = (
+        base_output_dirpath / f"{top_module_name}.map.collected.json"
+    )
 
     if task_name is not None:
         task["name"] = task_name
@@ -172,7 +178,7 @@ def make_quartus_task(
 
     task["file_dep"] = [source_input_filepath]
 
-    return task
+    return (task, (json_output_filepath,))
 
 
 @dataclass

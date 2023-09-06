@@ -1109,24 +1109,24 @@ def task_robustness_experiments(skip_verilator: bool):
             yield task
             lattice_collected_data_output_filepaths.append(json_filepath)
 
-        # if "intel" in backends:
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "quartus_intel"
-        #     )
-        #     yield quartus.make_quartus_task(
-        #         identifier = entry["module_name"],
-        #         top_module_name = entry["module_name"],
-        #         source_input_filepath = utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         summary_output_filepath = base_path / "summary.map.summary",
-        #         json_output_filepath = base_path / f"{entry['module_name']}_resource_utilization.json",
-        #         time_output_filepath = base_path / "out.time",
-        #         collected_data_output_filepath = base_path / "collected_data.json",
-        #         iteration = 0,
-        #         task_name = f"{entry['module_name']}:quartus_intel"
-        #     )
+        if "intel" in backends:
+            base_path = (
+                utils.output_dir()
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "quartus_intel"
+            )
+            (task, _) = quartus.make_quartus_task(
+                identifier=entry["module_name"],
+                top_module_name=entry["module_name"],
+                source_input_filepath=(
+                    utils.lakeroad_evaluation_dir() / entry["filepath"]
+                ),
+                base_output_dirpath=base_path,
+                iteration=0,
+                task_name=f"{entry['module_name']}:quartus_intel",
+            )
+            yield task
         #     base_path = (
         #         utils.output_dir()
         #         / "robustness_experiments"
