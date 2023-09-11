@@ -1,3 +1,4 @@
+import shutil
 import utils
 from dataclasses import dataclass
 import dataclasses
@@ -18,6 +19,9 @@ def run_quartus(
     summary_output_filepath: Union[str, Path],
     json_output_filepath: Union[str, Path],
     time_output_filepath: Union[str, Path],
+    verilog_output_filepath: Union[str, Path],
+    working_directory: Union[str, Path] = Path(tempfile.TemporaryDirectory().name),
+    extra_summary_fields: Dict[str, Any] = {},
 ):
     """Run Quartus on a design, generate a summary report.
 
@@ -27,54 +31,75 @@ def run_quartus(
         summary_output_filepath (Union[str, Path]): Quartus summary file.
         json_output_filepath (Union[str, Path]): Summary file, parsed into JSON.
         time_output_filepath (Union[str, Path]): Time file.
+        working_directory (Union[str, Path], optional): Working directory for
+          Quartus. Defaults to temp dir. Quartus is weird: it produces
+          intermediate files that are needed by multiple commands, so working
+          directory ends up being important.
     """
     summary_output_filepath = Path(summary_output_filepath)
     json_output_filepath = Path(json_output_filepath)
     time_output_filepath = Path(time_output_filepath)
+    verilog_output_filepath = Path(verilog_output_filepath)
 
     # Assumes that Quartus is on the PATH. Could make this an argument if we
     # want to be able to configure the location of Quartus.
     quartus_bin = "quartus_map"
 
-    with tempfile.TemporaryDirectory() as temp_dir_str:
-        temp_dir = Path(temp_dir_str)
-        start = time.time()
-        subprocess.run(
-            args=[
-                quartus_bin,
-                top_module_name,
-                "--source",
-                source_input_filepath,
-            ],
-            cwd=temp_dir,
-            # Error if Quartus fails and capture the output (and thus don't
-            # print to stdout/stderr). These can be handled more gracefully
-            # (i.e. catching the exception, printing stderr) if needed.
-            check=True,
-            capture_output=True,
-        )
-        end = time.time()
+    temp_dir = Path(working_directory)
+    temp_dir.mkdir(parents=True, exist_ok=True)
 
-        # Copy summary file over.
-        summary_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-        summary_output_filepath.write_bytes(
-            (temp_dir / f"{top_module_name}.map.summary").read_bytes()
-        )
+    # Filepath where we'll write the "VQM" file. This file is just Verilog from
+    # what I can tell.
+    vqm_file = tempfile.NamedTemporaryFile(suffix=".vqm", dir=temp_dir)
 
-    # Write time file.
-    time_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    with open(time_output_filepath, "w") as f:
-        print(f"{end-start}s", file=f)
+    start = time.time()
+    subprocess.run(
+        args=[
+            quartus_bin,
+            top_module_name,
+            "--source",
+            source_input_filepath,
+        ],
+        cwd=temp_dir,
+        # Error if Quartus fails and capture the output (and thus don't
+        # print to stdout/stderr). These can be handled more gracefully
+        # (i.e. catching the exception, printing stderr) if needed.
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        args=[
+            "quartus_cdb",
+            top_module_name,
+            f"--vqm={Path(vqm_file.name).stem}",
+        ],
+        cwd=temp_dir,
+        check=True,
+        capture_output=True,
+    )
+    end = time.time()
 
-    # Write out JSON file with results.
+    # Copy Verilog file over.
+    verilog_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(vqm_file.name, verilog_output_filepath)
+
+    # Generate summary JSON.
+    summary = hardware_compilation.count_resources_in_verilog_src(
+        verilog_src=verilog_output_filepath.read_text(),
+        module_name=top_module_name,
+    )
+
+    summary["time_s"] = end - start
+
+    for key in extra_summary_fields:
+        assert key not in summary
+        summary[key] = extra_summary_fields[key]
+
     json_output_filepath.parent.mkdir(parents=True, exist_ok=True)
-    with open(json_output_filepath, "w") as f:
-        json.dump(
-            dataclasses.asdict(
-                parse_quartus_map_summary(summary_output_filepath.read_text())
-            ),
-            f,
-        )
+    json.dump(
+        summary,
+        fp=open(json_output_filepath, "w"),
+    )
 
 
 def collect_quartus(
@@ -125,6 +150,8 @@ def make_quartus_task(
     base_output_dirpath: Union[str, Path],
     iteration: int,
     task_name: Optional[str] = None,
+    working_directory=None,
+    extra_summary_fields: Dict[str, Any] = {},
 ) -> List:
     """Generate tasks for Quartus.
 
@@ -140,32 +167,29 @@ def make_quartus_task(
     collected_data_output_filepath = (
         base_output_dirpath / f"{top_module_name}.map.collected.json"
     )
+    verilog_output_filepath = base_output_dirpath / f"{top_module_name}.v"
 
     if task_name is not None:
         task["name"] = task_name
+
+    run_quartus_args = {
+        "top_module_name": top_module_name,
+        "source_input_filepath": source_input_filepath,
+        "summary_output_filepath": summary_output_filepath,
+        "json_output_filepath": json_output_filepath,
+        "time_output_filepath": time_output_filepath,
+        "verilog_output_filepath": verilog_output_filepath,
+        "extra_summary_fields": extra_summary_fields,
+    }
+
+    if working_directory is not None:
+        run_quartus_args["working_directory"] = working_directory
 
     task["actions"] = [
         (
             run_quartus,
             [],
-            {
-                "top_module_name": top_module_name,
-                "source_input_filepath": source_input_filepath,
-                "summary_output_filepath": summary_output_filepath,
-                "json_output_filepath": json_output_filepath,
-                "time_output_filepath": time_output_filepath,
-            },
-        ),
-        (
-            collect_quartus,
-            [],
-            {
-                "iteration": iteration,
-                "json_input_filepath": json_output_filepath,
-                "time_input_filepath": time_output_filepath,
-                "collected_data_output_filepath": collected_data_output_filepath,
-                "identifier": identifier,
-            },
+            run_quartus_args,
         ),
     ]
 
@@ -174,11 +198,12 @@ def make_quartus_task(
         json_output_filepath,
         time_output_filepath,
         collected_data_output_filepath,
+        verilog_output_filepath,
     ]
 
     task["file_dep"] = [source_input_filepath]
 
-    return (task, (json_output_filepath,))
+    return (task, (json_output_filepath, verilog_output_filepath))
 
 
 @dataclass

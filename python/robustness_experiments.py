@@ -1125,6 +1125,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 base_output_dirpath=base_path,
                 iteration=0,
                 task_name=f"{entry['module_name']}:quartus_intel",
+                working_directory=base_path,
             )
             yield task
         #     base_path = (
