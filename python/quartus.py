@@ -22,6 +22,7 @@ def run_quartus(
     verilog_output_filepath: Union[str, Path],
     working_directory: Union[str, Path] = Path(tempfile.TemporaryDirectory().name),
     extra_summary_fields: Dict[str, Any] = {},
+    family: str = "cyclonev",
 ):
     """Run Quartus on a design, generate a summary report.
 
@@ -59,6 +60,7 @@ def run_quartus(
             top_module_name,
             "--source",
             source_input_filepath,
+            f"--family={family}",
         ],
         cwd=temp_dir,
         # Error if Quartus fails and capture the output (and thus don't
@@ -89,7 +91,11 @@ def run_quartus(
         module_name=top_module_name,
     )
 
+    assert "time_s" not in summary
     summary["time_s"] = end - start
+
+    assert "family" not in summary
+    summary["family"] = family
 
     for key in extra_summary_fields:
         assert key not in summary
@@ -102,47 +108,6 @@ def run_quartus(
     )
 
 
-def collect_quartus(
-    identifier: str,
-    iteration: int,
-    time_input_filepath: Union[str, Path],
-    json_input_filepath: Union[str, Path],
-    collected_data_output_filepath: Union[str, Path],
-):
-    """_summary_
-
-    Args:
-        identifier (str): Identifier for the module being compiled.
-        iteration (int): _description_
-        time_input_filepath (Union[str, Path]): _description_
-        json_input_filepath (Union[str, Path]): _description_
-        collected_data_output_filepath (Union[str, Path]): _description_
-    """
-    with open(json_input_filepath, "r") as f:
-        data = json.load(f)
-    with open(time_input_filepath, "r") as f:
-        time = float(f.read().removesuffix("s\n"))
-
-    assert "time_s" not in data
-    data["time_s"] = time
-
-    assert "iteration" not in data
-    data["iteration"] = iteration
-
-    assert "tool" not in data
-    data["tool"] = "quartus"
-
-    assert "architecture" not in data
-    data["architecture"] = "intel"
-
-    assert "identifier" not in data
-    data["identifier"] = identifier
-
-    Path(collected_data_output_filepath).parent.mkdir(parents=True, exist_ok=True)
-    with open(collected_data_output_filepath, "w") as f:
-        json.dump(data, f)
-
-
 def make_quartus_task(
     identifier: str,
     top_module_name: str,
@@ -152,6 +117,7 @@ def make_quartus_task(
     task_name: Optional[str] = None,
     working_directory=None,
     extra_summary_fields: Dict[str, Any] = {},
+    family: Optional[str] = None,
 ) -> List:
     """Generate tasks for Quartus.
 
@@ -184,6 +150,9 @@ def make_quartus_task(
 
     if working_directory is not None:
         run_quartus_args["working_directory"] = working_directory
+
+    if family is not None:
+        run_quartus_args["family"] = family
 
     task["actions"] = [
         (

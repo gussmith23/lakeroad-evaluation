@@ -1110,6 +1110,14 @@ def task_robustness_experiments(skip_verilator: bool):
             lattice_collected_data_output_filepaths.append(json_filepath)
 
         if "intel" in backends:
+            intel_familes = utils.get_manifest()["completeness_experiments"]["intel"][
+                "families"
+            ]
+            # Easy to update; just make this a loop over the families, if this
+            # is needed in the future.
+            assert len(intel_familes) == 1, "Only one intel family is supported for now"
+            family = intel_familes[0]
+
             base_path = (
                 utils.output_dir()
                 / "robustness_experiments"
@@ -1126,6 +1134,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 iteration=0,
                 task_name=f"{entry['module_name']}:quartus_intel",
                 working_directory=base_path,
+                family=family,
             )
             yield task
         #     base_path = (
