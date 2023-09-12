@@ -1116,27 +1116,41 @@ def task_robustness_experiments(skip_verilator: bool):
             # Easy to update; just make this a loop over the families, if this
             # is needed in the future.
             assert len(intel_familes) == 1, "Only one intel family is supported for now"
-            family = intel_familes[0]
+            family = quartus.IntelFamily.from_str(intel_familes[0])
 
-            base_path = (
-                utils.output_dir()
-                / "robustness_experiments"
-                / entry["module_name"]
-                / "quartus_intel"
-            )
             (task, _) = quartus.make_quartus_task(
                 identifier=entry["module_name"],
                 top_module_name=entry["module_name"],
                 source_input_filepath=(
                     utils.lakeroad_evaluation_dir() / entry["filepath"]
                 ),
-                base_output_dirpath=base_path,
+                base_output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "quartus_intel"
+                ),
                 iteration=0,
                 task_name=f"{entry['module_name']}:quartus_intel",
                 working_directory=base_path,
                 family=family,
             )
             yield task
+
+            (task, _) = hardware_compilation.make_intel_yosys_synthesis_task(
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "yosys_intel"
+                ),
+                module_name=entry["module_name"],
+                family=family,
+                name=f"{entry['module_name']}:yosys_intel",
+            )
+            yield task
+
         #     base_path = (
         #         utils.output_dir()
         #         / "robustness_experiments"

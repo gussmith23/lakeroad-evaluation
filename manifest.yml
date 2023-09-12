@@ -25,5 +25,6 @@ completeness_experiments:
     verilator_simulation_iterations: 2500
 
   intel:
-    # FPGA families to synthesize for.
-    families: [cyclonev]
+    # FPGA families to synthesize for. See IntelFamily.from_str for the
+    # available families.
+    families: [cycloneiv]
