@@ -10,7 +10,8 @@ import time
 import hardware_compilation
 
 
-class IntelFamily(enum.StrEnum):
+# TODO(@gussmith23): Use StrEnum in later Python versions.
+class IntelFamily(enum.Enum):
     def from_str(v):
         match v:
             case "cyclonev" | IntelFamily.CYCLONEV:
