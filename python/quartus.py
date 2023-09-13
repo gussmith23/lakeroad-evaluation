@@ -5,13 +5,13 @@ import json
 from pathlib import Path
 import subprocess
 import tempfile
-from typing import Dict, List, Optional, Self, Union, Any
+from typing import Dict, List, Optional, Union, Any
 import time
 import hardware_compilation
 
 
 class IntelFamily(enum.StrEnum):
-    def from_str(v) -> Self:
+    def from_str(v):
         match v:
             case "cyclonev" | IntelFamily.CYCLONEV:
                 return IntelFamily.CYCLONEV
