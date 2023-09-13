@@ -1,4 +1,4 @@
-from enum import Enum
+import enum
 import shutil
 from dataclasses import dataclass
 import json
@@ -10,12 +10,12 @@ import time
 import hardware_compilation
 
 
-class IntelFamily(Enum):
+class IntelFamily(enum.StrEnum):
     def from_str(v) -> Self:
         match v:
-            case "cyclonev":
+            case "cyclonev" | IntelFamily.CYCLONEV:
                 return IntelFamily.CYCLONEV
-            case "cycloneiv":
+            case "cycloneiv" | IntelFamily.CYCLONEIV:
                 return IntelFamily.CYCLONEIV
             case _:
                 raise ValueError(f"Unknown family: {v}")
@@ -111,9 +111,6 @@ def run_quartus(
 
     assert "time_s" not in summary
     summary["time_s"] = end - start
-
-    assert "family" not in summary
-    summary["family"] = family_str
 
     for key in extra_summary_fields:
         assert key not in summary

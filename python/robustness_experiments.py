@@ -1139,6 +1139,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "identifier": entry["module_name"],
                     "architecture": "intel",
                     "tool": "quartus",
+                    "family": str(family),
                 },
             )
             yield task
@@ -1162,6 +1163,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "identifier": entry["module_name"],
                     "architecture": "intel",
                     "tool": "yosys",
+                    "family": str(family),
                 },
             )
             yield task
