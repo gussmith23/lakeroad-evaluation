@@ -847,6 +847,7 @@ def task_robustness_experiments(skip_verilator: bool):
     # .json file that contains metadata is produced for each entry's synthesis.
     xilinx_collected_data_output_filepaths = []
     lattice_collected_data_output_filepaths = []
+    intel_collected_data_output_filepaths = []
 
     # determines if the compiler fails for the workload we're looking at
     def contains_compiler_fail(entry, tool_name):
@@ -1118,7 +1119,7 @@ def task_robustness_experiments(skip_verilator: bool):
             assert len(intel_familes) == 1, "Only one intel family is supported for now"
             family = quartus.IntelFamily.from_str(intel_familes[0])
 
-            (task, _) = quartus.make_quartus_task(
+            (task, (json_filepath, _)) = quartus.make_quartus_task(
                 identifier=entry["module_name"],
                 top_module_name=entry["module_name"],
                 source_input_filepath=(
@@ -1134,10 +1135,19 @@ def task_robustness_experiments(skip_verilator: bool):
                 task_name=f"{entry['module_name']}:quartus_intel",
                 working_directory=base_path,
                 family=family,
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "quartus",
+                },
             )
             yield task
+            intel_collected_data_output_filepaths.append(json_filepath)
 
-            (task, _) = hardware_compilation.make_intel_yosys_synthesis_task(
+            (
+                task,
+                (json_filepath, _, _),
+            ) = hardware_compilation.make_intel_yosys_synthesis_task(
                 input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=(
                     utils.output_dir()
@@ -1148,8 +1158,14 @@ def task_robustness_experiments(skip_verilator: bool):
                 module_name=entry["module_name"],
                 family=family,
                 name=f"{entry['module_name']}:yosys_intel",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "yosys",
+                },
             )
             yield task
+            intel_collected_data_output_filepaths.append(json_filepath)
 
         #     base_path = (
         #         utils.output_dir()
@@ -1287,6 +1303,29 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "filepaths": lattice_collected_data_output_filepaths,
                     "output_filepath": lattice_csv_output,
+                },
+            )
+        ],
+    }
+
+    intel_csv_output = (
+        utils.output_dir()
+        / "robustness_experiments_csv"
+        / "all_results"
+        / "all_intel_results_collected.csv"
+    )
+    yield {
+        "name": "collect_intel_data",
+        # To generate the CSV with incomplete data, you can comment out the following line.
+        "file_dep": intel_collected_data_output_filepaths,
+        "targets": [intel_csv_output],
+        "actions": [
+            (
+                _collect_robustness_benchmark_data,
+                [],
+                {
+                    "filepaths": intel_collected_data_output_filepaths,
+                    "output_filepath": intel_csv_output,
                 },
             )
         ],
