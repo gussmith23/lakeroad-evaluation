@@ -23,3 +23,8 @@ completeness_experiments:
     # issue with Lattice an unoptimizable signals -- you can try compiling w/o
     # ignoring the UNOPTIMIZABLE warning from Verilator.
     verilator_simulation_iterations: 2500
+
+  intel:
+    # FPGA families to synthesize for. See IntelFamily.from_str for the
+    # available families.
+    families: [cycloneiv]
