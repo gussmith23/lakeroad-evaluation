@@ -928,6 +928,7 @@
 - backends: &id013
   - xilinx
   - lattice
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -1964,6 +1965,7 @@
 - backends: &id025
   - xilinx
   - lattice
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -2999,6 +3001,7 @@
   xor_reduction: false
 - backends: &id037
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -4056,6 +4059,7 @@
   xor_reduction: false
 - backends: &id049
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -5113,6 +5117,7 @@
   xor_reduction: false
 - backends: &id061
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -6170,6 +6175,7 @@
   xor_reduction: false
 - backends: &id073
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -7227,6 +7233,7 @@
   xor_reduction: false
 - backends: &id085
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -8284,6 +8291,7 @@
   xor_reduction: false
 - backends: &id097
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -9341,6 +9349,7 @@
   xor_reduction: false
 - backends: &id109
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -10401,6 +10410,7 @@
   xor_reduction: false
 - backends: &id121
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -11458,6 +11468,7 @@
   xor_reduction: false
 - backends: &id133
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -12515,6 +12526,7 @@
   xor_reduction: false
 - backends: &id145
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -13572,6 +13584,7 @@
   xor_reduction: false
 - backends: &id157
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -14629,6 +14642,7 @@
   xor_reduction: false
 - backends: &id169
   - xilinx
+  - intel
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -15664,6 +15678,7 @@
   xor_reduction: false
 - backends: &id181
   - lattice
+  - intel
   bitwidth: 8
   expect_fail: []
   filepath: robustness-testing-verilog-files/generated/muland_0_stage_signed_8_bit.sv
@@ -16611,6 +16626,7 @@
   xor_reduction: false
 - backends: &id193
   - lattice
+  - intel
   bitwidth: 8
   expect_fail: []
   filepath: robustness-testing-verilog-files/generated/mulor_0_stage_signed_8_bit.sv
@@ -17558,6 +17574,7 @@
   xor_reduction: false
 - backends: &id205
   - lattice
+  - intel
   bitwidth: 8
   expect_fail: []
   filepath: robustness-testing-verilog-files/generated/mulxor_0_stage_signed_8_bit.sv
