@@ -40,7 +40,7 @@ jobs:
       run: |
         cd lakeroad
         git submodule init
-        git submodule update f4pga-arch-defs/ Nitro-Parts-lib-Xilinx/ skywater-pdk-libs-sky130_fd_sc_hd/ SOFA/ verilator-unisims/ verilator_xilinx/ rosette/
+        git submodule update rosette/ lakeroad-private/
 
     - name: Generate Docker image tag
       id: generate-tag
