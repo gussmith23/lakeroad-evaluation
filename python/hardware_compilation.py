@@ -1047,6 +1047,8 @@ def make_intel_yosys_synthesis_task(
             synth_command = "synth_intel_alm -family cyclonev"
         case IntelFamily.CYCLONEIV:
             synth_command = "synth_intel -family cycloneiv"
+        case IntelFamily.CYCLONE10LP:
+            synth_command = "synth_intel -family cyclone10lp"
         case _:
             raise NotImplementedError(f"Family {family} not implemented.")
 
