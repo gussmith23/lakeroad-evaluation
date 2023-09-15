@@ -21,6 +21,10 @@ class IntelFamily(enum.Enum):
             case _:
                 raise ValueError(f"Unknown family: {v}")
 
+    def __str__(self) -> str:
+        assert isinstance(self.value, str)
+        return self.value
+
     CYCLONEV = "Cyclone V"
     CYCLONEIV = "Cyclone IV"
 
