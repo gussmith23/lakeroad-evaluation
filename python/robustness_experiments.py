@@ -1065,7 +1065,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             (
                 task,
-                (json_filepath,),
+                (json_filepath, diamond_output_verilog),
             ) = hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
                 input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
                 output_dirpath=base_path,
@@ -1088,7 +1088,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     # wouldn't create a Verilator task.
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
-                    test_module_filepath=lakeroad_output_verilog,
+                    test_module_filepath=diamond_output_verilog,
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
@@ -1107,6 +1107,8 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-TIMESCALEMOD",
                         "-Wno-UNOPTFLAT",
                         "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-COMBDLY"
                     ],
                     max_num_tests=utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
