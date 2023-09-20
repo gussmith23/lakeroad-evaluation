@@ -1169,73 +1169,68 @@ def task_robustness_experiments(skip_verilator: bool):
             yield task
             intel_collected_data_output_filepaths.append(json_filepath)
 
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "lakeroad_intel"
-        #     )
-        #     # TODO(@vcanumalla): Add rest of quartus (yosys)
-        #     yield lakeroad.make_lakeroad_task(
-        #         iteration=0,
-        #         identifier=entry["module_name"],
-        #         collected_data_output_filepath=base_path / "collected_data.json",
-        #         template="dsp",
-        #         out_module_name="output",
-        #         out_filepath=base_path / "output.v",
-        #         architecture="intel",
-        #         time_filepath=base_path / "out.time",
-        #         json_filepath=base_path / "out.json",
-        #         verilog_module_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         top_module_name=entry["module_name"],
-        #         clock_name=("clk" if entry["stages"] != 0 else None),,
-        #         name=entry["module_name"] + ":lakeroad-intel",
-        #         initiation_interval=entry["stages"],
-        #         inputs=entry["inputs"],
-        #         verilog_module_out_signal=("out", entry["bitwidth"]),
-        #     )
-        #     yield {
-        #         "name": f"{entry['module_name']}:lakeroad-intel:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": base_path
-        #                     / "collected_data.json",
-        #                     "module_name": entry["module_name"],
-        #                     "tool_name": "lakeroad-intel",
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [base_path / "collected_data.json"],
-        #     }
-        #     yield quartus.make_intel_yosys_synthesis_task(
-        #         input_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         output_dirpath=(
-        #             utils.output_dir()
-        #             / "robustness_experiments"
-        #             / entry["module_name"]
-        #             / "yosys_intel"
-        #         ),
-        #         module_name=entry["module_name"],
-        #         name=f"{entry['module_name']}:yosys_intel",
+            (
+                task,
+                (json_filepath, verilog_filepath, _),
+            ) = lakeroad.make_lakeroad_task(
+                out_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "lakeroad_intel"
+                ),
+                template="dsp",
+                out_module_name="output",
+                architecture="intel-cyclone10lp",
+                verilog_module_filepath=(
+                    utils.lakeroad_evaluation_dir() / entry["filepath"]
+                ),
+                top_module_name=entry["module_name"],
+                clock_name=("clk" if entry["stages"] != 0 else None),
+                name=entry["module_name"] + ":lakeroad_intel",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+            )
+            yield task
 
-        #     )
-        #     yield {
-        #         "name": f"{entry['module_name']}:yosys_intel:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": resources_filepath,
-        #                     "module_name": entry["module_name"],
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [resources_filepath],
-        #     }
+            intel_collected_data_output_filepaths.append(json_filepath)
+
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    name=f"{entry['module_name']}:lakeroad_intel:verilator",
+                    # TODO(@gussmith23): Ideally, we wouldn't need this flag --
+                    # instead, we would know when Lakeroad was going to fail and we
+                    # wouldn't create a Verilator task.
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=(
+                        utils.output_dir()
+                        / "robustness_experiments"
+                        / entry["module_name"]
+                        / "lakeroad_intel"
+                        / "verilator"
+                    ),
+                    test_module_filepath=verilog_filepath,
+                    ground_truth_module_filepath=(
+                        utils.lakeroad_evaluation_dir() / entry["filepath"]
+                    ),
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    output_signal="out",
+                    include_dirs=[
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "intel_cyclone10lp"
+                    ],
+                    extra_args=[],
+                    max_num_tests=utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["verilator_simulation_iterations"],
+                    alternative_file_dep=json_filepath,
+                )[0]
+
     base_path = utils.output_dir() / "robustness_experiments_csv"
     xilinx_csv_output = base_path / "all_results" / "all_xilinx_results_collected.csv"
     yield {
