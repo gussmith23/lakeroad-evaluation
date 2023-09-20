@@ -1111,13 +1111,14 @@ def task_robustness_experiments(skip_verilator: bool):
             lattice_collected_data_output_filepaths.append(json_filepath)
 
         if "intel" in backends:
-            intel_familes = utils.get_manifest()["completeness_experiments"]["intel"][
+            intel_families = utils.get_manifest()["completeness_experiments"]["intel"][
                 "families"
             ]
             # Easy to update; just make this a loop over the families, if this
             # is needed in the future.
-            assert len(intel_familes) == 1, "Only one intel family is supported for now"
-            family = quartus.IntelFamily.from_str(intel_familes[0])
+            assert len(intel_families) == 1, "Only one intel family is supported for now"
+            assert intel_families[0] == quartus.IntelFamily.Cyclone10LP
+            family = intel_families[0]
 
             (task, (json_filepath, _)) = quartus.make_quartus_task(
                 identifier=entry["module_name"],
@@ -1191,6 +1192,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "lakeroad",
+                },
             )
             yield task
 
