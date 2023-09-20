@@ -1224,7 +1224,13 @@ def task_robustness_experiments(skip_verilator: bool):
                         / "lakeroad-private"
                         / "intel_cyclone10lp"
                     ],
-                    extra_args=[],
+                    extra_args=[
+                        "-Wno-LATCH",
+                        "-Wno-INITIALDLY",
+                        "-Wno-COMBDLY",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-WIDTH",
+                    ],
                     max_num_tests=utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
                     ]["verilator_simulation_iterations"],
