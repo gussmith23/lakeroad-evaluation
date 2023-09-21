@@ -821,7 +821,7 @@ def _visualize_succeeded_vs_failed_intel(
     suc_v_unsuc["percentage_lr_timeout"] = (
         suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
     ) * 100
-    
+
     # Write out plot data to a CSV.
     Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
     suc_v_unsuc.to_csv(plot_csv_filepath)
