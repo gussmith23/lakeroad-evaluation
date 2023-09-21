@@ -951,7 +951,10 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     output_signal="out",
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2"
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "DSP48E2"
                     ],
                     extra_args=[
                         "-DXIL_XECLIB",
@@ -1069,6 +1072,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     output_signal="out",
                     include_dirs=[
                         utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "lattice_ecp5"
                     ],
