@@ -394,7 +394,7 @@ def _visualize_succeeded_vs_failed_lattice(
         elif t == "yosys":
             return "Yosys"
         else:
-            return t
+            raise NotImplementedError()
 
     suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
     # Sanity check.
@@ -582,7 +582,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         elif t == "yosys":
             return "Yosys"
         else:
-            return t
+            raise NotImplementedError()
 
     suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
 
