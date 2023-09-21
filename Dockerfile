@@ -93,30 +93,6 @@ RUN mkdir -p /root/.local/bin \
   && chmod +x /root/.local/bin/lit
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Build CIRCT/MLIR.
-# Disabled for now, as we're not using MLIR yet. The build is slow.
-# WORKDIR /root
-# ARG MAKE_JOBS=2
-# ADD circt/ circt/
-# RUN cd circt \
-#   && mkdir llvm/build \
-#   && cd llvm/build \
-#   && cmake -G Ninja ../llvm \
-#   -DLLVM_ENABLE_PROJECTS="mlir" \
-#   -DLLVM_TARGETS_TO_BUILD="host" \
-#   -DLLVM_ENABLE_ASSERTIONS=ON \
-#   -DCMAKE_BUILD_TYPE=DEBUG \
-#   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-#   && ninja -j${MAKE_JOBS} \
-#   && cd ../.. \
-#   && mkdir build && cd build && cmake -G Ninja .. \
-#   -DMLIR_DIR=$PWD/../llvm/build/lib/cmake/mlir \
-#   -DLLVM_DIR=$PWD/../llvm/build/lib/cmake/llvm \
-#   -DLLVM_ENABLE_ASSERTIONS=ON \
-#   -DCMAKE_BUILD_TYPE=DEBUG \
-#   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-#   && ninja -j${MAKE_JOBS}
-
 # Build and install latest boolector.
 WORKDIR /root
 RUN git clone https://github.com/boolector/boolector \
