@@ -654,6 +654,216 @@ def _visualize_succeeded_vs_failed_xilinx(
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
+def _visualize_succeeded_vs_failed_intel(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
+    # Note, we fill NaNs with 0.
+    df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Resources we care about: things that do computation
+    # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
+    COMPUTATION_PRIMITIVES = [
+        "cyclone10lp_mac_mult",
+        "cyclone10lp_mac_out",
+        "cyclone10lp_lcell_comb",
+        "dffeas",
+    ]
+
+    # Make sure we're aware of all columns that may exist. This is so we're sure
+    # that we're not forgetting to take some columns into account.
+    assert set(df.columns).issubset(
+        set(
+            COMPUTATION_PRIMITIVES
+            + [
+                # Columns we added.
+                "time_s",
+                "identifier",
+                "architecture",
+                "tool",
+                "family",
+                "returncode",
+                "lakeroad_synthesis_success",
+                "lakeroad_synthesis_timeout",
+                "lakeroad_synthesis_failure",
+            ]
+        )
+    )
+
+    # Column which checks whether the experiment uses one DSP and no other
+    # computational units.
+    #
+    # For Intel, we define this as one mac_mult and 0 or 1 mac_outs.
+    # This column is false if there are any `dffeas` (register) primitives, as
+    # all tested workloads can use the registers on the `mac` primitives.
+    df["only_use_one_dsp"] = (
+        # if tool==Lakeroad, check that that Lakeroad succeeded.
+        (~(df["tool"] == "lakeroad") | (df["lakeroad_synthesis_success"] == True))
+        # Uses exactly one mac mult. Should this be <= 1?
+        & (df["cyclone10lp_mac_mult"] == 1)
+        # Uses 0 or 1 mac outs.
+        & (df["cyclone10lp_mac_out"] <= 1)
+        # Whether the number of computation primitives that aren't
+        # mac_mult/mac_out is 0.
+        & (
+            sum(
+                # A list of the columns containing the primitive counts for
+                # primitives that aren't mac_mult/mac_out.
+                map(
+                    lambda col: df.get(col, 0),
+                    list(
+                        set(COMPUTATION_PRIMITIVES)
+                        - set(
+                            [
+                                "cyclone10lp_mac_mult",
+                                "cyclone10lp_mac_out",
+                            ]
+                        )
+                    ),
+                )
+            )
+            == 0
+        )
+    )
+
+    # Filter out 3-stage workloads.
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+
+    # Write out the cleaned data.
+    Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cleaned_data_filepath)
+
+    ## Make a new table which will underlie the output figure.
+
+    # Tool column simply contains the tools we're interested in.
+    suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "quartus", "yosys"]})
+
+    # Number of experiments run for each tool.
+    suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
+        lambda t: (df["tool"] == t).sum()
+    )
+
+    # Number of "successful" experiments for each tool, i.e. experiments where
+    # the tool could map the design to a single DSP (determined by the column we
+    # created above).
+    suc_v_unsuc["num_successful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & df["only_use_one_dsp"]).sum()
+    )
+
+    # Number of "unsuccessful" experiments for each tool. We ignore Lakeroad,
+    # because we'll calculate different successful/unsuccessful columns for
+    # Lakeroad. (We split Lakeroad's unsuccessful experiments into unsat and
+    # timeout.)
+    suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+        if t != "lakeroad"
+        else 0
+    )
+
+    # Lakeroad unsuccessful columns.
+    suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_failure"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+    suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_timeout"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+
+    def match(t):
+        if t == "lakeroad":
+            return "Anaxi"
+        elif t == "quartus":
+            return "SOTA Intel"
+        elif t == "yosys":
+            return "Yosys"
+        else:
+            raise NotImplementedError()
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
+    # Sanity check.
+    assert suc_v_unsuc["num_experiments"].equals(
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+
+    # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and
+    # lakeroad_timeout experiments for each tool.
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    
+    # Write out plot data to a CSV.
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
+
+    # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(20, 6))
+    ax = plt.subplot(gs[0])
+    ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+            "percentage_lr_unsat",
+        ],
+        color=["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"],
+        stacked=True,
+        rot=0,
+        xlabel="Tool",
+        ylabel="Percentage (%)",
+    )
+
+    # set timeout bar to be red
+    plt.title("Intel Cyclone 10 LP", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+
+    # # Save the plot to the specified output filepath.
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    # ax.get_figure().savefig(plot_output_filepath)
+    # set legend location
+    ax.legend(loc="upper right", labels=["succeeded", "failed"], fontsize=7)
+    # ax.get_legend().legendHandles[2].set_color("red")
+    # raise Exception(print(ax.get_legend().legendHandles[2]))
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
+
+
 def _collect_robustness_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
@@ -1429,5 +1639,39 @@ def task_robustness_experiments(skip_verilator: bool):
                     ),
                 },
             ),
+        ],
+    }
+
+    intel_plot_output_filepath = (
+        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.png"
+    )
+    intel_cleaned_data_filepath = (
+        utils.output_dir()
+        / "robustness_experiments_csv"
+        / "all_results"
+        / "all_intel_results_collected_cleaned.csv"
+    )
+    intel_plot_csv_filepath = (
+        utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv"
+    )
+    yield {
+        "name": "visualize_succeeded_vs_failed_intel",
+        "file_dep": [intel_csv_output],
+        "actions": [
+            (
+                _visualize_succeeded_vs_failed_intel,
+                [],
+                {
+                    "csv_filepath": intel_csv_output,
+                    "plot_output_filepath": intel_plot_output_filepath,
+                    "cleaned_data_filepath": intel_cleaned_data_filepath,
+                    "plot_csv_filepath": intel_plot_csv_filepath,
+                },
+            )
+        ],
+        "targets": [
+            intel_plot_output_filepath,
+            intel_cleaned_data_filepath,
+            intel_plot_csv_filepath,
         ],
     }
