@@ -1116,9 +1116,11 @@ def task_robustness_experiments(skip_verilator: bool):
             ]
             # Easy to update; just make this a loop over the families, if this
             # is needed in the future.
-            assert len(intel_families) == 1, "Only one intel family is supported for now"
-            assert intel_families[0] == quartus.IntelFamily.Cyclone10LP
-            family = intel_families[0]
+            assert (
+                len(intel_families) == 1
+            ), "Only one intel family is supported for now"
+            family = quartus.IntelFamily.from_str(intel_families[0])
+            assert family == quartus.IntelFamily.CYCLONE10LP
 
             (task, (json_filepath, _)) = quartus.make_quartus_task(
                 identifier=entry["module_name"],
@@ -1196,6 +1198,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "identifier": entry["module_name"],
                     "architecture": "intel",
                     "tool": "lakeroad",
+                    "family": str(family),
                 },
             )
             yield task
