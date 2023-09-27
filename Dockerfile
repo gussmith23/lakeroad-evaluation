@@ -168,16 +168,10 @@ ENV PATH="/root/bitwuzla/build/src/main/:${PATH}"
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
 WORKDIR /root
-ADD lakeroad/rosette/ rosette/
 RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
-  # For now, we use a custom Rosette install; see below.
-  # rosette \
-  yaml \
-  # Install Rosette from submodule. Check that it exists first.
-  && [ "$(ls --almost-all /root/rosette)" ] \
-  && cd /root/rosette \
-  && raco pkg install --deps search-auto --batch
+  rosette \
+  yaml
 
 # Install Rust.
 WORKDIR /root
