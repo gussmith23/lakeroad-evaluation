@@ -40,7 +40,7 @@ jobs:
       run: |
         cd lakeroad
         git submodule init
-        git submodule update rosette/ lakeroad-private/
+        git submodule update bitwuzla/ lakeroad-private/
 
     - name: Generate Docker image tag
       id: generate-tag

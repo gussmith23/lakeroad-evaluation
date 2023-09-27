@@ -156,10 +156,8 @@ RUN rm /root/oss-cad-suite/bin/verilator
 # Build latest bitwuzla.
 WORKDIR /root
 ARG MAKE_JOBS=2
-ARG BITWUZLA_REF=d0b98ca844d983c053b7cbf4427fdf11dcfb0e04
-RUN git clone https://github.com/bitwuzla/bitwuzla \
-  && cd bitwuzla \
-  && git checkout ${BITWUZLA_REF} \
+ADD lakeroad/bitwuzla bitwuzla
+RUN cd bitwuzla \
   && ./configure.py \
   && cd build \
   && ninja -j${MAKE_JOBS}
