@@ -14,7 +14,7 @@ env:
   # E.g. Lakeroad tasks take one thread per solver in the portfolio, which by
   # default is at least 2. Vivado also spawns many processes; not sure how many
   # per job.
-  DOIT_JOBS: 30
+  DOIT_JOBS: 20
   # Number of jobs when building something with make. This is a separate task
   # from the above as each job generally uses one thread.
   MAKE_JOBS: 128
