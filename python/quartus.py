@@ -18,11 +18,18 @@ class IntelFamily(enum.Enum):
                 return IntelFamily.CYCLONEV
             case "cycloneiv" | IntelFamily.CYCLONEIV:
                 return IntelFamily.CYCLONEIV
+            case "cyclone10lp" | IntelFamily.CYCLONE10LP:
+                return IntelFamily.CYCLONE10LP
             case _:
                 raise ValueError(f"Unknown family: {v}")
 
+    def __str__(self) -> str:
+        assert isinstance(self.value, str)
+        return self.value
+
     CYCLONEV = "Cyclone V"
     CYCLONEIV = "Cyclone IV"
+    CYCLONE10LP = "Cyclone 10 LP"
 
 
 def run_quartus(
@@ -71,6 +78,10 @@ def run_quartus(
             family_str = "cyclonev"
         case IntelFamily.CYCLONEIV:
             family_str = "cycloneiv"
+        case IntelFamily.CYCLONE10LP:
+            family_str = "cyclone10lp"
+        case _:
+            raise ValueError(f"Unknown family: {family}")
 
     start = time.time()
     subprocess.run(

@@ -27,4 +27,4 @@ completeness_experiments:
   intel:
     # FPGA families to synthesize for. See IntelFamily.from_str for the
     # available families.
-    families: [cycloneiv]
+    families: [cyclone10lp]
