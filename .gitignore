@@ -20,3 +20,4 @@ out/
 
 .doit.db.bak
 .vscode/
+.env
