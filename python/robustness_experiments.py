@@ -1121,6 +1121,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="lakeroad_output",
@@ -1241,6 +1246,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="lakeroad_output",
@@ -1390,6 +1400,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, verilog_filepath, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=(
                     utils.output_dir()
                     / "robustness_experiments"

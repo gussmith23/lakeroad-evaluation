@@ -39,6 +39,7 @@ def invoke_lakeroad(
     check_returncode: bool = False,
     extra_summary_fields: Dict[str, Any] = {},
     stderr_filepath: Optional[Union[str, Path]] = None,
+    extra_cycles: Optional[int] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -144,6 +145,9 @@ def invoke_lakeroad(
     if timeout != None:
         cmd += ["--timeout", str(timeout)]
 
+    if extra_cycles != None:
+        cmd += ["--extra-cycles", str(extra_cycles)]
+
     # Add requested solvers and seeds
     manifest = utils.get_manifest()
     for solver in manifest["completeness_experiments"]["lakeroad"]["solvers"]:
@@ -231,6 +235,7 @@ def make_lakeroad_task(
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
     extra_summary_fields: Dict[str, Any] = {},
+    extra_cycles: Optional[int] = None,
 ) -> Tuple[Tuple, Dict]:
     """Creates a DoIt task for invoking Lakeroad.
 
@@ -279,6 +284,7 @@ def make_lakeroad_task(
                 "timeout": timeout,
                 "extra_summary_fields": extra_summary_fields,
                 "stderr_filepath": output_filepaths["lakeroad_stderr"],
+                "extra_cycles": extra_cycles,
             },
         )
     ]
