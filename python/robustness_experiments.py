@@ -1121,9 +1121,14 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
-                out_module_name="output",
+                out_module_name="lakeroad_output",
                 architecture="xilinx-ultrascale-plus",
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
@@ -1155,12 +1160,14 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
+                    test_module_name="lakeroad_output",
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
+                    ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2"
                     ],
@@ -1239,9 +1246,14 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
-                out_module_name="output",
+                out_module_name="lakeroad_output",
                 architecture="lattice-ecp5",
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
@@ -1272,12 +1284,14 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
+                    test_module_name="lakeroad_output",
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
+                    ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir()
                         / "lakeroad-private"
@@ -1386,6 +1400,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, verilog_filepath, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=(
                     utils.output_dir()
                     / "robustness_experiments"
@@ -1393,7 +1412,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     / "lakeroad_intel"
                 ),
                 template="dsp",
-                out_module_name="output",
+                out_module_name="lakeroad_output",
                 architecture="intel-cyclone10lp",
                 verilog_module_filepath=(
                     utils.lakeroad_evaluation_dir() / entry["filepath"]
@@ -1430,13 +1449,15 @@ def task_robustness_experiments(skip_verilator: bool):
                         / "verilator"
                     ),
                     test_module_filepath=verilog_filepath,
+                    test_module_name="lakeroad_output",
                     ground_truth_module_filepath=(
                         utils.lakeroad_evaluation_dir() / entry["filepath"]
                     ),
+                    ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir()
                         / "lakeroad"
