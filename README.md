@@ -35,18 +35,13 @@ We give some additional detail here.
   export PYTHONPATH="$PWD/python:$PYTHONPATH"
   ```
 
-  When developing in VSCode,
-    it can also be useful
-    to create an `.env` file
-    at the root of the project
-    which looks like:
-
-  ```sh
-  $ cat .env
-  PYTHONPATH=./python:${env:PYTHONPATH}
-  ```
-
-  This will tell VSCode to add the library to the `PYTHONPATH`
+  Copy [`.env.template`](./.env.template)
+    to `.env` and fill in the environment variables
+    at the top of the file.
+  You can then
+    do `source .env`
+    to set up the environment variables needed by the evaluation.
+  This file is also automatically used by VSCode.
 
   TODO(@gussmith23): Figure out how to use Python packaging, so we could install
     the utilities as a package within a virtual environment.

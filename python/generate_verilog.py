@@ -51,8 +51,9 @@ def generate_design(
         [f"\tinput {signedness} [{bitwidth - 1}:0] {input}" for input in inputs]
     )
 
-    result += f",\n\toutput [{bitwidth - 1}:0] out,\n"
-    result += "\tinput clk);\n\n"
+    # Only generate a clk (and a comma after out) if we're not combinational.
+    result += f",\n\toutput [{bitwidth - 1}:0] out{',' if stages > 0 else ''}\n"
+    result += "\tinput clk);\n\n" if stages > 0 else "\t);\n\n"
 
     # Pipeline registers
     reg_bitwidth = bitwidth * 2

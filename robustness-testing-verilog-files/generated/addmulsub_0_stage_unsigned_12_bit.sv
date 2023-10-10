@@ -3,8 +3,8 @@
 	input  [11:0] b,
 	input  [11:0] c,
 	input  [11:0] d,
-	output [11:0] out,
-	input clk);
+	output [11:0] out
+	);
 
 	assign out = ((d + a) * b) - c;
 endmodule

@@ -132,9 +132,8 @@ RUN rm /root/oss-cad-suite/bin/verilator
 # Build latest bitwuzla.
 WORKDIR /root
 ARG MAKE_JOBS=2
-RUN git clone https://github.com/bitwuzla/bitwuzla \
-  && cd bitwuzla \
-  && git checkout 4eda0536800576cb2531ab9ce13292da8f21f0eb \
+ADD lakeroad/bitwuzla bitwuzla
+RUN cd bitwuzla \
   && ./configure.py \
   && cd build \
   && ninja -j${MAKE_JOBS}
@@ -145,16 +144,10 @@ ENV PATH="/root/bitwuzla/build/src/main/:${PATH}"
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
 WORKDIR /root
-ADD lakeroad/rosette/ rosette/
 RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
-  # For now, we use a custom Rosette install; see below.
-  # rosette \
-  yaml \
-  # Install Rosette from submodule. Check that it exists first.
-  && [ "$(ls --almost-all /root/rosette)" ] \
-  && cd /root/rosette \
-  && raco pkg install --deps search-auto --batch
+  rosette \
+  yaml
 
 # Install Rust.
 WORKDIR /root

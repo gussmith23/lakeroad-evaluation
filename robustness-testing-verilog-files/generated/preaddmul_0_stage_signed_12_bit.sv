@@ -2,8 +2,8 @@
 	input signed [11:0] a,
 	input signed [11:0] b,
 	input signed [11:0] d,
-	output [11:0] out,
-	input clk);
+	output [11:0] out
+	);
 
 	assign out = (d + a) * b;
 endmodule

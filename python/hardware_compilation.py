@@ -2,7 +2,6 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
-import dataclasses
 import json
 import logging
 import os
@@ -15,6 +14,7 @@ from pathlib import Path
 from time import time
 from typing import Any, Dict, Optional, Tuple, Union
 from tempfile import NamedTemporaryFile
+from quartus import IntelFamily
 
 
 def count_resources_in_verilog_src(
@@ -703,7 +703,7 @@ def yosys_synthesis(
             )
             yosys_end_time = time()
         except subprocess.CalledProcessError as e:
-            print(f"Error log in {(str(logfile))}", file=sys.stderr)
+            print(f"Error log in {(str(logfile.name))}", file=sys.stderr)
             raise e
 
     # Generate summary
@@ -1027,3 +1027,56 @@ def make_yosys_nextpnr_synthesis_task(
         ],
         "file_dep": [input_filepath],
     }
+
+
+def make_intel_yosys_synthesis_task(
+    input_filepath: Union[str, Path],
+    output_dirpath: Union[str, Path],
+    module_name: str,
+    family: IntelFamily,
+    name: Optional[str] = None,
+    extra_summary_fields: Dict[str, Any] = {},
+):
+    output_dirpath = Path(output_dirpath)
+    json_filepath = output_dirpath / f"{module_name}.json"
+    output_filepath = output_dirpath / f"{module_name}.sv"
+    log_filepath = output_dirpath / f"{module_name}.log"
+
+    match family:
+        case IntelFamily.CYCLONEV:
+            synth_command = "synth_intel_alm -family cyclonev"
+        case IntelFamily.CYCLONEIV:
+            synth_command = "synth_intel -family cycloneiv"
+        case IntelFamily.CYCLONE10LP:
+            synth_command = "synth_intel -family cyclone10lp"
+        case _:
+            raise NotImplementedError(f"Family {family} not implemented.")
+
+    task = {
+        "actions": [
+            (
+                yosys_synthesis,
+                [],
+                {
+                    "summary_filepath": json_filepath,
+                    "input_filepath": input_filepath,
+                    "module_name": module_name,
+                    "output_filepath": output_filepath,
+                    "synth_command": synth_command,
+                    "log_filepath": log_filepath,
+                    "extra_summary_fields": extra_summary_fields,
+                },
+            )
+        ],
+        "file_dep": [input_filepath],
+        "targets": [
+            json_filepath,
+            output_filepath,
+            log_filepath,
+        ],
+    }
+
+    if name is not None:
+        task["name"] = name
+
+    return (task, (json_filepath, output_filepath, log_filepath))

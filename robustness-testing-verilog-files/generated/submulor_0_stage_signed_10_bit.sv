@@ -3,8 +3,8 @@
 	input signed [9:0] b,
 	input signed [9:0] c,
 	input signed [9:0] d,
-	output [9:0] out,
-	input clk);
+	output [9:0] out
+	);
 
 	assign out = ((d - a) * b) | c;
 endmodule
