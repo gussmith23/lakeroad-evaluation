@@ -85,13 +85,6 @@ def make_verilator_task(
                 "expect_all_zero_outputs": False,
                 "test_module_name": test_module_name,
                 "ground_truth_module_name": ground_truth_module_name,
-                # Allows us to override the C++ compiler. It would be nice if
-                # the Verilator Makefile read the CXX variable directly; I
-                # requested this functionality in
-                # https://github.com/verilator/verilator/issues/4549.
-                "extra_make_args": (
-                    [f"CXX={os.environ['CXX']}"] if "CXX" in os.environ else []
-                ),
             },
         )
     ]
