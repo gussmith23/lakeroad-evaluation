@@ -95,20 +95,32 @@ def generate_design(
         function = "((d + a) * b) ^ c"
     elif workload == "submulxor":
         function = "((d - a) * b) ^ c"
-    # elif workload == "muladdadd":
-    #     function = "(a * b) + (c + d)"
-    # elif workload == "muladdsub":
-    #     function = "(a * b) + (c - d)"
-    # elif workload == "mulsubadd":
-    #     function = "(a * b) - (c + d)"
-    # elif workload == "mulsubsub":
-    #     function = "(a * b) - (c - d)"
     elif workload == "muland":
         function = "(a * b) & c"
     elif workload == "mulor":
         function = "(a * b) | c"
     elif workload == "mulxor":
         function = "(a * b) ^ c"
+    elif workload == "addaddsquare_a":
+        function = "c + ((d + a) * (d + a))"
+    elif workload == "subaddsquare_a":
+        function = "c - ((d + a) * (d + a))"
+    elif workload == "subsubsquare_a":
+        function = "c - ((d - a) * (d - a))"
+    elif workload == "subsquare_a":
+        function = "(d - a) * (d - a)"
+    elif workload == "addsquare_a":
+        function = "(d + a) * (d + a)"
+    elif workload == "addaddsquare_b":
+        function = "c + ((d + b) * (d + b))"
+    elif workload == "subaddsquare_b":
+        function = "c - ((d + b) * (d + b))"
+    elif workload == "subsubsquare_b":
+        function = "c - ((d - b) * (d - b))"
+    elif workload == "addsquare_b":
+        function = "(d - a) * (d - a)"
+    elif workload == "subsquare_b":
+        function = "(d - b) * (d - b)"
     else:
         raise ValueError(f"Unknown workload {workload}")
 
@@ -135,7 +147,7 @@ def generate_design(
 
 def generate_designs(design_dir: Union[str, Path]):
     # the max bitwidth for the workloads
-    bitwidth_max = 18
+    bitwidth_max = 8  # TODO: make this bigger again
     # the workloads, their inputs, and the compilers that support them
     inputs_dict = {
         "mult": [["a", "b"], ["xilinx", "intel", "lattice"]],
@@ -153,13 +165,19 @@ def generate_designs(design_dir: Union[str, Path]):
         "addmulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "submulxor": [["a", "b", "c", "d"], ["xilinx"]],
         "preaddmul": [["a", "b", "d"], ["xilinx"]],
-        # "muladdadd": [["a", "b", "c", "d"], ["lattice"]],
-        # "muladdsub": [["a", "b", "c", "d"], ["lattice"]],
-        # "mulsubadd": [["a", "b", "c", "d"], ["lattice"]],
-        # "mulsubsub": [["a", "b", "c", "d"], ["lattice"]],
         "muland": [["a", "b", "c"], ["lattice"]],
         "mulor": [["a", "b", "c"], ["lattice"]],
         "mulxor": [["a", "b", "c"], ["lattice"]],
+        "addaddsquare_a": [["a", "c", "d"], ["xilinx"]],
+        "subaddsquare_a": [["a", "c", "d"], ["xilinx"]],
+        "subsubsquare_a": [["a", "c", "d"], ["xilinx"]],
+        "subsquare_a": [["a", "d"], ["xilinx"]],
+        "addsquare_a": [["a", "d"], ["xilinx"]],
+        "addaddsquare_b": [["b", "c", "d"], ["xilinx"]],
+        "subaddsquare_b": [["b", "c", "d"], ["xilinx"]],
+        "subsubsquare_b": [["b", "c", "d"], ["xilinx"]],
+        "addsquare_b": [["a", "d"], ["xilinx"]],
+        "subsquare_b": [["b", "d"], ["xilinx"]],
     }
     workloads = [key for key in inputs_dict.keys()]
     max_stages = 3
@@ -177,11 +195,184 @@ def generate_designs(design_dir: Union[str, Path]):
     # first, clear robustness-manifest.yml
     with open("robustness-manifest.yml", "w+") as output_file:
         output_file.write("")
-    experiments = []
+    experiments = [
+        # {
+        # "module_name": "simd_dual_add",
+        # "workload": "simddualadd",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["a", "b"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_dual_add.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_dual_sub",
+        # "workload": "simddualsub",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["a", "b"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_dual_sub.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_dual_acc",
+        # "workload": "simddualacc",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["clk", "val", "acc"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_dual_acc.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_dual_counter",
+        # "workload": "simddualcounter",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["clk", "enable"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_dual_counter.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_quad_add",
+        # "workload": "simdquadadd",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["a", "b"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_quad_add.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_quad_sub",
+        # "workload": "simdquadsub",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["a", "b"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_quad_sub.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_quad_acc",
+        # "workload": "simdquadacc",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["clk", "val", "acc"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_quad_acc.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "simd_quad_counter",
+        # "workload": "simdquadcounter",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": False,
+        # "inputs": ["clk", "enable"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/simd_quad_counter.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "xor_reduction_96",
+        # "workload": "xorreduction96",
+        # "bitwidth": 96,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": True,
+        # "inputs": ["a"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/xor_reduction_96.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "xor_reduction_48",
+        # "workload": "xorreduction48",
+        # "bitwidth": 48,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": True,
+        # "inputs": ["a"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/xor_reduction_48.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        # {
+        # "module_name": "xor_reduction_24",
+        # "workload": "xorreduction24",
+        # "bitwidth": 24,
+        # "is_signed": False,
+        # "stages": 0,
+        # "xor_reduction": True,
+        # "inputs": ["a"],
+        # "filepath": str(
+        # Path("verilog/robustness-designs/xor_reduction_24.v").relative_to(
+        # utils.lakeroad_evaluation_dir()
+        # )
+        # ),
+        # },
+        {
+            "module_name": "xor_reduction_12",
+            "workload": "xorreduction12",
+            "bitwidth": 12,
+            "is_signed": False,
+            "stages": 0,
+            "xor_reduction": True,
+            "inputs": [["a", 12]],
+            "filepath": str(
+                Path(
+                    utils.lakeroad_evaluation_dir()
+                    / "robustness-testing-verilog-files"
+                    / "extra-designs"
+                    / "xor_reduction_12.v"
+                ).relative_to(utils.lakeroad_evaluation_dir())
+            ),
+            "backends": ["xilinx"],
+        },
+    ]
     for workload in workloads:
         inputs = inputs_dict[workload][0]
         backends = inputs_dict[workload][1]
-        for bitwidth in range(8, bitwidth_max + 1):
+        for bitwidth in range(1, bitwidth_max + 1):
             input_tuples = [[input, bitwidth] for input in inputs]
             for is_signed in [True, False]:
                 for stages in range(0, max_stages + 1):
