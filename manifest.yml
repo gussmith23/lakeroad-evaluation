@@ -25,7 +25,7 @@ completeness_experiments:
     verilator_simulation_iterations: 2500
     # Number of extra cycles to include in the synthesis query, to approximate
     # stream-like guarantees.
-    extra_cycles: 3
+    extra_cycles: 1
 
   intel:
     # FPGA families to synthesize for. See IntelFamily.from_str for the
