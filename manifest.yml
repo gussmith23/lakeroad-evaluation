@@ -17,7 +17,7 @@ completeness_experiments:
     # Seeds to use. Default in the script is just 0.
     seeds: [0]
     # Timeout for Lakeroad.
-    timeout: 90
+    timeout: 120
     # The number of random inputs to sample when simulating each experiment with
     # Verilator. Some testbenches are quick, and some aren't. There may be an
     # issue with Lattice an unoptimizable signals -- you can try compiling w/o
@@ -25,7 +25,7 @@ completeness_experiments:
     verilator_simulation_iterations: 2500
     # Number of extra cycles to include in the synthesis query, to approximate
     # stream-like guarantees.
-    extra_cycles: 1
+    extra_cycles: 2
 
   intel:
     # FPGA families to synthesize for. See IntelFamily.from_str for the
