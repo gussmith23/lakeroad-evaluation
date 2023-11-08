@@ -1,6 +1,23 @@
 # Lakeroad Evaluation
 
-**Quick run on Docker:**
+The evaluation for [Lakeroad.](https://github.com/uwsampl/lakeroad)
+
+This README contains detailed information on how to set up and run the evaluation. However, **the [Dockerfile](./Dockerfile)  is the first and best source of truth on which dependencies to install and environment variables to set, just as the [workflow file](.github/workflows/run-evaluation-leviathan.yml) which builds and executes it is the first and best source of truth on how to build and run the Docker image.** This README is meant to be a more readable source of information, but in case of bugs or missing information, consult the previously mentioned files.
+
+**This evaluation must be run on a Linux machine.** Parts of the evaluation will work on Mac (namely, the Lakeroad components), but you will not be able to run (let alone install) the baseline hardware compilers (Vivado, Quartus, and Diamond).
+
+We detail three methods for setting up and running the evaluation:
+1. **Quick run via Docker.** This method will get something working quickly, but will not run the full evaluation.
+2. **Full run via Docker.** This method will run the entire evaluation via Docker, and requires completing the most time-consuming part of setup: setting up the proprietary hardware design tools (Vivado, Quartus, and Diamond).
+3. **Full run locally.** This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set (on top of what is required for method 2.)
+
+For those attempting to fully reproduce results, choose between methods 2 or 3. If you are working on a Linux machine (ideally Ubuntu), method 3 should work well.
+
+For those doing development, method 3 is required.
+
+## Quick Run via Docker
+
+To quickly get *something* running, use the Dockerfile:
 
 ```sh
 git clone --recursive <this repo>
@@ -8,14 +25,65 @@ docker build . -t lakeroad-evaluation
 docker run lakeroad-evaluation
 ```
 
-**Run locally:** *Requires dependencies to be set up.* TODO(@gussmith23)
+Note that, at the moment, this will still encounter errors when it attempts to run the proprietary baseline compilers (Vivado, Quartus, Diamond). See Setup for details on how to install those compilers and hook them into the Docker image.
 
-TODO(@gussmith23): quick run w/o Vivado.
+TODO(@gussmith23): provide a flag for disabling proprietary tools.
 
-## Setup
+## Full Run via Docker 
 
-See the Dockerfile for a definitive list of dependencies to install.
-We give some additional detail here.
+Our [Dockerfile](./Dockerfile) captures *almost* all of the evaluation's dependencies. However, a few critical pieces of software are left out: **the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.**
+
+Why did we leave these out? A few reasons, but chief among them: they are very large, unwieldy to install, and may require generating individual (free) licenses.
+
+Thus, to fully run the evaluation via Docker, you must first [install the proprietary hardware compiler toolchains.](#installing-proprietary-tools)
+
+Once you have done this, you must now build the Docker image, passing in special `build-arg`s to point to the locations of these tools. This will look something like:
+
+```sh
+docker build . -t lakeroad-evaluation \
+  --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
+  --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
+  --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
+```
+
+(Note: these paths actually refer to paths *inside* the Docker image, but it's encouraged to just use the same paths that exist on your host system.)
+
+For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
+
+```sh
+  ...
+  --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2023.1/bin \
+  --build-arg QUARTUS_BIN_DIR=/tools/intel/quartus/bin \
+  --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
+  ...
+```
+
+However, this will likely be different on your machine, depending on where you install the tools.
+
+Finally, you can run the Docker image. In this step, we will mount your local installations of the tools into the Docker container, so that the binaries are available inside the container. We do so using `-v` flags, as follows:
+
+```sh
+docker run \
+  -v /path/to/Xilinx:/path/to/Xilinx \
+  -v /path/to/diamond:/path/to/diamond \
+  -v /path/to/intel:/path/to/intel \
+  lakeroad-evaluation
+  doit --always-execute --continue -n 20
+```
+
+For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
+
+```sh
+  ...
+  -v /tools/Xilinx:/tools/Xilinx \
+  -v /usr/local/diamond:/usr/local/diamond \
+  -v /tools/intel:/tools/intel \
+  ...
+```
+
+Again, these paths will be different depending on where you install these tools. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
+
+## Full Run Locally
 
 - yosys 0.15
   - The most up-to-date yosys can be downloaded as part of the [OSS CAD Suite](https://github.com/YosysHQ/oss-cad-suite-build/releases).
@@ -46,46 +114,15 @@ We give some additional detail here.
   TODO(@gussmith23): Figure out how to use Python packaging, so we could install
     the utilities as a package within a virtual environment.
 
-## Environment Variables to Set
+Environment variables to set:
 
 - `PYTHONPATH`
 - TODO(@gussmith23): document Quartus, Diamond, Vivado
 
-## Output Location
-
-The location of the experiment output
-  can be controlled
-  by setting the
-  `OUTPUT_DIR` environment variable.
-By default, the experiment results
-  write to `out/`.
   
-## Calyx
-
-We have multiple versions of Calyx in the repository.
-[`calyx/`](./calyx/) is "vanilla", unmodified Calyx.
-We also have versions of Calyx which use our implementations of their ISA:
-  e.g.
-  [`calyx-xilinx-ultrascale-plus/`](./calyx-xilinx-ultrascale-plus/), for UltraScale+.
-These versions of Calyx
-  work the same as Calyx on the surface,
-  but under the hood,
-  they compile to our architecture-specific
-  structural SystemVerilog,
-  rather than the behavioral SystemVerilog
-  which Calyx usually compiles to.
-
-[`calyx_base`](./calyx_base/)
-  contains the base set of modifications
-  which all of our other Calyx versions
-  are based off of.
-
-[`calyx_vivado`](./calyx_vivado//)
-  is Calyx using instructions pre-implemented
-  for Xilinx UltraScale+
-  using Vivado.
-
-## Vivado
+## Installing Proprietary Tools
+  
+### Vivado
 
 The evaluation optionally depends
   on Vivado.
@@ -144,7 +181,7 @@ Once the environment is set up correctly, you should be able
   to run the evaluation scripts
   with Vivado-based eval enabled.
 
-## Lattice Diamond
+### Lattice Diamond
 
 *Summary:* To enable the use of Lattice Diamond,
   set the `DIAMOND_BINDIR` environment variable when running locally,
@@ -213,7 +250,7 @@ To do so, we use the following syntax:
   replacing `/usr/local/diamond` with the path
   to your Diamond installation.
   
-## Quartus
+### Quartus
 
 Similarly to Vivado and Diamond,
   the evaluation depends on Quartus.
@@ -230,3 +267,12 @@ See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.
 ## [./runs](./runs)
 
 This folder contains our output runs.
+
+## Output Location
+
+The location of the experiment output
+  can be controlled
+  by setting the
+  `OUTPUT_DIR` environment variable.
+By default, the experiment results
+  write to `out/`.
