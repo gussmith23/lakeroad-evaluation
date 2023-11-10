@@ -10,12 +10,16 @@ use_quartus: true
 # Completeness experiments.
 completeness_experiments:
   lakeroad:
-    # Solvers for Lakeroad to use. Note that the portfolio solver uses some
-    # solvers by default (currently bitwuzla and cvc5), so removing them from this
-    # list will not make them not run.
-    solvers: [bitwuzla, cvc5]
-    # Seeds to use. Default in the script is just 0.
-    seeds: [0]
+    # Solver instances for Lakeroad's portfolio solver to instantiate. Note that
+    # the portfolio solver uses some solvers by default (currently bitwuzla and
+    # cvc5), so removing them from this list will not make them not run.
+    #
+    # Each instance can either be just a solver name (e.g. "- bitwuzla") or a
+    # map from a solver name to a key-value map of solver flags (e.g.
+    # "- bitwuzla: {':seed': 0}").
+    solver_instances: 
+    - bitwuzla: {":seed": 0}
+    - cvc5: {":seed": 0}
     # Timeout for Lakeroad.
     timeout: 120
     # The number of random inputs to sample when simulating each experiment with

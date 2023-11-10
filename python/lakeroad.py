@@ -150,10 +150,24 @@ def invoke_lakeroad(
 
     # Add requested solvers and seeds
     manifest = utils.get_manifest()
-    for solver in manifest["completeness_experiments"]["lakeroad"]["solvers"]:
-        cmd += [f"--{solver}"]
-    for seed in manifest["completeness_experiments"]["lakeroad"]["seeds"]:
-        cmd += [f"--seed", str(seed)]
+    for solver_instance in manifest["completeness_experiments"]["lakeroad"][
+        "solver_instances"
+    ]:
+        # If it's just something like "- bitwuzla", then just turn on that sovler.
+        if isinstance(solver_instance, str):
+            cmd += [f"--{solver_instance}"]
+        # Otherwise, if it has flags, like "- bitwuzla: {foo: bar}", then
+        # activate those flags as well.
+        elif isinstance(solver_instance, dict):
+            assert len(solver_instance) == 1
+            solver_name = list(solver_instance.keys())[0]
+            solver_flag_set = ",".join(
+                f"{k}={v}" for (k, v) in solver_instance[solver_name].items()
+            )
+            cmd += [f"--{solver_name}"]
+            cmd += [f"--{solver_name}-flag-set", solver_flag_set]
+        else:
+            raise Exception(f"Unexpected solver_instance: {solver_instance}")
 
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
