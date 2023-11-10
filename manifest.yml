@@ -16,7 +16,7 @@ completeness_experiments:
     #
     # Each instance can either be just a solver name (e.g. "- bitwuzla") or a
     # map from a solver name to a key-value map of solver flags (e.g.
-    # "- bitwuzla: {seed: 0}").
+    # "- bitwuzla: {':seed': 0}").
     solver_instances: 
     - bitwuzla: {":seed": 0}
     - cvc5: {":seed": 0}
