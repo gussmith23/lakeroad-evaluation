@@ -85,6 +85,12 @@ Again, these paths will be different depending on where you install these tools.
 
 ## Full Run Locally
 
+1. Make sure submodules are cloned and up-to-date. Either clone with `--recursive`, or do `git submodule init; git submodule update`.
+2. Make sure you have an up-to-date Python. We use Python 3.11.4.
+3. Install Python dependencies from `requirements.txt`: `pip install -r requirements.txt`.
+4. Install LLVM/Clang.
+5. Install Yosys.
+
 - yosys 0.15
   - The most up-to-date yosys can be downloaded as part of the [OSS CAD Suite](https://github.com/YosysHQ/oss-cad-suite-build/releases).
     yosys installed via some package managers will be out of date.
