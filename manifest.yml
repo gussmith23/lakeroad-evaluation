@@ -19,7 +19,8 @@ completeness_experiments:
     # "- bitwuzla: {':seed': 0}").
     solver_instances: 
     - bitwuzla: {":seed": 0}
-    - cvc5: {":seed": 0}
+    - cvc5: {":seed": 0, ":bitblast": "eager", ":bv-to-bool" : "true", ":bv-gauss-elim": "true"}
+    - stp
     # Timeout for Lakeroad.
     timeout: 120
     # The number of random inputs to sample when simulating each experiment with
