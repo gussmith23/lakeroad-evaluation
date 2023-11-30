@@ -169,6 +169,9 @@ def invoke_lakeroad(
         else:
             raise Exception(f"Unexpected solver_instance: {solver_instance}")
 
+    metadata_out_filepath = NamedTemporaryFile()
+    cmd += ["--metadata-out-filepath", metadata_out_filepath.name]
+
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
     )
@@ -208,6 +211,13 @@ def invoke_lakeroad(
     summary["lakeroad_synthesis_failure"] = (
         proc.returncode == SYNTHESIS_FAIL_RETURN_CODE
     )
+
+    # Add portfolio solver metadata.
+    portfolio_solver_metadata = json.load(open(metadata_out_filepath.name))
+    assert "solver" not in summary
+    summary["solver"] = portfolio_solver_metadata["solver"]
+    assert "solver_flags" not in summary
+    summary["solver_flags"] = portfolio_solver_metadata["flags"]
 
     for extra_field in extra_summary_fields:
         assert extra_field not in summary
