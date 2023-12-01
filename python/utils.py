@@ -4,6 +4,11 @@ from typing import Dict, Optional
 import yaml
 
 
+LRE_OUTPUT_DIR_ENV_VAR = "LRE_OUTPUT_DIR"
+LRE_MANIFEST_PATH_ENV_VAR = "LRE_MANIFEST_PATH"
+LRE_ITERATIONS_ENV_VAR = "LRE_ITERATIONS"
+
+
 def lakeroad_evaluation_dir() -> Path:
     """Return the path to the Lakeroad evaluation directory."""
     return Path(__file__).parent.parent.resolve()
@@ -29,8 +34,8 @@ def output_dir() -> Path:
 
     out = DEFAULT_VALUE
 
-    if "OUTPUT_DIR" in os.environ:
-        out = Path(os.environ["OUTPUT_DIR"])
+    if LRE_OUTPUT_DIR_ENV_VAR in os.environ:
+        out = Path(os.environ[LRE_OUTPUT_DIR_ENV_VAR])
 
     return out
 
@@ -47,8 +52,8 @@ def _manifest_path() -> Path:
     2. from a default value.
     """
     return (
-        Path(os.environ["LRE_MANIFEST_PATH"])
-        if "LRE_MANIFEST_PATH" in os.environ
+        Path(os.environ[LRE_MANIFEST_PATH_ENV_VAR])
+        if LRE_MANIFEST_PATH_ENV_VAR in os.environ
         else lakeroad_evaluation_dir() / "manifest.yml"
     )
 
@@ -59,7 +64,7 @@ def get_manifest() -> Dict:
     # Override values from environment variables. This section of the code
     # allows us to override any manifest values using environment variables. Add
     # lines like `manifest["key"] = os.environ["KEY"]` to add an override.
-    if "LRE_ITERATIONS" in os.environ:
-        manifest["iterations"] = int(os.environ["LRE_ITERATIONS"])
+    if LRE_ITERATIONS_ENV_VAR in os.environ:
+        manifest["iterations"] = int(os.environ[LRE_ITERATIONS_ENV_VAR])
 
     return manifest
