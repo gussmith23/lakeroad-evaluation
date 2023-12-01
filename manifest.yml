@@ -4,12 +4,13 @@
 output_dir: out/
 
 # Number of iterations of each experiment to run.
-iterations: 3
+# TODO(@gussmith23): Implement this.
+# iterations: 3
 
 # Whether or not to use Quartus in the eval. If true, then QUARTUS_BIN_DIR
 # environment variable must be set to the bin/ dir of Quartus.
-use_quartus: true
-
+# TODO(@gussmith23): Implement this.
+# use_quartus: true
 # TODO(@gussmith23): Add use_diamond, use_vivado.
 
 # Completeness experiments.
