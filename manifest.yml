@@ -13,7 +13,10 @@ output_dir: out/
 # use_quartus: true
 # TODO(@gussmith23): Add use_diamond, use_vivado.
 
-# Completeness experiments.
+# Lakeroad's completeness experiments evaluate the completeness of Lakeroad
+# and a set of baseline tools. We compile a number of benchmarks intended to
+# fit onto a single DSP, and evaluate which tools are in fact able to fit them
+# onto a single DSP.
 completeness_experiments:
   lakeroad:
     # Solver instances for Lakeroad's portfolio solver to instantiate. Note that
