@@ -27,15 +27,24 @@ def output_dir() -> Path:
     """Get directory where output should go.
 
     Output directory is set (in order of precedence)
-    1. from the OUTPUT_DIR environment variable, if set;
-    2. from a default value.
+    1. from the LRE_OUTPUT_DIR environment variable, if set;
+    2. from the manifest.
     """
-    DEFAULT_VALUE = lakeroad_evaluation_dir() / "out"
 
-    out = DEFAULT_VALUE
+    # Output directory is set by the LRE_OUTPUT_DIR environment variable, if
+    # it's set. Otherwise, get it from the manifest.
+    out = Path(
+        os.environ[LRE_OUTPUT_DIR_ENV_VAR]
+        if LRE_OUTPUT_DIR_ENV_VAR in os.environ
+        else get_manifest()["output_dir"]
+    )
 
-    if LRE_OUTPUT_DIR_ENV_VAR in os.environ:
-        out = Path(os.environ[LRE_OUTPUT_DIR_ENV_VAR])
+    # If the path is relative, we assume it's relative to the Lakeroad
+    # evaluation directory.
+    if not out.is_absolute():
+        out = lakeroad_evaluation_dir() / out
+
+    out = out.resolve()
 
     return out
 

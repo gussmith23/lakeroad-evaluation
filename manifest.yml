@@ -1,3 +1,8 @@
+# Path to the output directory. If this isn't an absolute path, then it will be
+# interpreted relative to the evaluation directory. This can be overridden using
+# the LRE_OUTPUT_DIR environment variable. See python/utils.py.
+output_dir: out/
+
 # Number of iterations of each experiment to run.
 iterations: 3
 
