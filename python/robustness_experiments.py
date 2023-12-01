@@ -269,6 +269,8 @@ def _visualize_succeeded_vs_failed_lattice(
                 "lakeroad_synthesis_success",
                 "lakeroad_synthesis_timeout",
                 "lakeroad_synthesis_failure",
+                "solver",
+                "solver_flags",
                 # Resources we don't care about.
                 "GSR",
                 "IB",
@@ -503,6 +505,8 @@ def _visualize_succeeded_vs_failed_xilinx(
                 "lakeroad_synthesis_success",
                 "lakeroad_synthesis_timeout",
                 "lakeroad_synthesis_failure",
+                "solver",
+                "solver_flags",
                 # Resources we don't care about: things the tools insert that
                 # don't do computation.
                 "GND",
@@ -688,6 +692,8 @@ def _visualize_succeeded_vs_failed_intel(
                 "lakeroad_synthesis_success",
                 "lakeroad_synthesis_timeout",
                 "lakeroad_synthesis_failure",
+                "solver",
+                "solver_flags",
             ]
         )
     )
