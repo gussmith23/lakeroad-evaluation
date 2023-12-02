@@ -3,7 +3,8 @@ name: Run evaluation on Leviathan
 on:
   schedule:
     # 1am PT.
-    - cron: '0 8 * * *'
+    # TODO(@gussmith23): Disabled as other user needs Leviathan at night. Reenable.
+    # - cron: '0 8 * * *'
   workflow_dispatch:
 
 env:
