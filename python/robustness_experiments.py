@@ -473,7 +473,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     df = pandas.read_csv(csv_filepath).fillna(0)
 
     # Filter to Xilinx rows.
-    df = df[df["architecture"] == "xilinx"]
+    df = df[df["architecture"] == "xilinx-ultrascale-plus"]
 
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
