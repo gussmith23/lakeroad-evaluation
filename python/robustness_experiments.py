@@ -231,6 +231,9 @@ def _visualize_succeeded_vs_failed_lattice(
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
 
+    # Filter to Lattice rows.
+    df = df[df["architecture"] == "lattice-ecp5"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
     COMPUTATION_PRIMITIVES = [
@@ -270,6 +273,7 @@ def _visualize_succeeded_vs_failed_lattice(
                 "lakeroad_synthesis_failure",
                 "solver",
                 "solver_flags",
+                "family",
                 # Resources we don't care about.
                 "GSR",
                 "IB",
@@ -285,9 +289,13 @@ def _visualize_succeeded_vs_failed_lattice(
                 "IFS1P3DX",
                 "OFS1P3JX",
                 "IFS1P3JX",
+                # Primitives from other architectures that we should ignore.
+                "DSP48E2",
+                "cyclone10lp_mac_mult",
+                "cyclone10lp_mac_out",
             ]
         )
-    )
+    ), f"Unexpected columns in {set(df.columns)}"
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -389,7 +397,7 @@ def _visualize_succeeded_vs_failed_lattice(
 
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "diamond":
             return "SOTA Lattice"
         elif t == "yosys":
@@ -579,7 +587,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     # raise Exception(print(df))
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "Anaxi" if t == "lakeroad" else t
+    #     lambda t: "Lakeroad" if t == "lakeroad" else t
     # )
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
     #     lambda t: "SOTA Xilinx" if t == "vivado" else t
@@ -589,7 +597,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     # )
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "vivado":
             return "SOTA Xilinx"
         elif t == "yosys":
@@ -676,6 +684,10 @@ def _visualize_succeeded_vs_failed_intel(
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
 
+    # Filter to Intel rows.
+    df = df[df["architecture"] == "intel"]
+    df = df[df["family"] == "Cyclone 10 LP"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
     COMPUTATION_PRIMITIVES = [
@@ -703,9 +715,13 @@ def _visualize_succeeded_vs_failed_intel(
                 "lakeroad_synthesis_failure",
                 "solver",
                 "solver_flags",
+                # Primitives from other architectures that we should ignore.
+                "MULT18X18C",
+                "ALU54A",
+                "DSP48E2",
             ]
         )
-    )
+    ), f"Unexpected columns in {set(df.columns)}"
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -799,7 +815,7 @@ def _visualize_succeeded_vs_failed_intel(
 
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "quartus":
             return "SOTA Intel"
         elif t == "yosys":
