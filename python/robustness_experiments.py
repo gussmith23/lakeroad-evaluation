@@ -471,6 +471,10 @@ def _visualize_succeeded_vs_failed_xilinx(
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Filter to Xilinx rows.
+    df = df[df["architecture"] == "xilinx"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
     # SRL16E).
@@ -506,6 +510,7 @@ def _visualize_succeeded_vs_failed_xilinx(
                 "lakeroad_synthesis_failure",
                 "solver",
                 "solver_flags",
+                "family",
                 # Resources we don't care about: things the tools insert that
                 # don't do computation.
                 "GND",
@@ -513,9 +518,14 @@ def _visualize_succeeded_vs_failed_xilinx(
                 "BUFG",
                 "IBUF",
                 "OBUF",
+                # Primitives from other architectures that we should ignore.
+                "ALU54A",
+                "MULT18X18C",
+                "cyclone10lp_mac_mult",
+                "cyclone10lp_mac_out",
             ]
         )
-    )
+    ), f"Unexpected columns in {set(df.columns)}"
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -898,23 +908,9 @@ def task_robustness_experiments(skip_verilator: bool):
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
 
-    # .json file that contains metadata is produced for each entry's synthesis.
-    xilinx_collected_data_output_filepaths = []
-    lattice_collected_data_output_filepaths = []
-    intel_collected_data_output_filepaths = []
-
-    # determines if the compiler fails for the workload we're looking at
-    def contains_compiler_fail(entry, tool_name):
-        if "expect_fail" in entry:
-            if tool_name in entry["expect_fail"]:
-                return True
-        return False
-
-    # if there is a timeout for lakeroad
-    def contains_compiler_timeout(entry):
-        if "expect_timeout" in entry:
-            return True
-        return False
+    # This list stores the filepaths to each experiment's output .json file,
+    # each of which contains the results of a single experiment.
+    collected_data_output_filepaths = []
 
     for entry in entries:
         backends = entry["backends"]
@@ -951,7 +947,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
@@ -993,7 +989,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
 
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1056,7 +1052,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
         if "lattice" in backends:
             # diamond-lattice, lakeroad-lattice, yosys-lattice
@@ -1081,7 +1077,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             base_path = (
                 utils.output_dir()
@@ -1120,7 +1116,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1180,7 +1176,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
         if "intel" in backends:
             intel_families = utils.get_manifest()["completeness_experiments"]["intel"][
@@ -1218,7 +1214,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             (
                 task,
@@ -1242,7 +1238,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             (
                 task,
@@ -1280,7 +1276,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
 
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1325,20 +1321,22 @@ def task_robustness_experiments(skip_verilator: bool):
                     alternative_file_dep=json_filepath,
                 )[0]
 
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    xilinx_csv_output = base_path / "all_results" / "all_xilinx_results_collected.csv"
+    output_csv_path = (
+        utils.output_dir()
+        / utils.get_manifest()["completeness_experiments"]["output_csv_path"]
+    )
     yield {
-        "name": "collect_xilinx_data",
+        "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": xilinx_collected_data_output_filepaths,
-        "targets": [xilinx_csv_output],
+        "file_dep": collected_data_output_filepaths,
+        "targets": [output_csv_path],
         "actions": [
             (
                 _collect_robustness_benchmark_data,
                 [],
                 {
-                    "filepaths": xilinx_collected_data_output_filepaths,
-                    "output_filepath": xilinx_csv_output,
+                    "filepaths": collected_data_output_filepaths,
+                    "output_filepath": output_csv_path,
                 },
             )
         ],
@@ -1346,13 +1344,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "visualize_succeeded_vs_failed_xilinx",
-        "file_dep": [xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1379,58 +1377,15 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
     }
 
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
-
-    yield {
-        "name": "collect_lattice_data",
-        # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": lattice_collected_data_output_filepaths,
-        "targets": [lattice_csv_output],
-        "actions": [
-            (
-                _collect_robustness_benchmark_data,
-                [],
-                {
-                    "filepaths": lattice_collected_data_output_filepaths,
-                    "output_filepath": lattice_csv_output,
-                },
-            )
-        ],
-    }
-
-    intel_csv_output = (
-        utils.output_dir()
-        / "robustness_experiments_csv"
-        / "all_results"
-        / "all_intel_results_collected.csv"
-    )
-    yield {
-        "name": "collect_intel_data",
-        # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": intel_collected_data_output_filepaths,
-        "targets": [intel_csv_output],
-        "actions": [
-            (
-                _collect_robustness_benchmark_data,
-                [],
-                {
-                    "filepaths": intel_collected_data_output_filepaths,
-                    "output_filepath": intel_csv_output,
-                },
-            )
-        ],
-    }
-
     yield {
         "name": "visualize_succeeded_vs_failed_lattice",
-        "file_dep": [lattice_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1458,7 +1413,7 @@ def task_robustness_experiments(skip_verilator: bool):
     }
     yield {
         "name": "visualize_succeeded_vs_failed_all",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _combined_visualized,
@@ -1480,13 +1435,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "timing",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _timing_cdf_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_lattice.png"
                     ),
@@ -1499,7 +1454,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 _timing_cdf_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_xilinx.png"
                     ),
@@ -1525,13 +1480,13 @@ def task_robustness_experiments(skip_verilator: bool):
     )
     yield {
         "name": "visualize_succeeded_vs_failed_intel",
-        "file_dep": [intel_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_intel,
                 [],
                 {
-                    "csv_filepath": intel_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": intel_plot_output_filepath,
                     "cleaned_data_filepath": intel_cleaned_data_filepath,
                     "plot_csv_filepath": intel_plot_csv_filepath,

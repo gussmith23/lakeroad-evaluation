@@ -18,6 +18,9 @@ output_dir: out/
 # fit onto a single DSP, and evaluate which tools are in fact able to fit them
 # onto a single DSP.
 completeness_experiments:
+  # Path to the CSV file to write the results to. Relative to `output_dir`.
+  output_csv_path: raw_data/completeness.csv
+
   lakeroad:
     # Solver instances for Lakeroad's portfolio solver to instantiate. Note that
     # the portfolio solver uses some solvers by default (currently bitwuzla and
