@@ -17,9 +17,6 @@ python/__pycache__/
 
 # Default evaluation output directory
 out/
-baseline/
-experiment0/
-venv/
 
 .doit.db.bak
 .vscode/
