@@ -232,7 +232,7 @@ RUN apt-get install -y git cmake bison flex libboost-all-dev python2 perl && \
   mkdir build && \
   cd build && \
   cmake .. && \
-  cmake --build .
+  cmake --build . -j${MAKE_JOBS}
 ENV PATH="/root/stp/build:${PATH}"
 
 # Build Yices2.
@@ -246,7 +246,7 @@ RUN apt-get install -y gperf && \
   cd yices2 && \
   autoconf && \
   ./configure && \
-  make && \
+  make -j${MAKE_JOBS} && \
   # If this line fails, it's presumably because we're on a different architecture.
   [ -d build/x86_64-pc-linux-gnu-release/bin ]
 ENV PATH="/root/yices2/build/x86_64-pc-linux-gnu-release/bin/:${PATH}"
