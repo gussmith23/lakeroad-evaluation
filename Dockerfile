@@ -217,5 +217,41 @@ RUN unset VERILATOR_ROOT \
   && make install
 ENV VERILATOR_INCLUDE_DIR=/usr/local/share/verilator/include
 
+# Build STP.
+WORKDIR /root
+ENV STP_URL="https://github.com/stp/stp/archive/0510509a85b6823278211891cbb274022340fa5c.tar.gz"
+RUN apt-get install -y git cmake bison flex libboost-all-dev python2 perl && \
+  wget ${STP_URL} -nv -O stp.tar.gz && \
+  mkdir stp && \
+  tar xzf stp.tar.gz -C stp --strip-components=1 && \
+  cd stp && \
+  ./scripts/deps/setup-gtest.sh && \
+  ./scripts/deps/setup-outputcheck.sh && \
+  ./scripts/deps/setup-cms.sh && \
+  ./scripts/deps/setup-minisat.sh && \
+  mkdir build && \
+  cd build && \
+  cmake .. && \
+  cmake --build .
+ENV PATH="/root/stp/build:${PATH}"
+
+# Build Yices2.
+# TODO(@gussmith23): Can we just use the yices in oss-cad-suite? Here, and in Lakeroad itself.
+WORKDIR /root
+ENV YICES2_URL="https://github.com/SRI-CSL/yices2/archive/e27cf308cffb0ecc6cc7165c10e81ca65bc303b3.tar.gz"
+RUN apt-get install -y gperf && \
+  wget ${YICES2_URL} -nv -O yices2.tar.gz && \
+  mkdir yices2 && \
+  tar xvf yices2.tar.gz -C yices2 --strip-components=1 && \
+  cd yices2 && \
+  autoconf && \
+  ./configure && \
+  make && \
+  # If this line fails, it's presumably because we're on a different architecture.
+  [ -d build/x86_64-pc-linux-gnu-release/bin ]
+ENV PATH="/root/yices2/build/x86_64-pc-linux-gnu-release/bin/:${PATH}"
+
+
+
 WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]
