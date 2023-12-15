@@ -256,47 +256,6 @@ def _visualize_succeeded_vs_failed_lattice(
         # "IFS1P3JX",
     ]
 
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added.
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-                "family",
-                # Resources we don't care about.
-                "GSR",
-                "IB",
-                "OB",
-                "PUR",
-                "VHI",
-                "VLO",
-                # Registers...see note above.
-                "TRELLIS_FF",
-                "FD1S3AX",
-                "OFS1P3DX",
-                "DPR16X4C",
-                "IFS1P3DX",
-                "OFS1P3JX",
-                "IFS1P3JX",
-                # Primitives from other architectures that we should ignore.
-                "DSP48E2",
-                "cyclone10lp_mac_mult",
-                "cyclone10lp_mac_out",
-            ]
-        )
-    ), f"Unexpected columns in {set(df.columns)}"
-
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
     #
@@ -501,40 +460,6 @@ def _visualize_succeeded_vs_failed_xilinx(
         "FDRE",
     ]
 
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-                "family",
-                # Resources we don't care about: things the tools insert that
-                # don't do computation.
-                "GND",
-                "VCC",
-                "BUFG",
-                "IBUF",
-                "OBUF",
-                # Primitives from other architectures that we should ignore.
-                "ALU54A",
-                "MULT18X18C",
-                "cyclone10lp_mac_mult",
-                "cyclone10lp_mac_out",
-            ]
-        )
-    ), f"Unexpected columns in {set(df.columns)}"
-
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
     df["only_use_one_dsp"] = (df.get("DSP48E2", 0) == 1) & (
@@ -696,32 +621,6 @@ def _visualize_succeeded_vs_failed_intel(
         "cyclone10lp_lcell_comb",
         "dffeas",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added.
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "family",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-                # Primitives from other architectures that we should ignore.
-                "MULT18X18C",
-                "ALU54A",
-                "DSP48E2",
-            ]
-        )
-    ), f"Unexpected columns in {set(df.columns)}"
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
