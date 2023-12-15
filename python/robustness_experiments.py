@@ -8,7 +8,6 @@ import utils
 import json
 from typing import List
 import pandas
-import logging
 import verilator
 import quartus
 import os
@@ -232,6 +231,9 @@ def _visualize_succeeded_vs_failed_lattice(
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
 
+    # Filter to Lattice rows.
+    df = df[df["architecture"] == "lattice-ecp5"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
     COMPUTATION_PRIMITIVES = [
@@ -253,42 +255,6 @@ def _visualize_succeeded_vs_failed_lattice(
         # "OFS1P3JX",
         # "IFS1P3JX",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added.
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-                # Resources we don't care about.
-                "GSR",
-                "IB",
-                "OB",
-                "PUR",
-                "VHI",
-                "VLO",
-                # Registers...see note above.
-                "TRELLIS_FF",
-                "FD1S3AX",
-                "OFS1P3DX",
-                "DPR16X4C",
-                "IFS1P3DX",
-                "OFS1P3JX",
-                "IFS1P3JX",
-            ]
-        )
-    )
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -390,7 +356,7 @@ def _visualize_succeeded_vs_failed_lattice(
 
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "diamond":
             return "SOTA Lattice"
         elif t == "yosys":
@@ -472,6 +438,10 @@ def _visualize_succeeded_vs_failed_xilinx(
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Filter to Xilinx rows.
+    df = df[df["architecture"] == "xilinx-ultrascale-plus"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
     # SRL16E).
@@ -489,34 +459,6 @@ def _visualize_succeeded_vs_failed_xilinx(
         "MUXF9",
         "FDRE",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-                # Resources we don't care about: things the tools insert that
-                # don't do computation.
-                "GND",
-                "VCC",
-                "BUFG",
-                "IBUF",
-                "OBUF",
-            ]
-        )
-    )
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -570,7 +512,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     # raise Exception(print(df))
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "Anaxi" if t == "lakeroad" else t
+    #     lambda t: "Lakeroad" if t == "lakeroad" else t
     # )
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
     #     lambda t: "SOTA Xilinx" if t == "vivado" else t
@@ -580,7 +522,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     # )
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "vivado":
             return "SOTA Xilinx"
         elif t == "yosys":
@@ -667,6 +609,10 @@ def _visualize_succeeded_vs_failed_intel(
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
 
+    # Filter to Intel rows.
+    df = df[df["architecture"] == "intel"]
+    df = df[df["family"] == "Cyclone 10 LP"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
     COMPUTATION_PRIMITIVES = [
@@ -675,28 +621,6 @@ def _visualize_succeeded_vs_failed_intel(
         "cyclone10lp_lcell_comb",
         "dffeas",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added.
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "family",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                "solver",
-                "solver_flags",
-            ]
-        )
-    )
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -790,7 +714,7 @@ def _visualize_succeeded_vs_failed_intel(
 
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "quartus":
             return "SOTA Intel"
         elif t == "yosys":
@@ -883,167 +807,6 @@ def _collect_robustness_benchmark_data(
     ).to_csv(output_filepath, index=False)
 
 
-def check_dsp_usage(
-    module_name: str,
-    tool_name: str,
-    resource_utilization_json_filepath: Union[str, Path],
-    expect_only_dsp: Optional[bool] = True,
-    expect_fail: Optional[bool] = False,
-):
-    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-    with open(resource_utilization_json_filepath, "r") as f:
-        resource_utilization = json.load(f)
-    """Check if the resource utilization uses DSPs"""
-    # create error folder if it doesn't exist
-    if tool_name == "vivado":
-        # check all the dsps for vivado
-        resource_list = ["DSP48E2", "LUT2"]
-        # if we only expect a dsp, raise exceptions if we see conflicting results in the resource utilization
-        if expect_only_dsp:
-            # NO DSP USED
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            # OTHER PRIMITIVES USED
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-
-    if tool_name == "lakeroad-xilinx":
-        resource_list = ["DSP48E2", "LUT2"]
-        if expect_only_dsp:
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "yosys-xilinx":
-        resource_list = ["DSP48E2", "LUT2"]
-        if expect_only_dsp:
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "diamond":
-        # Skip all of the non-computational primitives
-        resource_skip_set = set(
-            [
-                "FD1S3AX",
-                "GSR",
-                "IB",
-                "OB",
-                "OFS1P3DX",
-                "PUR",
-                "VHI",
-                "VLO",
-                "DPR16X4C",
-                "IFS1P3DX",
-            ]
-        )
-        computational = resource_utilization.keys() - resource_skip_set
-
-        # check to make sure only dsps are in the computational primitives based off what we expect
-        if expect_only_dsp:
-            if (
-                "MULT9X9D" not in resource_utilization
-                and "MULT18X18D" not in resource_utilization
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(computational) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage withot expecting a failed mapping")
-                    raise Exception("extra primitives used" + str(computational))
-    if tool_name == "lakeroad-lattice":
-        if expect_only_dsp:
-            if (
-                "MULT18X18D" not in resource_utilization
-                or resource_utilization["MULT18X18D"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "yosys-lattice":
-        if expect_only_dsp:
-            if (
-                "MULT18X18D" not in resource_utilization
-                or resource_utilization["MULT18X18D"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "quartus":
-        if expect_only_dsp:
-            if "dsps" not in resource_utilization or resource_utilization["dsps"] > 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "lakeroad-intel":
-        if expect_only_dsp:
-            if (
-                "altmult_accum" not in resource_utilization
-                or resource_utilization["altmult_accum"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-
-
 @doit.task_params(
     [
         {
@@ -1060,23 +823,9 @@ def task_robustness_experiments(skip_verilator: bool):
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
 
-    # .json file that contains metadata is produced for each entry's synthesis.
-    xilinx_collected_data_output_filepaths = []
-    lattice_collected_data_output_filepaths = []
-    intel_collected_data_output_filepaths = []
-
-    # determines if the compiler fails for the workload we're looking at
-    def contains_compiler_fail(entry, tool_name):
-        if "expect_fail" in entry:
-            if tool_name in entry["expect_fail"]:
-                return True
-        return False
-
-    # if there is a timeout for lakeroad
-    def contains_compiler_timeout(entry):
-        if "expect_timeout" in entry:
-            return True
-        return False
+    # This list stores the filepaths to each experiment's output .json file,
+    # each of which contains the results of a single experiment.
+    collected_data_output_filepaths = []
 
     for entry in entries:
         backends = entry["backends"]
@@ -1113,7 +862,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
@@ -1155,7 +904,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
 
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1218,7 +967,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
         if "lattice" in backends:
             # diamond-lattice, lakeroad-lattice, yosys-lattice
@@ -1243,7 +992,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             base_path = (
                 utils.output_dir()
@@ -1282,7 +1031,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1342,7 +1091,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
         if "intel" in backends:
             intel_families = utils.get_manifest()["completeness_experiments"]["intel"][
@@ -1380,7 +1129,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             (
                 task,
@@ -1404,7 +1153,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             (
                 task,
@@ -1442,7 +1191,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
 
-            intel_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1487,20 +1236,22 @@ def task_robustness_experiments(skip_verilator: bool):
                     alternative_file_dep=json_filepath,
                 )[0]
 
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    xilinx_csv_output = base_path / "all_results" / "all_xilinx_results_collected.csv"
+    output_csv_path = (
+        utils.output_dir()
+        / utils.get_manifest()["completeness_experiments"]["output_csv_path"]
+    )
     yield {
-        "name": "collect_xilinx_data",
+        "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": xilinx_collected_data_output_filepaths,
-        "targets": [xilinx_csv_output],
+        "file_dep": collected_data_output_filepaths,
+        "targets": [output_csv_path],
         "actions": [
             (
                 _collect_robustness_benchmark_data,
                 [],
                 {
-                    "filepaths": xilinx_collected_data_output_filepaths,
-                    "output_filepath": xilinx_csv_output,
+                    "filepaths": collected_data_output_filepaths,
+                    "output_filepath": output_csv_path,
                 },
             )
         ],
@@ -1508,13 +1259,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "visualize_succeeded_vs_failed_xilinx",
-        "file_dep": [xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1541,58 +1292,15 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
     }
 
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
-
-    yield {
-        "name": "collect_lattice_data",
-        # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": lattice_collected_data_output_filepaths,
-        "targets": [lattice_csv_output],
-        "actions": [
-            (
-                _collect_robustness_benchmark_data,
-                [],
-                {
-                    "filepaths": lattice_collected_data_output_filepaths,
-                    "output_filepath": lattice_csv_output,
-                },
-            )
-        ],
-    }
-
-    intel_csv_output = (
-        utils.output_dir()
-        / "robustness_experiments_csv"
-        / "all_results"
-        / "all_intel_results_collected.csv"
-    )
-    yield {
-        "name": "collect_intel_data",
-        # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": intel_collected_data_output_filepaths,
-        "targets": [intel_csv_output],
-        "actions": [
-            (
-                _collect_robustness_benchmark_data,
-                [],
-                {
-                    "filepaths": intel_collected_data_output_filepaths,
-                    "output_filepath": intel_csv_output,
-                },
-            )
-        ],
-    }
-
     yield {
         "name": "visualize_succeeded_vs_failed_lattice",
-        "file_dep": [lattice_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1620,7 +1328,7 @@ def task_robustness_experiments(skip_verilator: bool):
     }
     yield {
         "name": "visualize_succeeded_vs_failed_all",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _combined_visualized,
@@ -1642,13 +1350,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "timing",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _timing_cdf_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_lattice.png"
                     ),
@@ -1661,7 +1369,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 _timing_cdf_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_xilinx.png"
                     ),
@@ -1687,13 +1395,13 @@ def task_robustness_experiments(skip_verilator: bool):
     )
     yield {
         "name": "visualize_succeeded_vs_failed_intel",
-        "file_dep": [intel_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_intel,
                 [],
                 {
-                    "csv_filepath": intel_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": intel_plot_output_filepath,
                     "cleaned_data_filepath": intel_cleaned_data_filepath,
                     "plot_csv_filepath": intel_plot_csv_filepath,

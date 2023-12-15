@@ -95,7 +95,7 @@ jobs:
           -v /usr/local/diamond:/usr/local/diamond \
           -v /tools/intel:/tools/intel \
           --env LOGLEVEL=INFO \
-          --env OUTPUT_DIR=/root/results \
+          --env LRE_OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
           doit --always-execute --continue -n ${{ env.DOIT_JOBS }}
 

@@ -279,6 +279,6 @@ This folder contains our output runs.
 The location of the experiment output
   can be controlled
   by setting the
-  `OUTPUT_DIR` environment variable.
+  `LRE_OUTPUT_DIR` environment variable.
 By default, the experiment results
   write to `out/`.

@@ -1,14 +1,26 @@
+# Path to the output directory. If this isn't an absolute path, then it will be
+# interpreted relative to the evaluation directory. This can be overridden using
+# the LRE_OUTPUT_DIR environment variable. See python/utils.py.
+output_dir: out/
+
 # Number of iterations of each experiment to run.
-iterations: 3
+# TODO(@gussmith23): Implement this.
+# iterations: 3
 
 # Whether or not to use Quartus in the eval. If true, then QUARTUS_BIN_DIR
 # environment variable must be set to the bin/ dir of Quartus.
-use_quartus: true
-
+# TODO(@gussmith23): Implement this.
+# use_quartus: true
 # TODO(@gussmith23): Add use_diamond, use_vivado.
 
-# Completeness experiments.
+# Lakeroad's completeness experiments evaluate the completeness of Lakeroad
+# and a set of baseline tools. We compile a number of benchmarks intended to
+# fit onto a single DSP, and evaluate which tools are in fact able to fit them
+# onto a single DSP.
 completeness_experiments:
+  # Path to the CSV file to write the results to. Relative to `output_dir`.
+  output_csv_path: raw_data/completeness.csv
+
   lakeroad:
     # Solver instances for Lakeroad's portfolio solver to instantiate. Note that
     # the portfolio solver uses some solvers by default (currently bitwuzla and
