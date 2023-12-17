@@ -19,7 +19,12 @@ import numpy as np
 import re
 
 
-def _plot_timing(completeness_data_filepath: Union[str, Path], architecture: str):
+def _plot_timing(
+    completeness_data_filepath: Union[str, Path],
+    architecture: str,
+    plot_output_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
     df = pd.read_csv(completeness_data_filepath)
     df = df[
         (df["tool"] == "lakeroad")
@@ -33,7 +38,7 @@ def _plot_timing(completeness_data_filepath: Union[str, Path], architecture: str
     assert len(df) > 0, "No data to plot"
 
     fig = plt.figure(figsize=(6, 4))
-    ax = fig.add_subplot(1,1,1)
+    ax = fig.add_subplot(1, 1, 1)
     ax.set_title("Lakeroad synthesis time")
     ax.set_ylabel("fraction of experiments completed")
     ax.set_xlabel("time (s)")
@@ -41,6 +46,7 @@ def _plot_timing(completeness_data_filepath: Union[str, Path], architecture: str
     ax2.set_ylabel("number of experiments completed")
     ax.ecdf(df["time_s"])
     ax2.hist(df["time_s"], alpha=0.5, bins=100)
+
 
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
@@ -1436,5 +1442,25 @@ def task_robustness_experiments(skip_verilator: bool):
             intel_plot_output_filepath,
             intel_cleaned_data_filepath,
             intel_plot_csv_filepath,
+        ],
+    }
+
+    yield {
+        "name": "lakeroad_time_xilinx",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "csv_filepath": output_csv_path,
+                    "plot_output_filepath": (
+                        utils.output_dir() / "figures" / "lakeroad_time_xilinx.png"
+                    ),
+                    "plot_csv_filepath": (
+                        utils.output_dir() / "figures" / "lakeroad_time_xilinx.csv"
+                    ),
+                },
+            )
         ],
     }
