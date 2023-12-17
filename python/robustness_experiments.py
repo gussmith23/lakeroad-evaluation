@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 import doit
 import yaml
@@ -15,8 +15,6 @@ import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-import numpy as np
-import re
 
 
 def _plot_timing(
@@ -24,6 +22,9 @@ def _plot_timing(
     architecture: str,
     plot_output_filepath: Union[str, Path],
     plot_csv_filepath: Union[str, Path],
+    title: str,
+    num_bins: int = 100,
+    alpha: float = 0.5,
 ):
     df = pd.read_csv(completeness_data_filepath)
     df = df[
@@ -39,13 +40,16 @@ def _plot_timing(
 
     fig = plt.figure(figsize=(6, 4))
     ax = fig.add_subplot(1, 1, 1)
-    ax.set_title("Lakeroad synthesis time")
+    ax.set_title(title)
     ax.set_ylabel("fraction of experiments completed")
     ax.set_xlabel("time (s)")
     ax2 = ax.twinx()
     ax2.set_ylabel("number of experiments completed")
     ax.ecdf(df["time_s"])
-    ax2.hist(df["time_s"], alpha=0.5, bins=100)
+    ax2.hist(df["time_s"], alpha=alpha, bins=num_bins)
+
+    df.to_csv(plot_csv_filepath)
+    fig.savefig(plot_output_filepath)
 
 
 def _timing_cdf_xilinx(
@@ -1453,13 +1457,18 @@ def task_robustness_experiments(skip_verilator: bool):
                 _plot_timing,
                 [],
                 {
-                    "csv_filepath": output_csv_path,
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "xilinx-ultrascale-plus",
+                    "title": "Lakeroad compiletime on Xilinx",
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "lakeroad_time_xilinx.png"
                     ),
                     "plot_csv_filepath": (
                         utils.output_dir() / "figures" / "lakeroad_time_xilinx.csv"
                     ),
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "xilinx-timing-num-bins"
+                    ],
                 },
             )
         ],
