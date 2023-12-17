@@ -8,6 +8,7 @@ import utils
 import json
 from typing import List
 import pandas
+import pandas as pd
 import verilator
 import quartus
 import os
@@ -17,6 +18,29 @@ from matplotlib.gridspec import GridSpec
 import numpy as np
 import re
 
+
+def _plot_timing(completeness_data_filepath: Union[str, Path], architecture: str):
+    df = pd.read_csv(completeness_data_filepath)
+    df = df[
+        (df["tool"] == "lakeroad")
+        & (df["architecture"] == architecture)
+        & (
+            (df["lakeroad_synthesis_success"] == True)
+            | (df["lakeroad_synthesis_failure"] == True)
+        )
+        & (df["lakeroad_synthesis_timeout"] == False)
+    ]
+    assert len(df) > 0, "No data to plot"
+
+    fig = plt.figure(figsize=(6, 4))
+    ax = fig.add_subplot(1,1,1)
+    ax.set_title("Lakeroad synthesis time")
+    ax.set_ylabel("fraction of experiments completed")
+    ax.set_xlabel("time (s)")
+    ax2 = ax.twinx()
+    ax2.set_ylabel("number of experiments completed")
+    ax.ecdf(df["time_s"])
+    ax2.hist(df["time_s"], alpha=0.5, bins=100)
 
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
