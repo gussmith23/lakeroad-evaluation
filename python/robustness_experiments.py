@@ -933,7 +933,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                    "timeout"
+                    "xilinx-timeout"
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
@@ -1061,7 +1061,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                    "timeout"
+                    "lattice-timeout"
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
@@ -1227,6 +1227,9 @@ def task_robustness_experiments(skip_verilator: bool):
                     "tool": "lakeroad",
                     "family": str(family),
                 },
+                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                    "intel-timeout"
+                ],
             )
             yield task
 
@@ -1474,7 +1477,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ],
                     "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
-                    ]["timeout"],
+                    ]["xilinx-timeout"],
                 },
             )
         ],
@@ -1501,7 +1504,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ],
                     "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
-                    ]["timeout"],
+                    ]["lattice-timeout"],
                 },
             )
         ],
@@ -1527,7 +1530,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ],
                     "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
-                    ]["timeout"],
+                    ]["intel-timeout"],
                 },
             )
         ],
