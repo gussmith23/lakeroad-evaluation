@@ -49,3 +49,8 @@ completeness_experiments:
     # FPGA families to synthesize for. See IntelFamily.from_str for the
     # available families.
     families: [cyclone10lp]
+
+  # Number of bins to use for the timing histogram.
+  xilinx-timing-num-bins: 20
+  lattice-timing-num-bins: 4
+  intel-timing-num-bins: 4

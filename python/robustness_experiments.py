@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 import doit
 import yaml
@@ -8,14 +8,53 @@ import utils
 import json
 from typing import List
 import pandas
+import pandas as pd
 import verilator
 import quartus
 import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-import numpy as np
-import re
+
+
+def _plot_timing(
+    completeness_data_filepath: Union[str, Path],
+    architecture: str,
+    plot_output_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+    title: str,
+    num_bins: int = 100,
+    alpha: float = 0.5,
+    timeout: int = None,
+    xlim_timeout_padding: int = 5,
+):
+    df = pd.read_csv(completeness_data_filepath)
+    df = df[
+        (df["tool"] == "lakeroad")
+        & (df["architecture"] == architecture)
+        & (
+            (df["lakeroad_synthesis_success"] == True)
+            | (df["lakeroad_synthesis_failure"] == True)
+        )
+        & (df["lakeroad_synthesis_timeout"] == False)
+    ]
+    assert len(df) > 0, "No data to plot"
+
+    fig = plt.figure(figsize=(6, 4))
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_title(title)
+    ax.set_ylabel("fraction of experiments completed")
+    ax.set_xlabel("time (s)")
+    if timeout:
+        ax.set_xlim(0, timeout + xlim_timeout_padding)
+        ax.axvline(x=timeout, color="red", linestyle="--")
+    ax2 = ax.twinx()
+    ax2.set_ylabel("number of experiments completed")
+    ax.ecdf(df["time_s"])
+    ax2.hist(df["time_s"], alpha=alpha, bins=num_bins)
+
+    df.to_csv(plot_csv_filepath)
+    fig.savefig(plot_output_filepath)
 
 
 def _timing_cdf_xilinx(
@@ -1412,5 +1451,84 @@ def task_robustness_experiments(skip_verilator: bool):
             intel_plot_output_filepath,
             intel_cleaned_data_filepath,
             intel_plot_csv_filepath,
+        ],
+    }
+
+    xilinx_time_png = utils.output_dir() / "figures" / "lakeroad_time_xilinx.png"
+    xilinx_time_csv = utils.output_dir() / "figures" / "lakeroad_time_xilinx.csv"
+    yield {
+        "name": "lakeroad_time_xilinx",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "xilinx-ultrascale-plus",
+                    "title": "Lakeroad compiletime on Xilinx",
+                    "plot_output_filepath": xilinx_time_png,
+                    "plot_csv_filepath": xilinx_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "xilinx-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["timeout"],
+                },
+            )
+        ],
+        "targets": [xilinx_time_png, xilinx_time_csv],
+    }
+
+    lattice_time_png = utils.output_dir() / "figures" / "lakeroad_time_lattice.png"
+    lattice_time_csv = utils.output_dir() / "figures" / "lakeroad_time_lattice.csv"
+    yield {
+        "name": "lakeroad_time_lattice",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "lattice-ecp5",
+                    "title": "Lakeroad compiletime on Lattice",
+                    "plot_output_filepath": lattice_time_png,
+                    "plot_csv_filepath": lattice_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "lattice-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["timeout"],
+                },
+            )
+        ],
+    }
+
+    intel_time_png = utils.output_dir() / "figures" / "lakeroad_time_intel.png"
+    intel_time_csv = utils.output_dir() / "figures" / "lakeroad_time_intel.csv"
+    yield {
+        "name": "lakeroad_time_intel",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "intel",
+                    "title": "Lakeroad compiletime on Intel",
+                    "plot_output_filepath": intel_time_png,
+                    "plot_csv_filepath": intel_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "intel-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["timeout"],
+                },
+            )
         ],
     }
