@@ -1391,7 +1391,10 @@ def task_robustness_experiments(skip_verilator: bool):
     }
     yield {
         "name": "visualize_succeeded_vs_failed_all",
-        "file_dep": [output_csv_path],
+        "file_dep": [
+            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
+            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
+        ],
         "actions": [
             (
                 _combined_visualized,
@@ -1454,7 +1457,7 @@ def task_robustness_experiments(skip_verilator: bool):
         / "all_intel_results_collected_cleaned.csv"
     )
     intel_plot_csv_filepath = (
-        utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv"
+        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.csv"
     )
     yield {
         "name": "visualize_succeeded_vs_failed_intel",
