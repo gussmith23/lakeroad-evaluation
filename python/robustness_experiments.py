@@ -17,6 +17,27 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 
 
+def _generate_solver_results_table(
+    completeness_data_filepath: Union[str, Path],
+    out_csv_filepath: Union[str, Path],
+):
+    df = pd.read_csv(completeness_data_filepath)
+    df = df[
+        (df["tool"] == "lakeroad")
+        & (df["lakeroad_synthesis_timeout"] == False)
+        & (
+            (df["lakeroad_synthesis_failure"] == True)
+            | (df["lakeroad_synthesis_success"] == True)
+        )
+    ]
+
+    out = pd.DataFrame()
+    out["counts"] = df["solver"].value_counts()
+    out["fraction"] = out["counts"] / out["counts"].sum()
+
+    out.to_csv(out_csv_filepath)
+
+
 def _plot_timing(
     completeness_data_filepath: Union[str, Path],
     architecture: str,
@@ -1531,6 +1552,22 @@ def task_robustness_experiments(skip_verilator: bool):
                     "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
                     ]["intel-timeout"],
+                },
+            )
+        ],
+    }
+
+    solver_results_csv = utils.output_dir() / "figures" / "solver_results.csv"
+    yield {
+        "name": "solver_results",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _generate_solver_results_table,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "out_csv_filepath": solver_results_csv,
                 },
             )
         ],
