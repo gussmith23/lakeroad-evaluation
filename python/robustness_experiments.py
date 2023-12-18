@@ -25,7 +25,8 @@ def _plot_timing(
     title: str,
     num_bins: int = 100,
     alpha: float = 0.5,
-    xlim: int = None,
+    timeout: int = None,
+    xlim_timeout_padding: int = 5,
 ):
     df = pd.read_csv(completeness_data_filepath)
     df = df[
@@ -44,7 +45,9 @@ def _plot_timing(
     ax.set_title(title)
     ax.set_ylabel("fraction of experiments completed")
     ax.set_xlabel("time (s)")
-    ax.set_xlim(0, xlim)
+    if timeout:
+        ax.set_xlim(0, timeout + xlim_timeout_padding)
+        ax.axvline(x=timeout, color="red", linestyle="--")
     ax2 = ax.twinx()
     ax2.set_ylabel("number of experiments completed")
     ax.ecdf(df["time_s"])
@@ -1469,7 +1472,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "num_bins": utils.get_manifest()["completeness_experiments"][
                         "xilinx-timing-num-bins"
                     ],
-                    "xlim": utils.get_manifest()["completeness_experiments"][
+                    "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
                     ]["timeout"],
                 },
@@ -1496,7 +1499,33 @@ def task_robustness_experiments(skip_verilator: bool):
                     "num_bins": utils.get_manifest()["completeness_experiments"][
                         "lattice-timing-num-bins"
                     ],
-                    "xlim": utils.get_manifest()["completeness_experiments"][
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["timeout"],
+                },
+            )
+        ],
+    }
+
+    intel_time_png = utils.output_dir() / "figures" / "lakeroad_time_intel.png"
+    intel_time_csv = utils.output_dir() / "figures" / "lakeroad_time_intel.csv"
+    yield {
+        "name": "lakeroad_time_intel",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "intel",
+                    "title": "Lakeroad compiletime on Intel",
+                    "plot_output_filepath": intel_time_png,
+                    "plot_csv_filepath": intel_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "intel-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
                         "lakeroad"
                     ]["timeout"],
                 },

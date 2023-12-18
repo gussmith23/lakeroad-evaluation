@@ -53,3 +53,4 @@ completeness_experiments:
   # Number of bins to use for the timing histogram.
   xilinx-timing-num-bins: 20
   lattice-timing-num-bins: 4
+  intel-timing-num-bins: 4
