@@ -36,8 +36,8 @@ completeness_experiments:
     - yices
     # Timeout for Lakeroad on various architectures.
     xilinx-timeout: 120
-    lattice-timeout: 120
-    intel-timeout: 120
+    lattice-timeout: 60
+    intel-timeout: 40
     # The number of random inputs to sample when simulating each experiment with
     # Verilator. Some testbenches are quick, and some aren't. There may be an
     # issue with Lattice an unoptimizable signals -- you can try compiling w/o
