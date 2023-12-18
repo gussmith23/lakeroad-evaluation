@@ -213,7 +213,7 @@ RUN unset VERILATOR_ROOT \
   && cd verilator/ \
   && autoconf \
   && ./configure \
-  && make -j `nproc` \
+  && make -j${MAKE_JOBS} \
   && make install
 ENV VERILATOR_INCLUDE_DIR=/usr/local/share/verilator/include
 
