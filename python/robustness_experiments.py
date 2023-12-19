@@ -1348,10 +1348,7 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
         "targets": [
             utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png",
-            utils.output_dir()
-            / "robustness_experiments_csv"
-            / "all_results"
-            / "all_xilinx_results_collected_cleaned.csv",
+            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
         ],
     }
 
@@ -1383,10 +1380,7 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
         "targets": [
             utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.png",
-            utils.output_dir()
-            / "robustness_experiments_csv"
-            / "all_results"
-            / "all_lattice_results_collected_cleaned.csv",
+            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
         ],
     }
     yield {
