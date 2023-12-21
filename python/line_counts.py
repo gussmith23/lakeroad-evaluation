@@ -113,26 +113,32 @@ def task_verilog_file_line_counts():
         / "xilinx_ultrascale_plus"
         / "LUT6_2.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "altera_mf"
         / "altera_mf_modified.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "lattice_ecp5"
         / "modified_ALU24B.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "lattice_ecp5"
         / "modified_ALU54B.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "lattice_ecp5"
         / "ALU54A_modified_for_racket_import.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "lattice_ecp5"
         / "MULT18X18C_modified_for_racket_import.v",
         utils.lakeroad_evaluation_dir()
+        / "lakeroad"
         / "lakeroad-private"
         / "lattice_ecp5"
         / "MULT18X18D_modified_for_racket_import.v",

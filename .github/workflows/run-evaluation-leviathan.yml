@@ -6,6 +6,19 @@ on:
     - cron: '0 8 * * *'
   workflow_dispatch:
 
+env:
+  # Number of DoIt jobs to run in parallel. This parameter is important: if it's
+  # too high, we'll start seeing odd failures, e.g. #116. If it's too slow, it
+  # will take forever to run. Leviathan has 128 threads, but we can't just do
+  # `doit -n 128`, because the doit tasks take a variable number of threads.
+  # E.g. Lakeroad tasks take one thread per solver in the portfolio, which by
+  # default is at least 2. Vivado also spawns many processes; not sure how many
+  # per job.
+  DOIT_JOBS: 20
+  # Number of jobs when building something with make. This is a separate task
+  # from the above as each job generally uses one thread.
+  MAKE_JOBS: 128
+
 jobs:
 
   # TODO(@gussmith23) It would be nice if this wasn't necessary
@@ -40,7 +53,7 @@ jobs:
       run: |
         cd lakeroad
         git submodule init
-        git submodule update f4pga-arch-defs/ Nitro-Parts-lib-Xilinx/ skywater-pdk-libs-sky130_fd_sc_hd/ SOFA/ verilator-unisims/ verilator_xilinx/ rosette/
+        git submodule update bitwuzla/ lakeroad-private/
 
     - name: Generate Docker image tag
       id: generate-tag
@@ -58,9 +71,11 @@ jobs:
           --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2023.1/bin \
           --build-arg QUARTUS_BIN_DIR=/tools/intel/quartus/bin/ \
           --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
-          --build-arg MAKE_JOBS=36
+          --build-arg MAKE_JOBS=${{ env.MAKE_JOBS }}
 
   run-evaluation:
+    # TODO(@gussmith23): Figure out what's taking so long. (probs Verilator)
+    timeout-minutes: 480
     needs: build-docker-image
     runs-on: [self-hosted, leviathan]
     outputs:
@@ -80,9 +95,9 @@ jobs:
           -v /usr/local/diamond:/usr/local/diamond \
           -v /tools/intel:/tools/intel \
           --env LOGLEVEL=INFO \
-          --env OUTPUT_DIR=/root/results \
+          --env LRE_OUTPUT_DIR=/root/results \
           ${{ needs.build-docker-image.outputs.tag }} \
-          doit --always-execute --continue -n 22
+          doit --always-execute --continue -n ${{ env.DOIT_JOBS }}
 
   send-results-to-slack:
     needs: run-evaluation

@@ -1,25 +1,58 @@
+# Path to the output directory. If this isn't an absolute path, then it will be
+# interpreted relative to the evaluation directory. This can be overridden using
+# the LRE_OUTPUT_DIR environment variable. See python/utils.py.
+output_dir: out/
+
 # Number of iterations of each experiment to run.
-iterations: 3
+# TODO(@gussmith23): Implement this.
+# iterations: 3
 
 # Whether or not to use Quartus in the eval. If true, then QUARTUS_BIN_DIR
 # environment variable must be set to the bin/ dir of Quartus.
-use_quartus: true
-
+# TODO(@gussmith23): Implement this.
+# use_quartus: true
 # TODO(@gussmith23): Add use_diamond, use_vivado.
 
-# Completeness experiments.
+# Lakeroad's completeness experiments evaluate the completeness of Lakeroad
+# and a set of baseline tools. We compile a number of benchmarks intended to
+# fit onto a single DSP, and evaluate which tools are in fact able to fit them
+# onto a single DSP.
 completeness_experiments:
+  # Path to the CSV file to write the results to. Relative to `output_dir`.
+  output_csv_path: raw_data/completeness.csv
+
   lakeroad:
-    # Solvers for Lakeroad to use. Note that the portfolio solver uses some
-    # solvers by default (currently bitwuzla and cvc5), so removing them from this
-    # list will not make them not run.
-    solvers: [bitwuzla, cvc5]
-    # Seeds to use. Default in the script is just 0.
-    seeds: [0]
-    # Timeout for Lakeroad.
-    timeout: 180
+    # Solver instances for Lakeroad's portfolio solver to instantiate. Note that
+    # the portfolio solver uses some solvers by default (currently bitwuzla and
+    # cvc5), so removing them from this list will not make them not run.
+    #
+    # Each instance can either be just a solver name (e.g. "- bitwuzla") or a
+    # map from a solver name to a key-value map of solver flags (e.g.
+    # "- bitwuzla: {':seed': 0}").
+    solver_instances: 
+    - bitwuzla: {":seed": 0}
+    - cvc5: {":seed": 0, ":bitblast": "eager", ":bv-to-bool" : "true", ":bv-gauss-elim": "true"}
+    - stp
+    - yices
+    # Timeout for Lakeroad on various architectures.
+    xilinx-timeout: 120
+    lattice-timeout: 40
+    intel-timeout: 20
     # The number of random inputs to sample when simulating each experiment with
     # Verilator. Some testbenches are quick, and some aren't. There may be an
     # issue with Lattice an unoptimizable signals -- you can try compiling w/o
     # ignoring the UNOPTIMIZABLE warning from Verilator.
     verilator_simulation_iterations: 2500
+    # Number of extra cycles to include in the synthesis query, to approximate
+    # stream-like guarantees.
+    extra_cycles: 2
+
+  intel:
+    # FPGA families to synthesize for. See IntelFamily.from_str for the
+    # available families.
+    families: [cyclone10lp]
+
+  # Number of bins to use for the timing histogram.
+  xilinx-timing-num-bins: 20
+  lattice-timing-num-bins: 4
+  intel-timing-num-bins: 4

@@ -39,6 +39,7 @@ def invoke_lakeroad(
     check_returncode: bool = False,
     extra_summary_fields: Dict[str, Any] = {},
     stderr_filepath: Optional[Union[str, Path]] = None,
+    extra_cycles: Optional[int] = None,
 ):
     """Invoke Lakeroad to generate an instruction implementation.
 
@@ -144,12 +145,32 @@ def invoke_lakeroad(
     if timeout != None:
         cmd += ["--timeout", str(timeout)]
 
+    if extra_cycles != None:
+        cmd += ["--extra-cycles", str(extra_cycles)]
+
     # Add requested solvers and seeds
     manifest = utils.get_manifest()
-    for solver in manifest["completeness_experiments"]["lakeroad"]["solvers"]:
-        cmd += [f"--{solver}"]
-    for seed in manifest["completeness_experiments"]["lakeroad"]["seeds"]:
-        cmd += [f"--seed", str(seed)]
+    for solver_instance in manifest["completeness_experiments"]["lakeroad"][
+        "solver_instances"
+    ]:
+        # If it's just something like "- bitwuzla", then just turn on that sovler.
+        if isinstance(solver_instance, str):
+            cmd += [f"--{solver_instance}"]
+        # Otherwise, if it has flags, like "- bitwuzla: {foo: bar}", then
+        # activate those flags as well.
+        elif isinstance(solver_instance, dict):
+            assert len(solver_instance) == 1
+            solver_name = list(solver_instance.keys())[0]
+            solver_flag_set = ",".join(
+                f"{k}={v}" for (k, v) in solver_instance[solver_name].items()
+            )
+            cmd += [f"--{solver_name}"]
+            cmd += [f"--{solver_name}-flag-set", solver_flag_set]
+        else:
+            raise Exception(f"Unexpected solver_instance: {solver_instance}")
+
+    metadata_out_filepath = NamedTemporaryFile()
+    cmd += ["--metadata-out-filepath", metadata_out_filepath.name]
 
     logging.info(
         "Generating %s with command:\n%s", out_filepath, " ".join(map(str, cmd))
@@ -191,6 +212,13 @@ def invoke_lakeroad(
         proc.returncode == SYNTHESIS_FAIL_RETURN_CODE
     )
 
+    # Add portfolio solver metadata.
+    portfolio_solver_metadata = json.load(open(metadata_out_filepath.name))
+    assert "solver" not in summary
+    summary["solver"] = portfolio_solver_metadata["solver"]
+    assert "solver_flags" not in summary
+    summary["solver_flags"] = portfolio_solver_metadata["flags"]
+
     for extra_field in extra_summary_fields:
         assert extra_field not in summary
         summary[extra_field] = extra_summary_fields[extra_field]
@@ -231,6 +259,7 @@ def make_lakeroad_task(
     reset_name: Optional[str] = None,
     timeout: Optional[int] = None,
     extra_summary_fields: Dict[str, Any] = {},
+    extra_cycles: Optional[int] = None,
 ) -> Tuple[Tuple, Dict]:
     """Creates a DoIt task for invoking Lakeroad.
 
@@ -279,6 +308,7 @@ def make_lakeroad_task(
                 "timeout": timeout,
                 "extra_summary_fields": extra_summary_fields,
                 "stderr_filepath": output_filepaths["lakeroad_stderr"],
+                "extra_cycles": extra_cycles,
             },
         )
     ]

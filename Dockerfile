@@ -93,30 +93,6 @@ RUN mkdir -p /root/.local/bin \
   && chmod +x /root/.local/bin/lit
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Build CIRCT/MLIR.
-# Disabled for now, as we're not using MLIR yet. The build is slow.
-# WORKDIR /root
-# ARG MAKE_JOBS=2
-# ADD circt/ circt/
-# RUN cd circt \
-#   && mkdir llvm/build \
-#   && cd llvm/build \
-#   && cmake -G Ninja ../llvm \
-#   -DLLVM_ENABLE_PROJECTS="mlir" \
-#   -DLLVM_TARGETS_TO_BUILD="host" \
-#   -DLLVM_ENABLE_ASSERTIONS=ON \
-#   -DCMAKE_BUILD_TYPE=DEBUG \
-#   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-#   && ninja -j${MAKE_JOBS} \
-#   && cd ../.. \
-#   && mkdir build && cd build && cmake -G Ninja .. \
-#   -DMLIR_DIR=$PWD/../llvm/build/lib/cmake/mlir \
-#   -DLLVM_DIR=$PWD/../llvm/build/lib/cmake/llvm \
-#   -DLLVM_ENABLE_ASSERTIONS=ON \
-#   -DCMAKE_BUILD_TYPE=DEBUG \
-#   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-#   && ninja -j${MAKE_JOBS}
-
 # Build and install latest boolector.
 WORKDIR /root
 RUN git clone https://github.com/boolector/boolector \
@@ -156,9 +132,8 @@ RUN rm /root/oss-cad-suite/bin/verilator
 # Build latest bitwuzla.
 WORKDIR /root
 ARG MAKE_JOBS=2
-RUN git clone https://github.com/bitwuzla/bitwuzla \
-  && cd bitwuzla \
-  && git checkout 4eda0536800576cb2531ab9ce13292da8f21f0eb \
+ADD lakeroad/bitwuzla bitwuzla
+RUN cd bitwuzla \
   && ./configure.py \
   && cd build \
   && ninja -j${MAKE_JOBS}
@@ -169,16 +144,10 @@ ENV PATH="/root/bitwuzla/build/src/main/:${PATH}"
 # Install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs.
 WORKDIR /root
-ADD lakeroad/rosette/ rosette/
 RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
-  # For now, we use a custom Rosette install; see below.
-  # rosette \
-  yaml \
-  # Install Rosette from submodule. Check that it exists first.
-  && [ "$(ls --almost-all /root/rosette)" ] \
-  && cd /root/rosette \
-  && raco pkg install --deps search-auto --batch
+  rosette \
+  yaml
 
 # Install Rust.
 WORKDIR /root
@@ -244,9 +213,45 @@ RUN unset VERILATOR_ROOT \
   && cd verilator/ \
   && autoconf \
   && ./configure \
-  && make -j `nproc` \
+  && make -j${MAKE_JOBS} \
   && make install
 ENV VERILATOR_INCLUDE_DIR=/usr/local/share/verilator/include
+
+# Build STP.
+WORKDIR /root
+ENV STP_URL="https://github.com/stp/stp/archive/0510509a85b6823278211891cbb274022340fa5c.tar.gz"
+RUN apt-get install -y git cmake bison flex libboost-all-dev python2 perl && \
+  wget ${STP_URL} -nv -O stp.tar.gz && \
+  mkdir stp && \
+  tar xzf stp.tar.gz -C stp --strip-components=1 && \
+  cd stp && \
+  ./scripts/deps/setup-gtest.sh && \
+  ./scripts/deps/setup-outputcheck.sh && \
+  ./scripts/deps/setup-cms.sh && \
+  ./scripts/deps/setup-minisat.sh && \
+  mkdir build && \
+  cd build && \
+  cmake .. && \
+  cmake --build . -j${MAKE_JOBS}
+ENV PATH="/root/stp/build:${PATH}"
+
+# Build Yices2.
+# TODO(@gussmith23): Can we just use the yices in oss-cad-suite? Here, and in Lakeroad itself.
+WORKDIR /root
+ENV YICES2_URL="https://github.com/SRI-CSL/yices2/archive/e27cf308cffb0ecc6cc7165c10e81ca65bc303b3.tar.gz"
+RUN apt-get install -y gperf && \
+  wget ${YICES2_URL} -nv -O yices2.tar.gz && \
+  mkdir yices2 && \
+  tar xvf yices2.tar.gz -C yices2 --strip-components=1 && \
+  cd yices2 && \
+  autoconf && \
+  ./configure && \
+  make -j${MAKE_JOBS} && \
+  # If this line fails, it's presumably because we're on a different architecture.
+  [ -d build/x86_64-pc-linux-gnu-release/bin ]
+ENV PATH="/root/yices2/build/x86_64-pc-linux-gnu-release/bin/:${PATH}"
+
+
 
 WORKDIR /root
 CMD ["bash", "-c", "doit -f experiments/dodo.py -n `nproc`"]

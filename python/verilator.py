@@ -1,14 +1,8 @@
 """Utilities for simulating with Verilator."""
 
-import itertools
-import logging
 import os
 from pathlib import Path
-import random
-import sys
 from typing import List, Optional, Tuple, Union
-import subprocess
-import utils
 
 # Imported from lakeroad/bin, which must be on the PYTHONPATH.
 from simulate_with_verilator import simulate_with_verilator
@@ -18,10 +12,12 @@ def make_verilator_task(
     output_dirpath: Union[Path, str],
     test_module_filepath: List[Union[str, Path]],
     ground_truth_module_filepath: List[Union[str, Path]],
+    test_module_name: str,
+    ground_truth_module_name: str,
     module_inputs: List[Tuple[str, int]],
     clock_name: str,
     initiation_interval: int,
-    output_signal: str,
+    module_outputs: List[Tuple[str, int]],
     max_num_tests: int,
     include_dirs: List[Union[str, Path]] = [],
     extra_args: List[str] = [],
@@ -47,13 +43,13 @@ def make_verilator_task(
     output_dirpath = Path(output_dirpath)
 
     output_filepaths = {
-        "obj_dir_dir": output_dirpath / "verilator_obj_dir",
+        "obj_dir_dirpath": output_dirpath / "verilator_obj_dir",
         "testbench_exe_filepath": output_dirpath / "testbench",
         "testbench_stdout_log_filepath": output_dirpath / "testbench_stdout.log",
         "testbench_stderr_log_filepath": output_dirpath / "testbench_stderr.log",
         "makefile_filepath": output_dirpath / "Makefile",
         "testbench_inputs_filepath": output_dirpath / "testbench_inputs.txt",
-        "testbench_cc_filepath": output_dirpath / "testbench.cc",
+        "testbench_sv_filepath": output_dirpath / "testbench.sv",
     }
 
     task["actions"] = [
@@ -61,7 +57,7 @@ def make_verilator_task(
             simulate_with_verilator,
             [],
             {
-                "obj_dir_dir": output_filepaths["obj_dir_dir"],
+                "obj_dirpath": output_filepaths["obj_dir_dirpath"],
                 "testbench_exe_filepath": output_filepaths["testbench_exe_filepath"],
                 "testbench_stdout_log_filepath": output_filepaths[
                     "testbench_stdout_log_filepath"
@@ -73,17 +69,22 @@ def make_verilator_task(
                 "testbench_inputs_filepath": output_filepaths[
                     "testbench_inputs_filepath"
                 ],
-                "testbench_cc_filepath": output_filepaths["testbench_cc_filepath"],
-                "test_module_filepath": test_module_filepath,
-                "ground_truth_module_filepath": ground_truth_module_filepath,
+                "testbench_sv_filepath": output_filepaths["testbench_sv_filepath"],
+                "verilog_filepaths": [
+                    test_module_filepath,
+                    ground_truth_module_filepath,
+                ],
                 "module_inputs": module_inputs,
                 "clock_name": clock_name,
                 "initiation_interval": initiation_interval,
-                "output_signal": output_signal,
+                "module_outputs": module_outputs,
                 "include_dirs": include_dirs,
                 "extra_args": extra_args,
                 "max_num_tests": max_num_tests,
                 "ignore_missing_test_module_file": ignore_missing_test_module_file,
+                "expect_all_zero_outputs": False,
+                "test_module_name": test_module_name,
+                "ground_truth_module_name": ground_truth_module_name,
             },
         )
     ]

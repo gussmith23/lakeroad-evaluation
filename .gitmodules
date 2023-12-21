@@ -2,21 +2,9 @@
 	path = lakeroad
 	url = git@github.com:gussmith23/lakeroad
 	ignore = untracked
-[submodule "verilator-unisims"]
-	path = verilator-unisims
-	url = git@github.com:oliverbunting/verilator-unisims
-[submodule "circt"]
-	path = circt
-	url = git@github.com:uwsampl/circt
 [submodule "yosys"]
 	path = yosys
 	url = git@github.com:uwsampl/yosys
-[submodule "fpga-dsp-mapping-benchmarks"]
-	path = fpga-dsp-mapping-benchmarks
-	url = git@github.com:uwsampl/fpga-dsp-mapping-benchmarks.git
-[submodule "lakeroad-private"]
-	path = lakeroad-private
-	url = git@github.com:uwsampl/lakeroad-private
 [submodule "verilator"]
 	path = verilator
 	url = git@github.com:verilator/verilator

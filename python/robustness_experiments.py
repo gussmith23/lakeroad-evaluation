@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 import doit
 import yaml
@@ -8,15 +8,74 @@ import utils
 import json
 from typing import List
 import pandas
-import logging
+import pandas as pd
 import verilator
 import quartus
 import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-import numpy as np
-import re
+
+
+def _generate_solver_results_table(
+    completeness_data_filepath: Union[str, Path],
+    out_csv_filepath: Union[str, Path],
+):
+    df = pd.read_csv(completeness_data_filepath)
+    df = df[
+        (df["tool"] == "lakeroad")
+        & (df["lakeroad_synthesis_timeout"] == False)
+        & (
+            (df["lakeroad_synthesis_failure"] == True)
+            | (df["lakeroad_synthesis_success"] == True)
+        )
+    ]
+
+    out = pd.DataFrame()
+    out["counts"] = df["solver"].value_counts()
+    out["fraction"] = out["counts"] / out["counts"].sum()
+
+    out.to_csv(out_csv_filepath)
+
+
+def _plot_timing(
+    completeness_data_filepath: Union[str, Path],
+    architecture: str,
+    plot_output_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+    title: str,
+    num_bins: int = 100,
+    alpha: float = 0.5,
+    timeout: int = None,
+    xlim_timeout_padding: int = 5,
+):
+    df = pd.read_csv(completeness_data_filepath)
+    df = df[
+        (df["tool"] == "lakeroad")
+        & (df["architecture"] == architecture)
+        & (
+            (df["lakeroad_synthesis_success"] == True)
+            | (df["lakeroad_synthesis_failure"] == True)
+        )
+        & (df["lakeroad_synthesis_timeout"] == False)
+    ]
+    assert len(df) > 0, "No data to plot"
+
+    fig = plt.figure(figsize=(6, 4))
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_title(title)
+    ax.set_ylabel("fraction of experiments completed")
+    ax.set_xlabel("time (s)")
+    if timeout:
+        ax.set_xlim(0, timeout + xlim_timeout_padding)
+        ax.axvline(x=timeout, color="red", linestyle="--")
+    ax2 = ax.twinx()
+    ax2.set_ylabel("number of experiments completed")
+    ax.ecdf(df["time_s"])
+    ax2.hist(df["time_s"], alpha=alpha, bins=num_bins)
+
+    df.to_csv(plot_csv_filepath)
+    fig.savefig(plot_output_filepath)
 
 
 def _timing_cdf_xilinx(
@@ -232,6 +291,9 @@ def _visualize_succeeded_vs_failed_lattice(
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
 
+    # Filter to Lattice rows.
+    df = df[df["architecture"] == "lattice-ecp5"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
     COMPUTATION_PRIMITIVES = [
@@ -253,40 +315,6 @@ def _visualize_succeeded_vs_failed_lattice(
         # "OFS1P3JX",
         # "IFS1P3JX",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added.
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                # Resources we don't care about.
-                "GSR",
-                "IB",
-                "OB",
-                "PUR",
-                "VHI",
-                "VLO",
-                # Registers...see note above.
-                "TRELLIS_FF",
-                "FD1S3AX",
-                "OFS1P3DX",
-                "DPR16X4C",
-                "IFS1P3DX",
-                "OFS1P3JX",
-                "IFS1P3JX",
-            ]
-        )
-    )
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -388,13 +416,13 @@ def _visualize_succeeded_vs_failed_lattice(
 
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "diamond":
             return "SOTA Lattice"
         elif t == "yosys":
             return "Yosys"
         else:
-            return t
+            raise NotImplementedError()
 
     suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
     # Sanity check.
@@ -470,6 +498,10 @@ def _visualize_succeeded_vs_failed_xilinx(
 ):
     # Note, we fill NaNs with 0.
     df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Filter to Xilinx rows.
+    df = df[df["architecture"] == "xilinx-ultrascale-plus"]
+
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
     # SRL16E).
@@ -487,32 +519,6 @@ def _visualize_succeeded_vs_failed_xilinx(
         "MUXF9",
         "FDRE",
     ]
-
-    # Make sure we're aware of all columns that may exist. This is so we're sure
-    # that we're not forgetting to take some columns into account.
-    assert set(df.columns).issubset(
-        set(
-            COMPUTATION_PRIMITIVES
-            + [
-                # Columns we added
-                "time_s",
-                "identifier",
-                "architecture",
-                "tool",
-                "returncode",
-                "lakeroad_synthesis_success",
-                "lakeroad_synthesis_timeout",
-                "lakeroad_synthesis_failure",
-                # Resources we don't care about: things the tools insert that
-                # don't do computation.
-                "GND",
-                "VCC",
-                "BUFG",
-                "IBUF",
-                "OBUF",
-            ]
-        )
-    )
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
@@ -566,7 +572,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     # raise Exception(print(df))
     # rename the tools in dataframe
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "Anaxi" if t == "lakeroad" else t
+    #     lambda t: "Lakeroad" if t == "lakeroad" else t
     # )
     # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
     #     lambda t: "SOTA Xilinx" if t == "vivado" else t
@@ -576,13 +582,13 @@ def _visualize_succeeded_vs_failed_xilinx(
     # )
     def match(t):
         if t == "lakeroad":
-            return "Anaxi"
+            return "Lakeroad"
         elif t == "vivado":
             return "SOTA Xilinx"
         elif t == "yosys":
             return "Yosys"
         else:
-            return t
+            raise NotImplementedError()
 
     suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
 
@@ -654,6 +660,200 @@ def _visualize_succeeded_vs_failed_xilinx(
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
+def _visualize_succeeded_vs_failed_intel(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
+    # Note, we fill NaNs with 0.
+    df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Filter to Intel rows.
+    df = df[df["architecture"] == "intel"]
+    df = df[df["family"] == "Cyclone 10 LP"]
+
+    # Resources we care about: things that do computation
+    # (DSPs,LUTs)/wire manipulation (muxes)/state (registers).
+    COMPUTATION_PRIMITIVES = [
+        "cyclone10lp_mac_mult",
+        "cyclone10lp_mac_out",
+        "cyclone10lp_lcell_comb",
+        "dffeas",
+    ]
+
+    # Column which checks whether the experiment uses one DSP and no other
+    # computational units.
+    #
+    # For Intel, we define this as one mac_mult and 0 or 1 mac_outs.
+    # This column is false if there are any `dffeas` (register) primitives, as
+    # all tested workloads can use the registers on the `mac` primitives.
+    df["only_use_one_dsp"] = (
+        # if tool==Lakeroad, check that that Lakeroad succeeded.
+        (~(df["tool"] == "lakeroad") | (df["lakeroad_synthesis_success"] == True))
+        # Uses exactly one mac mult. Should this be <= 1?
+        & (df["cyclone10lp_mac_mult"] == 1)
+        # Uses 0 or 1 mac outs.
+        & (df["cyclone10lp_mac_out"] <= 1)
+        # Whether the number of computation primitives that aren't
+        # mac_mult/mac_out is 0.
+        & (
+            sum(
+                # A list of the columns containing the primitive counts for
+                # primitives that aren't mac_mult/mac_out.
+                map(
+                    lambda col: df.get(col, 0),
+                    list(
+                        set(COMPUTATION_PRIMITIVES)
+                        - set(
+                            [
+                                "cyclone10lp_mac_mult",
+                                "cyclone10lp_mac_out",
+                            ]
+                        )
+                    ),
+                )
+            )
+            == 0
+        )
+    )
+
+    # Filter out 3-stage workloads.
+    df = df[~df["identifier"].str.match(".*3_stage.*", case=False)]
+
+    # Write out the cleaned data.
+    Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cleaned_data_filepath)
+
+    ## Make a new table which will underlie the output figure.
+
+    # Tool column simply contains the tools we're interested in.
+    suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "quartus", "yosys"]})
+
+    # Number of experiments run for each tool.
+    suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
+        lambda t: (df["tool"] == t).sum()
+    )
+
+    # Number of "successful" experiments for each tool, i.e. experiments where
+    # the tool could map the design to a single DSP (determined by the column we
+    # created above).
+    suc_v_unsuc["num_successful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & df["only_use_one_dsp"]).sum()
+    )
+
+    # Number of "unsuccessful" experiments for each tool. We ignore Lakeroad,
+    # because we'll calculate different successful/unsuccessful columns for
+    # Lakeroad. (We split Lakeroad's unsuccessful experiments into unsat and
+    # timeout.)
+    suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+        if t != "lakeroad"
+        else 0
+    )
+
+    # Lakeroad unsuccessful columns.
+    suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_failure"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+    suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_timeout"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+
+    def match(t):
+        if t == "lakeroad":
+            return "Lakeroad"
+        elif t == "quartus":
+            return "SOTA Intel"
+        elif t == "yosys":
+            return "Yosys"
+        else:
+            raise NotImplementedError()
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
+    # Sanity check.
+    assert suc_v_unsuc["num_experiments"].equals(
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+
+    # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and
+    # lakeroad_timeout experiments for each tool.
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+
+    # Write out plot data to a CSV.
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
+
+    # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    fig = plt.figure(figsize=(20, 6))
+    ax = plt.subplot(gs[0])
+    ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+            "percentage_lr_unsat",
+        ],
+        color=["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"],
+        stacked=True,
+        rot=0,
+        xlabel="Tool",
+        ylabel="Percentage (%)",
+    )
+
+    # set timeout bar to be red
+    plt.title("Intel Cyclone 10 LP", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+
+    # # Save the plot to the specified output filepath.
+    plot_output_filepath = Path(plot_output_filepath)
+    plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    # ax.get_figure().savefig(plot_output_filepath)
+    # set legend location
+    ax.legend(loc="upper right", labels=["succeeded", "failed"], fontsize=7)
+    # ax.get_legend().legendHandles[2].set_color("red")
+    # raise Exception(print(ax.get_legend().legendHandles[2]))
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
+
+
 def _collect_robustness_benchmark_data(
     filepaths: List[Union[str, Path]], output_filepath: Union[str, Path]
 ):
@@ -665,167 +865,6 @@ def _collect_robustness_benchmark_data(
             map(lambda f: json.load(open(f)) if os.path.exists(f) else None, filepaths),
         )
     ).to_csv(output_filepath, index=False)
-
-
-def check_dsp_usage(
-    module_name: str,
-    tool_name: str,
-    resource_utilization_json_filepath: Union[str, Path],
-    expect_only_dsp: Optional[bool] = True,
-    expect_fail: Optional[bool] = False,
-):
-    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-    with open(resource_utilization_json_filepath, "r") as f:
-        resource_utilization = json.load(f)
-    """Check if the resource utilization uses DSPs"""
-    # create error folder if it doesn't exist
-    if tool_name == "vivado":
-        # check all the dsps for vivado
-        resource_list = ["DSP48E2", "LUT2"]
-        # if we only expect a dsp, raise exceptions if we see conflicting results in the resource utilization
-        if expect_only_dsp:
-            # NO DSP USED
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            # OTHER PRIMITIVES USED
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-
-    if tool_name == "lakeroad-xilinx":
-        resource_list = ["DSP48E2", "LUT2"]
-        if expect_only_dsp:
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "yosys-xilinx":
-        resource_list = ["DSP48E2", "LUT2"]
-        if expect_only_dsp:
-            if (
-                "DSP48E2" not in resource_utilization
-                or resource_utilization["DSP48E2"] > 1
-            ):
-                if not expect_fail:
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-            if "LUT2" in resource_utilization:
-                if not expect_fail:
-                    raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "diamond":
-        # Skip all of the non-computational primitives
-        resource_skip_set = set(
-            [
-                "FD1S3AX",
-                "GSR",
-                "IB",
-                "OB",
-                "OFS1P3DX",
-                "PUR",
-                "VHI",
-                "VLO",
-                "DPR16X4C",
-                "IFS1P3DX",
-            ]
-        )
-        computational = resource_utilization.keys() - resource_skip_set
-
-        # check to make sure only dsps are in the computational primitives based off what we expect
-        if expect_only_dsp:
-            if (
-                "MULT9X9D" not in resource_utilization
-                and "MULT18X18D" not in resource_utilization
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    raise Exception(
-                        "incorrect dsp usage without expecting a failed mapping"
-                    )
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(computational) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage withot expecting a failed mapping")
-                    raise Exception("extra primitives used" + str(computational))
-    if tool_name == "lakeroad-lattice":
-        if expect_only_dsp:
-            if (
-                "MULT18X18D" not in resource_utilization
-                or resource_utilization["MULT18X18D"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "yosys-lattice":
-        if expect_only_dsp:
-            if (
-                "MULT18X18D" not in resource_utilization
-                or resource_utilization["MULT18X18D"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "quartus":
-        if expect_only_dsp:
-            if "dsps" not in resource_utilization or resource_utilization["dsps"] > 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-    if tool_name == "lakeroad-intel":
-        if expect_only_dsp:
-            if (
-                "altmult_accum" not in resource_utilization
-                or resource_utilization["altmult_accum"] > 1
-            ):
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
-            if len(resource_utilization) != 1:
-                if not expect_fail:
-                    with open(error_folder_path / "diamond.json", "w+") as f:
-                        json.dump(resource_utilization, f)
-                    # raise Exception("incorrect dsp usage without expecting a failed mapping")
-                    # raise Exception("lut used without expecting a failed mapping")
 
 
 @doit.task_params(
@@ -844,22 +883,9 @@ def task_robustness_experiments(skip_verilator: bool):
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
 
-    # .json file that contains metadata is produced for each entry's synthesis.
-    xilinx_collected_data_output_filepaths = []
-    lattice_collected_data_output_filepaths = []
-
-    # determines if the compiler fails for the workload we're looking at
-    def contains_compiler_fail(entry, tool_name):
-        if "expect_fail" in entry:
-            if tool_name in entry["expect_fail"]:
-                return True
-        return False
-
-    # if there is a timeout for lakeroad
-    def contains_compiler_timeout(entry):
-        if "expect_timeout" in entry:
-            return True
-        return False
+    # This list stores the filepaths to each experiment's output .json file,
+    # each of which contains the results of a single experiment.
+    collected_data_output_filepaths = []
 
     for entry in entries:
         backends = entry["backends"]
@@ -896,7 +922,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -941,9 +967,14 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
-                out_module_name="output",
+                out_module_name="lakeroad_output",
                 architecture="xilinx-ultrascale-plus",
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
@@ -954,7 +985,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                    "timeout"
+                    "xilinx-timeout"
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
@@ -964,7 +995,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
 
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -975,14 +1006,19 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
+                    test_module_name="lakeroad_output",
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
+                    ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2"
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "DSP48E2"
                     ],
                     extra_args=[
                         "-DXIL_XECLIB",
@@ -1022,7 +1058,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            xilinx_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1078,7 +1114,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1126,9 +1162,14 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
                 out_dirpath=base_path,
                 template="dsp",
-                out_module_name="output",
+                out_module_name="lakeroad_output",
                 architecture="lattice-ecp5",
                 verilog_module_filepath=utils.lakeroad_evaluation_dir()
                 / entry["filepath"],
@@ -1139,7 +1180,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                    "timeout"
+                    "lattice-timeout"
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
@@ -1148,7 +1189,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
@@ -1159,14 +1200,17 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
+                    test_module_name="lakeroad_output",
                     ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
                     / entry["filepath"],
+                    ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "lattice_ecp5"
                     ],
@@ -1205,107 +1249,170 @@ def task_robustness_experiments(skip_verilator: bool):
                 },
             )
             yield task
-            lattice_collected_data_output_filepaths.append(json_filepath)
+            collected_data_output_filepaths.append(json_filepath)
 
-        # if "intel" in backends:
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "quartus_intel"
-        #     )
-        #     yield quartus.make_quartus_task(
-        #         identifier = entry["module_name"],
-        #         top_module_name = entry["module_name"],
-        #         source_input_filepath = utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         summary_output_filepath = base_path / "summary.map.summary",
-        #         json_output_filepath = base_path / f"{entry['module_name']}_resource_utilization.json",
-        #         time_output_filepath = base_path / "out.time",
-        #         collected_data_output_filepath = base_path / "collected_data.json",
-        #         iteration = 0,
-        #         task_name = f"{entry['module_name']}:quartus_intel"
-        #     )
-        #     base_path = (
-        #         utils.output_dir()
-        #         / "robustness_experiments"
-        #         / entry["module_name"]
-        #         / "lakeroad_intel"
-        #     )
-        #     # TODO(@vcanumalla): Add rest of quartus (yosys)
-        #     yield lakeroad.make_lakeroad_task(
-        #         iteration=0,
-        #         identifier=entry["module_name"],
-        #         collected_data_output_filepath=base_path / "collected_data.json",
-        #         template="dsp",
-        #         out_module_name="output",
-        #         out_filepath=base_path / "output.v",
-        #         architecture="intel",
-        #         time_filepath=base_path / "out.time",
-        #         json_filepath=base_path / "out.json",
-        #         verilog_module_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         top_module_name=entry["module_name"],
-        #         clock_name=("clk" if entry["stages"] != 0 else None),,
-        #         name=entry["module_name"] + ":lakeroad-intel",
-        #         initiation_interval=entry["stages"],
-        #         inputs=entry["inputs"],
-        #         verilog_module_out_signal=("out", entry["bitwidth"]),
-        #     )
-        #     yield {
-        #         "name": f"{entry['module_name']}:lakeroad-intel:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": base_path
-        #                     / "collected_data.json",
-        #                     "module_name": entry["module_name"],
-        #                     "tool_name": "lakeroad-intel",
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [base_path / "collected_data.json"],
-        #     }
-        #     yield quartus.make_intel_yosys_synthesis_task(
-        #         input_filepath=utils.lakeroad_evaluation_dir()/ entry["filepath"],
-        #         output_dirpath=(
-        #             utils.output_dir()
-        #             / "robustness_experiments"
-        #             / entry["module_name"]
-        #             / "yosys_intel"
-        #         ),
-        #         module_name=entry["module_name"],
-        #         name=f"{entry['module_name']}:yosys_intel",
+        if "intel" in backends:
+            intel_families = utils.get_manifest()["completeness_experiments"]["intel"][
+                "families"
+            ]
+            # Easy to update; just make this a loop over the families, if this
+            # is needed in the future.
+            assert (
+                len(intel_families) == 1
+            ), "Only one intel family is supported for now"
+            family = quartus.IntelFamily.from_str(intel_families[0])
+            assert family == quartus.IntelFamily.CYCLONE10LP
 
-        #     )
-        #     yield {
-        #         "name": f"{entry['module_name']}:yosys_intel:dsp_check",
-        #         "actions": [
-        #             (
-        #                 check_dsp_usage,
-        #                 [],
-        #                 {
-        #                     "resource_utilization_json_filepath": resources_filepath,
-        #                     "module_name": entry["module_name"],
-        #                 },
-        #             )
-        #         ],
-        #         "file_dep": [resources_filepath],
-        #     }
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    xilinx_csv_output = base_path / "all_results" / "all_xilinx_results_collected.csv"
+            (task, (json_filepath, _)) = quartus.make_quartus_task(
+                identifier=entry["module_name"],
+                top_module_name=entry["module_name"],
+                source_input_filepath=(
+                    utils.lakeroad_evaluation_dir() / entry["filepath"]
+                ),
+                base_output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "quartus_intel"
+                ),
+                iteration=0,
+                task_name=f"{entry['module_name']}:quartus_intel",
+                working_directory=base_path,
+                family=family,
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "quartus",
+                    "family": str(family),
+                },
+            )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
+
+            (
+                task,
+                (json_filepath, _, _),
+            ) = hardware_compilation.make_intel_yosys_synthesis_task(
+                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                output_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "yosys_intel"
+                ),
+                module_name=entry["module_name"],
+                family=family,
+                name=f"{entry['module_name']}:yosys_intel",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "yosys",
+                    "family": str(family),
+                },
+            )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
+
+            (
+                task,
+                (json_filepath, verilog_filepath, _),
+            ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                        "extra_cycles"
+                    ]
+                ),
+                out_dirpath=(
+                    utils.output_dir()
+                    / "robustness_experiments"
+                    / entry["module_name"]
+                    / "lakeroad_intel"
+                ),
+                template="dsp",
+                out_module_name="lakeroad_output",
+                architecture="intel-cyclone10lp",
+                verilog_module_filepath=(
+                    utils.lakeroad_evaluation_dir() / entry["filepath"]
+                ),
+                top_module_name=entry["module_name"],
+                clock_name=("clk" if entry["stages"] != 0 else None),
+                name=entry["module_name"] + ":lakeroad_intel",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "intel",
+                    "tool": "lakeroad",
+                    "family": str(family),
+                },
+                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                    "intel-timeout"
+                ],
+            )
+            yield task
+
+            collected_data_output_filepaths.append(json_filepath)
+
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    name=f"{entry['module_name']}:lakeroad_intel:verilator",
+                    # TODO(@gussmith23): Ideally, we wouldn't need this flag --
+                    # instead, we would know when Lakeroad was going to fail and we
+                    # wouldn't create a Verilator task.
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=(
+                        utils.output_dir()
+                        / "robustness_experiments"
+                        / entry["module_name"]
+                        / "lakeroad_intel"
+                        / "verilator"
+                    ),
+                    test_module_filepath=verilog_filepath,
+                    test_module_name="lakeroad_output",
+                    ground_truth_module_filepath=(
+                        utils.lakeroad_evaluation_dir() / entry["filepath"]
+                    ),
+                    ground_truth_module_name=entry["module_name"],
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    module_outputs=[("out", entry["bitwidth"])],
+                    include_dirs=[
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "intel_cyclone10lp"
+                    ],
+                    extra_args=[
+                        "-Wno-LATCH",
+                        "-Wno-INITIALDLY",
+                        "-Wno-COMBDLY",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-WIDTH",
+                    ],
+                    max_num_tests=utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["verilator_simulation_iterations"],
+                    alternative_file_dep=json_filepath,
+                )[0]
+
+    output_csv_path = (
+        utils.output_dir()
+        / utils.get_manifest()["completeness_experiments"]["output_csv_path"]
+    )
     yield {
-        "name": "collect_xilinx_data",
+        "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": xilinx_collected_data_output_filepaths,
-        "targets": [xilinx_csv_output],
+        "file_dep": collected_data_output_filepaths,
+        "targets": [output_csv_path],
         "actions": [
             (
                 _collect_robustness_benchmark_data,
                 [],
                 {
-                    "filepaths": xilinx_collected_data_output_filepaths,
-                    "output_filepath": xilinx_csv_output,
+                    "filepaths": collected_data_output_filepaths,
+                    "output_filepath": output_csv_path,
                 },
             )
         ],
@@ -1313,13 +1420,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "visualize_succeeded_vs_failed_xilinx",
-        "file_dep": [xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1339,42 +1446,19 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
         "targets": [
             utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png",
-            utils.output_dir()
-            / "robustness_experiments_csv"
-            / "all_results"
-            / "all_xilinx_results_collected_cleaned.csv",
-        ],
-    }
-
-    base_path = utils.output_dir() / "robustness_experiments_csv"
-    lattice_csv_output = base_path / "all_results" / "all_lattice_results_collected.csv"
-
-    yield {
-        "name": "collect_lattice_data",
-        # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": lattice_collected_data_output_filepaths,
-        "targets": [lattice_csv_output],
-        "actions": [
-            (
-                _collect_robustness_benchmark_data,
-                [],
-                {
-                    "filepaths": lattice_collected_data_output_filepaths,
-                    "output_filepath": lattice_csv_output,
-                },
-            )
+            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
         ],
     }
 
     yield {
         "name": "visualize_succeeded_vs_failed_lattice",
-        "file_dep": [lattice_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _visualize_succeeded_vs_failed_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir()
                         / "figures"
@@ -1394,15 +1478,15 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
         "targets": [
             utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.png",
-            utils.output_dir()
-            / "robustness_experiments_csv"
-            / "all_results"
-            / "all_lattice_results_collected_cleaned.csv",
+            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
         ],
     }
     yield {
         "name": "visualize_succeeded_vs_failed_all",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [
+            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
+            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
+        ],
         "actions": [
             (
                 _combined_visualized,
@@ -1424,13 +1508,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     yield {
         "name": "timing",
-        "file_dep": [lattice_csv_output, xilinx_csv_output],
+        "file_dep": [output_csv_path],
         "actions": [
             (
                 _timing_cdf_lattice,
                 [],
                 {
-                    "csv_filepath": lattice_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_lattice.png"
                     ),
@@ -1443,7 +1527,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 _timing_cdf_xilinx,
                 [],
                 {
-                    "csv_filepath": xilinx_csv_output,
+                    "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
                         utils.output_dir() / "figures" / "timing_cdf_xilinx.png"
                     ),
@@ -1452,5 +1536,134 @@ def task_robustness_experiments(skip_verilator: bool):
                     ),
                 },
             ),
+        ],
+    }
+
+    intel_plot_output_filepath = (
+        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.png"
+    )
+    intel_cleaned_data_filepath = (
+        utils.output_dir()
+        / "robustness_experiments_csv"
+        / "all_results"
+        / "all_intel_results_collected_cleaned.csv"
+    )
+    intel_plot_csv_filepath = (
+        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.csv"
+    )
+    yield {
+        "name": "visualize_succeeded_vs_failed_intel",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _visualize_succeeded_vs_failed_intel,
+                [],
+                {
+                    "csv_filepath": output_csv_path,
+                    "plot_output_filepath": intel_plot_output_filepath,
+                    "cleaned_data_filepath": intel_cleaned_data_filepath,
+                    "plot_csv_filepath": intel_plot_csv_filepath,
+                },
+            )
+        ],
+        "targets": [
+            intel_plot_output_filepath,
+            intel_cleaned_data_filepath,
+            intel_plot_csv_filepath,
+        ],
+    }
+
+    xilinx_time_png = utils.output_dir() / "figures" / "lakeroad_time_xilinx.png"
+    xilinx_time_csv = utils.output_dir() / "figures" / "lakeroad_time_xilinx.csv"
+    yield {
+        "name": "lakeroad_time_xilinx",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "xilinx-ultrascale-plus",
+                    "title": "Lakeroad compiletime on Xilinx",
+                    "plot_output_filepath": xilinx_time_png,
+                    "plot_csv_filepath": xilinx_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "xilinx-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["xilinx-timeout"],
+                },
+            )
+        ],
+        "targets": [xilinx_time_png, xilinx_time_csv],
+    }
+
+    lattice_time_png = utils.output_dir() / "figures" / "lakeroad_time_lattice.png"
+    lattice_time_csv = utils.output_dir() / "figures" / "lakeroad_time_lattice.csv"
+    yield {
+        "name": "lakeroad_time_lattice",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "lattice-ecp5",
+                    "title": "Lakeroad compiletime on Lattice",
+                    "plot_output_filepath": lattice_time_png,
+                    "plot_csv_filepath": lattice_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "lattice-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["lattice-timeout"],
+                },
+            )
+        ],
+    }
+
+    intel_time_png = utils.output_dir() / "figures" / "lakeroad_time_intel.png"
+    intel_time_csv = utils.output_dir() / "figures" / "lakeroad_time_intel.csv"
+    yield {
+        "name": "lakeroad_time_intel",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "intel",
+                    "title": "Lakeroad compiletime on Intel",
+                    "plot_output_filepath": intel_time_png,
+                    "plot_csv_filepath": intel_time_csv,
+                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                        "intel-timing-num-bins"
+                    ],
+                    "timeout": utils.get_manifest()["completeness_experiments"][
+                        "lakeroad"
+                    ]["intel-timeout"],
+                },
+            )
+        ],
+    }
+
+    solver_results_csv = utils.output_dir() / "figures" / "solver_results.csv"
+    yield {
+        "name": "solver_results",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _generate_solver_results_table,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "out_csv_filepath": solver_results_csv,
+                },
+            )
         ],
     }
