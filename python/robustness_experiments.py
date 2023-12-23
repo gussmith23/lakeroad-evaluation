@@ -880,6 +880,10 @@ def _collect_robustness_benchmark_data(
 def task_robustness_experiments(skip_verilator: bool):
     """Robustness experiments: finding Verilog files that existing tools can't map"""
 
+    manifest = utils.get_manifest()
+    output_dir = utils.output_dir()
+    lakeroad_evaluation_dir = utils.lakeroad_evaluation_dir()
+
     entries = yaml.safe_load(stream=open("robustness-manifest.yml", "r"))
     # entries = yaml.safe_load(stream=open("test-robustness.yaml", "r"))
 
@@ -892,17 +896,14 @@ def task_robustness_experiments(skip_verilator: bool):
         if "xilinx" in backends:
             # base path for vivado tasks for this entry
             base_path = (
-                utils.output_dir()
-                / "robustness_experiments"
-                / entry["module_name"]
-                / "vivado"
+                output_dir / "robustness_experiments" / entry["module_name"] / "vivado"
             )
             # vivado synthesis
             (
                 task,
                 (json_filepath, vivado_output_verilog, _, _),
             ) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
-                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 # TODO(@gussmith23): Hardcoding clock name and period here.
@@ -932,17 +933,19 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=False,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=vivado_output_verilog,
-                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "DSP48E2",
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "vivado_2023.1",
                     ],
@@ -956,14 +959,14 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-TIMESCALEMOD",
                         "-Wno-PINMISSING",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                 )[0]
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
-                utils.output_dir()
+                output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
                 / "lakeroad_xilinx_ultrascale_plus"
@@ -974,23 +977,20 @@ def task_robustness_experiments(skip_verilator: bool):
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
                 extra_cycles=(
-                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                        "extra_cycles"
-                    ]
+                    manifest["completeness_experiments"]["lakeroad"]["extra_cycles"]
                 ),
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="lakeroad_output",
                 architecture="xilinx-ultrascale-plus",
-                verilog_module_filepath=utils.lakeroad_evaluation_dir()
-                / entry["filepath"],
+                verilog_module_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad-xilinx",
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
-                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                timeout=manifest["completeness_experiments"]["lakeroad"][
                     "xilinx-timeout"
                 ],
                 extra_summary_fields={
@@ -1013,7 +1013,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
                     test_module_name="lakeroad_output",
-                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
                     / entry["filepath"],
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
@@ -1021,7 +1021,8 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad"
                         / "lakeroad-private"
                         / "DSP48E2"
@@ -1036,15 +1037,15 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-TIMESCALEMOD",
                         "-Wno-PINMISSING",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                     alternative_file_dep=json_filepath,
                 )[0]
 
             # yosys synthesis for xilinx backend
             base_path = (
-                utils.output_dir()
+                output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
                 / "yosys_xilinx_ultrascale_plus"
@@ -1053,7 +1054,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, _, _),
             ) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
-                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:yosys_xilinx_ultrascale_plus",
@@ -1074,17 +1075,19 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=False,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=vivado_output_verilog,
-                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "DSP48E2",
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "vivado_2023.1",
                     ],
@@ -1098,24 +1101,21 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-TIMESCALEMOD",
                         "-Wno-PINMISSING",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                 )[0]
 
         if "lattice" in backends:
             # diamond-lattice, lakeroad-lattice, yosys-lattice
             base_path = (
-                utils.output_dir()
-                / "robustness_experiments"
-                / entry["module_name"]
-                / "diamond"
+                output_dir / "robustness_experiments" / entry["module_name"] / "diamond"
             )
             (
                 task,
                 (json_filepath, diamond_output_verilog),
             ) = hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
-                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:lattice-ecp5-diamond",
@@ -1139,14 +1139,15 @@ def task_robustness_experiments(skip_verilator: bool):
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=diamond_output_verilog,
-                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
                     / entry["filepath"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad-private"
                         / "lattice_ecp5"
                     ],
@@ -1160,14 +1161,14 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-STMTDLY",
                         "-Wno-COMBDLY",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                     alternative_file_dep=json_filepath,
                 )[0]
 
             base_path = (
-                utils.output_dir()
+                output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
                 / "lakeroad_lattice_ecp5"
@@ -1177,23 +1178,20 @@ def task_robustness_experiments(skip_verilator: bool):
                 (json_filepath, lakeroad_output_verilog, _),
             ) = lakeroad.make_lakeroad_task(
                 extra_cycles=(
-                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                        "extra_cycles"
-                    ]
+                    manifest["completeness_experiments"]["lakeroad"]["extra_cycles"]
                 ),
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="lakeroad_output",
                 architecture="lattice-ecp5",
-                verilog_module_filepath=utils.lakeroad_evaluation_dir()
-                / entry["filepath"],
+                verilog_module_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lattice-ecp5-lakeroad",
                 initiation_interval=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
-                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                timeout=manifest["completeness_experiments"]["lakeroad"][
                     "lattice-timeout"
                 ],
                 extra_summary_fields={
@@ -1215,7 +1213,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
                     test_module_name="lakeroad_output",
-                    ground_truth_module_filepath=utils.lakeroad_evaluation_dir()
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
                     / entry["filepath"],
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
@@ -1223,7 +1221,8 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad"
                         / "lakeroad-private"
                         / "lattice_ecp5"
@@ -1236,14 +1235,14 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-UNOPTFLAT",
                         "-Wno-WIDTH",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                     alternative_file_dep=json_filepath,
                 )[0]
 
             base_path = (
-                utils.output_dir()
+                output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
                 / "yosys_lattice_ecp5"
@@ -1252,7 +1251,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, _, _),
             ) = hardware_compilation.make_lattice_ecp5_yosys_synthesis_task(
-                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
                 name=f"{entry['module_name']}:lattice-ecp5-yosys",
@@ -1266,9 +1265,7 @@ def task_robustness_experiments(skip_verilator: bool):
             collected_data_output_filepaths.append(json_filepath)
 
         if "intel" in backends:
-            intel_families = utils.get_manifest()["completeness_experiments"]["intel"][
-                "families"
-            ]
+            intel_families = manifest["completeness_experiments"]["intel"]["families"]
             # Easy to update; just make this a loop over the families, if this
             # is needed in the future.
             assert (
@@ -1280,11 +1277,9 @@ def task_robustness_experiments(skip_verilator: bool):
             (task, (json_filepath, _)) = quartus.make_quartus_task(
                 identifier=entry["module_name"],
                 top_module_name=entry["module_name"],
-                source_input_filepath=(
-                    utils.lakeroad_evaluation_dir() / entry["filepath"]
-                ),
+                source_input_filepath=(lakeroad_evaluation_dir / entry["filepath"]),
                 base_output_dirpath=(
-                    utils.output_dir()
+                    output_dir
                     / "robustness_experiments"
                     / entry["module_name"]
                     / "quartus_intel"
@@ -1307,9 +1302,9 @@ def task_robustness_experiments(skip_verilator: bool):
                 task,
                 (json_filepath, _, _),
             ) = hardware_compilation.make_intel_yosys_synthesis_task(
-                input_filepath=utils.lakeroad_evaluation_dir() / entry["filepath"],
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=(
-                    utils.output_dir()
+                    output_dir
                     / "robustness_experiments"
                     / entry["module_name"]
                     / "yosys_intel"
@@ -1332,12 +1327,10 @@ def task_robustness_experiments(skip_verilator: bool):
                 (json_filepath, verilog_filepath, _),
             ) = lakeroad.make_lakeroad_task(
                 extra_cycles=(
-                    utils.get_manifest()["completeness_experiments"]["lakeroad"][
-                        "extra_cycles"
-                    ]
+                    manifest["completeness_experiments"]["lakeroad"]["extra_cycles"]
                 ),
                 out_dirpath=(
-                    utils.output_dir()
+                    output_dir
                     / "robustness_experiments"
                     / entry["module_name"]
                     / "lakeroad_intel"
@@ -1345,9 +1338,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 template="dsp",
                 out_module_name="lakeroad_output",
                 architecture="intel-cyclone10lp",
-                verilog_module_filepath=(
-                    utils.lakeroad_evaluation_dir() / entry["filepath"]
-                ),
+                verilog_module_filepath=(lakeroad_evaluation_dir / entry["filepath"]),
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad_intel",
@@ -1360,7 +1351,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "tool": "lakeroad",
                     "family": str(family),
                 },
-                timeout=utils.get_manifest()["completeness_experiments"]["lakeroad"][
+                timeout=manifest["completeness_experiments"]["lakeroad"][
                     "intel-timeout"
                 ],
             )
@@ -1376,7 +1367,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     # wouldn't create a Verilator task.
                     ignore_missing_test_module_file=True,
                     output_dirpath=(
-                        utils.output_dir()
+                        output_dir
                         / "robustness_experiments"
                         / entry["module_name"]
                         / "lakeroad_intel"
@@ -1385,7 +1376,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     test_module_filepath=verilog_filepath,
                     test_module_name="lakeroad_output",
                     ground_truth_module_filepath=(
-                        utils.lakeroad_evaluation_dir() / entry["filepath"]
+                        lakeroad_evaluation_dir / entry["filepath"]
                     ),
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
@@ -1393,7 +1384,8 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir()
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
                         / "lakeroad"
                         / "lakeroad-private"
                         / "intel_cyclone10lp"
@@ -1405,15 +1397,14 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-TIMESCALEMOD",
                         "-Wno-WIDTH",
                     ],
-                    max_num_tests=utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["verilator_simulation_iterations"],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
                     alternative_file_dep=json_filepath,
                 )[0]
 
     output_csv_path = (
-        utils.output_dir()
-        / utils.get_manifest()["completeness_experiments"]["output_csv_path"]
+        output_dir / manifest["completeness_experiments"]["output_csv_path"]
     )
     yield {
         "name": "collect_data",
@@ -1442,25 +1433,21 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "succeeded_vs_failed_xilinx.png"
+                        output_dir / "figures" / "succeeded_vs_failed_xilinx.png"
                     ),
-                    "cleaned_data_filepath": utils.output_dir()
+                    "cleaned_data_filepath": output_dir
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_xilinx_results_collected_cleaned.csv",
                     "plot_csv_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "succeeded_vs_failed_xilinx.csv"
+                        output_dir / "figures" / "succeeded_vs_failed_xilinx.csv"
                     ),
                 },
             )
         ],
         "targets": [
-            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.png",
-            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx.png",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
         ],
     }
 
@@ -1474,46 +1461,42 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "succeeded_vs_failed_lattice.png"
+                        output_dir / "figures" / "succeeded_vs_failed_lattice.png"
                     ),
-                    "cleaned_data_filepath": utils.output_dir()
+                    "cleaned_data_filepath": output_dir
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_lattice_results_collected_cleaned.csv",
                     "plot_csv_filepath": (
-                        utils.output_dir()
-                        / "figures"
-                        / "succeeded_vs_failed_lattice.csv"
+                        output_dir / "figures" / "succeeded_vs_failed_lattice.csv"
                     ),
                 },
             )
         ],
         "targets": [
-            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.png",
-            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
+            output_dir / "figures" / "succeeded_vs_failed_lattice.png",
+            output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
         ],
     }
     yield {
         "name": "visualize_succeeded_vs_failed_all",
         "file_dep": [
-            utils.output_dir() / "figures" / "succeeded_vs_failed_lattice.csv",
-            utils.output_dir() / "figures" / "succeeded_vs_failed_xilinx.csv",
+            output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
         ],
         "actions": [
             (
                 _combined_visualized,
                 [],
                 {
-                    "csv_lattice_filepath": utils.output_dir()
+                    "csv_lattice_filepath": output_dir
                     / "figures"
                     / "succeeded_vs_failed_lattice.csv",
-                    "csv_xilinx_filepath": utils.output_dir()
+                    "csv_xilinx_filepath": output_dir
                     / "figures"
                     / "succeeded_vs_failed_xilinx.csv",
                     "plot_output_filepath": (
-                        utils.output_dir() / "figures" / "succeeded_vs_failed_all.png"
+                        output_dir / "figures" / "succeeded_vs_failed_all.png"
                     ),
                 },
             )
@@ -1530,10 +1513,10 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        utils.output_dir() / "figures" / "timing_cdf_lattice.png"
+                        output_dir / "figures" / "timing_cdf_lattice.png"
                     ),
                     "timing_csv_filepath": (
-                        utils.output_dir() / "figures" / "timing_cdf_lattice.csv"
+                        output_dir / "figures" / "timing_cdf_lattice.csv"
                     ),
                 },
             ),
@@ -1543,10 +1526,10 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        utils.output_dir() / "figures" / "timing_cdf_xilinx.png"
+                        output_dir / "figures" / "timing_cdf_xilinx.png"
                     ),
                     "timing_csv_filepath": (
-                        utils.output_dir() / "figures" / "timing_cdf_xilinx.csv"
+                        output_dir / "figures" / "timing_cdf_xilinx.csv"
                     ),
                 },
             ),
@@ -1554,17 +1537,15 @@ def task_robustness_experiments(skip_verilator: bool):
     }
 
     intel_plot_output_filepath = (
-        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.png"
+        output_dir / "figures" / "succeeded_vs_failed_intel.png"
     )
     intel_cleaned_data_filepath = (
-        utils.output_dir()
+        output_dir
         / "robustness_experiments_csv"
         / "all_results"
         / "all_intel_results_collected_cleaned.csv"
     )
-    intel_plot_csv_filepath = (
-        utils.output_dir() / "figures" / "succeeded_vs_failed_intel.csv"
-    )
+    intel_plot_csv_filepath = output_dir / "figures" / "succeeded_vs_failed_intel.csv"
     yield {
         "name": "visualize_succeeded_vs_failed_intel",
         "file_dep": [output_csv_path],
@@ -1587,8 +1568,8 @@ def task_robustness_experiments(skip_verilator: bool):
         ],
     }
 
-    xilinx_time_png = utils.output_dir() / "figures" / "lakeroad_time_xilinx.png"
-    xilinx_time_csv = utils.output_dir() / "figures" / "lakeroad_time_xilinx.csv"
+    xilinx_time_png = output_dir / "figures" / "lakeroad_time_xilinx.png"
+    xilinx_time_csv = output_dir / "figures" / "lakeroad_time_xilinx.csv"
     yield {
         "name": "lakeroad_time_xilinx",
         "file_dep": [output_csv_path],
@@ -1602,20 +1583,20 @@ def task_robustness_experiments(skip_verilator: bool):
                     "title": "Lakeroad compiletime on Xilinx",
                     "plot_output_filepath": xilinx_time_png,
                     "plot_csv_filepath": xilinx_time_csv,
-                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                    "num_bins": manifest["completeness_experiments"][
                         "xilinx-timing-num-bins"
                     ],
-                    "timeout": utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["xilinx-timeout"],
+                    "timeout": manifest["completeness_experiments"]["lakeroad"][
+                        "xilinx-timeout"
+                    ],
                 },
             )
         ],
         "targets": [xilinx_time_png, xilinx_time_csv],
     }
 
-    lattice_time_png = utils.output_dir() / "figures" / "lakeroad_time_lattice.png"
-    lattice_time_csv = utils.output_dir() / "figures" / "lakeroad_time_lattice.csv"
+    lattice_time_png = output_dir / "figures" / "lakeroad_time_lattice.png"
+    lattice_time_csv = output_dir / "figures" / "lakeroad_time_lattice.csv"
     yield {
         "name": "lakeroad_time_lattice",
         "file_dep": [output_csv_path],
@@ -1629,19 +1610,19 @@ def task_robustness_experiments(skip_verilator: bool):
                     "title": "Lakeroad compiletime on Lattice",
                     "plot_output_filepath": lattice_time_png,
                     "plot_csv_filepath": lattice_time_csv,
-                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                    "num_bins": manifest["completeness_experiments"][
                         "lattice-timing-num-bins"
                     ],
-                    "timeout": utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["lattice-timeout"],
+                    "timeout": manifest["completeness_experiments"]["lakeroad"][
+                        "lattice-timeout"
+                    ],
                 },
             )
         ],
     }
 
-    intel_time_png = utils.output_dir() / "figures" / "lakeroad_time_intel.png"
-    intel_time_csv = utils.output_dir() / "figures" / "lakeroad_time_intel.csv"
+    intel_time_png = output_dir / "figures" / "lakeroad_time_intel.png"
+    intel_time_csv = output_dir / "figures" / "lakeroad_time_intel.csv"
     yield {
         "name": "lakeroad_time_intel",
         "file_dep": [output_csv_path],
@@ -1655,18 +1636,18 @@ def task_robustness_experiments(skip_verilator: bool):
                     "title": "Lakeroad compiletime on Intel",
                     "plot_output_filepath": intel_time_png,
                     "plot_csv_filepath": intel_time_csv,
-                    "num_bins": utils.get_manifest()["completeness_experiments"][
+                    "num_bins": manifest["completeness_experiments"][
                         "intel-timing-num-bins"
                     ],
-                    "timeout": utils.get_manifest()["completeness_experiments"][
-                        "lakeroad"
-                    ]["intel-timeout"],
+                    "timeout": manifest["completeness_experiments"]["lakeroad"][
+                        "intel-timeout"
+                    ],
                 },
             )
         ],
     }
 
-    solver_results_csv = utils.output_dir() / "figures" / "solver_results.csv"
+    solver_results_csv = output_dir / "figures" / "solver_results.csv"
     yield {
         "name": "solver_results",
         "file_dep": [output_csv_path],

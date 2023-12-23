@@ -341,6 +341,8 @@ def make_lakeroad_task(
 def task_instruction_experiments(experiments_file: str):
     """DoIt task creator for compiling instructions with various backends."""
 
+    output_dir = utils.output_dir()
+
     # TODO(@gussmith23) Use `make_lakeroad_task` above instead of this function.
     def _make_instruction_implementation_with_lakeroad_task(
         experiment: LakeroadInstructionExperiment,
@@ -410,9 +412,7 @@ def task_instruction_experiments(experiments_file: str):
         architecture = experiment.architecture
 
         # Base output path.
-        output_dirpath = (
-            utils.output_dir() / "lakeroad" / architecture / module_name / template
-        )
+        output_dirpath = output_dir / "lakeroad" / architecture / module_name / template
 
         verilog_filepath = output_dirpath / f"{module_name}.sv"
         json_filepath = output_dirpath / f"{module_name}.json"
@@ -432,7 +432,7 @@ def task_instruction_experiments(experiments_file: str):
         )
         df.to_csv(output_csv)
 
-    output_csv = utils.output_dir() / "lakeroad" / "lakeroad.csv"
+    output_csv = output_dir / "lakeroad" / "lakeroad.csv"
     yield {
         "name": "lakeroad_generate_csv",
         "actions": [
