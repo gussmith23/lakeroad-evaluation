@@ -77,12 +77,6 @@ ENV LC_ALL en_US.UTF-8
 # `llvm-config` on your PATH.
 ENV LLVM_CONFIG=llvm-config-14
 
-# Build our version of Yosys.
-WORKDIR /root/
-ADD yosys/ yosys/
-RUN cd yosys && \
-  CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j ${MAKE_JOBS}
-
 # Make a binary for `lit`. If you're on Mac, you can install lit via Brew.
 # Ubuntu doesn't have a binary for it, but it is available on pip and is
 # installed later in this Dockerfile.
@@ -176,21 +170,6 @@ RUN raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
   rosette \
   yaml
-
-# Install Rust.
-WORKDIR /root
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-ENV PATH="/root/.cargo/bin:$PATH"
-
-# Cargo dependencies.
-RUN cargo install \
-  runt \
-  vcdump
-
-# Build Lakeroad Rust package.
-ADD lakeroad /root/lakeroad
-RUN cargo build --manifest-path ./lakeroad/rust/Cargo.toml
-ENV LAKEROAD_DIR=/root/lakeroad
 
 # Build Racket bytecode; makes Lakeroad WAY faster.
 RUN raco make /root/lakeroad/bin/main.rkt
