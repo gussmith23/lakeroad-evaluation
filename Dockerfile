@@ -1,4 +1,5 @@
 FROM ubuntu:22.04
+ARG MAKE_JOBS=2
 
 # Install apt dependencies. DEBIAN_FRONTEND is necessary for making sure tzdata
 # setup runs non-interactively.
@@ -80,7 +81,7 @@ ENV LLVM_CONFIG=llvm-config-14
 WORKDIR /root/
 ADD yosys/ yosys/
 RUN cd yosys && \
-  CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j `nproc`
+  CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j ${MAKE_JOBS}
 
 # Make a binary for `lit`. If you're on Mac, you can install lit via Brew.
 # Ubuntu doesn't have a binary for it, but it is available on pip and is
