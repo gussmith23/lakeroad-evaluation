@@ -1023,7 +1023,6 @@ def task_robustness_experiments(skip_verilator: bool):
                     include_dirs=[
                         lakeroad_evaluation_dir
                         / "lakeroad"
-                        / "lakeroad"
                         / "lakeroad-private"
                         / "DSP48E2"
                     ],
@@ -1223,7 +1222,6 @@ def task_robustness_experiments(skip_verilator: bool):
                     include_dirs=[
                         lakeroad_evaluation_dir
                         / "lakeroad"
-                        / "lakeroad"
                         / "lakeroad-private"
                         / "lattice_ecp5"
                     ],
@@ -1385,7 +1383,6 @@ def task_robustness_experiments(skip_verilator: bool):
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         lakeroad_evaluation_dir
-                        / "lakeroad"
                         / "lakeroad"
                         / "lakeroad-private"
                         / "intel_cyclone10lp"
