@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 ARG MAKE_JOBS=2
+SHELL ["/bin/bash", "-c"] 
 
 # Install apt dependencies. DEBIAN_FRONTEND is necessary for making sure tzdata
 # setup runs non-interactively.
