@@ -939,8 +939,12 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2",
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "vivado_2023.1",
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad-private"
+                        / "DSP48E2",
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad-private"
+                        / "vivado_2023.1",
                     ],
                     extra_args=[
                         "-DXIL_XECLIB",
@@ -1077,8 +1081,12 @@ def task_robustness_experiments(skip_verilator: bool):
                     initiation_interval=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2",
-                        utils.lakeroad_evaluation_dir() / "lakeroad-private" / "vivado_2023.1",
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad-private"
+                        / "DSP48E2",
+                        utils.lakeroad_evaluation_dir()
+                        / "lakeroad-private"
+                        / "vivado_2023.1",
                     ],
                     extra_args=[
                         "-DXIL_XECLIB",
@@ -1150,7 +1158,7 @@ def task_robustness_experiments(skip_verilator: bool):
                         "-Wno-UNOPTFLAT",
                         "-Wno-WIDTH",
                         "-Wno-STMTDLY",
-                        "-Wno-COMBDLY"
+                        "-Wno-COMBDLY",
                     ],
                     max_num_tests=utils.get_manifest()["completeness_experiments"][
                         "lakeroad"

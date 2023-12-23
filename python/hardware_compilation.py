@@ -985,7 +985,13 @@ def make_lattice_ecp5_diamond_synthesis_task(
     if name is not None:
         task["name"] = name
 
-    return (task, (json_filepath, output_verilog_filepath,))
+    return (
+        task,
+        (
+            json_filepath,
+            output_verilog_filepath,
+        ),
+    )
 
 
 def make_yosys_nextpnr_synthesis_task(
