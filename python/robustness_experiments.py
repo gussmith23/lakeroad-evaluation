@@ -926,6 +926,8 @@ def task_robustness_experiments(skip_verilator: bool):
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
                     name=f"{entry['module_name']}:vivado:verilator",
                     ignore_missing_test_module_file=False,
                     output_dirpath=base_path / "verilator",
@@ -935,7 +937,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2",
                         utils.lakeroad_evaluation_dir() / "lakeroad-private" / "vivado_2023.1",
@@ -1062,6 +1064,8 @@ def task_robustness_experiments(skip_verilator: bool):
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
                     name=f"{entry['module_name']}:yosys:verilator",
                     ignore_missing_test_module_file=False,
                     output_dirpath=base_path / "verilator",
@@ -1071,7 +1075,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir() / "lakeroad-private" / "DSP48E2",
                         utils.lakeroad_evaluation_dir() / "lakeroad-private" / "vivado_2023.1",
@@ -1118,6 +1122,8 @@ def task_robustness_experiments(skip_verilator: bool):
 
             if not skip_verilator:
                 yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
                     name=f"{entry['module_name']}:diamond:verilator",
                     # TODO(@gussmith23): Ideally, we wouldn't need this flag --
                     # instead, we would know when Lakeroad was going to fail and we
@@ -1130,7 +1136,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
                     initiation_interval=entry["stages"],
-                    output_signal="out",
+                    module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         utils.lakeroad_evaluation_dir()
                         / "lakeroad-private"
