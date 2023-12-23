@@ -2,9 +2,3 @@
 	path = lakeroad
 	url = git@github.com:gussmith23/lakeroad
 	ignore = untracked
-[submodule "yosys"]
-	path = yosys
-	url = git@github.com:uwsampl/yosys
-[submodule "verilator"]
-	path = verilator
-	url = git@github.com:verilator/verilator
