@@ -901,7 +901,7 @@ def task_robustness_experiments(skip_verilator: bool):
             # vivado synthesis
             (
                 task,
-                (json_filepath, _, _, _),
+                (json_filepath, vivado_output_verilog, _, _),
             ) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
                 input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
@@ -924,6 +924,45 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
             collected_data_output_filepaths.append(json_filepath)
+
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
+                    name=f"{entry['module_name']}:vivado:verilator",
+                    ignore_missing_test_module_file=False,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=vivado_output_verilog,
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
+                    / entry["filepath"],
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    module_outputs=[("out", entry["bitwidth"])],
+                    include_dirs=[
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "DSP48E2",
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "vivado_2023.1",
+                    ],
+                    extra_args=[
+                        "-DXIL_XECLIB",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-LATCH",
+                        "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-CASEX",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-PINMISSING",
+                    ],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
+                )[0]
 
             # Lakeroad Synthesis for xilinx backend
             base_path = (
@@ -1027,6 +1066,45 @@ def task_robustness_experiments(skip_verilator: bool):
             yield task
             collected_data_output_filepaths.append(json_filepath)
 
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
+                    name=f"{entry['module_name']}:yosys:verilator",
+                    ignore_missing_test_module_file=False,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=vivado_output_verilog,
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
+                    / entry["filepath"],
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    module_outputs=[("out", entry["bitwidth"])],
+                    include_dirs=[
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "DSP48E2",
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "vivado_2023.1",
+                    ],
+                    extra_args=[
+                        "-DXIL_XECLIB",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-LATCH",
+                        "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-CASEX",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-PINMISSING",
+                    ],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
+                )[0]
+
         if "lattice" in backends:
             # diamond-lattice, lakeroad-lattice, yosys-lattice
             base_path = (
@@ -1034,7 +1112,7 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             (
                 task,
-                (json_filepath,),
+                (json_filepath, diamond_output_verilog),
             ) = hardware_compilation.make_lattice_ecp5_diamond_synthesis_task(
                 input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
@@ -1048,6 +1126,45 @@ def task_robustness_experiments(skip_verilator: bool):
             )
             yield task
             collected_data_output_filepaths.append(json_filepath)
+
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    test_module_name=entry["module_name"],
+                    ground_truth_module_name=entry["module_name"],
+                    name=f"{entry['module_name']}:diamond:verilator",
+                    # TODO(@gussmith23): Ideally, we wouldn't need this flag --
+                    # instead, we would know when Lakeroad was going to fail and we
+                    # wouldn't create a Verilator task.
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=diamond_output_verilog,
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
+                    / entry["filepath"],
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    module_outputs=[("out", entry["bitwidth"])],
+                    include_dirs=[
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "lattice_ecp5"
+                    ],
+                    extra_args=[
+                        "-Wno-CASEINCOMPLETE",
+                        "-Wno-IMPLICIT",
+                        "-Wno-PINMISSING",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-COMBDLY",
+                    ],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
+                    alternative_file_dep=json_filepath,
+                )[0]
 
             base_path = (
                 output_dir

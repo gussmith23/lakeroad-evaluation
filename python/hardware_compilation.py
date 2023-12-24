@@ -956,6 +956,8 @@ def make_lattice_ecp5_diamond_synthesis_task(
     input_filepath = Path(input_filepath)
     json_filepath = output_dirpath / f"{input_filepath.stem}_resource_utilization.json"
 
+    output_verilog_filepath = output_dirpath / f"{module_name}_prim.v"
+
     task = {
         "actions": [
             (
@@ -973,7 +975,7 @@ def make_lattice_ecp5_diamond_synthesis_task(
             # output_dirpath / f"{module_name}.lsedata",
             # output_dirpath / f"{module_name}.ngd",
             output_dirpath / f"{module_name}.v",
-            output_dirpath / f"{module_name}_prim.v",
+            output_verilog_filepath,
             output_dirpath / f"{module_name}_drc.log",
             output_dirpath / f"synthesis.log",
             json_filepath,
@@ -983,7 +985,13 @@ def make_lattice_ecp5_diamond_synthesis_task(
     if name is not None:
         task["name"] = name
 
-    return (task, (json_filepath,))
+    return (
+        task,
+        (
+            json_filepath,
+            output_verilog_filepath,
+        ),
+    )
 
 
 def make_yosys_nextpnr_synthesis_task(

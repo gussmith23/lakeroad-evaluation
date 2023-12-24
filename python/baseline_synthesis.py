@@ -77,7 +77,7 @@ def task_baseline_synthesis(baseline_instructions_dir: str):
         yield yosys_xilinx_ultrascale_plus_baseline_synthesis_task
         json_filepaths.append(json_filepath)
 
-        (task, (json_filepath,)) = make_lattice_ecp5_diamond_synthesis_task(
+        (task, (json_filepath, _)) = make_lattice_ecp5_diamond_synthesis_task(
             input_filepath=instruction_file,
             output_dirpath=output_dir_base / "diamond" / instruction_file.stem,
             module_name=instruction_file.stem,
