@@ -174,6 +174,7 @@ RUN raco setup --doc-index --force-user-docs \
 
 # Add Lakeroad.
 ADD lakeroad /root/lakeroad
+ENV LAKEROAD_DIR=/root/lakeroad
 
 # Build Racket bytecode; makes Lakeroad WAY faster.
 RUN raco make /root/lakeroad/bin/main.rkt
