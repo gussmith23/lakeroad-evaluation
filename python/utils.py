@@ -26,6 +26,9 @@ def make_module_name(
 def output_dir() -> Path:
     """Get directory where output should go.
 
+    Note that this function loads the manifest, so calling it repeatedly will
+    impact performance. Consider just saving the output of this function.
+
     Output directory is set (in order of precedence)
     1. from the LRE_OUTPUT_DIR environment variable, if set;
     2. from the manifest.
