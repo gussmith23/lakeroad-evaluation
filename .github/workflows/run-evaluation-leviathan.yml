@@ -12,7 +12,7 @@ env:
   # details.
   NUM_JOBS_VIVADO_TASKS: 94
   NUM_JOBS_LAKEROAD_TASKS: 20
-  NUM_JOBS_OTHER_TASKS: 30
+  NUM_JOBS_OTHER_TASKS: 100
 
   # Number of jobs when building something with make. This is a separate task
   # from the above as each job generally uses one thread.
