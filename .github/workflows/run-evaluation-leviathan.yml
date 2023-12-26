@@ -7,14 +7,13 @@ on:
   workflow_dispatch:
 
 env:
-  # Number of DoIt jobs to run in parallel. This parameter is important: if it's
-  # too high, we'll start seeing odd failures, e.g. #116. If it's too slow, it
-  # will take forever to run. Leviathan has 128 threads, but we can't just do
-  # `doit -n 128`, because the doit tasks take a variable number of threads.
-  # E.g. Lakeroad tasks take one thread per solver in the portfolio, which by
-  # default is at least 2. Vivado also spawns many processes; not sure how many
-  # per job.
-  DOIT_JOBS: 20
+  # Configure the number of tasks to run in parallel. Please see the
+  # documentation in [run-evaluation.sh](../../run-evaluation.sh) for more
+  # details.
+  NUM_JOBS_VIVADO_TASKS: 20
+  NUM_JOBS_LAKEROAD_TASKS: 20
+  NUM_JOBS_OTHER_TASKS: 30
+
   # Number of jobs when building something with make. This is a separate task
   # from the above as each job generally uses one thread.
   MAKE_JOBS: 128
@@ -96,8 +95,11 @@ jobs:
           -v /tools/intel:/tools/intel \
           --env LOGLEVEL=INFO \
           --env LRE_OUTPUT_DIR=/root/results \
+          --env NUM_JOBS_VIVADO_TASKS=${{ env.NUM_JOBS_VIVADO_TASKS }} \
+          --env NUM_JOBS_LAKEROAD_TASKS=${{ env.NUM_JOBS_LAKEROAD_TASKS }} \
+          --env NUM_JOBS_OTHER_TASKS=${{ env.NUM_JOBS_OTHER_TASKS }} \
           ${{ needs.build-docker-image.outputs.tag }} \
-          doit --always-execute --continue -n ${{ env.DOIT_JOBS }}
+          bash /root/run-evaluation.sh
 
   send-results-to-slack:
     needs: run-evaluation
