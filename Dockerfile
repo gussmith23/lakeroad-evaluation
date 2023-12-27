@@ -217,5 +217,6 @@ ENV PATH=/root/sv2v/bin:${PATH}
 
 WORKDIR /root
 ADD verilog/ verilog/
+ADD run-evaluation.sh run-evaluation.sh
 
 WORKDIR /root

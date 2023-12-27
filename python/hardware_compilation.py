@@ -371,6 +371,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     place_directive: str = "default",
     route_directive: str = "default",
     extra_summary_fields: Dict[str, Any] = {},
+    max_threads: int = 1,
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -431,6 +432,9 @@ set synth_opt_place_route_output_filepath {synth_opt_place_route_output_filepath
 # Part number chosen at Luis's suggestion. Can be changed to another UltraScale+
 # part.
 set_part xczu3eg-sbva484-1-e
+
+# Set number of threads.
+set_param general.maxThreads {max_threads}
 
 read_verilog -sv ${{sv_source_file}}
 set_property top ${{modname}} [current_fileset]
