@@ -244,7 +244,7 @@ def _combined_visualized(
         color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
-    ax1.set_title("Xilinx Ultrascale+")
+    ax1.set_title("Xilinx UltraScale+")
     ax1.set_ylabel("Percentage (%)")
     # Plot Lattice data on the second subplot
     df2.plot.bar(
