@@ -215,6 +215,7 @@ def _timing_cdf_lattice(
 def _combined_visualized(
     csv_xilinx_filepath: Union[str, Path],
     csv_lattice_filepath: Union[str, Path],
+    csv_intel_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
 ):
     # combined graph of xilinx and lattice results
@@ -222,13 +223,15 @@ def _combined_visualized(
     df2["backend"] = "Lattice"
     df1 = pandas.read_csv(csv_xilinx_filepath).fillna(0)
     df1["backend"] = "Xilinx"
-    merged_df = pandas.concat([df1, df2])
+    df_intel = pandas.read_csv(csv_intel_filepath).fillna(0)
+    df_intel["backend"] = "Intel"
+    merged_df = pandas.concat([df1, df2, df_intel])
     merged_df.groupby("backend")
     # raise(Exception(print(merged_df)))
     # group the dataframe by xilinx or Yosys
     # merged_df = merged_df.groupby(merged_df.index // 3)
     # plot the merged df
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6, 5))
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(6, 4))
     df1.plot.bar(
         x="tool",
         y=[
@@ -258,12 +261,31 @@ def _combined_visualized(
         stacked=True,
         rot=0,
         ax=ax2,
+        legend=None,
         color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax2.set_title("Lattice ECP5")
     ax2.set_yticks([])
-    ax2.legend(
+
+    # Plot Intel data on the third subplot
+    df_intel.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax3,
+        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
+        # hatch=['', '', '///', '']
+    )
+    ax3.set_title("Intel Cyclone 10 LP")
+    ax3.set_yticks([])
+    ax3.legend(
         loc="upper right",
         labels=["succeeded", "failed", "unsat", "timeout"],
         fontsize=8,
@@ -1366,6 +1388,7 @@ def task_robustness_experiments(skip_verilator: bool):
         "file_dep": [
             output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
             output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
+            output_dir / "figures" / "succeeded_vs_failed_intel.csv",
         ],
         "actions": [
             (
@@ -1378,6 +1401,9 @@ def task_robustness_experiments(skip_verilator: bool):
                     "csv_xilinx_filepath": output_dir
                     / "figures"
                     / "succeeded_vs_failed_xilinx.csv",
+                    "csv_intel_filepath": output_dir
+                    / "figures"
+                    / "succeeded_vs_failed_intel.csv",
                     "plot_output_filepath": (
                         output_dir / "figures" / "succeeded_vs_failed_all.png"
                     ),
