@@ -268,6 +268,7 @@ def _combined_visualized(
         labels=["succeeded", "failed", "unsat", "timeout"],
         fontsize=8,
     )
+
     # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
     # plt.ylabel("Percentage (%)")
     ax1.set_yticks([0, 20, 40, 60, 80, 100])
@@ -278,6 +279,7 @@ def _combined_visualized(
     for ax in fig.axes:
         plt.sca(ax)
         plt.xticks(rotation=25)
+
     plot_output_filepath = Path(plot_output_filepath)
     plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
     plt.savefig(plot_output_filepath, dpi=400)
