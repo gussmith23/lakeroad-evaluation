@@ -270,6 +270,7 @@ def _combined_visualized(
     )
     # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
     # plt.ylabel("Percentage (%)")
+    ax1.set_yticks([0, 20, 40, 60, 80, 100])
     ax1.set_yticklabels(["{:.0f}%".format(x) for x in ax1.get_yticks()])
     # ax2.set_yticklabels(["{:.0f}%".format(x) for x in ax2.get_yticks()])
     plt.tight_layout()
