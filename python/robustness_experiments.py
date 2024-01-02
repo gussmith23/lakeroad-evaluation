@@ -244,7 +244,7 @@ def _combined_visualized(
         rot=0,
         ax=ax1,
         legend=None,
-        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax1.set_title("Xilinx UltraScale+")
@@ -262,7 +262,7 @@ def _combined_visualized(
         rot=0,
         ax=ax2,
         legend=None,
-        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax2.set_title("Lattice ECP5")
@@ -280,7 +280,7 @@ def _combined_visualized(
         stacked=True,
         rot=0,
         ax=ax3,
-        color=["#28CA2C", "#FF0000", "#852EA6", "#000000"],
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
     ax3.set_title("Intel Cyclone 10 LP")
