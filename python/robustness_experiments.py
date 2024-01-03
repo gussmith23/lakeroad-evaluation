@@ -15,6 +15,160 @@ import os
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+import numpy as np
+
+
+def _resource_percentages(input_csv, output_csv):
+    # read in a file called completeness.csv
+    df = pd.read_csv(input_csv).fillna(0)
+
+    lakeroad_successes = df[
+        (df["tool"] == "lakeroad") & (df["lakeroad_synthesis_success"] == True)
+    ]
+
+    lakeroad_successes_xilinx = lakeroad_successes[
+        lakeroad_successes["architecture"] == "xilinx-ultrascale-plus"
+    ]
+    lakeroad_successes_lattice = lakeroad_successes[
+        lakeroad_successes["architecture"] == "lattice-ecp5"
+    ]
+    lakeroad_successes_intel = lakeroad_successes[
+        lakeroad_successes["architecture"] == "intel"
+    ]
+
+    xilinx_vivado = df[
+        (df["tool"] == "vivado") & (df["architecture"] == "xilinx-ultrascale-plus")
+    ]
+    xilinx_yosys = df[
+        (df["tool"] == "yosys") & (df["architecture"] == "xilinx-ultrascale-plus")
+    ]
+
+    def _compute_percentages(
+        baseline_tool_name, architecture, logic_element_names, dsp_names, register_names
+    ):
+        baseline = df[
+            (df["tool"] == baseline_tool_name) & (df["architecture"] == architecture)
+        ]
+
+        lakeroad_successes = df[
+            (df["tool"] == "lakeroad")
+            & (df["lakeroad_synthesis_success"] == True)
+            & (df["architecture"] == "xilinx-ultrascale-plus")
+        ]
+        merged = lakeroad_successes.merge(
+            baseline, on="identifier", suffixes=("_lakeroad", f"_{baseline_tool_name}")
+        )
+
+        lakeroad_le_column_name = "lakeroad_LEs"
+        baseline_le_column_name = f"{baseline_tool_name}_LEs"
+        merged[lakeroad_le_column_name] = sum(
+            merged[f"{name}_lakeroad"] for name in logic_element_names
+        )
+        merged[baseline_le_column_name] = sum(
+            merged[f"{name}_{baseline_tool_name}"] for name in logic_element_names
+        )
+
+        lakeroad_dsp_column_name = "lakeroad_dsps"
+        baseline_dsp_column_name = f"{baseline_tool_name}_dsps"
+        merged[lakeroad_dsp_column_name] = sum(
+            merged[f"{name}_lakeroad"] for name in dsp_names
+        )
+        merged[baseline_dsp_column_name] = sum(
+            merged[f"{name}_{baseline_tool_name}"] for name in dsp_names
+        )
+
+        lakeroad_register_column_name = "lakeroad_registers"
+        baseline_register_column_name = f"{baseline_tool_name}_registers"
+        merged[lakeroad_register_column_name] = sum(
+            merged[f"{name}_lakeroad"] for name in register_names
+        )
+        merged[baseline_register_column_name] = sum(
+            merged[f"{name}_{baseline_tool_name}"] for name in register_names
+        )
+
+        merged["LE_difference"] = (
+            merged[baseline_le_column_name] - merged[lakeroad_le_column_name]
+        )
+        merged["LE_percent_improvement"] = np.where(
+            merged[baseline_le_column_name] > 0,
+            (merged["LE_difference"] / merged[baseline_le_column_name]) * 100,
+            0,
+        )
+
+        merged["DSP_difference"] = (
+            merged[baseline_dsp_column_name] - merged[lakeroad_dsp_column_name]
+        )
+        merged["DSP_percent_improvement"] = np.where(
+            merged[baseline_dsp_column_name] > 0,
+            (merged["DSP_difference"] / merged[baseline_dsp_column_name]) * 100,
+            0,
+        )
+
+        merged["register_difference"] = (
+            merged[baseline_register_column_name]
+            - merged[lakeroad_register_column_name]
+        )
+        merged["register_percent_improvement"] = np.where(
+            merged[baseline_register_column_name] > 0,
+            (merged["register_difference"] / merged[baseline_register_column_name])
+            * 100,
+            0,
+        )
+
+        return {
+            "tool": baseline_tool_name,
+            "architecture": architecture,
+            "LE_percent_improvement_mean": merged["LE_percent_improvement"].mean(),
+            "DSP_percent_improvement_mean": merged["DSP_percent_improvement"].mean(),
+            "register_percent_improvement_mean": merged[
+                "register_percent_improvement"
+            ].mean(),
+            "LE_difference_mean": merged["LE_difference"].mean(),
+            "DSP_difference_mean": merged["DSP_difference"].mean(),
+            "register_difference_mean": merged["register_difference"].mean(),
+        }
+
+    Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame.from_records(
+        [
+            _compute_percentages(
+                "vivado",
+                "xilinx-ultrascale-plus",
+                [
+                    "CARRY4",
+                    "LUT2",
+                    "LUT3",
+                    "LUT4",
+                    "LUT5",
+                    "LUT6",
+                    "SRL16E",
+                    "MUXF7",
+                    "MUXF8",
+                    "MUXF9",
+                ],
+                ["DSP48E2"],
+                ["FDRE"],
+            ),
+            _compute_percentages(
+                "yosys",
+                "xilinx-ultrascale-plus",
+                [
+                    "CARRY4",
+                    "LUT2",
+                    "LUT3",
+                    "LUT4",
+                    "LUT5",
+                    "LUT6",
+                    "SRL16E",
+                    "MUXF7",
+                    "MUXF8",
+                    "MUXF9",
+                ],
+                ["DSP48E2"],
+                ["FDRE"],
+            ),
+        ]
+    ).to_csv(output_csv)
 
 
 def _generate_solver_results_table(
@@ -1567,6 +1721,22 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "completeness_data_filepath": output_csv_path,
                     "out_csv_filepath": solver_results_csv,
+                },
+            )
+        ],
+    }
+
+    resource_percentages_csv = output_dir / "figures" / "resource_percentages.csv"
+    yield {
+        "name": "resource_percentages",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _resource_percentages,
+                [],
+                {
+                    "input_csv": output_csv_path,
+                    "output_csv": resource_percentages_csv,
                 },
             )
         ],
