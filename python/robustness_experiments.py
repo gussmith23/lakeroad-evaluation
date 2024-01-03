@@ -243,14 +243,17 @@ def _plot_timing(
     ]
     assert len(df) > 0, "No data to plot"
 
-    fig = plt.figure(figsize=(6, 4))
-    ax = fig.add_subplot(1, 1, 1)
+    fig, ax = plt.subplots()
+    fig.set_figheight(2)
+    fig.set_figwidth(6)
+    plt.subplots_adjust(bottom=0.22)
     ax.set_title(title)
     if timeout:
         ax.set_xlim(0, timeout + xlim_timeout_padding)
         ax.axvline(x=timeout, color="red", linestyle="--")
-    ax.set_ylabel("number of experiments completed")
+    ax.set_ylabel("# completed")
     ax.hist(df["time_s"], alpha=alpha, bins=num_bins)
+    ax.set_xlabel("time (s)")
 
     df.to_csv(plot_csv_filepath)
     fig.savefig(plot_output_filepath)
