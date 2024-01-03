@@ -32,7 +32,7 @@ def _resource_percentages(input_csv, output_csv):
         lakeroad_successes = df[
             (df["tool"] == "lakeroad")
             & (df["lakeroad_synthesis_success"] == True)
-            & (df["architecture"] == "xilinx-ultrascale-plus")
+            & (df["architecture"] == architecture)
         ]
         merged = lakeroad_successes.merge(
             baseline, on="identifier", suffixes=("_lakeroad", f"_{baseline_tool_name}")
