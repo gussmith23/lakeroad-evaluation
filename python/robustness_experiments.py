@@ -170,6 +170,30 @@ def _resource_percentages(input_csv, output_csv):
                     "IFS1P3JX",
                 ],
             ),
+            _compute_percentages(
+                "yosys",
+                "lattice-ecp5",
+                [
+                    "LUT4",
+                    "CCU2C",
+                ],
+                [
+                    "MULT9X9D",
+                    "MULT18X18D",
+                    "MULT18X18C",
+                    "ALU54A",
+                    "ALU54B",
+                ],
+                [
+                    "TRELLIS_FF",
+                    "FD1S3AX",
+                    "OFS1P3DX",
+                    "DPR16X4C",
+                    "IFS1P3DX",
+                    "OFS1P3JX",
+                    "IFS1P3JX",
+                ],
+            ),
         ]
     ).to_csv(output_csv)
 
