@@ -62,7 +62,8 @@ def _resource_percentages(input_csv, output_csv):
             merged.get(f"{name}_lakeroad", default=0) for name in register_names
         )
         merged[baseline_register_column_name] = sum(
-            merged.get(f"{name}_{baseline_tool_name}", default=0) for name in register_names
+            merged.get(f"{name}_{baseline_tool_name}", default=0)
+            for name in register_names
         )
 
         merged["LE_difference"] = (
@@ -253,6 +254,7 @@ def _plot_timing(
 
     df.to_csv(plot_csv_filepath)
     fig.savefig(plot_output_filepath)
+
 
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
