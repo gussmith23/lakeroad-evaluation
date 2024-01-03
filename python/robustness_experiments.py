@@ -245,19 +245,14 @@ def _plot_timing(
     fig = plt.figure(figsize=(6, 4))
     ax = fig.add_subplot(1, 1, 1)
     ax.set_title(title)
-    ax.set_ylabel("fraction of experiments completed")
-    ax.set_xlabel("time (s)")
     if timeout:
         ax.set_xlim(0, timeout + xlim_timeout_padding)
         ax.axvline(x=timeout, color="red", linestyle="--")
-    ax2 = ax.twinx()
-    ax2.set_ylabel("number of experiments completed")
-    ax.ecdf(df["time_s"])
-    ax2.hist(df["time_s"], alpha=alpha, bins=num_bins)
+    ax.set_ylabel("number of experiments completed")
+    ax.hist(df["time_s"], alpha=alpha, bins=num_bins)
 
     df.to_csv(plot_csv_filepath)
     fig.savefig(plot_output_filepath)
-
 
 def _timing_cdf_xilinx(
     csv_filepath: Union[str, Path],
