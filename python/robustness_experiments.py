@@ -22,27 +22,6 @@ def _resource_percentages(input_csv, output_csv):
     # read in a file called completeness.csv
     df = pd.read_csv(input_csv).fillna(0)
 
-    lakeroad_successes = df[
-        (df["tool"] == "lakeroad") & (df["lakeroad_synthesis_success"] == True)
-    ]
-
-    lakeroad_successes_xilinx = lakeroad_successes[
-        lakeroad_successes["architecture"] == "xilinx-ultrascale-plus"
-    ]
-    lakeroad_successes_lattice = lakeroad_successes[
-        lakeroad_successes["architecture"] == "lattice-ecp5"
-    ]
-    lakeroad_successes_intel = lakeroad_successes[
-        lakeroad_successes["architecture"] == "intel"
-    ]
-
-    xilinx_vivado = df[
-        (df["tool"] == "vivado") & (df["architecture"] == "xilinx-ultrascale-plus")
-    ]
-    xilinx_yosys = df[
-        (df["tool"] == "yosys") & (df["architecture"] == "xilinx-ultrascale-plus")
-    ]
-
     def _compute_percentages(
         baseline_tool_name, architecture, logic_element_names, dsp_names, register_names
     ):
