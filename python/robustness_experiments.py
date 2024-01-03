@@ -50,19 +50,19 @@ def _resource_percentages(input_csv, output_csv):
         lakeroad_dsp_column_name = "lakeroad_dsps"
         baseline_dsp_column_name = f"{baseline_tool_name}_dsps"
         merged[lakeroad_dsp_column_name] = sum(
-            merged[f"{name}_lakeroad"] for name in dsp_names
+            merged.get(f"{name}_lakeroad", default=0) for name in dsp_names
         )
         merged[baseline_dsp_column_name] = sum(
-            merged[f"{name}_{baseline_tool_name}"] for name in dsp_names
+            merged.get(f"{name}_{baseline_tool_name}", default=0) for name in dsp_names
         )
 
         lakeroad_register_column_name = "lakeroad_registers"
         baseline_register_column_name = f"{baseline_tool_name}_registers"
         merged[lakeroad_register_column_name] = sum(
-            merged[f"{name}_lakeroad"] for name in register_names
+            merged.get(f"{name}_lakeroad", default=0) for name in register_names
         )
         merged[baseline_register_column_name] = sum(
-            merged[f"{name}_{baseline_tool_name}"] for name in register_names
+            merged.get(f"{name}_{baseline_tool_name}", default=0) for name in register_names
         )
 
         merged["LE_difference"] = (
