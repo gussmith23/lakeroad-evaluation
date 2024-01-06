@@ -1720,7 +1720,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "completeness_data_filepath": output_csv_path,
                     "architecture": "xilinx-ultrascale-plus",
-                    "title": "Lakeroad compiletime on Xilinx",
+                    "title": "Lakeroad synthesis time on Xilinx",
                     "plot_output_filepath": xilinx_time_png,
                     "plot_csv_filepath": xilinx_time_csv,
                     "num_bins": manifest["completeness_experiments"][
@@ -1747,7 +1747,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "completeness_data_filepath": output_csv_path,
                     "architecture": "lattice-ecp5",
-                    "title": "Lakeroad compiletime on Lattice",
+                    "title": "Lakeroad synthesis time on Lattice",
                     "plot_output_filepath": lattice_time_png,
                     "plot_csv_filepath": lattice_time_csv,
                     "num_bins": manifest["completeness_experiments"][
@@ -1773,7 +1773,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "completeness_data_filepath": output_csv_path,
                     "architecture": "intel",
-                    "title": "Lakeroad compiletime on Intel",
+                    "title": "Lakeroad synthesis time on Intel",
                     "plot_output_filepath": intel_time_png,
                     "plot_csv_filepath": intel_time_csv,
                     "num_bins": manifest["completeness_experiments"][
