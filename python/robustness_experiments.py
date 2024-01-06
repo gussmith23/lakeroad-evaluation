@@ -18,6 +18,40 @@ from matplotlib.gridspec import GridSpec
 import numpy as np
 
 
+def _lakeroad_is_X_times_better_numbers(
+    xilinx_succeeded_vs_failed_csv: Union[str, Path],
+    lattice_succeeded_vs_failed_csv: Union[str, Path],
+    intel_succeeded_vs_failed_csv: Union[str, Path],
+    output_csv: Union[str, Path],
+):
+    xilinx_df = pd.read_csv(xilinx_succeeded_vs_failed_csv)
+    lattice_df = pd.read_csv(lattice_succeeded_vs_failed_csv)
+    intel_df = pd.read_csv(intel_succeeded_vs_failed_csv)
+
+    records = []
+    for df, tools in [
+        (xilinx_df, ["SOTA Xilinx", "Yosys"]),
+        (lattice_df, ["SOTA Lattice", "Yosys"]),
+        (intel_df, ["SOTA Intel", "Yosys"]),
+    ]:
+        for tool in tools:
+            records.append(
+                {
+                    "tool": tool,
+                    "lakeroad is __X times better than tool": df[df.tool == "Lakeroad"]
+                    .squeeze()
+                    .num_successful
+                    / df[df.tool == tool].num_successful.squeeze()
+                    if df[df.tool == tool].num_successful.squeeze() != 0
+                    else np.inf,
+                }
+            )
+
+    df = pd.DataFrame.from_records(records)
+    Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_csv)
+
+
 def _solver_counts(input_csv, output_csv):
     df = pd.read_csv(input_csv)
     df = df[
@@ -1846,6 +1880,36 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "input_csv": output_csv_path,
                     "output_csv": solver_counts_csv,
+                },
+            )
+        ],
+    }
+
+    lakeroad_is_x_times_better_csv = (
+        output_dir / "figures" / "lakeroad_is_x_times_better.csv"
+    )
+    yield {
+        "name": "lakeroad_is_x_times_better",
+        "file_dep": [
+            output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
+            output_dir / "figures" / "succeeded_vs_failed_intel.csv",
+        ],
+        "actions": [
+            (
+                _lakeroad_is_X_times_better_numbers,
+                [],
+                {
+                    "lattice_succeeded_vs_failed_csv": output_dir
+                    / "figures"
+                    / "succeeded_vs_failed_lattice.csv",
+                    "xilinx_succeeded_vs_failed_csv": output_dir
+                    / "figures"
+                    / "succeeded_vs_failed_xilinx.csv",
+                    "intel_succeeded_vs_failed_csv": output_dir
+                    / "figures"
+                    / "succeeded_vs_failed_intel.csv",
+                    "output_csv": lakeroad_is_x_times_better_csv,
                 },
             )
         ],
