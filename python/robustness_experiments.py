@@ -659,7 +659,7 @@ def _visualize_succeeded_vs_failed_lattice(
         if t == "lakeroad":
             return "Lakeroad"
         elif t == "diamond":
-            return "SOTA Lattice"
+            return "Lattice SOTA"
         elif t == "yosys":
             return "Yosys"
         else:
@@ -825,7 +825,7 @@ def _visualize_succeeded_vs_failed_xilinx(
         if t == "lakeroad":
             return "Lakeroad"
         elif t == "vivado":
-            return "SOTA Xilinx"
+            return "Xilinx SOTA"
         elif t == "yosys":
             return "Yosys"
         else:
@@ -1017,7 +1017,7 @@ def _visualize_succeeded_vs_failed_intel(
         if t == "lakeroad":
             return "Lakeroad"
         elif t == "quartus":
-            return "SOTA Intel"
+            return "Intel SOTA"
         elif t == "yosys":
             return "Yosys"
         else:
