@@ -18,6 +18,21 @@ from matplotlib.gridspec import GridSpec
 import numpy as np
 
 
+def _solver_counts(input_csv, output_csv):
+    df = pd.read_csv(input_csv)
+    df = df[
+        (df.tool == "lakeroad")
+        & (df.lakeroad_synthesis_timeout == False)
+        & (
+            (df.lakeroad_synthesis_success == True)
+            | (df.lakeroad_synthesis_failure == True)
+        )
+    ]
+    df = df.groupby("solver").solver.count()
+    Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_csv)
+
+
 def _timing_table(input_csv, output_csv):
     df = pd.read_csv(input_csv)
 
@@ -1815,6 +1830,22 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "input_csv": output_csv_path,
                     "output_csv": timing_table_csv,
+                },
+            )
+        ],
+    }
+
+    solver_counts_csv = output_dir / "figures" / "solver_counts.csv"
+    yield {
+        "name": "solver_counts",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _solver_counts,
+                [],
+                {
+                    "input_csv": output_csv_path,
+                    "output_csv": solver_counts_csv,
                 },
             )
         ],
