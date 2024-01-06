@@ -18,6 +18,41 @@ from matplotlib.gridspec import GridSpec
 import numpy as np
 
 
+def _timing_table(input_csv, output_csv):
+    df = pd.read_csv(input_csv)
+
+    df[df["tool"] == "vivado"].time_s.max()
+
+    out_records = []
+    for arch in ["xilinx-ultrascale-plus", "lattice-ecp5", "intel"]:
+        if arch == "xilinx-ultrascale-plus":
+            tools = ["vivado", "yosys", "lakeroad"]
+        elif arch == "lattice-ecp5":
+            tools = ["diamond", "yosys", "lakeroad"]
+        elif arch == "intel":
+            tools = ["quartus", "yosys", "lakeroad"]
+
+        for tool in tools:
+            out_records.append(
+                {
+                    "architecture": arch,
+                    "tool": tool,
+                    "median_time_s": df[
+                        (df["architecture"] == arch) & (df["tool"] == tool)
+                    ].time_s.median(),
+                    "min_time_s": df[
+                        (df["architecture"] == arch) & (df["tool"] == tool)
+                    ].time_s.min(),
+                    "max_time_s": df[
+                        (df["architecture"] == arch) & (df["tool"] == tool)
+                    ].time_s.max(),
+                }
+            )
+
+    Path(output_csv).parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(out_records).to_csv(output_csv)
+
+
 def _resource_percentages(input_csv, output_csv):
     # read in a file called completeness.csv
     df = pd.read_csv(input_csv).fillna(0)
@@ -1764,6 +1799,22 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "input_csv": output_csv_path,
                     "output_csv": resource_percentages_csv,
+                },
+            )
+        ],
+    }
+
+    timing_table_csv = output_dir / "figures" / "timing_table.csv"
+    yield {
+        "name": "timing_table",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _timing_table,
+                [],
+                {
+                    "input_csv": output_csv_path,
+                    "output_csv": timing_table_csv,
                 },
             )
         ],
