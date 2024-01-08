@@ -30,9 +30,9 @@ def _lakeroad_is_X_times_better_numbers(
 
     records = []
     for df, tools in [
-        (xilinx_df, ["SOTA Xilinx", "Yosys"]),
-        (lattice_df, ["SOTA Lattice", "Yosys"]),
-        (intel_df, ["SOTA Intel", "Yosys"]),
+        (xilinx_df, ["Xilinx SOTA", "Yosys"]),
+        (lattice_df, ["Lattice SOTA", "Yosys"]),
+        (intel_df, ["Intel SOTA", "Yosys"]),
     ]:
         for tool in tools:
             records.append(
@@ -859,17 +859,6 @@ def _visualize_succeeded_vs_failed_xilinx(
         else 0
     )
 
-    # raise Exception(print(df))
-    # rename the tools in dataframe
-    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "Lakeroad" if t == "lakeroad" else t
-    # )
-    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "SOTA Xilinx" if t == "vivado" else t
-    # )
-    # suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(
-    #     lambda t: "Yosys" if t == "yosys" else t
-    # )
     def match(t):
         if t == "lakeroad":
             return "Lakeroad"
