@@ -1,5 +1,4 @@
-# Lakeroad Evaluation
-
+# Lakeroad Evaluation <!-- omit from toc -->
 
 This README contains detailed information on how to set up and run the evaluation
   for [Lakeroad.](https://github.com/uwsampl/lakeroad)
@@ -8,16 +7,30 @@ It was specifically written
   but all instructions should work
   for the general public.
 
-Three things to note before we begin:
+Important things to note before we begin:
 
-- **This evaluation must be run on a Linux machine.** Parts of the evaluation will work on Mac (namely, the Lakeroad components), but you will not be able to run (let alone install) the baseline hardware compilers (Vivado, Quartus, and Diamond).
+- **Access to the [lakeroad-private](https://github.com/uwsampl/lakeroad-private)
+    repository
+    is required for this evaluation.**
+  If you are using the Zenodo link in the paper,
+    the lakeroad-private files are included.
+  If you would like to clone directly from this repo,
+    contact the authors (we suggest opening an issue)
+    to get access to lakeroad-private.
+- **This evaluation must be run on an x86 Linux machine.**
+  Parts of the evaluation will work on Mac
+    (namely, the Lakeroad components),
+    but you will not be able to run (let alone install)
+    the baseline hardware compilers (Vivado, Quartus, and Diamond).
+  Windows is completely untested and not recommended.
 - **This evaluation benefits from many cores.**
   Our evaluation machine has 128 cores, and takes about 3.5 hours
     while fully using the machine.
 - This README is meant to be 
     a readable version of the necessary environment setup
     for the evaluation, but
-    **in case of bugs or missing information, consult the [Dockerfile](./Dockerfile) the [workflow file](.github/workflows/run-evaluation-leviathan.yml) as ground truth.** 
+    **in case of bugs or missing information, consult the [Dockerfile](./Dockerfile)
+    and the [workflow file](.github/workflows/run-evaluation-leviathan.yml) as ground truth.** 
   The Dockerfile is the ground truth 
     detailing
     which dependencies 
@@ -28,13 +41,14 @@ Three things to note before we begin:
     and execute the evaluation within a Docker container.
 
 We detail three methods for setting up and running the evaluation:
-1. **Quick run via Docker.** 
+1. [**Quick run via Docker.**](#method-1-quick-run-via-docker)
   This method will get something working 
   quickly, 
   but will not run the full evaluation.
   Not appropriate for
     artifact evaluators.
-2. **Full run via Docker.** 
+1. [**Full run via Docker.**](#method-2-full-run-via-docker)
+  **Recommended for artifact evaluators.**
   This method will run 
     the entire evaluation via Docker,
     which avoids some environment setup,
@@ -43,7 +57,7 @@ We detail three methods for setting up and running the evaluation:
     setting up the proprietary 
     hardware design tools 
     (Vivado, Quartus, and Diamond).
-3. **Full run locally.** This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set (on top of what is required for method 2.)
+1. [**Full run locally.**](#method-3-full-run-locally) This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set on top of what is required for method 2.
 
 For those just attempting 
   to fully reproduce results 
@@ -51,6 +65,18 @@ For those just attempting
   we recommend method 2.
 
 For those doing development, method 3 is required.
+
+## Table of Contents <!-- omit from toc -->
+- [Method 1: Quick Run via Docker](#method-1-quick-run-via-docker)
+- [Method 2: Full Run via Docker](#method-2-full-run-via-docker)
+  - [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
+  - [Step 2: Build Docker Image](#step-2-build-docker-image)
+- [Method 3: Full Run Locally](#method-3-full-run-locally)
+- [Installing Proprietary Tools](#installing-proprietary-tools)
+  - [Vivado](#vivado)
+  - [Lattice Diamond](#lattice-diamond)
+  - [Quartus](#quartus)
+- [Choosing the Number of Parallel Jobs](#choosing-the-number-of-parallel-jobs)
 
 ## Method 1: Quick Run via Docker
 
@@ -70,13 +96,69 @@ TODO(@gussmith23): provide a flag for disabling proprietary tools.
 
 ## Method 2: Full Run via Docker 
 
+**This is the recommended method for artifact evaluators and others trying to replicate results.**
+
+In this method,
+  you will build and run our Docker image,
+  which sets up most of the software
+  required for the evaluation.
+
+Steps summary:
+
+1. Install proprietary hardware tools (~3hrs)
+2. Build Docker image (~1hr)
+3. Run evaluation inside of Docker container (2-20+hrs, depending on number of cores)
+
+### Step 1: Install Proprietary Hardware Tools
+
 Our [Dockerfile](./Dockerfile) captures *almost* all of the evaluation's dependencies. However, a few critical pieces of software are left out: **the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.**
 
-Why did we leave these out? A few reasons, but chief among them: they are very large, unwieldy to install, and may require generating individual (free) licenses.
+Why did we leave these out? A few reasons, but chief among them:
+  they are very large,
+  unwieldy to install,
+  and may require generating individual (free) licenses,
+  all of which makes packaging inside a Docker image very difficult.
 
-Thus, to fully run the evaluation via Docker, you must first [install the proprietary hardware compiler toolchains.](#installing-proprietary-tools)
+Thus, to fully run the evaluation via Docker, 
+  you must first [install the proprietary hardware compiler toolchains.](#installing-proprietary-tools)
+Follow the linked instructions,
+  and then proceed to step 2.
 
-Once you have done this, you must now build the Docker image, passing in special `build-arg`s to point to the locations of these tools. This will look something like:
+### Step 2: Build Docker Image
+
+Once you have the proprietary hardware tools installed,
+  you are now ready to build the Docker image.
+
+Begin by
+  unpacking the repository
+  found in the Zenodo link:
+
+```sh
+unzip <file-from-zenodo>
+cd lakeroad-evaluation
+```
+
+Alternatively, if you have access
+  to [lakeroad-private](https://github.com/uwsampl/lakeroad-private),
+  you can clone this repository directly:
+
+```sh
+git clone <url-of-this-repo>
+git submodule init; git submodule update
+cd lakeroad
+git submodule init; git submodule update lakeroad-private
+cd ..
+```
+
+
+```sh
+docker build . -t lakeroad-evaluation \
+  --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
+  --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
+  --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
+```
+
+  passing in special `build-arg`s to point to the locations of these tools. This will look something like:
 
 ```sh
 docker build . -t lakeroad-evaluation \
@@ -127,6 +209,8 @@ For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.y
 Again, these paths will be different depending on where you install these tools. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
 
 ## Method 3: Full Run Locally
+
+**This is the recommended method for those trying to develop on the evaluation.**
 
 1. Make sure submodules are cloned and up-to-date. Either clone with `--recursive`, or do `git submodule init; git submodule update`.
 2. Make sure you have an up-to-date Python. We use Python 3.11.4.
