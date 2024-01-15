@@ -1,21 +1,60 @@
 # Lakeroad Evaluation
 
-The evaluation for [Lakeroad.](https://github.com/uwsampl/lakeroad)
 
-This README contains detailed information on how to set up and run the evaluation. However, **the [Dockerfile](./Dockerfile)  is the first and best source of truth on which dependencies to install and environment variables to set, just as the [workflow file](.github/workflows/run-evaluation-leviathan.yml) which builds and executes it is the first and best source of truth on how to build and run the Docker image.** This README is meant to be a more readable source of information, but in case of bugs or missing information, consult the previously mentioned files.
+This README contains detailed information on how to set up and run the evaluation
+  for [Lakeroad.](https://github.com/uwsampl/lakeroad)
+It was specifically written
+  for ASPLOS 2024's artifact evaluation process,
+  but all instructions should work
+  for the general public.
 
-**This evaluation must be run on a Linux machine.** Parts of the evaluation will work on Mac (namely, the Lakeroad components), but you will not be able to run (let alone install) the baseline hardware compilers (Vivado, Quartus, and Diamond).
+Three things to note before we begin:
+
+- **This evaluation must be run on a Linux machine.** Parts of the evaluation will work on Mac (namely, the Lakeroad components), but you will not be able to run (let alone install) the baseline hardware compilers (Vivado, Quartus, and Diamond).
+- **This evaluation benefits from many cores.**
+  Our evaluation machine has 128 cores, and takes about 3.5 hours
+    while fully using the machine.
+- This README is meant to be 
+    a readable version of the necessary environment setup
+    for the evaluation, but
+    **in case of bugs or missing information, consult the [Dockerfile](./Dockerfile) the [workflow file](.github/workflows/run-evaluation-leviathan.yml) as ground truth.** 
+  The Dockerfile is the ground truth 
+    detailing
+    which dependencies 
+    must be installed
+    and which environment variables must be set.
+  The workflow file is the ground truth
+    detailing how to build the Docker image
+    and execute the evaluation within a Docker container.
 
 We detail three methods for setting up and running the evaluation:
-1. **Quick run via Docker.** This method will get something working quickly, but will not run the full evaluation.
-2. **Full run via Docker.** This method will run the entire evaluation via Docker, and requires completing the most time-consuming part of setup: setting up the proprietary hardware design tools (Vivado, Quartus, and Diamond).
+1. **Quick run via Docker.** 
+  This method will get something working 
+  quickly, 
+  but will not run the full evaluation.
+  Not appropriate for
+    artifact evaluators.
+2. **Full run via Docker.** 
+  This method will run 
+    the entire evaluation via Docker,
+    which avoids some environment setup,
+    but still requires completing 
+    the most time-consuming part of setup: 
+    setting up the proprietary 
+    hardware design tools 
+    (Vivado, Quartus, and Diamond).
 3. **Full run locally.** This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set (on top of what is required for method 2.)
 
-For those attempting to fully reproduce results, choose between methods 2 or 3. If you are working on a Linux machine (ideally Ubuntu), method 3 should work well.
+For those just attempting 
+  to fully reproduce results 
+  (i.e., artifact evaluators),
+  we recommend method 2.
 
 For those doing development, method 3 is required.
 
-## Quick Run via Docker
+## Method 1: Quick Run via Docker
+
+**This method is not appropriate for artifact evaluation.**
 
 To quickly get *something* running, use the Dockerfile:
 
@@ -29,7 +68,7 @@ Note that, at the moment, this will still encounter errors when it attempts to r
 
 TODO(@gussmith23): provide a flag for disabling proprietary tools.
 
-## Full Run via Docker 
+## Method 2: Full Run via Docker 
 
 Our [Dockerfile](./Dockerfile) captures *almost* all of the evaluation's dependencies. However, a few critical pieces of software are left out: **the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.**
 
@@ -46,7 +85,8 @@ docker build . -t lakeroad-evaluation \
   --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
 ```
 
-(Note: these paths actually refer to paths *inside* the Docker image, but it's encouraged to just use the same paths that exist on your host system.)
+(Note: these paths actually refer to paths *inside* the Docker image,
+  but it's strongly encouraged to just use the same paths that exist on your host system.)
 
 For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
 
@@ -58,9 +98,9 @@ For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.y
   ...
 ```
 
-However, this will likely be different on your machine, depending on where you install the tools.
+However, this may be different on your machine, depending on where you install the tools.
 
-Finally, you can run the Docker image. In this step, we will mount your local installations of the tools into the Docker container, so that the binaries are available inside the container. We do so using `-v` flags, as follows:
+Finally, we will run the Docker image. In this step, we will mount your local installations of the tools into the Docker container, so that the binaries are available inside the container. We do so using `-v` flags, as follows:
 
 ```sh
 docker run \
@@ -71,6 +111,9 @@ docker run \
   doit --always-execute --continue -n 20
 ```
 
+Again, we recommend mounting the tools within the containers such that they have the same
+  path as in the host system; hence, this is why the source path (before the colon)
+  is the same as the destination path (after the colon).
 For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
 
 ```sh
@@ -83,7 +126,7 @@ For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.y
 
 Again, these paths will be different depending on where you install these tools. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
 
-## Full Run Locally
+## Method 3: Full Run Locally
 
 1. Make sure submodules are cloned and up-to-date. Either clone with `--recursive`, or do `git submodule init; git submodule update`.
 2. Make sure you have an up-to-date Python. We use Python 3.11.4.
@@ -270,15 +313,5 @@ Quartus must similarly also be mounted into the Docker container.
 See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.yml)
   for an example invocation of the Docker container.
 
-## [./runs](./runs)
+## Choosing the Number of Parallel Jobs
 
-This folder contains our output runs.
-
-## Output Location
-
-The location of the experiment output
-  can be controlled
-  by setting the
-  `LRE_OUTPUT_DIR` environment variable.
-By default, the experiment results
-  write to `out/`.
