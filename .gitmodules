@@ -1,4 +1,4 @@
 [submodule "lakeroad"]
 	path = lakeroad
-	url = git@github.com:gussmith23/lakeroad
+	url = https://github.com/gussmith23/lakeroad
 	ignore = untracked
