@@ -77,6 +77,8 @@ For those doing development, method 3 is required.
   - [Lattice Diamond](#lattice-diamond)
   - [Quartus](#quartus)
 - [Choosing the Number of Parallel Jobs](#choosing-the-number-of-parallel-jobs)
+- [Appendix](#appendix)
+  - [Setup without Docker](#setup-without-docker)
 
 ## Method 1: Quick Run via Docker
 
@@ -399,3 +401,12 @@ See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.
 
 ## Choosing the Number of Parallel Jobs
 
+
+## Appendix
+
+### Setup without Docker
+
+If you are interested in setting up
+  the evaluation
+  to run outside of Docker,
+  for 
