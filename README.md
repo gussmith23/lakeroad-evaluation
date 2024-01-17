@@ -26,14 +26,14 @@ Important things to note before we begin:
 - **This evaluation benefits from many cores.**
   Our evaluation machine has 128 cores, and takes about 3.5 hours
     while fully using the machine.
-- This README is meant to be 
+- This README is meant to be
     a readable version of the necessary environment setup
     for the evaluation, but
     **in case of bugs or missing information, consult the [Dockerfile](./Dockerfile)
-    and the [workflow file](.github/workflows/run-evaluation-leviathan.yml) as ground truth.** 
-  The Dockerfile is the ground truth 
+    and the [workflow file](.github/workflows/run-evaluation-leviathan.yml) as ground truth.**
+  The Dockerfile is the ground truth
     detailing
-    which dependencies 
+    which dependencies
     must be installed
     and which environment variables must be set.
   The workflow file is the ground truth
@@ -41,32 +41,34 @@ Important things to note before we begin:
     and execute the evaluation within a Docker container.
 
 We detail three methods for setting up and running the evaluation:
+
 1. [**Quick run via Docker.**](#method-1-quick-run-via-docker)
-  This method will get something working 
-  quickly, 
+  This method will get something working
+  quickly,
   but will not run the full evaluation.
   Not appropriate for
     artifact evaluators.
 1. [**Full run via Docker.**](#method-2-full-run-via-docker)
   **Recommended for artifact evaluators.**
-  This method will run 
+  This method will run
     the entire evaluation via Docker,
     which avoids some environment setup,
-    but still requires completing 
-    the most time-consuming part of setup: 
-    setting up the proprietary 
-    hardware design tools 
+    but still requires completing
+    the most time-consuming part of setup:
+    setting up the proprietary
+    hardware design tools
     (Vivado, Quartus, and Diamond).
 1. [**Full run locally.**](#method-3-full-run-locally) This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set on top of what is required for method 2.
 
-For those just attempting 
-  to fully reproduce results 
+For those just attempting
+  to fully reproduce results
   (i.e., artifact evaluators),
   we recommend method 2.
 
 For those doing development, method 3 is required.
 
 ## Table of Contents <!-- omit from toc -->
+
 - [Method 1: Quick Run via Docker](#method-1-quick-run-via-docker)
 - [Method 2: Full Run via Docker](#method-2-full-run-via-docker)
   - [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
@@ -96,7 +98,7 @@ Note that, at the moment, this will still encounter errors when it attempts to r
 
 TODO(@gussmith23): provide a flag for disabling proprietary tools.
 
-## Method 2: Full Run via Docker 
+## Method 2: Full Run via Docker
 
 **This is the recommended method for artifact evaluators and others trying to replicate results.**
 
@@ -121,7 +123,7 @@ Why did we leave these out? A few reasons, but chief among them:
   and may require generating individual (free) licenses,
   all of which makes packaging inside a Docker image very difficult.
 
-Thus, to fully run the evaluation via Docker, 
+Thus, to fully run the evaluation via Docker,
   you must first [install the proprietary hardware compiler toolchains.](#installing-proprietary-tools)
 Follow the linked instructions,
   and then proceed to step 2.
@@ -151,7 +153,6 @@ cd lakeroad
 git submodule init; git submodule update lakeroad-private
 cd ..
 ```
-
 
 ```sh
 docker build . -t lakeroad-evaluation \
@@ -254,7 +255,6 @@ Environment variables to set:
 - `PYTHONPATH`
 - TODO(@gussmith23): document Quartus, Diamond, Vivado
 
-  
 ## Installing Proprietary Tools
   
 ### Vivado
@@ -401,7 +401,6 @@ See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.
 
 ## Choosing the Number of Parallel Jobs
 
-
 ## Appendix
 
 ### Setup without Docker
@@ -409,4 +408,4 @@ See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.
 If you are interested in setting up
   the evaluation
   to run outside of Docker,
-  for 
+  for
