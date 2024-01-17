@@ -40,36 +40,8 @@ Important things to note before we begin:
     detailing how to build the Docker image
     and execute the evaluation within a Docker container.
 
-We detail three methods for setting up and running the evaluation:
-
-1. [**Quick run via Docker.**](#method-1-quick-run-via-docker)
-  This method will get something working
-  quickly,
-  but will not run the full evaluation.
-  Not appropriate for
-    artifact evaluators.
-1. [**Full run via Docker.**](#method-2-full-run-via-docker)
-  **Recommended for artifact evaluators.**
-  This method will run
-    the entire evaluation via Docker,
-    which avoids some environment setup,
-    but still requires completing
-    the most time-consuming part of setup:
-    setting up the proprietary
-    hardware design tools
-    (Vivado, Quartus, and Diamond).
-1. [**Full run locally.**](#method-3-full-run-locally) This method will run the entire evaluation locally, and only requires a few more dependency installations and environment variables to be set on top of what is required for method 2.
-
-For those just attempting
-  to fully reproduce results
-  (i.e., artifact evaluators),
-  we recommend method 2.
-
-For those doing development, method 3 is required.
-
 ## Table of Contents <!-- omit from toc -->
 
-- [Method 1: Quick Run via Docker](#method-1-quick-run-via-docker)
 - [Method 2: Full Run via Docker](#method-2-full-run-via-docker)
   - [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
   - [Step 2: Build Docker Image](#step-2-build-docker-image)
@@ -82,22 +54,6 @@ For those doing development, method 3 is required.
 - [Appendix](#appendix)
   - [Setup without Docker](#setup-without-docker)
 
-## Method 1: Quick Run via Docker
-
-**This method is not appropriate for artifact evaluation.**
-
-To quickly get *something* running, use the Dockerfile:
-
-```sh
-git clone --recursive <this repo>
-docker build . -t lakeroad-evaluation
-docker run lakeroad-evaluation
-```
-
-Note that, at the moment, this will still encounter errors when it attempts to run the proprietary baseline compilers (Vivado, Quartus, Diamond). See Setup for details on how to install those compilers and hook them into the Docker image.
-
-TODO(@gussmith23): provide a flag for disabling proprietary tools.
-
 ## Method 2: Full Run via Docker
 
 **This is the recommended method for artifact evaluators and others trying to replicate results.**
@@ -106,6 +62,12 @@ In this method,
   you will build and run our Docker image,
   which sets up most of the software
   required for the evaluation.
+This is suitable for those simply aiming
+  to reproduce results
+  (i.e., artifact evaluators.)
+For those aiming to do development,
+  you should instead follow the instructions in
+  [Setup without Docker.](#setup-without-docker)
 
 Steps summary:
 
@@ -408,4 +370,7 @@ See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.
 If you are interested in setting up
   the evaluation
   to run outside of Docker,
-  for
+  e.g. so that you can develop on it,
+  follow these instructions.
+
+TODO(@gussmith23).
