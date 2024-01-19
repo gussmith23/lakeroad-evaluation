@@ -15,8 +15,8 @@ It was specifically written
   - [Lattice Diamond](#lattice-diamond)
   - [Intel Quartus](#intel-quartus)
 - [Step 2: Build Docker Image](#step-2-build-docker-image)
+- [Step 3: Run Docker Image](#step-3-run-docker-image)
 - [Method 3: Full Run Locally](#method-3-full-run-locally)
-- [Choosing the Number of Parallel Jobs](#choosing-the-number-of-parallel-jobs)
 - [Appendix](#appendix)
   - [Setup without Docker](#setup-without-docker)
 
@@ -359,19 +359,19 @@ docker build . -t lakeroad-evaluation \
   --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
   --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
   --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
-  --build-arg MAKE_JOBS=<num_make_jobs>
+  --build-arg MAKE_JOBS=<num-make-jobs>
 ```
 
-  passing in special `build-arg`s to point to the locations of these tools. This will look something like:
+We will now describe
+  how to set each `--build-arg`
+  flag.
 
-```sh
-docker build . -t lakeroad-evaluation \
-  --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
-  --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
-  --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
-```
-
-(Note: these paths actually refer to paths *inside* the Docker image,
+`VIVADO_BIN_DIR`,`QUARTUS_BIN_DIR`,and `DIAMOND_BINDIR`
+  should be set to the `bin/` (or `bin/lin64/`, for Diamond)
+  directories
+  for each installed tool.
+(Note: these paths will actually
+  refer to paths *inside* the Docker image,
   but it's strongly encouraged to just use the same paths that exist on your host system.)
 
 For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
@@ -384,21 +384,86 @@ For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.y
   ...
 ```
 
-However, this may be different on your machine, depending on where you install the tools.
+Please determine what the appropriate
+  settings should be
+  on your machine.
 
-Finally, we will run the Docker image. In this step, we will mount your local installations of the tools into the Docker container, so that the binaries are available inside the container. We do so using `-v` flags, as follows:
+`MAKE_JOBS` should be set to the number of parallel jobs
+  `make` should use
+  when building.
+It is generally a safe default
+  to set this to the number of processors
+  on your machine,
+  which can be printed by running `nproc`.
+
+Putting it all together,
+  your final command might look
+  something like this,
+  a simplified form of the command used
+  by [our GitHub workflow](https://github.com/uwsampl/lakeroad-evaluation/blob/1ce2fb745db112ca97114cceddc045bfe25a8376/.github/workflows/run-evaluation-leviathan.yml#L58-L65):
+
+```sh
+docker build . -t lakeroad-evaluation \
+  --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2023.1/bin \
+  --build-arg QUARTUS_BIN_DIR=/tools/intel/quartus/bin/ \
+  --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
+  --build-arg MAKE_JOBS=128
+```
+
+## Step 3: Run Docker Image
+
+Finally, we will run the Docker image.
+
+Evaluation will take multiple hours.
+We suggest running within `tmux` or `screen`.
+
+The final command will look something like this,
+  a simplified form of the command used
+  by our [GitHub workflow](https://github.com/uwsampl/lakeroad-evaluation/blob/1ce2fb745db112ca97114cceddc045bfe25a8376/.github/workflows/run-evaluation-leviathan.yml#L83-L94):
 
 ```sh
 docker run \
+  --name <container-name> \
+  -v /tools/Xilinx:/tools/Xilinx \
+  -v /usr/local/diamond:/usr/local/diamond \
+  -v /tools/intel:/tools/intel \
+  --env NUM_JOBS_VIVADO_TASKS=... \
+  --env NUM_JOBS_LAKEROAD_TASKS=... \
+  --env NUM_JOBS_OTHER_TASKS=... \
+  lakeroad-evaluation \
+  bash /root/run-evaluation.sh
+```
+
+We will now explain
+  how to correctly set the `--name`, `-v` and `--env`
+  flags
+  correctly.
+
+`--name` can be set to a name of your choosing.
+This will become the name of your container,
+  which we will later use
+  to copy out the resulting evaluation files.
+For example, `--name lakeroad-evaluation-container`.
+
+The `-v` flags
+  ensure
+  that the evaluation
+  has access to
+  your local installations
+  of the proprietary hardware tools
+  by mounting the tools inside of the container.
+The flags should look like:
+
+```sh
+  ...
   -v /path/to/Xilinx:/path/to/Xilinx \
   -v /path/to/diamond:/path/to/diamond \
   -v /path/to/intel:/path/to/intel \
-  lakeroad-evaluation
-  doit --always-execute --continue -n 20
+  ...
 ```
 
-Again, we recommend mounting the tools within the containers such that they have the same
-  path as in the host system; hence, this is why the source path (before the colon)
+We recommend mounting the tools within the containers such that they have the **same
+  path as in the host system;** hence, this is why the source path (before the colon)
   is the same as the destination path (after the colon).
 For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
 
@@ -411,6 +476,45 @@ For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.y
 ```
 
 Again, these paths will be different depending on where you install these tools. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
+
+Next we will determine
+  how to set
+  the environment variables
+  `NUM_JOBS_VIVADO_TASKS`,
+  `NUM_JOBS_LAKEROAD_TASKS`, and
+  `NUM_JOBS_OTHER_TASKS`.
+These environment variables
+  are used to tune the performance
+  of the evaluation.
+Correctly setting these
+  can make the evaluation run
+  2-3X faster!
+
+Our [run script](https://github.com/uwsampl/lakeroad-evaluation/blob/main/run-evaluation.sh)
+  recommends the following:
+
+```sh
+# The environment variables expected by this script are:
+# - NUM_JOBS_VIVADO_TASKS: The number of parallel jobs to use for Vivado tasks.
+#   Suggestion: (nproc - buffer) / 4
+# - NUM_JOBS_LAKEROAD_TASKS: The number of parallel jobs to use for Lakeroad
+#   tasks. Suggestion: (nproc - buffer) / 4
+# - NUM_JOBS_OTHER_TASKS: The number of parallel jobs to use for all other
+#   tasks. Suggestion: nproc - buffer
+# "buffer" is a number of cores to leave free for the OS and other tasks. I
+# suggest about 10% of cores.
+```
+
+On our 128 core machine,
+  we set these variables in the following way:
+
+```sh
+  ...
+  --env NUM_JOBS_VIVADO_TASKS=20 \
+  --env NUM_JOBS_LAKEROAD_TASKS=20 \
+  --env NUM_JOBS_OTHER_TASKS=100 \
+  ...
+```
 
 ## Method 3: Full Run Locally
 
@@ -454,9 +558,6 @@ Again, these paths will be different depending on where you install these tools.
 Environment variables to set:
 
 - `PYTHONPATH`
-- TODO(@gussmith23): document Quartus, Diamond, Vivado
-
-## Choosing the Number of Parallel Jobs
 
 ## Appendix
 
