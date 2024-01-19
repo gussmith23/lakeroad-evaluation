@@ -7,8 +7,41 @@ It was specifically written
   but all instructions should work
   for the general public.
 
+## Table of Contents <!-- omit from toc -->
+
+- [Introduction](#introduction)
+- [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
+  - [Xilinx Vivado](#xilinx-vivado)
+  - [Lattice Diamond](#lattice-diamond)
+  - [Intel Quartus](#intel-quartus)
+- [Step 2: Build Docker Image](#step-2-build-docker-image)
+- [Method 3: Full Run Locally](#method-3-full-run-locally)
+- [Choosing the Number of Parallel Jobs](#choosing-the-number-of-parallel-jobs)
+- [Appendix](#appendix)
+  - [Setup without Docker](#setup-without-docker)
+
+## Introduction
+
+These instructions
+  will step you through the process of
+  building and running the evaluation
+  using Docker.
+This is suitable for those simply aiming
+  to reproduce results
+  (i.e., artifact evaluators).
+For those aiming to do development,
+  you should instead follow the instructions in
+  [Setup without Docker.](#setup-without-docker)
+
+Steps summary:
+
+1. Install proprietary hardware tools (~3hrs)
+2. Build Docker image (~1hr)
+3. Run evaluation inside of Docker container (2-20+hrs, depending on number of cores)
+
 Important things to note before we begin:
 
+- **Docker is required for building and running the evaluation.**
 - **Access to the [lakeroad-private](https://github.com/uwsampl/lakeroad-private)
     repository
     is required for this evaluation.**
@@ -17,12 +50,17 @@ Important things to note before we begin:
   If you would like to clone directly from this repo,
     contact the authors (we suggest opening an issue)
     to get access to lakeroad-private.
-- **This evaluation must be run on an x86 Linux machine.**
+- **This evaluation must be run on an x86 Linux 
+    (ideally Ubuntu) machine
+    with 300GB of free space.**
   Parts of the evaluation will work on Mac
     (namely, the Lakeroad components),
     but you will not be able to run (let alone install)
     the baseline hardware compilers (Vivado, Quartus, and Diamond).
+  We recommend Ubuntu, as that is what we use.
   Windows is completely untested and not recommended.
+  The large disk space requirement is mostly due
+    to the large size of the proprietary hardware tools.
 - **This evaluation benefits from many cores.**
   Our evaluation machine has 128 cores, and takes about 3.5 hours
     while fully using the machine.
@@ -40,45 +78,13 @@ Important things to note before we begin:
     detailing how to build the Docker image
     and execute the evaluation within a Docker container.
 
-## Table of Contents <!-- omit from toc -->
+## Step 1: Install Proprietary Hardware Tools
 
-- [Method 2: Full Run via Docker](#method-2-full-run-via-docker)
-  - [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
-  - [Step 2: Build Docker Image](#step-2-build-docker-image)
-- [Method 3: Full Run Locally](#method-3-full-run-locally)
-- [Installing Proprietary Tools](#installing-proprietary-tools)
-  - [Vivado](#vivado)
-  - [Lattice Diamond](#lattice-diamond)
-  - [Quartus](#quartus)
-- [Choosing the Number of Parallel Jobs](#choosing-the-number-of-parallel-jobs)
-- [Appendix](#appendix)
-  - [Setup without Docker](#setup-without-docker)
-
-## Method 2: Full Run via Docker
-
-**This is the recommended method for artifact evaluators and others trying to replicate results.**
-
-In this method,
-  you will build and run our Docker image,
-  which sets up most of the software
-  required for the evaluation.
-This is suitable for those simply aiming
-  to reproduce results
-  (i.e., artifact evaluators.)
-For those aiming to do development,
-  you should instead follow the instructions in
-  [Setup without Docker.](#setup-without-docker)
-
-Steps summary:
-
-1. Install proprietary hardware tools (~3hrs)
-2. Build Docker image (~1hr)
-3. Run evaluation inside of Docker container (2-20+hrs, depending on number of cores)
-
-### Step 1: Install Proprietary Hardware Tools
-
-Our [Dockerfile](./Dockerfile) captures *almost* all of the evaluation's dependencies. However, a few critical pieces of software are left out: **the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.**
-
+Our [Dockerfile](./Dockerfile)
+  automatically builds
+  *almost* all of the evaluation's dependencies.
+However, a few critical pieces of software are left out: 
+  the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.
 Why did we leave these out? A few reasons, but chief among them:
   they are very large,
   unwieldy to install,
@@ -86,18 +92,247 @@ Why did we leave these out? A few reasons, but chief among them:
   all of which makes packaging inside a Docker image very difficult.
 
 Thus, to fully run the evaluation via Docker,
-  you must first [install the proprietary hardware compiler toolchains.](#installing-proprietary-tools)
+  you must first install the proprietary hardware compiler toolchains.
 Follow the linked instructions,
   and then proceed to step 2.
 
-### Step 2: Build Docker Image
+**Note:** hardware design tools
+  are notoriously finicky and difficult.
+Please do not blame us for failures
+  which occur in this portion
+  of evaluation setup.
+We will give support
+  for installing these tools
+  (via HotCRP for artifact evaluators
+  or via issues on GitHub),
+  but these tools are not ours,
+  and thus, there is only so much we can do.
+  
+### Xilinx Vivado
+
+The evaluation uses Vivado version 2023.1.
+
+To install Vivado,
+  please visit
+  this link:
+<https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html>
+
+Download the product
+  labeled
+  "Vivado ML Edition - 2023.1  Full Product Installation"
+  via whichever method you prefer.
+You will be required to create an account
+  on their website
+  to download.
+From there, running the installer
+  should be fairly seamless.
+We installed Vivado to `/tools/Xilinx`,
+  but you can install it wherever you want.
+
+<!--
+1. Pass `--build-arg VIVADO_BIN_DIR=</absolute/path/to/vivado/bin>`
+    to `docker build`.
+    The absolute path should be the path on the container,
+      not on the host, though we recommend that you ensure
+      that the paths are the same. See step 2.
+    This will add the bin directory to the path.
+2. During `docker run`, mount your entire Xilinx software directory. For example, our
+    directory looks like:
+
+    ```raw
+    $ tree -d -L 2 /tools/Xilinx
+    /tools/Xilinx
+    ├── DocNav
+    │   ├── lib
+    │   ├── libexec
+    │   ├── pdfjs
+    │   ├── plugins
+    │   ├── resources
+    │   └── translations
+    ├── Downloads
+    ├── Model_Composer
+    │   └── 2021.2
+    ├── Vitis_HLS
+    │   └── 2021.2
+    ├── Vivado
+    │   └── 2021.2
+    └── xic
+        ├── bin
+        ├── data
+        ├── lib
+        ├── scripts
+        └── tps
+    ```
+
+    We mount the directory during `docker run` as follows:
+
+    ```shell
+    docker run -v /tools/Xilinx/:/tools/Xilinx/ lakeroad-evaluation ...
+    ```
+
+    We recommend preserving the exact directory structure that exists on the host machine.
+    Thus, in our case, we map `/tools/Xilinx` to `/tools/Xilinx`.
+    This is because some of the tools have hardcoded directories.
+
+Once the environment is set up correctly, you should be able
+  to run the evaluation scripts
+  with Vivado-based eval enabled.
+  -->
+
+### Lattice Diamond
+
+The evaluation uses Lattice Diamond version 3.12.
+
+Unfortunately, Lattice's Diamond toolchain
+  is more difficult to install.
+We lean on the following documentation
+  for installing Lattice Diamond:
+<https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04>
+
+Please follow all of the instructions
+  under the first section
+  titled "Install Lattice Diamond".
+You can ignore the other sections
+  of the post.
+
+(In case the above post disappears, here is the archived version:
+<https://web.archive.org/web/20230203012029/https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04>)
+
+These instructions should completely cover
+  all of the difficulties
+  in installing Diamond.
+We ran into many issues following these instructions,
+  though in the end,
+  they were all errors on our side.
+If you similarly run into issues,
+  you can
+  read the notes we took
+  while installing Diamond
+  on our own machine:
+<https://github.com/uwsampl/lakeroad-evaluation/issues/86>
+
+<!--
+*Summary:* To enable the use of Lattice Diamond,
+  set the `DIAMOND_BINDIR` environment variable when running locally,
+  and use the `DIAMOND_BINDIR` build argument
+  when building and running in the Docker container.
+
+The evaluation optionally depends
+  on Lattice Diamond.
+We do not install Diamond in the Docker image
+  due to its license,
+  so we expect the user to install it
+  on the host system,
+  and mount it into the container.
+
+Diamond
+  can be downloaded
+  [here](https://www.latticesemi.com/latticediamond).
+Lattice Diamond requires a license,
+  but most people can get a free license from their website.
+See [this page](https://www.latticesemi.com/en/Support/Licensing).
+For those on Ubuntu, the Linux version
+  of Diamond
+  can be made to work with Ubuntu.
+See [this tutorial](https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).
+
+The evaluation does not expect
+  Diamond to be available on the `PATH`,
+  as Diamond's libraries can interfere with system libraries.
+Instead, the evaluation expects the user to set
+  the `DIAMOND_BINDIR`
+  environment variable
+  to the location of the directory
+  of Diamond binaries,
+  e.g. `/usr/local/diamond/3.12/bin/lin64`.
+  
+There are two steps
+  to enabling Lattice Diamond
+  inside the Docker image:
+
+1. Build this repo's Docker image with `--build-arg=DIAMOND_BINDIR=/path/to/diamond/bindir`.
+2. Mount the host's Diamond directory when running the Docker container.
+
+When building the Docker image,
+  set the `DIAMOND_BINDIR` build argument.
+This argument should point to the main folder of Diamond binaries.
+How you set this variable is determined
+  by where you mount
+  the Diamond directory
+  in the next step.
+If we are on Linux, and our Diamond directory
+  on the host
+  is `/usr/local/diamond`,
+  and we mount it to
+  `/usr/local/diamond`
+  in our container,
+  then we will set `DIAMOND_BINDIR` with:
+  `--build-arg=DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64`.
+
+Lastly,
+  we need to mount
+  our Diamond directory
+  into the container
+  when we finally run the Docker image.
+To do so, we use the following syntax:
+  `docker run -v/usr/local/diamond:/usr/local/diamond ...`,
+  replacing `/usr/local/diamond` with the path
+  to your Diamond installation.
+  -->
+  
+### Intel Quartus
+
+The evaluation uses Quartus Prime Lite 22.1.
+
+Download and install the software using the instructions
+  on this page:
+<https://www.intel.com/content/www/us/en/software-kit/795187/intel-quartus-prime-lite-edition-design-software-version-23-1-for-linux.html>
+
+We used the "Multiple Download" option
+  to download and extract a tarfile.
+The new "Installer" method
+  may work better,
+  but we haven't tested it.
+
+We installed Quartus to `/tools/intel`,
+  but you can install it
+  wherever you want.
+
+We encountered some issues with Quartus installation,
+  documented here:
+<https://github.com/uwsampl/lakeroad-evaluation/issues/87>
+
+The only change we needed in the end
+  was to change the permissions
+  of the installed files:
+
+```sh
+sudo chmod -R u+rwX,go+rX,go-w /path/to/quartus/install
+```
+
+<!--
+Similarly to Vivado and Diamond,
+  the evaluation depends on Quartus.
+A free version of Quartus can be downloaded
+  from Intel's website.
+Quartus must appear on the `PATH`.
+In the future, it would be ideal to
+  (1) make Quartus optional and
+  (2) specify its location via an environment variable.
+Quartus must similarly also be mounted into the Docker container.
+See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.yml)
+  for an example invocation of the Docker container.
+-->
+
+## Step 2: Build Docker Image
 
 Once you have the proprietary hardware tools installed,
   you are now ready to build the Docker image.
 
-Begin by
-  unpacking the repository
-  found in the Zenodo link:
+If you have downloaded
+  the evaluation
+  using the Zenodo link,
+  unpack it:
 
 ```sh
 unzip <file-from-zenodo>
@@ -116,11 +351,15 @@ git submodule init; git submodule update lakeroad-private
 cd ..
 ```
 
+Next, we will run `docker build`,
+  which will roughly look like:
+
 ```sh
 docker build . -t lakeroad-evaluation \
   --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
   --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
   --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
+  --build-arg MAKE_JOBS=<num_make_jobs>
 ```
 
   passing in special `build-arg`s to point to the locations of these tools. This will look something like:
@@ -216,150 +455,6 @@ Environment variables to set:
 
 - `PYTHONPATH`
 - TODO(@gussmith23): document Quartus, Diamond, Vivado
-
-## Installing Proprietary Tools
-  
-### Vivado
-
-The evaluation optionally depends
-  on Vivado.
-The [`run.sh`](/run.sh) script
-  has a flag for controlling whether
-  the Vivado-based tests are run.
-
-The Docker image can use the Vivado installed on your system.
-There are two steps to this process:
-
-1. Pass `--build-arg VIVADO_BIN_DIR=</absolute/path/to/vivado/bin>`
-    to `docker build`.
-    The absolute path should be the path on the container,
-      not on the host, though we recommend that you ensure
-      that the paths are the same. See step 2.
-    This will add the bin directory to the path.
-2. During `docker run`, mount your entire Xilinx software directory. For example, our
-    directory looks like:
-
-    ```raw
-    $ tree -d -L 2 /tools/Xilinx
-    /tools/Xilinx
-    ├── DocNav
-    │   ├── lib
-    │   ├── libexec
-    │   ├── pdfjs
-    │   ├── plugins
-    │   ├── resources
-    │   └── translations
-    ├── Downloads
-    ├── Model_Composer
-    │   └── 2021.2
-    ├── Vitis_HLS
-    │   └── 2021.2
-    ├── Vivado
-    │   └── 2021.2
-    └── xic
-        ├── bin
-        ├── data
-        ├── lib
-        ├── scripts
-        └── tps
-    ```
-
-    We mount the directory during `docker run` as follows:
-
-    ```shell
-    docker run -v /tools/Xilinx/:/tools/Xilinx/ lakeroad-evaluation ...
-    ```
-
-    We recommend preserving the exact directory structure that exists on the host machine.
-    Thus, in our case, we map `/tools/Xilinx` to `/tools/Xilinx`.
-    This is because some of the tools have hardcoded directories.
-
-Once the environment is set up correctly, you should be able
-  to run the evaluation scripts
-  with Vivado-based eval enabled.
-
-### Lattice Diamond
-
-*Summary:* To enable the use of Lattice Diamond,
-  set the `DIAMOND_BINDIR` environment variable when running locally,
-  and use the `DIAMOND_BINDIR` build argument
-  when building and running in the Docker container.
-
-The evaluation optionally depends
-  on Lattice Diamond.
-We do not install Diamond in the Docker image
-  due to its license,
-  so we expect the user to install it
-  on the host system,
-  and mount it into the container.
-
-Diamond
-  can be downloaded
-  [here](https://www.latticesemi.com/latticediamond).
-Lattice Diamond requires a license,
-  but most people can get a free license from their website.
-See [this page](https://www.latticesemi.com/en/Support/Licensing).
-For those on Ubuntu, the Linux version
-  of Diamond
-  can be made to work with Ubuntu.
-See [this tutorial](https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).
-
-The evaluation does not expect
-  Diamond to be available on the `PATH`,
-  as Diamond's libraries can interfere with system libraries.
-Instead, the evaluation expects the user to set
-  the `DIAMOND_BINDIR`
-  environment variable
-  to the location of the directory
-  of Diamond binaries,
-  e.g. `/usr/local/diamond/3.12/bin/lin64`.
-  
-There are two steps
-  to enabling Lattice Diamond
-  inside the Docker image:
-
-1. Build this repo's Docker image with `--build-arg=DIAMOND_BINDIR=/path/to/diamond/bindir`.
-2. Mount the host's Diamond directory when running the Docker container.
-
-When building the Docker image,
-  set the `DIAMOND_BINDIR` build argument.
-This argument should point to the main folder of Diamond binaries.
-How you set this variable is determined
-  by where you mount
-  the Diamond directory
-  in the next step.
-If we are on Linux, and our Diamond directory
-  on the host
-  is `/usr/local/diamond`,
-  and we mount it to
-  `/usr/local/diamond`
-  in our container,
-  then we will set `DIAMOND_BINDIR` with:
-  `--build-arg=DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64`.
-
-Lastly,
-  we need to mount
-  our Diamond directory
-  into the container
-  when we finally run the Docker image.
-To do so, we use the following syntax:
-  `docker run -v/usr/local/diamond:/usr/local/diamond ...`,
-  replacing `/usr/local/diamond` with the path
-  to your Diamond installation.
-  
-### Quartus
-
-Similarly to Vivado and Diamond,
-  the evaluation depends on Quartus.
-A free version of Quartus can be downloaded
-  from Intel's website.
-Quartus must appear on the `PATH`.
-In the future, it would be ideal to
-  (1) make Quartus optional and
-  (2) specify its location via an environment variable.
-Quartus must similarly also be mounted into the Docker container.
-See [`.github/workflows/run-evaluation.yml`](./.github/workflows/run-evaluation.yml)
-  for an example invocation of the Docker container.
 
 ## Choosing the Number of Parallel Jobs
 
