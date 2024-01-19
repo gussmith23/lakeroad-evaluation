@@ -10,7 +10,6 @@ env:
   # Configure the number of tasks to run in parallel. Please see the
   # documentation in [run-evaluation.sh](../../run-evaluation.sh) for more
   # details.
-  NUM_JOBS_VIVADO_TASKS: 20
   NUM_JOBS_LAKEROAD_TASKS: 20
   NUM_JOBS_OTHER_TASKS: 100
 
@@ -87,7 +86,6 @@ jobs:
           -v /tools/intel:/tools/intel \
           --env LOGLEVEL=INFO \
           --env LRE_OUTPUT_DIR=/root/results \
-          --env NUM_JOBS_VIVADO_TASKS=${{ env.NUM_JOBS_VIVADO_TASKS }} \
           --env NUM_JOBS_LAKEROAD_TASKS=${{ env.NUM_JOBS_LAKEROAD_TASKS }} \
           --env NUM_JOBS_OTHER_TASKS=${{ env.NUM_JOBS_OTHER_TASKS }} \
           ${{ needs.build-docker-image.outputs.tag }} \

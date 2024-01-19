@@ -9,19 +9,12 @@
 # If the machine is too overloaded, we'll see odd failures, e.g. #116.
 #
 # The environment variables expected by this script are:
-# - NUM_JOBS_VIVADO_TASKS: The number of parallel jobs to use for Vivado tasks.
-#   Suggestion: (nproc - buffer) / 4
 # - NUM_JOBS_LAKEROAD_TASKS: The number of parallel jobs to use for Lakeroad
 #   tasks. Suggestion: (nproc - buffer) / 4
 # - NUM_JOBS_OTHER_TASKS: The number of parallel jobs to use for all other
 #   tasks. Suggestion: nproc - buffer
 # "buffer" is a number of cores to leave free for the OS and other tasks. I
 # suggest about 10% of cores.
-
-if [[ -z "$NUM_JOBS_VIVADO_TASKS" ]]; then
-    echo "Must provide NUM_JOBS_VIVADO_TASKS in environment" 1>&2
-    exit 1
-fi
 
 if [[ -z "$NUM_JOBS_LAKEROAD_TASKS" ]]; then
     echo "Must provide NUM_JOBS_LAKEROAD_TASKS in environment" 1>&2
@@ -33,10 +26,7 @@ if [[ -z "$NUM_JOBS_OTHER_TASKS" ]]; then
     exit 1
 fi
 
-doit --continue -n $NUM_JOBS_VIVADO_TASKS \
-  'robustness_experiments:*vivado' \
-  'baseline_synthesis:vivado*'
-doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
+doit --continue -n "$NUM_JOBS_LAKEROAD_TASKS" \
   'instruction_experiments:lakeroad_generate_*' \
   'robustness_experiments:*lakeroad-xilinx' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
@@ -44,4 +34,4 @@ doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
   'robustness_experiments:*lakeroad-xilinx' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
   'robustness_experiments:*lakeroad_intel'
-doit --continue -n $NUM_JOBS_OTHER_TASKS
+doit --continue -n "$NUM_JOBS_OTHER_TASKS"
