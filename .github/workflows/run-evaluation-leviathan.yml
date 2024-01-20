@@ -51,9 +51,8 @@ jobs:
     - name: Zip up artifact for Zenodo
       run: |
         mkdir lakeroad-evaluation
-        cp -r . lakeroad-evaluation/
-        rm -r lakeroad-evaluation/lakeroad-evaluation
-        zip -r lakeroad-evaluation.zip lakeroad-evaluation/
+        rsync -r . --exclude lakeroad-evaluation/ lakeroad-evaluation/
+        zip -9 -r lakeroad-evaluation.zip lakeroad-evaluation/
     
     - name: Upload Zenodo artifact
       uses: actions/upload-artifact@v3
