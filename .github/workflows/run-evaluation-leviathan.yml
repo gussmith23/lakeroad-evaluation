@@ -93,34 +93,34 @@ jobs:
           ${{ needs.build-docker-image.outputs.tag }} \
           bash /root/run-evaluation.sh
 
-  send-results-to-slack:
-    needs: run-evaluation
-    runs-on: [self-hosted, leviathan]
-    steps:
-    - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
-    - run: |
-        # Send initial message to start the thread.
-        THREAD_TS=$(curl -F "channel=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
-            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "text=Results from CI run" \
-            -X POST https://slack.com/api/chat.postMessage \
-            | jq .ts)
+  # send-results-to-slack:
+  #   needs: run-evaluation
+  #   runs-on: [self-hosted, leviathan]
+  #   steps:
+  #   - run: docker cp ${{ needs.run-evaluation.outputs.container-name }}:/root/results results/
+  #   - run: |
+  #       # Send initial message to start the thread.
+  #       THREAD_TS=$(curl -F "channel=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+  #           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+  #           -F "text=Results from CI run" \
+  #           -X POST https://slack.com/api/chat.postMessage \
+  #           | jq .ts)
 
-        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
-            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/sofa_figure.png" \
-            -F "thread_ts=$THREAD_TS" \
-            -X POST https://slack.com/api/files.upload 
-        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
-            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/lattice_ecp5_figure.png" \
-            -F "thread_ts=$THREAD_TS" \
-            -X POST https://slack.com/api/files.upload 
-        curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
-            -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
-            -F "file=@results/figures/xilinx_ultrascale_plus_figure.png" \
-            -F "thread_ts=$THREAD_TS" \
-            -X POST https://slack.com/api/files.upload 
+  #       curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+  #           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+  #           -F "file=@results/figures/sofa_figure.png" \
+  #           -F "thread_ts=$THREAD_TS" \
+  #           -X POST https://slack.com/api/files.upload 
+  #       curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+  #           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+  #           -F "file=@results/figures/lattice_ecp5_figure.png" \
+  #           -F "thread_ts=$THREAD_TS" \
+  #           -X POST https://slack.com/api/files.upload 
+  #       curl -F "channels=${{ secrets.LAKEROAD_CHANNEL_ID }}" \
+  #           -F "token=${{ secrets.SLACK_OAUTH_TOKEN }}" \
+  #           -F "file=@results/figures/xilinx_ultrascale_plus_figure.png" \
+  #           -F "thread_ts=$THREAD_TS" \
+  #           -X POST https://slack.com/api/files.upload 
 
   upload-artifact:
     # Runs even if evaluation failed. Lets us inspect partial results and logs.
