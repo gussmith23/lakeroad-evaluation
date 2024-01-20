@@ -427,6 +427,7 @@ docker run \
   -v /tools/Xilinx:/tools/Xilinx \
   -v /usr/local/diamond:/usr/local/diamond \
   -v /tools/intel:/tools/intel \
+  --env NUM_JOBS_VIVADO_TASKS=... \
   --env NUM_JOBS_LAKEROAD_TASKS=... \
   --env NUM_JOBS_OTHER_TASKS=... \
   lakeroad-evaluation \
@@ -479,7 +480,8 @@ Again, these paths will be different depending on where you install these tools.
 Next we will determine
   how to set
   the environment variables
-  `NUM_JOBS_LAKEROAD_TASKS` and
+  `NUM_JOBS_VIVADO_TASKS`,
+  `NUM_JOBS_LAKEROAD_TASKS`, and
   `NUM_JOBS_OTHER_TASKS`.
 These environment variables
   are used to tune the performance
@@ -493,6 +495,8 @@ Our [run script](https://github.com/uwsampl/lakeroad-evaluation/blob/main/run-ev
 
 ```sh
 # The environment variables expected by this script are:
+# - NUM_JOBS_VIVADO_TASKS: The number of parallel jobs to use for Vivado tasks.
+#   Suggestion: (nproc - buffer) / 4
 # - NUM_JOBS_LAKEROAD_TASKS: The number of parallel jobs to use for Lakeroad
 #   tasks. Suggestion: (nproc - buffer) / 4
 # - NUM_JOBS_OTHER_TASKS: The number of parallel jobs to use for all other
@@ -506,6 +510,7 @@ On our 128 core machine,
 
 ```sh
   ...
+  --env NUM_JOBS_VIVADO_TASKS=20 \
   --env NUM_JOBS_LAKEROAD_TASKS=20 \
   --env NUM_JOBS_OTHER_TASKS=100 \
   ...
