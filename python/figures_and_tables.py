@@ -87,7 +87,7 @@ def create_png_from_tex(tex_filepath: Path, png_filepath: Path):
         },
     ]
 )
-def task_make_sofa_figure(
+def _disabled_task_make_sofa_figure(
     gathered_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],
     tex_filepath: Union[str, Path],
@@ -264,7 +264,7 @@ def task_make_sofa_figure(
         },
     ]
 )
-def task_make_lattice_ecp5_figure(
+def _disabled_task_make_lattice_ecp5_figure(
     gathered_lakeroad_data_filepath: Union[str, Path],
     gathered_baseline_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],
@@ -507,7 +507,7 @@ def task_make_lattice_ecp5_figure(
         },
     ]
 )
-def task_make_xilinx_ultrascale_plus_figure(
+def _disabled_task_make_xilinx_ultrascale_plus_figure(
     gathered_lakeroad_data_filepath: Union[str, Path],
     gathered_baseline_data_filepath: Union[str, Path],
     csv_filepath: Union[str, Path],

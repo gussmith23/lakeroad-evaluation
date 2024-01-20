@@ -7,9 +7,5 @@ file. It is the job of the dodo.py file to import all tasks to make them visible
 to DoIt.
 """
 
-from baseline_synthesis import task_baseline_synthesis
-from lakeroad import task_instruction_experiments
-from yosys_experiments import *
-from figures_and_tables import *
 from robustness_experiments import *
 from line_counts import *
