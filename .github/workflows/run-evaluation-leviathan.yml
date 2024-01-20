@@ -107,6 +107,7 @@ jobs:
           --env NUM_JOBS_VIVADO_TASKS=${{ env.NUM_JOBS_VIVADO_TASKS }} \
           --env NUM_JOBS_LAKEROAD_TASKS=${{ env.NUM_JOBS_LAKEROAD_TASKS }} \
           --env NUM_JOBS_OTHER_TASKS=${{ env.NUM_JOBS_OTHER_TASKS }} \
+          --env PRINT_UPTIME_INTERVAL=${{ env.PRINT_UPTIME_INTERVAL }} \
           ${{ needs.build-docker-image.outputs.tag }} \
           bash /root/run-evaluation.sh
 
