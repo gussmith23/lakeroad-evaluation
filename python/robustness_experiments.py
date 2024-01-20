@@ -301,6 +301,7 @@ def _generate_solver_results_table(
     out["counts"] = df["solver"].value_counts()
     out["fraction"] = out["counts"] / out["counts"].sum()
 
+    Path(out_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(out_csv_filepath)
 
 
