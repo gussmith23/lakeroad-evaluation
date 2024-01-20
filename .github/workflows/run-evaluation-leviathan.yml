@@ -10,7 +10,7 @@ env:
   # Configure the number of tasks to run in parallel. Please see the
   # documentation in [run-evaluation.sh](../../run-evaluation.sh) for more
   # details.
-  NUM_JOBS_VIVADO_TASKS: 20
+  NUM_JOBS_VIVADO_TASKS: 64
   NUM_JOBS_LAKEROAD_TASKS: 20
   NUM_JOBS_OTHER_TASKS: 100
 
