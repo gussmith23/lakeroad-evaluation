@@ -47,6 +47,22 @@ jobs:
         cd lakeroad
         git submodule init
         git submodule update lakeroad-private/
+    
+    - name: Zip up artifact for Zenodo
+      run: |
+        mkdir lakeroad-evaluation
+        cp -r . lakeroad-evaluation/
+        rm -r lakeroad-evaluation/lakeroad-evaluation
+        zip -r lakeroad-evaluation.zip lakeroad-evaluation/
+    
+    - name: Upload Zenodo artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: lakeroad-evaluation
+        path: lakeroad-evaluation.zip
+
+    - name: Clean up intermediate files
+      run: rm -rf lakeroad-evaluation lakeroad-evaluation.zip
 
     - name: Generate Docker image tag
       id: generate-tag
