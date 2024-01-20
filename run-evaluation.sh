@@ -34,10 +34,8 @@ if [[ -z "$NUM_JOBS_OTHER_TASKS" ]]; then
 fi
 
 doit --continue -n $NUM_JOBS_VIVADO_TASKS \
-  'robustness_experiments:*vivado' \
-  'baseline_synthesis:vivado*'
+  'robustness_experiments:*vivado'
 doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
-  'instruction_experiments:lakeroad_generate_*' \
   'robustness_experiments:*lakeroad-xilinx' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
   'robustness_experiments:*lakeroad_intel' \
