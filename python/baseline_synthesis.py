@@ -17,7 +17,7 @@ import utils
         },
     ]
 )
-def task_baseline_synthesis(baseline_instructions_dir: str):
+def _disabled_task_baseline_synthesis(baseline_instructions_dir: str):
     """DoIt task creator for creating baseline synthesis tasks for instructions."""
 
     output_dir_base = utils.output_dir() / "baseline"

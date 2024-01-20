@@ -338,7 +338,7 @@ def make_lakeroad_task(
         },
     ]
 )
-def task_instruction_experiments(experiments_file: str):
+def _disabled_task_instruction_experiments(experiments_file: str):
     """DoIt task creator for compiling instructions with various backends."""
 
     output_dir = utils.output_dir()
