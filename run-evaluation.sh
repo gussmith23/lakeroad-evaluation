@@ -52,7 +52,7 @@ trap cleanup EXIT
 UPTIME_PID=""
 if [[ -n "$PRINT_UPTIME_INTERVAL" ]] && [[ $PRINT_UPTIME_INTERVAL -gt 0 ]]; then
   while true; do
-  uptime; sleep 1
+  uptime; sleep $PRINT_UPTIME_INTERVAL
   done &
   UPTIME_PID=$!
 fi
