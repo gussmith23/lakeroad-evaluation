@@ -39,26 +39,20 @@ if [[ -z "$NUM_JOBS_OTHER_TASKS" ]]; then
     exit 1
 fi
 
-## Optionally track uptime.
-#
-# Cleanup function to kill the uptime process.
-cleanup() {
-  if [[ -n "$UPTIME_PID" ]]; then
-    kill $UPTIME_PID
-  fi
-}
-trap cleanup EXIT
-# Start the uptime process.
-UPTIME_PID=""
+# Optionally track uptime. Set PRINT_UPTIME_INTERVAL to a positive number to
+# enable.
 if [[ -n "$PRINT_UPTIME_INTERVAL" ]] && [[ $PRINT_UPTIME_INTERVAL -gt 0 ]]; then
-  while true; do
-  uptime; sleep $PRINT_UPTIME_INTERVAL
-  done &
-  UPTIME_PID=$!
+  # Trap to kill uptime process on exit.
+  trap 'kill $(jobs -p)' EXIT
+  # Uptime process.
+  while true; do uptime; sleep $PRINT_UPTIME_INTERVAL; done &
 fi
 
+echo "Running Vivado tasks with ${NUM_JOBS_VIVADO_TASKS} parallel jobs."
 doit --continue -n $NUM_JOBS_VIVADO_TASKS \
   'robustness_experiments:*vivado'
+
+echo "Running Lakeroad tasks with ${NUM_JOBS_LAKEROAD_TASKS} parallel jobs."
 doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
   'robustness_experiments:*lakeroad-xilinx' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
@@ -66,4 +60,6 @@ doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
   'robustness_experiments:*lakeroad-xilinx' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
   'robustness_experiments:*lakeroad_intel'
+
+echo "Running remaining tasks with ${NUM_JOBS_OTHER_TASKS} parallel jobs."
 doit --continue -n $NUM_JOBS_OTHER_TASKS
