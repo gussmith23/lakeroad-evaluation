@@ -22,6 +22,8 @@
 # at which to print the uptime. This is useful for performance debugging,
 # to understand which parts of the evaluation are using the most resources.
 
+set -eo pipefail
+
 PRINT_UPTIME_INTERVAL="${PRINT_UPTIME_INTERVAL:-0}"
 
 if [[ -z "$NUM_JOBS_VIVADO_TASKS" ]]; then
