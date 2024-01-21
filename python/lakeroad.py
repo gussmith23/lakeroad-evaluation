@@ -317,7 +317,17 @@ def make_lakeroad_task(
     if verilog_module_filepath:
         task["file_dep"].append(verilog_module_filepath)
 
-    task["targets"] = list(output_filepaths.values())
+    # Note that we specifically exclude the Verilog output file from the list of
+    # targets, because the file won't always be created. Instead, we should
+    # depend on files that are always created, like the JSON summary.
+    #
+    # If we don't do this, DoIt will always re-run failed Lakeroad tasks. The
+    # task will fail, and the Verilog file won't be created, so DoIt will still
+    # think the task needs to be run next time around.
+    task["targets"] = [
+        output_filepaths["lakeroad_summary_json"],
+        output_filepaths["lakeroad_stderr"],
+    ]
 
     return (
         task,
