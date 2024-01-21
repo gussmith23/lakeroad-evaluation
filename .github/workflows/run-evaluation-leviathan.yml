@@ -68,7 +68,7 @@ jobs:
       run: |
         export TAG=lakeroad-evaluation:$(date +%s)
         echo "Docker image tag: $TAG"
-        echo "::set-output name=tag::$TAG"
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
 
     - name: Build Docker image
       run: |
@@ -96,7 +96,7 @@ jobs:
       run: |
         CONTAINER_NAME=lakeroad-evaluation-run-$(date +%s)
         echo "Docker container name: $CONTAINER_NAME"
-        echo "::set-output name=container-name::$CONTAINER_NAME"
+        echo "container-name=$CONTAINER_NAME" >> $GITHUB_OUTPUT
         docker run \
           --name $CONTAINER_NAME \
           -v /tools/Xilinx:/tools/Xilinx \
