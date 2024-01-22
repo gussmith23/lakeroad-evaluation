@@ -1,3 +1,5 @@
+TODO(@gussmith23): kick-the-tires command
+
 # Lakeroad Evaluation <!-- omit from toc -->
 
 This README contains detailed information on how to set up and run the evaluation
