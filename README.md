@@ -3,7 +3,7 @@ TODO(@gussmith23): kick-the-tires command
 # Lakeroad Evaluation <!-- omit from toc -->
 
 This README contains detailed information on how to set up and run the evaluation
-  for [Lakeroad.](https://github.com/uwsampl/lakeroad)
+  for [Lakeroad](https://github.com/uwsampl/lakeroad).
 It was specifically written
   for ASPLOS 2024's artifact evaluation process,
   but all instructions should work
