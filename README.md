@@ -10,6 +10,7 @@ It was specifically written
 ## Table of Contents <!-- omit from toc -->
 
 - [Introduction](#introduction)
+- [Step 0: Kick the Tires](#step-0-kick-the-tires)
 - [Step 1: Install Proprietary Hardware Tools](#step-1-install-proprietary-hardware-tools)
   - [Xilinx Vivado](#xilinx-vivado)
   - [Lattice Diamond](#lattice-diamond)
@@ -35,6 +36,7 @@ For those aiming to do development,
 
 Steps summary:
 
+0. Kick the tires (~1hr)
 1. Install proprietary hardware tools (~3hrs)
 2. Build Docker image (~1hr)
 3. Run evaluation inside of Docker container (2-20+hrs, depending on number of cores)
@@ -77,6 +79,35 @@ Important things to note before we begin:
   The workflow file is the ground truth
     detailing how to build the Docker image
     and execute the evaluation within a Docker container.
+
+## Step 0: Kick the Tires
+
+To "kick the tires" of our evaluation,
+  you can build our Docker image
+  and run the portion of the evaluation
+  that does not depend on
+  proprietary hardware tools.
+
+The command to use:
+```sh
+docker build . -t lre-kick-the-tires --build-arg MAKE_JOBS=`nproc` \
+&& docker run lre-kick-the-tires doit -n $((`nproc`/4)) '*lakeroad*'
+```
+
+If you see output like the following:
+```raw
+TODO(@gussmith23)
+```
+  then the Lakeroad portion of the evaluation
+  is successfully running,
+  and you should consider the tires kicked.
+The evaluation
+  won't produce much useful output
+  (i.e. figures and tables)
+  until the proprietary tools are installed,
+  so at this point you should kill the run
+  and move on to step 1.
+
 
 ## Step 1: Install Proprietary Hardware Tools
 
