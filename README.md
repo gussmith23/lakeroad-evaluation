@@ -145,9 +145,7 @@ The evaluation uses Vivado version 2023.1.
 
 To install Vivado,
   please visit
-  this link:
-<https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html>
-
+  [this link](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools/2023-1.html).
 Download the product
   labeled
   "Vivado ML Edition - 2023.1  Full Product Installation"
@@ -216,18 +214,16 @@ The evaluation uses Lattice Diamond version 3.12.
 
 Unfortunately, Lattice's Diamond toolchain
   is more difficult to install.
-We lean on the following documentation
-  for installing Lattice Diamond:
-<https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04>
-
+We lean on [this blog post](https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04)
+  for installing Lattice Diamond.
 Please follow all of the instructions
   under the first section
   titled "Install Lattice Diamond".
 You can ignore the other sections
   of the post.
-
-(In case the above post disappears, here is the archived version:
-<https://web.archive.org/web/20230203012029/https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04>)
+(In case the above post disappears,
+  the archived version
+  is [here](https://web.archive.org/web/20230203012029/https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).)
 
 These instructions should completely cover
   all of the difficulties
@@ -316,8 +312,7 @@ To do so, we use the following syntax:
 The evaluation uses Quartus Prime Lite 22.1.
 
 Download and install the software using the instructions
-  on this page:
-<https://www.intel.com/content/www/us/en/software-kit/795187/intel-quartus-prime-lite-edition-design-software-version-23-1-for-linux.html>
+  on [this page](https://www.intel.com/content/www/us/en/software-kit/795187/intel-quartus-prime-lite-edition-design-software-version-23-1-for-linux.html).
 
 We used the "Multiple Download" option
   to download and extract a tarfile.
@@ -330,8 +325,7 @@ We installed Quartus to `/tools/intel`,
   wherever you want.
 
 We encountered some issues with Quartus installation,
-  documented here:
-<https://github.com/uwsampl/lakeroad-evaluation/issues/87>
+  documented [here](https://github.com/uwsampl/lakeroad-evaluation/issues/87).
 
 The only change we needed in the end
   was to change the permissions
@@ -340,6 +334,10 @@ The only change we needed in the end
 ```sh
 sudo chmod -R u+rwX,go+rX,go-w /path/to/quartus/install
 ```
+
+Note that this command may not be needed
+  if you use the new "Installer"
+  method.
 
 <!--
 Similarly to Vivado and Diamond,
