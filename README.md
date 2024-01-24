@@ -1,5 +1,3 @@
-TODO(@gussmith23): kick-the-tires command
-
 # Lakeroad Evaluation <!-- omit from toc -->
 
 This README contains detailed information on how to set up and run the evaluation
@@ -18,8 +16,9 @@ It was specifically written
   - [Lattice Diamond](#lattice-diamond)
   - [Intel Quartus](#intel-quartus)
 - [Step 2: Build Docker Image](#step-2-build-docker-image)
-- [Step 3: Run Docker Image](#step-3-run-docker-image)
-- [Method 3: Full Run Locally](#method-3-full-run-locally)
+- [Step 3: Run Evaluation](#step-3-run-evaluation)
+- [Step 4: Inspect Output](#step-4-inspect-output)
+- [Conclusion](#conclusion)
 - [Appendix](#appendix)
   - [Setup without Docker](#setup-without-docker)
 
@@ -38,10 +37,11 @@ For those aiming to do development,
 
 Steps summary:
 
-0. Kick the tires (~1hr)
+0. Kick the tires (less than 1hr)
 1. Install proprietary hardware tools (~3hrs)
-2. Build Docker image (~1hr)
+2. Build Docker image (less than 1hr)
 3. Run evaluation inside of Docker container (2-20+hrs, depending on number of cores)
+4. Inspect output (~15 minutes)
 
 Important things to note before we begin:
 
@@ -92,7 +92,10 @@ To "kick the tires" of our evaluation,
 
 The command to use:
 ```sh
-docker build . -t lre-kick-the-tires --build-arg MAKE_JOBS=`nproc` \
+wget https://zenodo.org/records/10515833/files/lakeroad-evaluation.zip?download=1 -O lakeroad-evaluation.zip \
+&& unzip lakeroad-evaluation.zip \
+&& cd lakeroad-evaluation \
+&& docker build . -t lre-kick-the-tires --build-arg MAKE_JOBS=`nproc` \
 && docker run lre-kick-the-tires doit -n $((`nproc`/4)) '*lakeroad*'
 ```
 
@@ -441,116 +444,288 @@ docker build . -t lakeroad-evaluation \
   --build-arg MAKE_JOBS=128
 ```
 
-## Step 3: Run Docker Image
+## Step 3: Run Evaluation
 
-Finally, we will run the Docker image.
+Finally, we will run the evaluation
+  inside a Docker container.
 
 Evaluation will take multiple hours.
 We suggest running within `tmux` or `screen`.
 
-The final command will look something like this,
-  a simplified form of the command used
-  by our [GitHub workflow](https://github.com/uwsampl/lakeroad-evaluation/blob/1ce2fb745db112ca97114cceddc045bfe25a8376/.github/workflows/run-evaluation-leviathan.yml#L83-L94):
+The entire process is summarized in the following code block.
+We will go into further detail about each part.
 
 ```sh
+# Start a tmux or screen session.
+tmux # or `screen`
+
+# Start the Docker container in the background.
 docker run \
+  -dt \
   --name <container-name> \
   -v /tools/Xilinx:/tools/Xilinx \
   -v /usr/local/diamond:/usr/local/diamond \
   -v /tools/intel:/tools/intel \
-  --env NUM_JOBS_VIVADO_TASKS=... \
-  --env NUM_JOBS_LAKEROAD_TASKS=... \
-  --env NUM_JOBS_OTHER_TASKS=... \
-  lakeroad-evaluation \
-  bash /root/run-evaluation.sh
+  lakeroad-evaluation
+
+# Enter the container.
+docker exec -it <container-name> bash
+
+# Execute the evaluation.
+export NUM_JOBS_VIVADO_TASKS=...
+export NUM_JOBS_LAKEROAD_TASKS=...
+export NUM_JOBS_OTHER_TASKS=...
+bash /root/run-evaluation.sh
 ```
 
 We will now explain
-  how to correctly set the `--name`, `-v` and `--env`
-  flags
-  correctly.
-
-`--name` can be set to a name of your choosing.
-This will become the name of your container,
-  which we will later use
-  to copy out the resulting evaluation files.
-For example, `--name lakeroad-evaluation-container`.
-
-The `-v` flags
-  ensure
-  that the evaluation
-  has access to
-  your local installations
-  of the proprietary hardware tools
-  by mounting the tools inside of the container.
-The flags should look like:
+  each step.
 
 ```sh
-  ...
-  -v /path/to/Xilinx:/path/to/Xilinx \
-  -v /path/to/diamond:/path/to/diamond \
-  -v /path/to/intel:/path/to/intel \
-  ...
+tmux # or `screen`
 ```
 
-We recommend mounting the tools within the containers such that they have the **same
-  path as in the host system;** hence, this is why the source path (before the colon)
-  is the same as the destination path (after the colon).
-For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
+This command enters a `tmux` or `screen` session,
+  which opens up a persistent terminal
+  which you can reconnect to
+  even after logging off and logging back onto your machine.
+Entering a `tmux` or `screen` session is optional,
+  but is helpful for keeping the evaluation running
+  for a long period of time.
+Search for "tmux cheat sheet" or "screen cheat sheet"
+  for the basic commands.
 
 ```sh
-  ...
+docker run \
+  -dt \
+  --name <container-name> \
   -v /tools/Xilinx:/tools/Xilinx \
   -v /usr/local/diamond:/usr/local/diamond \
   -v /tools/intel:/tools/intel \
-  ...
+  lakeroad-evaluation
 ```
 
-Again, these paths will be different depending on where you install these tools. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
+This command starts a Docker container
+  in the background.
+After this command,
+  the Docker container 
+  (which is similar to a virtual machine)
+  will be present
+  on the machine, but will not yet be connected to it.
 
-Next we will determine
-  how to set
-  the environment variables
+To start the Docker container, we must provide a few flags.
+- `-dt` ensures the container is started in the background.
+- `--name` can be set to a name of your choosing.
+  This will become the name of your container,
+    which we will later use
+    to copy out the resulting evaluation files.
+  For example, `--name lakeroad-evaluation-container`.
+- The `-v` flags
+    ensure
+    that the evaluation
+    has access to
+    your local installations
+    of the proprietary hardware tools
+    by mounting the tools inside of the container.
+  The flags should look like:
+
+  ```sh
+    ...
+    -v /path/to/Xilinx:/path/to/Xilinx \
+    -v /path/to/diamond:/path/to/diamond \
+    -v /path/to/intel:/path/to/intel \
+    ...
+  ```
+  
+  We recommend mounting the tools within the containers such that they have the **same
+    path as in the host system;** hence, this is why the source path (before the colon)
+    is the same as the destination path (after the colon).
+  For example, in our [workflow file](.github/workflows/run-evaluation-leviathan.yml), we use the following settings for these arguments:
+
+  ```sh
+    ...
+    -v /tools/Xilinx:/tools/Xilinx \
+    -v /usr/local/diamond:/usr/local/diamond \
+    -v /tools/intel:/tools/intel \
+    ...
+  ```
+
+  Again, these paths will be different depending on where you installed these tools in step 1. **Note that we mount the entire tool folder and not just the `bin` folder;** e.g. we mount `/tools/Xilinx` instead of `/tools/Xilinx/Vivado/2023.1/bin`.
+
+```sh
+docker exec -it <container-name> bash
+```
+
+This command enters the Docker container.
+Use the container name you chose above.
+After this command, you should see your
+  terminal prompt change.
+If you run `ls`, you will see
+  that you are now in a different directory.
+
+```sh
+export NUM_JOBS_VIVADO_TASKS=<num-jobs-vivado-tasks>
+export NUM_JOBS_LAKEROAD_TASKS=<num-jobs-lakeroad-tasks>
+export NUM_JOBS_OTHER_TASKS=<num-jobs-other-tasks>
+export PRINT_UPTIME_INTERVAL=60
+bash /root/run-evaluation.sh
+```
+
+These commands run the evaluation.
+The environment variables
   `NUM_JOBS_VIVADO_TASKS`,
   `NUM_JOBS_LAKEROAD_TASKS`, and
-  `NUM_JOBS_OTHER_TASKS`.
-These environment variables
-  are used to tune the performance
+  `NUM_JOBS_OTHER_TASKS`
+  determine
+  the number of parallel tasks
+  that are used
+  for each
+  portion
   of the evaluation.
 Correctly setting these
-  can make the evaluation run
-  2-3X faster!
+  can reduce the evaluation runtime
+  by hours!
+However, tuning
+  these numbers to be correct
+  can be quite annoying.
+Thus, we provide two methods
+  for setting these variables:
+  an easy but potentially non-performant method,
+  and a more involved but more performant method.
 
-Our [run script](https://github.com/uwsampl/lakeroad-evaluation/blob/main/run-evaluation.sh)
-  recommends the following:
-
-```sh
-# The environment variables expected by this script are:
-# - NUM_JOBS_VIVADO_TASKS: The number of parallel jobs to use for Vivado tasks.
-#   Suggestion: (nproc - buffer) / 4
-# - NUM_JOBS_LAKEROAD_TASKS: The number of parallel jobs to use for Lakeroad
-#   tasks. Suggestion: (nproc - buffer) / 4
-# - NUM_JOBS_OTHER_TASKS: The number of parallel jobs to use for all other
-#   tasks. Suggestion: nproc - buffer
-# "buffer" is a number of cores to leave free for the OS and other tasks. I
-# suggest about 10% of cores.
-```
-
-On our 128 core machine,
-  we set these variables in the following way:
+**Easy but potentially non-performant.**
+A quick-and-dirty setting
+  of these variables
+  that should work on most machines
+  would be the following:
 
 ```sh
-  ...
-  --env NUM_JOBS_VIVADO_TASKS=20 \
-  --env NUM_JOBS_LAKEROAD_TASKS=20 \
-  --env NUM_JOBS_OTHER_TASKS=100 \
-  ...
+export NUM_JOBS_VIVADO_TASKS=$((`nproc`/3))
+export NUM_JOBS_LAKEROAD_TASKS=$((`nproc`/6))
+export NUM_JOBS_OTHER_TASKS=$((`nproc`/2))
 ```
 
-## Method 3: Full Run Locally
+**More involved but more performant.**
+A more involved method of determining
+  appropriate settings
+  for these variables
+  involves tuning the numbers
+  based on the `uptime` readings
+  that are printed during evaluation.
+`run-evaluation.sh` will print the result of
+  `uptime`
+  at an interval determined by the setting of
+  `PRINT_UPTIME_INTERVAL` (in seconds).
+In our above set of commands,
+  we use a 60 second interval.
+To tune the number of parallel tasks,
+  you can attempt to raise the load average
+  to somewhere between 80-100%
+  by increasing the number of parallel tasks.
+The `run-evaluation.sh` script prints information
+  about which group of tasks
+  are being run
+  (Vivado tasks, then Lakeroad tasks, then remaining tasks).
+If your number of parallel tasks is too high,
+  this will manifest in one or both of these ways:
+  (1) for non-Vivado tasks, your load average will be above 100,
+    and the tasks will run very slowly as a result
+    due to thrashing;
+  (2) for the Vivado tasks, you will see Vivado crashing
+    (likely due to out of memory errors).
+On our 64-core, 128-thread machine,
+  we use 50 parallel Vivado tasks,
+  20 parallel Lakeroad tasks,
+  and 100 parallel tasks for the remaining tasks.
 
-**This is the recommended method for those trying to develop on the evaluation.**
 
+## Step 4: Inspect Output
+
+Finally, we will inspect the output
+  of the evaluation.
+
+To do so, we will first copy the output folder
+  out of the container
+  and onto the host machine:
+
+```sh
+docker container cp <container-name>:/root/out out/
+```
+
+This command copies the folder at
+  `/root/out` (the default location for evaluation outputs)
+  to `out/`.
+Use the same container name
+  from step 3.
+
+Now you can inspect
+  the outputs
+  and compare them to the figures and tables
+  in the paper.
+The following is a list of the important outputs
+  to inspect
+  inside of `out/`.
+
+- `figures/lakeroad_is_x_times_better.csv`:
+  This file captures data on the multiplicative factor
+    by which Lakeroad outperforms other tools
+    with regard to completeness.
+  These numbers appear in the 
+    text: specifically,
+    in the abstract,
+    at the end of the introduction,
+    and in the evaluation 
+    (5.1, Comparison to Existing Toolchains, first paragraph).
+- `figures/lakeroad_time_{intel,lattice,xilinx}.png`:
+  These are the images used in Figure 7.
+- `figures/resource_percentages.csv`:
+  The numbers for Lakeroad's mean resource reduction.
+  These numbers appear
+    in the evaluation
+    (5.1, Comparison to Existing Toolchains, final paragraph).
+- `figures/solver_counts.csv`:
+  The number of experiments solved by each solver.
+  These numbers appear
+    in the evaluation
+    (5.1, Comparison to Existing Toolchains,
+    second to last paragraph).
+- `figures/succeeded_vs_failed_all.png`:
+  This is the image used in Figure 6.
+- `figures/timing_table.csv`:
+  This is the data from which the table in Figure 6 is generated.
+- `line_counts/architecture_descriptions.csv`:
+  The number of source lines of code (SLoC)
+    for the architecture descriptions in Lakeroad.
+
+## Conclusion
+
+At this point,
+  you should have succeeded
+  in installing all prerequisite software,
+  building the Docker image,
+  running the evaluation,
+  and inspecting the results.
+If you run into issues during this process,
+  please open an issue on the repository
+  (or, for our artifact evaluators,
+    add a comment on HotCRP).
+
+## Appendix
+
+### Setup without Docker
+
+If you are interested in setting up
+  the evaluation
+  to run outside of Docker,
+  e.g. so that you can develop on it,
+  follow these instructions.
+
+For now, I will simply refer you to the Dockerfile,
+  which documents how your local environment should be set up.
+
+TODO(@gussmith23).
+
+<!-- 
 1. Make sure submodules are cloned and up-to-date. Either clone with `--recursive`, or do `git submodule init; git submodule update`.
 2. Make sure you have an up-to-date Python. We use Python 3.11.4.
 3. Install Python dependencies from `requirements.txt`: `pip install -r requirements.txt`.
@@ -589,15 +764,6 @@ On our 128 core machine,
 Environment variables to set:
 
 - `PYTHONPATH`
+-->
 
-## Appendix
 
-### Setup without Docker
-
-If you are interested in setting up
-  the evaluation
-  to run outside of Docker,
-  e.g. so that you can develop on it,
-  follow these instructions.
-
-TODO(@gussmith23).
