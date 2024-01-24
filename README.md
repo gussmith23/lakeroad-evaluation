@@ -95,7 +95,6 @@ First, download the zip archive
   using the link in the paper.
 Then, run the following:
 
-The command to use:
 ```sh
 unzip <file-from-zenodo> \
 && cd lakeroad-evaluation \
