@@ -56,7 +56,6 @@ RUN apt-get update \
   python3-pip \
   python3-setuptools \
   python3-venv \
-  racket \
   software-properties-common \
   tcl-dev \
   tcl8.6-dev \
@@ -164,10 +163,17 @@ RUN source /root/dependencies.sh \
   && PREFIX="/root/.local" CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j ${MAKE_JOBS} install \
   && rm -rf /root/yosys
 
-# Install raco (Racket) dependencies. First, fix
-# https://github.com/racket/racket/issues/2691 by building the docs.
+# Install Racket, install raco (Racket) dependencies. First, fix
+# https://github.com/racket/racket/issues/2691 by building the docs. We error if
+# we're not on x86; the Racket install script will not work for other
+# architectures. We will need to build from source for other architectures.
 WORKDIR /root
-RUN raco setup --doc-index --force-user-docs \
+RUN [ "$(uname -m)" == "x86_64" ] \
+  && wget https://download.racket-lang.org/installers/8.9/racket-8.9-x86_64-linux-cs.sh \
+  && chmod +x racket-8.9-x86_64-linux-cs.sh \
+  && ./racket-8.9-x86_64-linux-cs.sh --unix-style --dest /usr/ \
+  && rm racket-8.9-x86_64-linux-cs.sh \
+  && raco setup --doc-index --force-user-docs \
   && raco pkg install --deps search-auto --batch \
   rosette \
   yaml
