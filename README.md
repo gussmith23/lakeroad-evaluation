@@ -404,7 +404,7 @@ docker build . -t lakeroad-evaluation \
   --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
   --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
   --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
-  --build-arg MAKE_JOBS=<num-make-jobs>
+  --build-arg MAKE_JOBS=`nproc`
 ```
 
 We will now describe
@@ -452,7 +452,7 @@ docker build . -t lakeroad-evaluation \
   --build-arg VIVADO_BIN_DIR=/tools/Xilinx/Vivado/2023.1/bin \
   --build-arg QUARTUS_BIN_DIR=/tools/intel/quartus/bin/ \
   --build-arg DIAMOND_BINDIR=/usr/local/diamond/3.12/bin/lin64 \
-  --build-arg MAKE_JOBS=128
+  --build-arg MAKE_JOBS=`nproc`
 ```
 
 ## Step 3: Run Evaluation
