@@ -245,7 +245,6 @@ You can ignore the other sections
 (In case the above post disappears,
   the archived version
   is [here](https://web.archive.org/web/20230203012029/https://community.element14.com/technologies/fpga-group/b/blog/posts/getting-started-with-the-tinyfpga-lattice-diamond-3-12-on-ubuntu-18-04).)
-
 These instructions should completely cover
   all of the difficulties
   in installing Diamond.
@@ -334,20 +333,16 @@ The evaluation uses Quartus Prime Lite 22.1.
 
 Download and install the software using the instructions
   on [this page](https://www.intel.com/content/www/us/en/software-kit/795187/intel-quartus-prime-lite-edition-design-software-version-23-1-for-linux.html).
-
 We used the "Multiple Download" option
   to download and extract a tarfile.
 The new "Installer" method
   may work better,
   but we haven't tested it.
-
 We installed Quartus to `/tools/intel`,
   but you can install it
   wherever you want.
-
 We encountered some issues with Quartus installation,
   documented [here](https://github.com/uwsampl/lakeroad-evaluation/issues/87).
-
 The only change we needed in the end
   was to change the permissions
   of the installed files:
