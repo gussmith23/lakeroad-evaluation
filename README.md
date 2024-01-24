@@ -90,10 +90,14 @@ To "kick the tires" of our evaluation,
   that does not depend on
   proprietary hardware tools.
 
+First, download the zip archive
+  of the evaluation off of Zenodo
+  using the link in the paper.
+Then, run the following:
+
 The command to use:
 ```sh
-wget https://zenodo.org/records/10515833/files/lakeroad-evaluation.zip?download=1 -O lakeroad-evaluation.zip \
-&& unzip lakeroad-evaluation.zip \
+unzip <file-from-zenodo> \
 && cd lakeroad-evaluation \
 && docker build . -t lre-kick-the-tires --build-arg MAKE_JOBS=`nproc` \
 && docker run lre-kick-the-tires doit -n $((`nproc`/4)) '*lakeroad*'
