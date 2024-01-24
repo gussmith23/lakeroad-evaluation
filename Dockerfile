@@ -169,7 +169,7 @@ RUN source /root/dependencies.sh \
 # architectures. We will need to build from source for other architectures.
 WORKDIR /root
 RUN [ "$(uname -m)" == "x86_64" ] \
-  && wget https://download.racket-lang.org/installers/8.9/racket-8.9-x86_64-linux-cs.sh \
+  && wget -q https://download.racket-lang.org/installers/8.9/racket-8.9-x86_64-linux-cs.sh \
   && chmod +x racket-8.9-x86_64-linux-cs.sh \
   && ./racket-8.9-x86_64-linux-cs.sh --unix-style --dest /usr/ \
   && rm racket-8.9-x86_64-linux-cs.sh \
