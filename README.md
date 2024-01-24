@@ -99,10 +99,26 @@ wget https://zenodo.org/records/10515833/files/lakeroad-evaluation.zip?download=
 && docker run lre-kick-the-tires doit -n $((`nproc`/4)) '*lakeroad*'
 ```
 
-If you see output like the following:
+If you eventually start seeing output like the following:
+
 ```raw
-TODO(@gussmith23)
+...
+.  robustness_experiments:mult_3_stage_unsigned_18_bit:lakeroad_intel:verilator
+.  robustness_experiments:muladd_2_stage_signed_8_bit:lattice-ecp5-lakeroad
+.  robustness_experiments:mult_2_stage_unsigned_18_bit:lakeroad-xilinx:verilator
+.  robustness_experiments:muladd_3_stage_signed_8_bit:lakeroad-xilinx
+.  robustness_experiments:muladd_3_stage_signed_8_bit:lattice-ecp5-lakeroad
+.  robustness_experiments:muladd_0_stage_unsigned_8_bit:lakeroad-xilinx
+.  robustness_experiments:mult_3_stage_unsigned_12_bit:lakeroad-xilinx:verilator
+.  robustness_experiments:muladd_0_stage_unsigned_8_bit:lattice-ecp5-lakeroad
+.  robustness_experiments:muladd_0_stage_signed_8_bit:lakeroad-xilinx:verilator
+.  robustness_experiments:mult_1_stage_unsigned_18_bit:lattice-ecp5-lakeroad:verilator
+.  robustness_experiments:muladd_1_stage_unsigned_8_bit:lakeroad-xilinx
+.  robustness_experiments:muladd_1_stage_unsigned_8_bit:lattice-ecp5-lakeroad
+.  robustness_experiments:muladd_2_stage_unsigned_8_bit:lakeroad-xilinx
+...
 ```
+
   then the Lakeroad portion of the evaluation
   is successfully running,
   and you should consider the tires kicked.
