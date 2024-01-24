@@ -17,6 +17,7 @@ It was specifically written
   - [Intel Quartus](#intel-quartus)
 - [Step 2: Build Docker Image](#step-2-build-docker-image)
 - [Step 3: Run Evaluation](#step-3-run-evaluation)
+  - [Troubleshooting Evaluation Errors](#troubleshooting-evaluation-errors)
 - [Step 4: Inspect Output](#step-4-inspect-output)
 - [Conclusion](#conclusion)
 - [Appendix](#appendix)
@@ -662,6 +663,36 @@ Similarly, you can disconnect
   from and reconnect to your
   Docker container
   without worrying about losing progress.
+
+### Troubleshooting Evaluation Errors
+
+This subsection documents errors
+  you may encounter
+  while running the evaluation,
+  and how to troubleshoot them.
+
+**Vivado failures.**
+Unfortunately, Vivado is *very* finicky
+  and is likely to crash
+  on at least a few experiments.
+Please remember
+  that Vivado is not our tool,
+  and in fact,
+  that frustrations with Vivado
+  are part of what inspired the creation of Lakeroad.
+To debug Vivado failures,
+  we recommend one of two steps:
+(1) Simply rerun the evaluation script.
+Vivado's errors are often unpredictable,
+  and will go away on a second try.
+(2) Lower the number of parallel
+  tasks used when running the Vivado
+  tasks.
+See the section above for details.
+If neither of these options work,
+  please open an issue here
+  (or leave a comment on HotCRP,
+    for artifact evaluators).
 
 ## Step 4: Inspect Output
 
