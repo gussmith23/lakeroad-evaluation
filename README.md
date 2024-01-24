@@ -649,6 +649,16 @@ On our 64-core, 128-thread machine,
   20 parallel Lakeroad tasks,
   and 100 parallel tasks for the remaining tasks.
 
+Note that
+  our evaluation framework
+  caches successfully run experiments,
+  so you can kill the evaluation
+  and restart it
+  without worrying about losing progress.
+Similarly, you can disconnect
+  from and reconnect to your
+  Docker container
+  without worrying about losing progress.
 
 ## Step 4: Inspect Output
 
