@@ -54,7 +54,7 @@ Important things to note before we begin:
   If you would like to clone directly from this repo,
     contact the authors (we suggest opening an issue)
     to get access to lakeroad-private.
-- **This evaluation must be run on an x86 Linux 
+- **This evaluation must be run on an x86 Linux
     (ideally Ubuntu) machine
     with 300GB of free space.**
   Parts of the evaluation will work on Mac
@@ -132,13 +132,12 @@ The evaluation
   so at this point you should kill the run
   and move on to step 1.
 
-
 ## Step 1: Install Proprietary Hardware Tools
 
 Our [Dockerfile](./Dockerfile)
   automatically builds
   *almost* all of the evaluation's dependencies.
-However, a few critical pieces of software are left out: 
+However, a few critical pieces of software are left out:
   the proprietary hardware compiler toolchains Vivado, Quartus, and Diamond.
 Why did we leave these out? A few reasons, but chief among them:
   they are very large,
@@ -522,12 +521,13 @@ docker run \
 This command starts a Docker container
   in the background.
 After this command,
-  the Docker container 
+  the Docker container
   (which is similar to a virtual machine)
   will be present
   on the machine, but will not yet be connected to it.
 
 To start the Docker container, we must provide a few flags.
+
 - `-dt` ensures the container is started in the background.
 - `--name` can be set to a name of your choosing.
   This will become the name of your container,
@@ -694,11 +694,11 @@ The following is a list of the important outputs
   This file captures data on the multiplicative factor
     by which Lakeroad outperforms other tools
     with regard to completeness.
-  These numbers appear in the 
+  These numbers appear in the
     text: specifically,
     in the abstract,
     at the end of the introduction,
-    and in the evaluation 
+    and in the evaluation
     (5.1, Comparison to Existing Toolchains, first paragraph).
 - `figures/lakeroad_time_{intel,lattice,xilinx}.png`:
   These are the images used in Figure 7.
@@ -789,5 +789,3 @@ Environment variables to set:
 
 - `PYTHONPATH`
 -->
-
-
