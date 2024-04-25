@@ -99,6 +99,8 @@ RUN pip3 install --requirement requirements.txt
 ADD python/ /root/python/
 ENV PYTHONPATH="/root/python/:/root/lakeroad/bin:${PYTHONPATH}"
 
+ADD lakeroad/dependencies.sh /root/dependencies.sh
+
 # Build Bitwuzla.
 WORKDIR /root
 RUN source /root/dependencies.sh \
