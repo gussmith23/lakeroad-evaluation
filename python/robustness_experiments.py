@@ -38,12 +38,12 @@ def _lakeroad_is_X_times_better_numbers(
             records.append(
                 {
                     "tool": tool,
-                    "lakeroad is __X times better than tool": df[df.tool == "Lakeroad"]
-                    .squeeze()
-                    .num_successful
-                    / df[df.tool == tool].num_successful.squeeze()
-                    if df[df.tool == tool].num_successful.squeeze() != 0
-                    else np.inf,
+                    "lakeroad is __X times better than tool": (
+                        df[df.tool == "Lakeroad"].squeeze().num_successful
+                        / df[df.tool == tool].num_successful.squeeze()
+                        if df[df.tool == tool].num_successful.squeeze() != 0
+                        else np.inf
+                    ),
                 }
             )
 
@@ -681,28 +681,34 @@ def _visualize_succeeded_vs_failed_lattice(
     # We ignore Lakeroad, because we'll calculate different
     # successful/unsuccessful columns for Lakeroad.
     suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
-        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
-        if t != "lakeroad"
-        else 0
+        lambda t: (
+            ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+            if t != "lakeroad"
+            else 0
+        )
     )
     # Lakeroad unsuccessful columns.
     suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_failure"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_failure"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
     suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_timeout"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_timeout"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
 
     def match(t):
@@ -836,28 +842,34 @@ def _visualize_succeeded_vs_failed_xilinx(
     # We ignore Lakeroad, because we'll calculate different
     # successful/unsuccessful columns for Lakeroad.
     suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
-        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
-        if t != "lakeroad"
-        else 0
+        lambda t: (
+            ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+            if t != "lakeroad"
+            else 0
+        )
     )
     # Lakeroad unsuccessful columns.
     suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_failure"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_failure"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
     suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_timeout"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_timeout"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
 
     def match(t):
@@ -1027,29 +1039,35 @@ def _visualize_succeeded_vs_failed_intel(
     # Lakeroad. (We split Lakeroad's unsuccessful experiments into unsat and
     # timeout.)
     suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
-        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
-        if t != "lakeroad"
-        else 0
+        lambda t: (
+            ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+            if t != "lakeroad"
+            else 0
+        )
     )
 
     # Lakeroad unsuccessful columns.
     suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_failure"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_failure"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
     suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
         lambda t: (
-            (df["tool"] == t)
-            & ~df["only_use_one_dsp"]
-            & df["lakeroad_synthesis_timeout"]
-        ).sum()
-        if t == "lakeroad"
-        else 0
+            (
+                (df["tool"] == t)
+                & ~df["only_use_one_dsp"]
+                & df["lakeroad_synthesis_timeout"]
+            ).sum()
+            if t == "lakeroad"
+            else 0
+        )
     )
 
     def match(t):
