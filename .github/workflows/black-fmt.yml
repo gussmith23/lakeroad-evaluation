@@ -2,6 +2,7 @@ name: Run Black Formatter
 
 on:
   pull_request:
+    branches: [ main ]
   push:
     branches: [ main ]
 
