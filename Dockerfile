@@ -88,28 +88,6 @@ RUN mkdir -p /root/.local/bin \
   && chmod +x /root/.local/bin/lit
 ENV PATH="/root/.local/bin:${PATH}"
 
-# Set up oss-cad-suite. Copied from Lakeroad Dockerfile; see documentation
-# there.
-WORKDIR /root
-ADD lakeroad/dependencies.sh /root/dependencies.sh
-RUN source /root/dependencies.sh \
-  && if [ "$(uname -m)" = "x86_64" ] ; then \
-  wget https://github.com/YosysHQ/oss-cad-suite-build/releases/download/$OSS_CAD_SUITE_DATE/oss-cad-suite-linux-x64-$(echo $OSS_CAD_SUITE_DATE | tr -d "-").tgz -q -O oss-cad-suite.tgz; \
-  else \
-  exit 1; \
-  fi \
-  && tar xf oss-cad-suite.tgz \
-  && rm oss-cad-suite.tgz \
-  # Delete binaries we don't need (and that we explicitly build other versions
-  # of).
-  && rm oss-cad-suite/bin/yosys \
-  && rm oss-cad-suite/bin/bitwuzla
-# Make sure that .local/bin has precedence over oss-cad-suite/bin. I realize
-# we add ./local/bin to the PATH twice, but I just want to document that we want
-# things in .local/bin to take precedence, and duplicate PATH entries won't
-# break anything.
-ENV PATH="/root/.local/bin:/root/oss-cad-suite/bin:${PATH}"
-
 # Set up Python.
 WORKDIR /root
 ADD requirements.txt requirements.txt
@@ -164,6 +142,40 @@ RUN source /root/dependencies.sh \
   && PREFIX="/root/.local" CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make config-gcc \
   && PREFIX="/root/.local" CPLUS_INCLUDE_PATH="/usr/include/tcl8.6/:$CPLUS_INCLUDE_PATH" make -j ${MAKE_JOBS} install \
   && rm -rf /root/yosys
+
+# Build CVC5.
+RUN source /root/dependencies.sh \
+  && mkdir cvc5 && cd cvc5 \
+  && wget -qO- https://github.com/cvc5/cvc5/archive/$CVC5_COMMIT_HASH.tar.gz  | tar xz --strip-components=1 \
+  && ./configure.sh --prefix="/root/.local"  --auto-download \
+  && cd ./build \
+  && make -j ${MAKE_JOBS} \
+  && make -j ${MAKE_JOBS} install \
+  && rm -rf /root/cvc5
+
+# Build Yices2.
+RUN source /root/dependencies.sh \
+  && apt-get install -y gperf \
+  && mkdir yices2 && cd yices2 \
+  && wget -qO- https://github.com/SRI-CSL/yices2/archive/$YICES2_COMMIT_HASH.tar.gz | tar xz --strip-components=1 \
+  && autoconf \
+  && ./configure --prefix="/root/.local" \
+  && make -j ${MAKE_JOBS} \
+  && make -j ${MAKE_JOBS} install \
+  && rm -rf /root/yices2
+
+# Build Verilator.
+RUN source /root/dependencies.sh \
+  && apt-get install -y git help2man perl python3 make autoconf g++ flex bison ccache \
+  && apt-get install -y libgoogle-perftools-dev numactl perl-doc \
+  && apt-get install -y libfl2  \
+  && apt-get install -y libfl-dev  \
+  && mkdir verilator && cd verilator \
+  && wget -qO- https://github.com/verilator/verilator/archive/$VERILATOR_COMMIT_HASH.tar.gz | tar xz --strip-components=1 \
+  && autoconf \
+  && ./configure --prefix="/root/.local" \
+  && make -j ${MAKE_JOBS} \
+  && make -j ${MAKE_JOBS} install
 
 # Install Racket, install raco (Racket) dependencies. First, fix
 # https://github.com/racket/racket/issues/2691 by building the docs. We error if
