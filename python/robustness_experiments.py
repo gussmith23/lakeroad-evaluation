@@ -823,6 +823,11 @@ def _visualize_succeeded_vs_failed_xilinx(
         == 0
     )
 
+    # Remove mul+logic benchmarks
+    df = df[~df["identifier"].str.match(".*mulxor.*", case=False)]
+    df = df[~df["identifier"].str.match(".*muland.*", case=False)]
+    df = df[~df["identifier"].str.match(".*mulor.*", case=False)]
+
     Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(cleaned_data_filepath)
 
