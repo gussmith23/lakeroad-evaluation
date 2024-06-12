@@ -2,6 +2,7 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
+
 import json
 import logging
 import os

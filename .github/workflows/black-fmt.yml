@@ -1,6 +1,10 @@
 name: Run Black Formatter
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -11,8 +15,7 @@ jobs:
       uses: actions/setup-python@v3
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install black
+        python -m pip install $(sed -n '/^black==.*/p' requirements.txt)
     - name: Check formatting
       run: |
         black --check $(git ls-files '*.py')

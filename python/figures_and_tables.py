@@ -357,15 +357,21 @@ def _disabled_task_make_lattice_ecp5_figure(
                     [
                         instr,
                         short_template,
-                        raw_lakeroad_data_row["time_s"]
-                        if not raw_lakeroad_data_row.empty
-                        else None,
-                        raw_lakeroad_data_row["LUT4"]
-                        if not raw_lakeroad_data_row.empty
-                        else None,
-                        raw_lakeroad_data_row["CCU2C"]
-                        if not raw_lakeroad_data_row.empty
-                        else None,
+                        (
+                            raw_lakeroad_data_row["time_s"]
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
+                        (
+                            raw_lakeroad_data_row["LUT4"]
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
+                        (
+                            raw_lakeroad_data_row["CCU2C"]
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
                         raw_yosys_data_row["time_s"],
                         raw_yosys_data_row["LUT4"],
                         raw_yosys_data_row["L6MUX21"] + raw_yosys_data_row["PFUMX"],
@@ -601,59 +607,65 @@ def _disabled_task_make_xilinx_ultrascale_plus_figure(
                     [
                         instr,
                         short_template,
-                        raw_lakeroad_data_row["time_s"]
-                        if not raw_lakeroad_data_row.empty
-                        else None,
+                        (
+                            raw_lakeroad_data_row["time_s"]
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
                         # LUTs
                         (
                             (
-                                raw_lakeroad_data_row["LUT2"]
-                                if "LUT2" in raw_lakeroad_data_row
-                                else 0
+                                (
+                                    raw_lakeroad_data_row["LUT2"]
+                                    if "LUT2" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["LUT3"]
+                                    if "LUT3" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["LUT4"]
+                                    if "LUT4" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["LUT5"]
+                                    if "LUT5" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["LUT6"]
+                                    if "LUT6" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["LUT6_2"]
+                                    if "LUT6_2" in raw_lakeroad_data_row
+                                    else 0
+                                )
                             )
-                            + (
-                                raw_lakeroad_data_row["LUT3"]
-                                if "LUT3" in raw_lakeroad_data_row
-                                else 0
-                            )
-                            + (
-                                raw_lakeroad_data_row["LUT4"]
-                                if "LUT4" in raw_lakeroad_data_row
-                                else 0
-                            )
-                            + (
-                                raw_lakeroad_data_row["LUT5"]
-                                if "LUT5" in raw_lakeroad_data_row
-                                else 0
-                            )
-                            + (
-                                raw_lakeroad_data_row["LUT6"]
-                                if "LUT6" in raw_lakeroad_data_row
-                                else 0
-                            )
-                            + (
-                                raw_lakeroad_data_row["LUT6_2"]
-                                if "LUT6_2" in raw_lakeroad_data_row
-                                else 0
-                            )
-                        )
-                        if not raw_lakeroad_data_row.empty
-                        else None,
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
                         # Carries
                         (
                             (
-                                raw_lakeroad_data_row["CARRY4"]
-                                if "CARRY4" in raw_lakeroad_data_row
-                                else 0
+                                (
+                                    raw_lakeroad_data_row["CARRY4"]
+                                    if "CARRY4" in raw_lakeroad_data_row
+                                    else 0
+                                )
+                                + (
+                                    raw_lakeroad_data_row["CARRY8"]
+                                    if "CARRY8" in raw_lakeroad_data_row
+                                    else 0
+                                )
                             )
-                            + (
-                                raw_lakeroad_data_row["CARRY8"]
-                                if "CARRY8" in raw_lakeroad_data_row
-                                else 0
-                            )
-                        )
-                        if not raw_lakeroad_data_row.empty
-                        else None,
+                            if not raw_lakeroad_data_row.empty
+                            else None
+                        ),
                         raw_yosys_data_row["time_s"],
                         raw_yosys_data_row.get("LUT4", 0),
                         # Yosys muxes
