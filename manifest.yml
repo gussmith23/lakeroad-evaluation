@@ -58,4 +58,4 @@ completeness_experiments:
   intel-timing-num-bins: 2
 
   # Retries to use for Vivado.
-  vivado-retries: 3
+  vivado_retries: 3
