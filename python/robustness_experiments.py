@@ -939,6 +939,166 @@ def _visualize_succeeded_vs_failed_xilinx(
     # ax.set_title("Xilinx DSP48E2")
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
+def _visualize_succeeded_vs_failed_virtex(
+    csv_filepath: Union[str, Path],
+    plot_output_filepath: Union[str, Path],
+    cleaned_data_filepath: Union[str, Path],
+    plot_csv_filepath: Union[str, Path],
+):
+    # Note, we fill NaNs with 0.
+    df = pandas.read_csv(csv_filepath).fillna(0)
+
+    # Filter to Xilinx rows.
+    df = df[df["architecture"] == "xilinx-virtex"]
+
+    # Resources we care about: things that do computation
+    # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
+    # SRL16E).
+    COMPUTATION_PRIMITIVES = [
+        "DSP48E1",
+        
+        # TODO(@vcanumalla): These primitives are for ultrascale,
+        # virtex probably has different primitives.
+        # "CARRY4",
+        # "LUT2",
+        # "LUT3",
+        # "LUT4",
+        # "LUT5",
+        # "LUT6",
+        # "SRL16E",
+        # "MUXF7",
+        # "MUXF8",
+        # "MUXF9",
+        # "FDRE",
+    ]
+
+    # Column which checks whether the experiment uses one DSP and no other
+    # computational units.
+    df["only_use_one_dsp"] = (df.get("DSP48E2", 0) == 1) & (
+        sum(
+            map(
+                lambda col: df.get(col, 0),
+                list(set(COMPUTATION_PRIMITIVES) - set(["DSP48E2"])),
+            )
+        )
+        == 0
+    )
+
+    Path(cleaned_data_filepath).parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(cleaned_data_filepath)
+
+    suc_v_unsuc = pandas.DataFrame({"tool": ["lakeroad", "vivado", "yosys"]})
+    suc_v_unsuc["num_experiments"] = suc_v_unsuc["tool"].map(
+        lambda t: (df["tool"] == t).sum()
+    )
+    suc_v_unsuc["num_successful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & df["only_use_one_dsp"]).sum()
+    )
+    # We ignore Lakeroad, because we'll calculate different
+    # successful/unsuccessful columns for Lakeroad.
+    suc_v_unsuc["num_unsuccessful"] = suc_v_unsuc["tool"].map(
+        lambda t: ((df["tool"] == t) & ~df["only_use_one_dsp"]).sum()
+        if t != "lakeroad"
+        else 0
+    )
+    # Lakeroad unsuccessful columns.
+    suc_v_unsuc["num_lr_unsat"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_failure"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+    suc_v_unsuc["num_lr_timeout"] = suc_v_unsuc["tool"].map(
+        lambda t: (
+            (df["tool"] == t)
+            & ~df["only_use_one_dsp"]
+            & df["lakeroad_synthesis_timeout"]
+        ).sum()
+        if t == "lakeroad"
+        else 0
+    )
+
+    def match(t):
+        if t == "lakeroad":
+            return "Lakeroad"
+        elif t == "vivado":
+            return "Xilinx SOTA"
+        elif t == "yosys":
+            return "Yosys"
+        else:
+            raise NotImplementedError()
+
+    suc_v_unsuc["tool"] = suc_v_unsuc["tool"].map(lambda t: match(t))
+
+    # raise Exception(
+    #     print(suc_v_unsuc["tool"]))
+
+    # Sanity check.
+    assert suc_v_unsuc["num_experiments"].equals(
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+    suc_v_unsuc["total_experiments"] = (
+        suc_v_unsuc["num_successful"]
+        + suc_v_unsuc["num_unsuccessful"]
+        + suc_v_unsuc["num_lr_unsat"]
+        + suc_v_unsuc["num_lr_timeout"]
+    )
+
+    # Calculate the percentage of successful, unsuccessful, lakeroad_unsat, and lakeroad_timeout experiments for each tool.
+    suc_v_unsuc["percentage_successful"] = (
+        suc_v_unsuc["num_successful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_unsuccessful"] = (
+        suc_v_unsuc["num_unsuccessful"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_unsat"] = (
+        suc_v_unsuc["num_lr_unsat"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    suc_v_unsuc["percentage_lr_timeout"] = (
+        suc_v_unsuc["num_lr_timeout"] / suc_v_unsuc["total_experiments"]
+    ) * 100
+    Path(plot_csv_filepath).parent.mkdir(parents=True, exist_ok=True)
+    suc_v_unsuc.to_csv(plot_csv_filepath)
+    # Plotting the stacked bar chart with percentages on the Y-axis.
+    gs = GridSpec(1, 1, width_ratios=[1])
+    ax = plt.subplot(gs[0])
+    ax = suc_v_unsuc.plot.bar(
+        figsize=(5, 2.4),
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_timeout",
+            "percentage_lr_unsat",
+        ],
+        stacked=True,
+        rot=0,
+        xlabel="Tool",
+        ylabel="Percentage (%)",
+    )
+    plt.title("Xilinx DSP48E2", pad=10)
+    plt.xlabel("Tool", labelpad=10)
+    plt.tight_layout()
+    plt.ylabel("Percentage (%)")
+    ax.set_yticklabels(["{:.0f}%".format(x) for x in ax.get_yticks()])
+    # # Save the plot to the specified output filepath.
+    # plot_output_filepath = Path(plot_output_filepath)
+    # plot_output_filepath.parent.mkdir(parents=True, exist_ok=True)
+    # ax.get_figure().savefig(plot_output_filepath)
+    # set legend location
+    ax.legend(
+        loc="upper right",
+        labels=["succeeded", "failed", "timeout", "unsat"],
+        fontsize=7,
+    )
+    # ax.set_title("Xilinx DSP48E2")
+    ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 def _visualize_succeeded_vs_failed_intel(
     csv_filepath: Union[str, Path],
@@ -1173,6 +1333,80 @@ def task_robustness_experiments(skip_verilator: bool):
 
     for entry in entries:
         backends = entry["backends"]
+        if "virtex" in backends:
+            # TODO(@vcanumalla): Only running virtex on lakeroad for now.
+            base_path = (
+                output_dir
+                / "robustness_experiments"
+                / entry["module_name"]
+                / "lakeroad_xilinx_virtex"
+            )
+            (
+                task,
+                (json_filepath, lakeroad_output_verilog, _),
+            ) = lakeroad.make_lakeroad_task(
+                extra_cycles=(
+                    manifest["completeness_experiments"]["lakeroad"]["extra_cycles"]
+                ),
+                out_dirpath=base_path,
+                template="dsp",
+                out_module_name="lakeroad_output",
+                architecture="xilinx-virtex",
+                verilog_module_filepath=lakeroad_evaluation_dir / entry["filepath"],
+                top_module_name=entry["module_name"],
+                clock_name=("clk" if entry["stages"] != 0 else None),
+                name=entry["module_name"] + ":lakeroad-virtex",
+                initiation_interval=entry["stages"],
+                inputs=entry["inputs"],
+                verilog_module_out_signal=("out", entry["bitwidth"]),
+                timeout=manifest["completeness_experiments"]["lakeroad"]["xilinx-timeout"],
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-virtex",
+                    "tool": "lakeroad",
+                },
+            )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
+            if not skip_verilator:
+                yield verilator.make_verilator_task(
+                    name=f"{entry['module_name']}:lakeroad-virtex:verilator",
+                    ignore_missing_test_module_file=True,
+                    output_dirpath=base_path / "verilator",
+                    test_module_filepath=lakeroad_output_verilog,
+                    test_module_name="lakeroad_output",
+                    ground_truth_module_filepath=lakeroad_evaluation_dir
+                    / entry["filepath"],
+                    ground_truth_module_name=entry["module_name"],
+                    module_inputs=entry["inputs"],
+                    clock_name=("clk" if entry["stages"] != 0 else None),
+                    initiation_interval=entry["stages"],
+                    module_outputs=[("out", entry["bitwidth"])],
+                    include_dirs=[
+                        lakeroad_evaluation_dir
+                        / "lakeroad"
+                        / "lakeroad-private"
+                        / "DSP48E1"
+                    ],
+                    extra_args=[
+                        "-DXIL_XECLIB",
+                        "-Wno-UNOPTFLAT",
+                        "-Wno-LATCH",
+                        "-Wno-WIDTH",
+                        "-Wno-STMTDLY",
+                        "-Wno-CASEX",
+                        "-Wno-TIMESCALEMOD",
+                        "-Wno-PINMISSING",
+                        "-Wno-COMBDLY",
+                        "-Wno-INITIALDLY",
+                        "-Wno-CASEINCOMPLETE",
+                    ],
+                    max_num_tests=manifest["completeness_experiments"]["lakeroad"][
+                        "verilator_simulation_iterations"
+                    ],
+                    alternative_file_dep=json_filepath,
+                )[0]
+
         if "xilinx" in backends:
             # base path for vivado tasks for this entry
             base_path = (
@@ -1569,7 +1803,7 @@ def task_robustness_experiments(skip_verilator: bool):
     yield {
         "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": collected_data_output_filepaths,
+        # "file_dep": collected_data_output_filepaths,
         "targets": [output_csv_path],
         "actions": [
             (
