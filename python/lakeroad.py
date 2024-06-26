@@ -31,7 +31,7 @@ def invoke_lakeroad(
     verilog_module_filepath: Optional[Union[str, Path]] = None,
     top_module_name: Optional[str] = None,
     verilog_module_out_signal: Optional[Tuple[str, int]] = None,
-    initiation_interval: Optional[int] = None,
+    pipeline_depth: Optional[int] = None,
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
@@ -60,7 +60,7 @@ def invoke_lakeroad(
         module.
       inputs: Inputs to the Verilog module. Must be specified for sequential
         synthesis. A list of tuples, (<name>, <bitwidth>).
-      initiation_interval: The initiation interval of the module, for sequential
+      pipeline_depth: The pipeline depth of the module, for sequential
         synthesis.
       timeout: Timeout arg to pass to Lakeroad (in seconds).
       check_returncode: Whether or not to run check_returncode(). Defaults to
@@ -129,8 +129,8 @@ def invoke_lakeroad(
             f"Didn't expect instruction ({instruction}) and verilog_module_filepath ({verilog_module_filepath})"
         )
 
-    if initiation_interval != None:
-        cmd += ["--initiation-interval", str(initiation_interval)]
+    if pipeline_depth != None:
+        cmd += ["--pipeline-depth", str(pipeline_depth)]
 
     if inputs != None:
         for name, bitwidth in inputs:
@@ -253,7 +253,7 @@ def make_lakeroad_task(
     top_module_name: Optional[str] = None,
     verilog_module_out_signal: Optional[str] = None,
     name: Optional[str] = None,
-    initiation_interval: Optional[int] = None,
+    pipeline_depth: Optional[int] = None,
     inputs: Optional[List[Tuple[str, int]]] = None,
     clock_name: Optional[str] = None,
     reset_name: Optional[str] = None,
@@ -301,7 +301,7 @@ def make_lakeroad_task(
                 "verilog_module_filepath": verilog_module_filepath,
                 "top_module_name": top_module_name,
                 "verilog_module_out_signal": verilog_module_out_signal,
-                "initiation_interval": initiation_interval,
+                "pipeline_depth": pipeline_depth,
                 "inputs": inputs,
                 "clock_name": clock_name,
                 "reset_name": reset_name,

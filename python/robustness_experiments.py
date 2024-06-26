@@ -1356,7 +1356,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad-virtex",
-                initiation_interval=entry["stages"],
+                pipeline_depth=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=manifest["completeness_experiments"]["lakeroad"]["xilinx-timeout"],
@@ -1380,7 +1380,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
-                    initiation_interval=entry["stages"],
+                    pipeline_depth=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         lakeroad_evaluation_dir
@@ -1462,7 +1462,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad-xilinx",
-                initiation_interval=entry["stages"],
+                pipeline_depth=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=manifest["completeness_experiments"]["lakeroad"][
@@ -1493,7 +1493,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
-                    initiation_interval=entry["stages"],
+                    pipeline_depth=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         lakeroad_evaluation_dir
@@ -1584,7 +1584,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lattice-ecp5-lakeroad",
-                initiation_interval=entry["stages"],
+                pipeline_depth=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=manifest["completeness_experiments"]["lakeroad"][
@@ -1614,7 +1614,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
-                    initiation_interval=entry["stages"],
+                    pipeline_depth=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         lakeroad_evaluation_dir
@@ -1737,7 +1737,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
                 name=entry["module_name"] + ":lakeroad_intel",
-                initiation_interval=entry["stages"],
+                pipeline_depth=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 extra_summary_fields={
@@ -1776,7 +1776,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     ground_truth_module_name=entry["module_name"],
                     module_inputs=entry["inputs"],
                     clock_name=("clk" if entry["stages"] != 0 else None),
-                    initiation_interval=entry["stages"],
+                    pipeline_depth=entry["stages"],
                     module_outputs=[("out", entry["bitwidth"])],
                     include_dirs=[
                         lakeroad_evaluation_dir
