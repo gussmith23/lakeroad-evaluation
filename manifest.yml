@@ -32,8 +32,7 @@ completeness_experiments:
     solver_instances: 
     - bitwuzla: {":seed": 0}
     - cvc5: {":seed": 0, ":bitblast": "eager", ":bv-to-bool" : "true", ":bv-gauss-elim": "true"}
-    # TODO(@gussmith23): STP is currently segfaulting, see https://github.com/stp/stp/issues/486
-    # - stp
+    - stp
     - yices
     # Timeout for Lakeroad on various architectures.
     xilinx-timeout: 120
