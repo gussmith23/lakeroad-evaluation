@@ -2,6 +2,7 @@
 
 By default, prints to stdout. To write to a file, use the --output-file
 argument."""
+
 import yaml
 from schema import *
 

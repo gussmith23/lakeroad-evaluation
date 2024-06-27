@@ -2,6 +2,7 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
+
 import json
 import logging
 import os
@@ -463,9 +464,9 @@ report_utilization
         # https://community.flexera.com/t5/InstallAnywhere-Forum/Issues-when-running-Xilinx-tools-or-Other-vendor-tools-in-docker/m-p/245820#M10647
         env = os.environ.copy()
         ld_preload_previous_value = env["LD_PRELOAD"] if "LD_PRELOAD" in env else ""
-        env[
-            "LD_PRELOAD"
-        ] = f"/lib/x86_64-linux-gnu/libudev.so.1:{ld_preload_previous_value}"
+        env["LD_PRELOAD"] = (
+            f"/lib/x86_64-linux-gnu/libudev.so.1:{ld_preload_previous_value}"
+        )
 
         start_time = time()
         subprocess.run(
