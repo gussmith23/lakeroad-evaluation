@@ -1462,6 +1462,7 @@ def task_robustness_experiments(skip_verilator: bool):
                     "architecture": "xilinx-ultrascale-plus",
                     "tool": "vivado",
                 },
+                attempts=manifest["completeness_experiments"]["vivado_retries"],
             )
             yield task
             collected_data_output_filepaths.append(json_filepath)
