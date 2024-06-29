@@ -494,7 +494,7 @@ def _combined_visualized(
     df_intel["backend"] = "Intel"
     df_virtex = pandas.read_csv(csv_virtex_filepath).fillna(0)
     df_virtex["backend"] = "Xilinx Virtex"
-    merged_df = pandas.concat([df1, df2, df_intel,  df_virtex ])
+    merged_df = pandas.concat([df1, df2, df_intel, df_virtex])
     merged_df.groupby("backend")
     # raise(Exception(print(merged_df)))
     # group the dataframe by xilinx or Yosys
