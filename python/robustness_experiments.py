@@ -482,6 +482,7 @@ def _combined_visualized(
     csv_xilinx_filepath: Union[str, Path],
     csv_lattice_filepath: Union[str, Path],
     csv_intel_filepath: Union[str, Path],
+    csv_virtex_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
 ):
     # combined graph of xilinx and lattice results
@@ -491,13 +492,15 @@ def _combined_visualized(
     df1["backend"] = "Xilinx"
     df_intel = pandas.read_csv(csv_intel_filepath).fillna(0)
     df_intel["backend"] = "Intel"
-    merged_df = pandas.concat([df1, df2, df_intel])
+    df_virtex = pandas.read_csv(csv_virtex_filepath).fillna(0)
+    df_virtex["backend"] = "Xilinx Virtex"
+    merged_df = pandas.concat([df1, df2, df_intel,  df_virtex ])
     merged_df.groupby("backend")
     # raise(Exception(print(merged_df)))
     # group the dataframe by xilinx or Yosys
     # merged_df = merged_df.groupby(merged_df.index // 3)
     # plot the merged df
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(6, 4))
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(6, 4))
     df1.plot.bar(
         x="tool",
         y=[
@@ -551,7 +554,25 @@ def _combined_visualized(
     )
     ax3.set_title("Intel Cyclone 10 LP")
     ax3.set_yticks([])
-    ax3.legend(
+
+    # Plot Xilinx Virtex data on the third subplot
+    df_intel.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax4,
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
+        # hatch=['', '', '///', '']
+    )
+    ax4.set_title("Xilinx Virtex")
+    ax4.set_yticks([])
+    ax4.legend(
         loc="upper right",
         labels=["succeeded", "failed", "unsat", "timeout"],
         fontsize=8,
@@ -1933,6 +1954,7 @@ def task_robustness_experiments(skip_verilator: bool):
             output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
             output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
             output_dir / "figures" / "succeeded_vs_failed_intel.csv",
+            output_dir / "figures" / "succeeded_vs_failed_virtex.csv",
         ],
         "actions": [
             (
@@ -1948,6 +1970,9 @@ def task_robustness_experiments(skip_verilator: bool):
                     "csv_intel_filepath": output_dir
                     / "figures"
                     / "succeeded_vs_failed_intel.csv",
+                    "csv_virtex_filepath": output_dir
+                    / "figures"
+                    / "succeeded_vs_failed_virtex.csv",
                     "plot_output_filepath": (
                         output_dir / "figures" / "succeeded_vs_failed_all.png"
                     ),
