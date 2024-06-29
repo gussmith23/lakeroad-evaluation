@@ -1831,7 +1831,7 @@ def task_robustness_experiments(skip_verilator: bool):
     yield {
         "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        # "file_dep": collected_data_output_filepaths,
+        "file_dep": collected_data_output_filepaths,
         "targets": [output_csv_path],
         "actions": [
             (
