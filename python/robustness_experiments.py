@@ -986,11 +986,11 @@ def _visualize_succeeded_vs_failed_virtex(
 
     # Column which checks whether the experiment uses one DSP and no other
     # computational units.
-    df["only_use_one_dsp"] = (df.get("DSP48E2", 0) == 1) & (
+    df["only_use_one_dsp"] = (df.get("DSP48E1", 0) == 1) & (
         sum(
             map(
                 lambda col: df.get(col, 0),
-                list(set(COMPUTATION_PRIMITIVES) - set(["DSP48E2"])),
+                list(set(COMPUTATION_PRIMITIVES) - set(["DSP48E1"])),
             )
         )
         == 0
@@ -1060,7 +1060,7 @@ def _visualize_succeeded_vs_failed_virtex(
         + suc_v_unsuc["num_unsuccessful"]
         + suc_v_unsuc["num_lr_unsat"]
         + suc_v_unsuc["num_lr_timeout"]
-    )
+    ), f"Expected {suc_v_unsuc['num_experiments']} == successful ({suc_v_unsuc['num_successful']}) + unsuccessful ({suc_v_unsuc['num_unsuccessful']}) + LR timeout ({suc_v_unsuc['num_lr_timeout']}) + LR unsat ({suc_v_unsuc['num_lr_unsat']})"
     suc_v_unsuc["total_experiments"] = (
         suc_v_unsuc["num_successful"]
         + suc_v_unsuc["num_unsuccessful"]
@@ -1100,7 +1100,7 @@ def _visualize_succeeded_vs_failed_virtex(
         xlabel="Tool",
         ylabel="Percentage (%)",
     )
-    plt.title("Xilinx DSP48E2", pad=10)
+    plt.title("Xilinx 7-series", pad=10)
     plt.xlabel("Tool", labelpad=10)
     plt.tight_layout()
     plt.ylabel("Percentage (%)")
@@ -1115,7 +1115,6 @@ def _visualize_succeeded_vs_failed_virtex(
         labels=["succeeded", "failed", "timeout", "unsat"],
         fontsize=7,
     )
-    # ax.set_title("Xilinx DSP48E2")
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
@@ -1831,7 +1830,7 @@ def task_robustness_experiments(skip_verilator: bool):
     yield {
         "name": "collect_data",
         # To generate the CSV with incomplete data, you can comment out the following line.
-        "file_dep": collected_data_output_filepaths,
+        # "file_dep": collected_data_output_filepaths,
         "targets": [output_csv_path],
         "actions": [
             (
@@ -1842,6 +1841,34 @@ def task_robustness_experiments(skip_verilator: bool):
                     "output_filepath": output_csv_path,
                 },
             )
+        ],
+    }
+
+    yield {
+        "name": "visualize_succeeded_vs_failed_virtex",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _visualize_succeeded_vs_failed_virtex,
+                [],
+                {
+                    "csv_filepath": output_csv_path,
+                    "plot_output_filepath": (
+                        output_dir / "figures" / "succeeded_vs_failed_virtex.png"
+                    ),
+                    "cleaned_data_filepath": output_dir
+                    / "robustness_experiments_csv"
+                    / "all_results"
+                    / "all_virtex_results_collected_cleaned.csv",
+                    "plot_csv_filepath": (
+                        output_dir / "figures" / "succeeded_vs_failed_virtex.csv"
+                    ),
+                },
+            )
+        ],
+        "targets": [
+            output_dir / "figures" / "succeeded_vs_failed_virtex.png",
+            output_dir / "figures" / "succeeded_vs_failed_virtex.csv",
         ],
     }
 
