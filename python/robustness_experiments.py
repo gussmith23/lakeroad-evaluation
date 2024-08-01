@@ -482,7 +482,7 @@ def _combined_visualized(
     csv_xilinx_filepath: Union[str, Path],
     csv_lattice_filepath: Union[str, Path],
     csv_intel_filepath: Union[str, Path],
-    csv_virtex_filepath: Union[str, Path],
+    csv_xilinx_7_series_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
 ):
     # combined graph of xilinx and lattice results
@@ -492,9 +492,9 @@ def _combined_visualized(
     df1["backend"] = "Xilinx"
     df_intel = pandas.read_csv(csv_intel_filepath).fillna(0)
     df_intel["backend"] = "Intel"
-    df_virtex = pandas.read_csv(csv_virtex_filepath).fillna(0)
-    df_virtex["backend"] = "Xilinx Virtex"
-    merged_df = pandas.concat([df1, df2, df_intel, df_virtex])
+    df_xilinx_7_series = pandas.read_csv(csv_xilinx_7_series_filepath).fillna(0)
+    df_xilinx_7_series["backend"] = "Xilinx 7-Series"
+    merged_df = pandas.concat([df1, df2, df_intel, df_xilinx_7_series])
     merged_df.groupby("backend")
     # raise(Exception(print(merged_df)))
     # group the dataframe by xilinx or Yosys
@@ -555,7 +555,7 @@ def _combined_visualized(
     ax3.set_title("Intel Cyclone 10 LP")
     ax3.set_yticks([])
 
-    # Plot Xilinx Virtex data on the third subplot
+    # Plot Xilinx 7-Series data on the third subplot
     df_intel.plot.bar(
         x="tool",
         y=[
@@ -570,7 +570,7 @@ def _combined_visualized(
         color=["#21de24", "#f71919", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
-    ax4.set_title("Xilinx Virtex")
+    ax4.set_title("Xilinx 7-Series")
     ax4.set_yticks([])
     ax4.legend(
         loc="upper right",
@@ -978,7 +978,7 @@ def _visualize_succeeded_vs_failed_xilinx(
     ax.get_figure().savefig(plot_output_filepath, dpi=600)
 
 
-def _visualize_succeeded_vs_failed_virtex(
+def _visualize_succeeded_vs_failed_xilinx_7_series(
     csv_filepath: Union[str, Path],
     plot_output_filepath: Union[str, Path],
     cleaned_data_filepath: Union[str, Path],
@@ -988,7 +988,7 @@ def _visualize_succeeded_vs_failed_virtex(
     df = pandas.read_csv(csv_filepath).fillna(0)
 
     # Filter to Xilinx rows.
-    df = df[df["architecture"] == "xilinx-virtex"]
+    df = df[df["architecture"] == "xilinx-7-series"]
 
     # Resources we care about: things that do computation
     # (DSPs,LUTs)/wire manipulation (muxes)/state (registers like
@@ -996,7 +996,7 @@ def _visualize_succeeded_vs_failed_virtex(
     COMPUTATION_PRIMITIVES = [
         "DSP48E1",
         # TODO(@vcanumalla): These primitives are for ultrascale,
-        # virtex probably has different primitives.
+        # 7series probably has different primitives.
         # "CARRY4",
         # "LUT2",
         # "LUT3",
@@ -1383,13 +1383,13 @@ def task_robustness_experiments(skip_verilator: bool):
 
     for entry in entries:
         backends = entry["backends"]
-        if "virtex" in backends:
-            # TODO(@vcanumalla): Only running virtex on lakeroad for now.
+        if "xilinx-7-series" in backends:
+            # TODO(@vcanumalla): Only running 7-series on lakeroad for now.
             base_path = (
                 output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
-                / "lakeroad_xilinx_virtex"
+                / "lakeroad_xilinx_7_series"
             )
             (
                 task,
@@ -1401,11 +1401,11 @@ def task_robustness_experiments(skip_verilator: bool):
                 out_dirpath=base_path,
                 template="dsp",
                 out_module_name="lakeroad_output",
-                architecture="xilinx-virtex",
+                architecture="xilinx-7-series",
                 verilog_module_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 top_module_name=entry["module_name"],
                 clock_name=("clk" if entry["stages"] != 0 else None),
-                name=entry["module_name"] + ":lakeroad-virtex",
+                name=entry["module_name"] + ":lakeroad-xilinx-7-series",
                 pipeline_depth=entry["stages"],
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
@@ -1414,7 +1414,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
-                    "architecture": "xilinx-virtex",
+                    "architecture": "xilinx-7-series",
                     "tool": "lakeroad",
                 },
             )
@@ -1422,7 +1422,7 @@ def task_robustness_experiments(skip_verilator: bool):
             collected_data_output_filepaths.append(json_filepath)
             if not skip_verilator:
                 yield verilator.make_verilator_task(
-                    name=f"{entry['module_name']}:lakeroad-virtex:verilator",
+                    name=f"{entry['module_name']}:lakeroad-xilinx-7-series:verilator",
                     ignore_missing_test_module_file=True,
                     output_dirpath=base_path / "verilator",
                     test_module_filepath=lakeroad_output_verilog,
@@ -1871,30 +1871,30 @@ def task_robustness_experiments(skip_verilator: bool):
     }
 
     yield {
-        "name": "visualize_succeeded_vs_failed_virtex",
+        "name": "visualize_succeeded_vs_failed_xilinx_7_series",
         "file_dep": [output_csv_path],
         "actions": [
             (
-                _visualize_succeeded_vs_failed_virtex,
+                _visualize_succeeded_vs_failed_xilinx_7_series,
                 [],
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        output_dir / "figures" / "succeeded_vs_failed_virtex.png"
+                        output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.png"
                     ),
                     "cleaned_data_filepath": output_dir
                     / "robustness_experiments_csv"
                     / "all_results"
-                    / "all_virtex_results_collected_cleaned.csv",
+                    / "all_xilinx_7_series_results_collected_cleaned.csv",
                     "plot_csv_filepath": (
-                        output_dir / "figures" / "succeeded_vs_failed_virtex.csv"
+                        output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.csv"
                     ),
                 },
             )
         ],
         "targets": [
-            output_dir / "figures" / "succeeded_vs_failed_virtex.png",
-            output_dir / "figures" / "succeeded_vs_failed_virtex.csv",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.png",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.csv",
         ],
     }
 
@@ -1959,7 +1959,7 @@ def task_robustness_experiments(skip_verilator: bool):
             output_dir / "figures" / "succeeded_vs_failed_lattice.csv",
             output_dir / "figures" / "succeeded_vs_failed_xilinx.csv",
             output_dir / "figures" / "succeeded_vs_failed_intel.csv",
-            output_dir / "figures" / "succeeded_vs_failed_virtex.csv",
+            output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.csv",
         ],
         "actions": [
             (
@@ -1975,9 +1975,9 @@ def task_robustness_experiments(skip_verilator: bool):
                     "csv_intel_filepath": output_dir
                     / "figures"
                     / "succeeded_vs_failed_intel.csv",
-                    "csv_virtex_filepath": output_dir
+                    "csv_xilinx_7_series_filepath": output_dir
                     / "figures"
-                    / "succeeded_vs_failed_virtex.csv",
+                    / "succeeded_vs_failed_xilinx_7_series.csv",
                     "plot_output_filepath": (
                         output_dir / "figures" / "succeeded_vs_failed_all.png"
                     ),

@@ -2,7 +2,7 @@
   - xilinx
   - intel
   - lattice
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail: []
   filepath: robustness-testing-verilog-files/generated/mult_0_stage_signed_8_bit.sv
@@ -929,7 +929,7 @@
 - backends: &id013
   - xilinx
   - lattice
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -1966,7 +1966,7 @@
 - backends: &id025
   - xilinx
   - lattice
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -3002,7 +3002,7 @@
   xor_reduction: false
 - backends: &id037
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -4060,7 +4060,7 @@
   xor_reduction: false
 - backends: &id049
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -5118,7 +5118,7 @@
   xor_reduction: false
 - backends: &id061
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -6176,7 +6176,7 @@
   xor_reduction: false
 - backends: &id073
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -7234,7 +7234,7 @@
   xor_reduction: false
 - backends: &id085
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -8292,7 +8292,7 @@
   xor_reduction: false
 - backends: &id097
   - xilinx
-  - virtex
+  - xilinx-7-series
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
