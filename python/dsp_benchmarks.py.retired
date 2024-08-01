@@ -196,7 +196,7 @@ def task_dsp_benchmarks():
                 benchmark["outputs"][0][1],
             ),
             name=f"{filepath.stem}_lakeroad_xilinx_ultrascale_plus_iter{iter}",
-            initiation_interval=benchmark["initiation_interval"],
+            pipeline_depth=benchmark["pipeline_depth"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
@@ -260,7 +260,7 @@ def task_dsp_benchmarks():
                     lakeroad_xilinx_ultrascale_plus_base_filepath / "Makefile"
                 ),
                 clock_name=benchmark["clock_name"],
-                initiation_interval=benchmark["initiation_interval"],
+                pipeline_depth=benchmark["pipeline_depth"],
                 output_signal=benchmark["outputs"][0][0],
             )
 
@@ -290,7 +290,7 @@ def task_dsp_benchmarks():
                 benchmark["outputs"][0][1],
             ),
             name=f"{filepath.stem}_lakeroad_lattice_ecp5_iter{iter}",
-            initiation_interval=benchmark["initiation_interval"],
+            pipeline_depth=benchmark["pipeline_depth"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
@@ -347,7 +347,7 @@ def task_dsp_benchmarks():
                 ),
                 makefile_filepath=(lakeroad_lattice_ecp5_base_filepath / "Makefile"),
                 clock_name=benchmark["clock_name"],
-                initiation_interval=benchmark["initiation_interval"],
+                pipeline_depth=benchmark["pipeline_depth"],
                 output_signal=benchmark["outputs"][0][0],
             )
 
@@ -380,7 +380,7 @@ def task_dsp_benchmarks():
                 benchmark["outputs"][0][1],
             ),
             name=f"{filepath.stem}_lakeroad_intel_iter{iter}",
-            initiation_interval=benchmark["initiation_interval"],
+            pipeline_depth=benchmark["pipeline_depth"],
             inputs=[(name, int(bw)) for [name, bw] in benchmark["inputs"]],
             clock_name=benchmark["clock_name"],
             reset_name=benchmark["reset_name"] if "reset_name" in benchmark else None,
@@ -428,7 +428,7 @@ def task_dsp_benchmarks():
                 ),
                 makefile_filepath=lakeroad_intel_base_filepath / "Makefile",
                 clock_name=benchmark["clock_name"],
-                initiation_interval=benchmark["initiation_interval"],
+                pipeline_depth=benchmark["pipeline_depth"],
                 output_signal=benchmark["outputs"][0][0],
             )
 

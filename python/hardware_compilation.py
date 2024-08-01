@@ -2,6 +2,7 @@
 
 By hardware compilation, we mean hardware synthesis, placement, and routing
 using "traditional" tools like Vivado, Yosys, and nextpnr."""
+
 import json
 import logging
 import os
@@ -372,6 +373,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     route_directive: str = "default",
     extra_summary_fields: Dict[str, Any] = {},
     max_threads: int = 1,
+    attempts: int = 1,
 ):
     """Synthesize with Xilinx Vivado.
 
@@ -392,6 +394,8 @@ def xilinx_ultrascale_plus_vivado_synthesis(
           constraint file will be created and loaded using the given clock
           information.
         extra_summary_fields: Extra fields to add to the summary JSON.
+        attempts: Number of times to attempt running Vivado synthesis, in the
+          case where Vivado fails (which occurs ~once per evaluation run).
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -454,38 +458,52 @@ report_utilization
 """
         )
 
-    # Synthesis with Vivado.
-    with open(log_path, "w") as logfile:
-        logging.info("Running Vivado synthesis/place/route on %s", instr_src_file)
+    def _run_vivado():
+        # Synthesis with Vivado.
+        with open(log_path, "w") as logfile:
+            logging.info("Running Vivado synthesis/place/route on %s", instr_src_file)
 
-        # Setting this environment variable prevents an error when running
-        # Vivado route_design inside a Docker container. See:
-        # https://community.flexera.com/t5/InstallAnywhere-Forum/Issues-when-running-Xilinx-tools-or-Other-vendor-tools-in-docker/m-p/245820#M10647
-        env = os.environ.copy()
-        ld_preload_previous_value = env["LD_PRELOAD"] if "LD_PRELOAD" in env else ""
-        env[
-            "LD_PRELOAD"
-        ] = f"/lib/x86_64-linux-gnu/libudev.so.1:{ld_preload_previous_value}"
+            # Setting this environment variable prevents an error when running
+            # Vivado route_design inside a Docker container. See:
+            # https://community.flexera.com/t5/InstallAnywhere-Forum/Issues-when-running-Xilinx-tools-or-Other-vendor-tools-in-docker/m-p/245820#M10647
+            env = os.environ.copy()
+            ld_preload_previous_value = env["LD_PRELOAD"] if "LD_PRELOAD" in env else ""
+            env["LD_PRELOAD"] = (
+                f"/lib/x86_64-linux-gnu/libudev.so.1:{ld_preload_previous_value}"
+            )
 
-        start_time = time()
-        subprocess.run(
-            [
-                "vivado",
-                # -stack 2000 is a way to sometimes prevent mysterious Vivado
-                # crashes...
-                "-stack",
-                "2000",
-                "-mode",
-                "batch",
-                "-source",
-                tcl_script_filepath,
-            ],
-            check=True,
-            stdout=logfile,
-            stderr=logfile,
-            env=env,
+            start_time = time()
+            completed_process = subprocess.run(
+                [
+                    "vivado",
+                    # -stack 2000 is a way to sometimes prevent mysterious Vivado
+                    # crashes...
+                    "-stack",
+                    "2000",
+                    "-mode",
+                    "batch",
+                    "-source",
+                    tcl_script_filepath,
+                ],
+                check=False,
+                stdout=logfile,
+                stderr=logfile,
+                env=env,
+            )
+            end_time = time()
+        return (completed_process, end_time - start_time)
+
+    completed_process, elapsed_time = _run_vivado()
+    attempts_remaining = attempts - 1
+    # If Vivado failed, try again.
+    while completed_process.returncode != 0 and attempts_remaining > 0:
+        logging.error(
+            "Vivado synthesis failed with return code %d. Trying again...",
+            completed_process.returncode,
         )
-        end_time = time()
+        completed_process, elapsed_time = _run_vivado()
+
+    completed_process.check_returncode()
 
     # We no longer really use this, other than to determine whether user
     # constraints were met (and we don't really use that info anymore, either!)
@@ -506,7 +524,7 @@ report_utilization
     )
 
     assert "time_s" not in summary
-    summary["time_s"] = end_time - start_time
+    summary["time_s"] = elapsed_time
 
     for key in extra_summary_fields:
         assert key not in summary
@@ -527,6 +545,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     directive: Optional[str] = None,
     fail_if_constraints_not_met: Optional[bool] = None,
     extra_summary_fields: Dict[str, Any] = {},
+    attempts: Optional[int] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -566,6 +585,8 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
         synth_args["clock_info"] = clock_info
     if fail_if_constraints_not_met is not None:
         synth_args["fail_if_constraints_not_met"] = fail_if_constraints_not_met
+    if attempts is not None:
+        synth_args["attempts"] = attempts
 
     task = {
         "actions": [
@@ -598,6 +619,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     output_dirpath: Union[str, Path],
     module_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
+    attempts: Optional[int] = None,
 ):
     """Wrapper over Vivado synthesis function which creates a DoIt task.
 
@@ -612,27 +634,32 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_noopt(
     tcl_script_filepath = output_dirpath / f"{input_filepath.stem}.tcl"
     json_filepath = output_dirpath / f"{input_filepath.stem}.json"
 
+    synth_opts = {
+        "instr_src_file": input_filepath,
+        "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
+        "module_name": module_name,
+        "time_filepath": time_filepath,
+        "log_path": log_filepath,
+        "tcl_script_filepath": tcl_script_filepath,
+        "directive": "RuntimeOptimized",
+        "place_directive": "RuntimeOptimized",
+        "route_directive": "RuntimeOptimized",
+        "opt_design": False,
+        "synth_design": True,
+        "synth_design_rtl_flags": False,
+        "clock_info": clock_info,
+        "json_filepath": json_filepath,
+    }
+
+    if attempts is not None:
+        synth_opts["attempts"] = attempts
+
     return {
         "actions": [
             (
                 xilinx_ultrascale_plus_vivado_synthesis,
                 [],
-                {
-                    "instr_src_file": input_filepath,
-                    "synth_opt_place_route_output_filepath": synth_opt_place_route_output_filepath,
-                    "module_name": module_name,
-                    "time_filepath": time_filepath,
-                    "log_path": log_filepath,
-                    "tcl_script_filepath": tcl_script_filepath,
-                    "directive": "RuntimeOptimized",
-                    "place_directive": "RuntimeOptimized",
-                    "route_directive": "RuntimeOptimized",
-                    "opt_design": False,
-                    "synth_design": True,
-                    "synth_design_rtl_flags": False,
-                    "clock_info": clock_info,
-                    "json_filepath": json_filepath,
-                },
+                synth_opts,
             )
         ],
         "file_dep": [input_filepath],
