@@ -2,6 +2,7 @@
   - xilinx
   - intel
   - lattice
+  - virtex
   bitwidth: 8
   expect_fail: []
   filepath: robustness-testing-verilog-files/generated/mult_0_stage_signed_8_bit.sv
@@ -928,6 +929,7 @@
 - backends: &id013
   - xilinx
   - lattice
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -1964,6 +1966,7 @@
 - backends: &id025
   - xilinx
   - lattice
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -2999,6 +3002,7 @@
   xor_reduction: false
 - backends: &id037
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -4056,6 +4060,7 @@
   xor_reduction: false
 - backends: &id049
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -5113,6 +5118,7 @@
   xor_reduction: false
 - backends: &id061
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -6170,6 +6176,7 @@
   xor_reduction: false
 - backends: &id073
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -7227,6 +7234,7 @@
   xor_reduction: false
 - backends: &id085
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -8284,6 +8292,7 @@
   xor_reduction: false
 - backends: &id097
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -9341,6 +9350,7 @@
   xor_reduction: false
 - backends: &id109
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -10401,6 +10411,7 @@
   xor_reduction: false
 - backends: &id121
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -11458,6 +11469,7 @@
   xor_reduction: false
 - backends: &id133
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -12515,6 +12527,7 @@
   xor_reduction: false
 - backends: &id145
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -13572,6 +13585,7 @@
   xor_reduction: false
 - backends: &id157
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
@@ -14629,6 +14643,7 @@
   xor_reduction: false
 - backends: &id169
   - xilinx
+  - virtex
   bitwidth: 8
   expect_fail:
   - yosys-xilinx
