@@ -57,7 +57,7 @@ doit --continue -n $NUM_JOBS_VIVADO_TASKS \
 echo "Running Lakeroad tasks with ${NUM_JOBS_LAKEROAD_TASKS} parallel jobs."
 doit --continue -n $NUM_JOBS_LAKEROAD_TASKS \
   'robustness_experiments:*lakeroad-xilinx' \
-  'robustness_experiments:*lakeroad-virtex' \
+  'robustness_experiments:*lakeroad-xilinx-7-series' \
   'robustness_experiments:*lattice-ecp5-lakeroad' \
   'robustness_experiments:*lakeroad_intel' \
   'robustness_experiments:*lakeroad-xilinx' \
