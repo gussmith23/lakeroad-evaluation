@@ -500,7 +500,7 @@ def _combined_visualized(
     # group the dataframe by xilinx or Yosys
     # merged_df = merged_df.groupby(merged_df.index // 3)
     # plot the merged df
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(6, 4))
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(8, 5))
     df1.plot.bar(
         x="tool",
         y=[
@@ -518,8 +518,52 @@ def _combined_visualized(
     )
     ax1.set_title("Xilinx UltraScale+")
     ax1.set_ylabel("Percentage (%)")
+
     # Plot Lattice data on the second subplot
     df2.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax3,
+        legend=None,
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
+        # hatch=['', '', '///', '']
+    )
+    ax3.set_title("Lattice ECP5")
+    ax3.set_yticks([])
+
+    # Plot Intel data on the third subplot
+    df_intel.plot.bar(
+        x="tool",
+        y=[
+            "percentage_successful",
+            "percentage_unsuccessful",
+            "percentage_lr_unsat",
+            "percentage_lr_timeout",
+        ],
+        stacked=True,
+        rot=0,
+        ax=ax4,
+        legend=None,
+        color=["#21de24", "#f71919", "#852EA6", "#000000"],
+        # hatch=['', '', '///', '']
+    )
+    ax4.set_title("Intel Cyclone 10 LP")
+    ax4.set_yticks([])
+    ax4.legend(
+        loc="upper right",
+        labels=["succeeded", "failed", "unsat", "timeout"],
+        fontsize=8,
+    )
+
+    # Plot Xilinx 7-Series data on the third subplot
+    df_xilinx_7_series.plot.bar(
         x="tool",
         y=[
             "percentage_successful",
@@ -534,49 +578,8 @@ def _combined_visualized(
         color=["#21de24", "#f71919", "#852EA6", "#000000"],
         # hatch=['', '', '///', '']
     )
-    ax2.set_title("Lattice ECP5")
+    ax2.set_title("Xilinx 7-Series")
     ax2.set_yticks([])
-
-    # Plot Intel data on the third subplot
-    df_intel.plot.bar(
-        x="tool",
-        y=[
-            "percentage_successful",
-            "percentage_unsuccessful",
-            "percentage_lr_unsat",
-            "percentage_lr_timeout",
-        ],
-        stacked=True,
-        rot=0,
-        ax=ax3,
-        color=["#21de24", "#f71919", "#852EA6", "#000000"],
-        # hatch=['', '', '///', '']
-    )
-    ax3.set_title("Intel Cyclone 10 LP")
-    ax3.set_yticks([])
-
-    # Plot Xilinx 7-Series data on the third subplot
-    df_intel.plot.bar(
-        x="tool",
-        y=[
-            "percentage_successful",
-            "percentage_unsuccessful",
-            "percentage_lr_unsat",
-            "percentage_lr_timeout",
-        ],
-        stacked=True,
-        rot=0,
-        ax=ax4,
-        color=["#21de24", "#f71919", "#852EA6", "#000000"],
-        # hatch=['', '', '///', '']
-    )
-    ax4.set_title("Xilinx 7-Series")
-    ax4.set_yticks([])
-    ax4.legend(
-        loc="upper right",
-        labels=["succeeded", "failed", "unsat", "timeout"],
-        fontsize=8,
-    )
 
     # ax2.legend(loc="upper right", labels=["succeeded", "failed", "timeout"], fontsize=7)
     # plt.ylabel("Percentage (%)")
