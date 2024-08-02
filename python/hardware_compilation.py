@@ -149,213 +149,6 @@ Number of register bits => .*?$
     )
 
 
-@dataclass
-class VivadoLogStats:
-    """Statistics parsed from Vivado logfile.
-
-    NOTE: it's important that this is not a nested dictionary, i.e. that all of
-    the fields of this dictionary are strings/ints/floats and not lists/dicts.
-    This is because each of these dictionaries becomes a row in a CSV file, and
-    thus if there was a nested structure, it would get a lot more compilcated."""
-
-    # Likely just the module name.
-    identifier: str
-
-    # The number of various resources used.
-    clb_luts: int
-    clb_regs: int
-    carry8s: int
-    f7muxes: int
-    f8muxes: int
-    f9muxes: int
-    dsp48e2s: int
-
-    # Timing stats won't be present if there was not a clock constraint
-    # provided, thus all timing stats are Optional.
-    user_constraints_met: Optional[bool]
-    worst_negative_slack: Optional[float]
-    clock_name: Optional[str]
-    clock_period_ns: Optional[float]
-    clock_frequency_MHz: Optional[float]
-
-    # CPU runtime of various Vivado commands as reported by Vivado, in seconds.
-    synth_time: float
-    # May or may not be present, as we may or may not run opt_design.
-    opt_time: Optional[float]
-
-
-def parse_ultrascale_log(log_text: str, identifier: str) -> VivadoLogStats:
-    """Parse Vivado logs.
-
-    Parses logs from Vivado version:
-    Vivado v2021.2 (64-bit)
-    SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
-    IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021"""
-    ## Parse primitive table.
-    # Get range to search between.
-    matches = list(
-        re.finditer(
-            r"^9. Primitives$\r?\n^-------------$", log_text, flags=re.MULTILINE
-        )
-    )
-    assert len(matches) == 1
-    start_index = matches[0].span()[1]
-    matches = list(
-        re.finditer(
-            r"^10. Black Boxes$\r?\n^---------------$", log_text, flags=re.MULTILINE
-        )
-    )
-    end_index = matches[0].span()[0]
-    # Find matches.
-    matches = re.findall(
-        r"^\| (\w+) +\| +(\d+) \| +\w+ \|$",
-        log_text[start_index:end_index],
-        flags=re.MULTILINE,
-    )
-    primitives = {m[0]: int(m[1]) for m in matches}
-    dsp48e2s = primitives["DSP48E2"] if "DSP48E2" in primitives else 0
-
-    ## CLB usage.
-    matches = list(
-        re.finditer(
-            r"""
-1\. CLB Logic
-------------
-
-\+-[+-]*
-\| *Site Type *\| *Used *\| *Fixed *\| *Prohibited *\| *Available *\| *Util% *\|
-\+-[+-]*
-\| CLB LUTs +\| +(?P<clbluts>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<clblutsutil>\d+\.\d+) +\|
-(^\|.*$\n?)*
-\| CLB Registers +\| +(?P<clbregisters>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<clbregistersutil>\d+\.\d+) +\|
-(^\|.*$\n?)*
-\| CARRY8 +\| +(?P<carry8>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<carry8util>\d+\.\d+) +\|
-\| F7 Muxes +\| +(?P<f7muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f7muxesutil>\d+\.\d+) +\|
-\| F8 Muxes +\| +(?P<f8muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f8muxesutil>\d+\.\d+) +\|
-\| F9 Muxes +\| +(?P<f9muxes>\d+) +\| +\d+ +\| +\d+ +\| +\d+ +\| +<?(?P<f9muxesutil>\d+\.\d+) +\|
-\+-[+-]*""",
-            log_text,
-            flags=re.MULTILINE,
-        )
-    )
-    assert len(matches) == 1
-    m = matches[0]
-    clb_luts = int(m["clbluts"])
-    clb_regs = int(m["clbregisters"])
-    carry8s = int(m["carry8"])
-    f7muxes = int(m["f7muxes"])
-    f8muxes = int(m["f8muxes"])
-    f9muxes = int(m["f9muxes"])
-
-    ## Timing.
-    if re.search("There are no user specified timing constraints\.", log_text):
-        user_constraints_met = None
-        worst_negative_slack = None
-        clock_name = None
-        clock_period_ns = None
-        clock_frequency_MHz = None
-    else:
-        ## Timing constraints met.
-        user_constraints_met = bool(
-            re.search(
-                r"^All user specified timing constraints are met\.$",
-                log_text,
-                flags=re.MULTILINE,
-            )
-        )
-
-        ## Timing summary.
-
-        matches = re.findall(
-            r"""\| Design Timing Summary
-\| ---------------------
--+
-
-^    WNS.*$
-^[ -]+$
- +(-?\d+\.\d+|NA) """,
-            log_text,
-            flags=re.MULTILINE,
-        )
-        assert len(matches) == 1
-        worst_negative_slack = None if matches[0] == "NA" else float(matches[0])
-
-        matches = list(
-            re.finditer(
-                r"""-+
-\| Clock Summary
-\| -+
-------------------------------------------------------------------------------------------------
-
-Clock.*Waveform.*Period\(ns\).*Frequency\(MHz\).*
-[ -]+
-(?P<name>\w+) +{[\.\d ]+} +(?P<period>\d+\.\d+) +(?P<frequency>\d+\.\d+)""",
-                log_text,
-                flags=re.MULTILINE,
-            )
-        )
-        assert len(matches) == 1
-        clock_name = matches[0]["name"]
-        clock_period_ns = float(matches[0]["period"])
-        clock_frequency_MHz = float(matches[0]["frequency"])
-
-    ## Parse latency of each command (synth_design, opt_design, etc)
-    def _parse_command_latency(command: str) -> Optional[Tuple[float, float]]:
-        """
-        Returns a tuple of the CPU seconds and the elapsed seconds. Returns None
-        if not found."""
-        matches = list(
-            re.finditer(
-                rf"""{command} completed successfully
-{command}: Time \(s\): cpu = (?P<cputime>.*) ; elapsed = (?P<elapsedtime>.*) . Memory \(MB\):""",
-                log_text,
-            )
-        )
-
-        if len(matches) == 0:
-            return None
-
-        assert len(matches) == 1
-
-        def _get_secs(time_str: str):
-            """Parse seconds from time string.
-
-            Ignores elapsed time.
-
-            Returns:
-                cpu time in seconds."""
-            parsed_datetime = datetime.strptime(time_str, "%H:%M:%S")
-            converted_timedelta = timedelta(
-                hours=parsed_datetime.hour,
-                minutes=parsed_datetime.minute,
-                seconds=parsed_datetime.second,
-            )
-            return converted_timedelta.total_seconds()
-
-        return _get_secs(matches[0]["cputime"])
-
-    synth_time = _parse_command_latency("synth_design")
-    opt_time = _parse_command_latency("opt_design")
-
-    return VivadoLogStats(
-        clb_luts=clb_luts,
-        clb_regs=clb_regs,
-        carry8s=carry8s,
-        f7muxes=f7muxes,
-        f8muxes=f8muxes,
-        f9muxes=f9muxes,
-        dsp48e2s=dsp48e2s,
-        user_constraints_met=user_constraints_met,
-        worst_negative_slack=worst_negative_slack,
-        clock_name=clock_name,
-        clock_period_ns=clock_period_ns,
-        clock_frequency_MHz=clock_frequency_MHz,
-        synth_time=synth_time,
-        opt_time=opt_time,
-        identifier=identifier,
-    )
-
-
 def xilinx_ultrascale_plus_vivado_synthesis(
     instr_src_file: Union[str, Path],
     synth_opt_place_route_output_filepath: Union[str, Path],
@@ -363,12 +156,12 @@ def xilinx_ultrascale_plus_vivado_synthesis(
     tcl_script_filepath: Union[str, Path],
     log_path: Union[str, Path],
     summary_filepath: Union[str, Path],
+    part_name: str,
     directive: str = "default",
     synth_design: bool = True,
     opt_design: bool = True,
     synth_design_rtl_flags: bool = False,
     clock_info: Optional[Tuple[str, float, Tuple[float, float]]] = None,
-    fail_if_constraints_not_met=True,
     place_directive: str = "default",
     route_directive: str = "default",
     extra_summary_fields: Dict[str, Any] = {},
@@ -396,6 +189,7 @@ def xilinx_ultrascale_plus_vivado_synthesis(
         extra_summary_fields: Extra fields to add to the summary JSON.
         attempts: Number of times to attempt running Vivado synthesis, in the
           case where Vivado fails (which occurs ~once per evaluation run).
+        part_name: The part name to use for synthesis.
     """
     log_path = Path(log_path)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -435,7 +229,7 @@ set synth_opt_place_route_output_filepath {synth_opt_place_route_output_filepath
 
 # Part number chosen at Luis's suggestion. Can be changed to another UltraScale+
 # part.
-set_part xczu3eg-sbva484-1-e
+set_part {part_name}
 
 # Set number of threads.
 set_param general.maxThreads {max_threads}
@@ -498,25 +292,14 @@ report_utilization
     # If Vivado failed, try again.
     while completed_process.returncode != 0 and attempts_remaining > 0:
         logging.error(
-            "Vivado synthesis failed with return code %d. Trying again...",
+            "Vivado synthesis failed with return code %d. Attempts remaining: %d. Trying again...",
             completed_process.returncode,
+            attempts_remaining,
         )
         completed_process, elapsed_time = _run_vivado()
+        attempts_remaining = attempts_remaining - 1
 
     completed_process.check_returncode()
-
-    # We no longer really use this, other than to determine whether user
-    # constraints were met (and we don't really use that info anymore, either!)
-    log_stats = parse_ultrascale_log(open(log_path).read(), identifier=module_name)
-    # data = dataclasses.asdict(log_stats)
-    # data["tool"] = "vivado"
-    # data["architecture"] = "xilinx_ultrascale_plus"
-    # json.dump(data, f)
-    if fail_if_constraints_not_met:
-        assert (
-            log_stats.user_constraints_met is None
-            or log_stats.user_constraints_met is True
-        ), "Vivado reports that user constraints were not met!"
 
     summary = count_resources_in_verilog_src(
         verilog_src=synth_opt_place_route_output_filepath.read_text(),
@@ -540,6 +323,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
+    part_name: str,
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
     directive: Optional[str] = None,
@@ -577,6 +361,7 @@ def make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
         "synth_design": True,
         "summary_filepath": output_filepaths["summary_filepath"],
         "extra_summary_fields": extra_summary_fields,
+        "part_name": part_name,
     }
 
     if directive is not None:
@@ -799,10 +584,11 @@ def make_lattice_ecp5_yosys_synthesis_task(
     return (task, (json_filepath, output_filepath, log_filepath))
 
 
-def make_xilinx_ultrascale_plus_yosys_synthesis_task(
+def make_xilinx_yosys_synthesis_task(
     input_filepath: Union[str, Path],
     output_dirpath: Union[str, Path],
     module_name: str,
+    family: str,
     clock_info: Optional[Tuple[str, float]] = None,
     name: Optional[str] = None,
     extra_summary_fields: Dict[str, Any] = {},
@@ -829,7 +615,7 @@ def make_xilinx_ultrascale_plus_yosys_synthesis_task(
                     "input_filepath": input_filepath,
                     "module_name": module_name,
                     "output_filepath": output_filepaths["output_filepath"],
-                    "synth_command": "synth_xilinx -family xcup",
+                    "synth_command": f"synth_xilinx -family {family}",
                     "log_filepath": output_filepaths["log_filepath"],
                     "extra_summary_fields": extra_summary_fields,
                 },

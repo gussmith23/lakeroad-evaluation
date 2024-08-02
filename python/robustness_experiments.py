@@ -1392,8 +1392,55 @@ def task_robustness_experiments(skip_verilator: bool):
                 output_dir
                 / "robustness_experiments"
                 / entry["module_name"]
-                / "lakeroad_xilinx_7_series"
+                / "xilinx_7_series"
             )
+
+            # vivado synthesis
+            (
+                task,
+                (json_filepath, _, _, _),
+            ) = hardware_compilation.make_xilinx_ultrascale_plus_vivado_synthesis_task_opt(
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
+                output_dirpath=base_path / "vivado",
+                module_name=entry["module_name"],
+                # TODO(@gussmith23): Hardcoding clock name and period here.
+                # 0.5ns chosen after a few iterations.
+                clock_info=("clk", 0.5, (0.0, 0.25)),
+                name=f"{entry['module_name']}:xilinx-7-series-vivado",
+                # Makes Vivado try harder to put things on DSPs.
+                directive="AreaMultThresholdDSP",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-7-series",
+                    "tool": "vivado",
+                },
+                attempts=manifest["completeness_experiments"]["vivado_retries"],
+                part_name=manifest["completeness_experiments"][
+                    "xilinx-7-series-part-name"
+                ],
+            )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
+
+            # yosys
+            (
+                task,
+                (json_filepath, _, _),
+            ) = hardware_compilation.make_xilinx_yosys_synthesis_task(
+                family="xc7",
+                input_filepath=lakeroad_evaluation_dir / entry["filepath"],
+                output_dirpath=base_path / "yosys",
+                module_name=entry["module_name"],
+                name=f"{entry['module_name']}:xilinx-7-series-yosys",
+                extra_summary_fields={
+                    "identifier": entry["module_name"],
+                    "architecture": "xilinx-ultrascale-plus",
+                    "tool": "yosys",
+                },
+            )
+            yield task
+            collected_data_output_filepaths.append(json_filepath)
+
             (
                 task,
                 (json_filepath, lakeroad_output_verilog, _),
@@ -1401,7 +1448,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 extra_cycles=(
                     manifest["completeness_experiments"]["lakeroad"]["extra_cycles"]
                 ),
-                out_dirpath=base_path,
+                out_dirpath=base_path / "lakeroad",
                 template="dsp",
                 out_module_name="lakeroad_output",
                 architecture="xilinx-7-series",
@@ -1481,16 +1528,15 @@ def task_robustness_experiments(skip_verilator: bool):
                 name=f"{entry['module_name']}:vivado",
                 # Makes Vivado try harder to put things on DSPs.
                 directive="AreaMultThresholdDSP",
-                # If our timing constraints are aggressive enough, it won't meet
-                # timing. This is okay; don't fail. We want aggressive
-                # constraints so we know Vivado is trying as hard as it can.
-                fail_if_constraints_not_met=False,
                 extra_summary_fields={
                     "identifier": entry["module_name"],
                     "architecture": "xilinx-ultrascale-plus",
                     "tool": "vivado",
                 },
                 attempts=manifest["completeness_experiments"]["vivado_retries"],
+                part_name=manifest["completeness_experiments"][
+                    "xilinx-ultrascale-plus-part-name"
+                ],
             )
             yield task
             collected_data_output_filepaths.append(json_filepath)
@@ -1583,7 +1629,8 @@ def task_robustness_experiments(skip_verilator: bool):
             (
                 task,
                 (json_filepath, _, _),
-            ) = hardware_compilation.make_xilinx_ultrascale_plus_yosys_synthesis_task(
+            ) = hardware_compilation.make_xilinx_yosys_synthesis_task(
+                family="xcup",
                 input_filepath=lakeroad_evaluation_dir / entry["filepath"],
                 output_dirpath=base_path,
                 module_name=entry["module_name"],
