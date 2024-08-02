@@ -1880,14 +1880,18 @@ def task_robustness_experiments(skip_verilator: bool):
                 {
                     "csv_filepath": output_csv_path,
                     "plot_output_filepath": (
-                        output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.png"
+                        output_dir
+                        / "figures"
+                        / "succeeded_vs_failed_xilinx_7_series.png"
                     ),
                     "cleaned_data_filepath": output_dir
                     / "robustness_experiments_csv"
                     / "all_results"
                     / "all_xilinx_7_series_results_collected_cleaned.csv",
                     "plot_csv_filepath": (
-                        output_dir / "figures" / "succeeded_vs_failed_xilinx_7_series.csv"
+                        output_dir
+                        / "figures"
+                        / "succeeded_vs_failed_xilinx_7_series.csv"
                     ),
                 },
             )
