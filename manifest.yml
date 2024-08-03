@@ -59,3 +59,7 @@ completeness_experiments:
 
   # Retries to use for Vivado.
   vivado_retries: 3
+
+  xilinx-ultrascale-plus-part-name: xczu3eg-sbva484-1-e
+  xilinx-7-series-part-name: xc7k160tlffv676-2L # I didn't really know how to pick a part number for 7-series.
+  
