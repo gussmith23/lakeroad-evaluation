@@ -1458,7 +1458,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 inputs=entry["inputs"],
                 verilog_module_out_signal=("out", entry["bitwidth"]),
                 timeout=manifest["completeness_experiments"]["lakeroad"][
-                    "xilinx-timeout"
+                    "xilinx-7-series-timeout"
                 ],
                 extra_summary_fields={
                     "identifier": entry["module_name"],
@@ -2128,6 +2128,33 @@ def task_robustness_experiments(skip_verilator: bool):
             )
         ],
         "targets": [xilinx_time_png, xilinx_time_csv],
+    }
+
+    xilinx_7_series_time_png = output_dir / "figures" / "lakeroad_time_xilinx_7_series.png"
+    xilinx_7_series_time_csv = output_dir / "figures" / "lakeroad_time_xilinx_7_series.csv"
+    yield {
+        "name": "lakeroad_time_xilinx_7_series",
+        "file_dep": [output_csv_path],
+        "actions": [
+            (
+                _plot_timing,
+                [],
+                {
+                    "completeness_data_filepath": output_csv_path,
+                    "architecture": "xilinx-7-series",
+                    "title": "Lakeroad synthesis time on Xilinx 7-series",
+                    "plot_output_filepath": xilinx_7_series_time_png,
+                    "plot_csv_filepath": xilinx_7_series_time_csv,
+                    "num_bins": manifest["completeness_experiments"][
+                        "xilinx-7-series-timing-num-bins"
+                    ],
+                    "timeout": manifest["completeness_experiments"]["lakeroad"][
+                        "xilinx-7-series-timeout"
+                    ],
+                },
+            )
+        ],
+        "targets": [xilinx_7_series_time_png, xilinx_7_series_time_csv],
     }
 
     lattice_time_png = output_dir / "figures" / "lakeroad_time_lattice.png"
