@@ -998,19 +998,17 @@ def _visualize_succeeded_vs_failed_xilinx_7_series(
     # SRL16E).
     COMPUTATION_PRIMITIVES = [
         "DSP48E1",
-        # TODO(@vcanumalla): These primitives are for ultrascale,
-        # 7series probably has different primitives.
-        # "CARRY4",
-        # "LUT2",
-        # "LUT3",
-        # "LUT4",
-        # "LUT5",
-        # "LUT6",
-        # "SRL16E",
-        # "MUXF7",
-        # "MUXF8",
-        # "MUXF9",
-        # "FDRE",
+        "CARRY4",
+        "LUT2",
+        "LUT3",
+        "LUT4",
+        "LUT5",
+        "LUT6",
+        "SRL16E",
+        "MUXF7",
+        "MUXF8",
+        "MUXF9",
+        "FDRE",
     ]
 
     # Column which checks whether the experiment uses one DSP and no other
@@ -1434,7 +1432,7 @@ def task_robustness_experiments(skip_verilator: bool):
                 name=f"{entry['module_name']}:xilinx-7-series-yosys",
                 extra_summary_fields={
                     "identifier": entry["module_name"],
-                    "architecture": "xilinx-ultrascale-plus",
+                    "architecture": "xilinx-7-series",
                     "tool": "yosys",
                 },
             )
