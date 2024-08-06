@@ -2130,8 +2130,12 @@ def task_robustness_experiments(skip_verilator: bool):
         "targets": [xilinx_time_png, xilinx_time_csv],
     }
 
-    xilinx_7_series_time_png = output_dir / "figures" / "lakeroad_time_xilinx_7_series.png"
-    xilinx_7_series_time_csv = output_dir / "figures" / "lakeroad_time_xilinx_7_series.csv"
+    xilinx_7_series_time_png = (
+        output_dir / "figures" / "lakeroad_time_xilinx_7_series.png"
+    )
+    xilinx_7_series_time_csv = (
+        output_dir / "figures" / "lakeroad_time_xilinx_7_series.csv"
+    )
     yield {
         "name": "lakeroad_time_xilinx_7_series",
         "file_dep": [output_csv_path],
