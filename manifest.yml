@@ -36,7 +36,7 @@ completeness_experiments:
     - yices
     # Timeout for Lakeroad on various architectures.
     xilinx-timeout: 120
-    xilinx-7-series-timeout: 160
+    xilinx-7-series-timeout: 60
     lattice-timeout: 40
     intel-timeout: 20
     # The number of random inputs to sample when simulating each experiment with
@@ -55,8 +55,8 @@ completeness_experiments:
 
   # Number of bins to use for the timing histogram.
   xilinx-timing-num-bins: 20
-  xilinx-7-series-timing-num-bins: 20
-  lattice-timing-num-bins: 10
+  xilinx-7-series-timing-num-bins: 10
+  lattice-timing-num-bins: 3
   intel-timing-num-bins: 2
 
   # Retries to use for Vivado.
