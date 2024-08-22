@@ -31,6 +31,12 @@ def task_architecture_descriptions_line_counts():
         / "architecture_descriptions"
         / "xilinx_ultrascale_plus.yml"
     )
+    xilinx_7_series_file = (
+        utils.lakeroad_evaluation_dir()
+        / "lakeroad"
+        / "architecture_descriptions"
+        / "xilinx_7_series.yml"
+    )
     intel_file = (
         utils.lakeroad_evaluation_dir()
         / "lakeroad"
@@ -47,6 +53,7 @@ def task_architecture_descriptions_line_counts():
     def _impl(output_csv_filepath):
         lattice_loc = _run_cloc(lattice_file, "YAML")
         xilinx_loc = _run_cloc(xilinx_file, "YAML")
+        xilinx_7_series_loc = _run_cloc(xilinx_7_series_file, "YAML")
         intel_loc = _run_cloc(intel_file, "YAML")
         sofa_loc = _run_cloc(sofa_file, "YAML")
 
@@ -55,6 +62,7 @@ def task_architecture_descriptions_line_counts():
             [
                 {"architecture": "lattice-ecp5", "sloc": lattice_loc},
                 {"architecture": "xilinx-ultrascale-plus", "sloc": xilinx_loc},
+                {"architecture": "xilinx-7-series", "sloc": xilinx_7_series_loc},
                 {"architecture": "intel", "sloc": intel_loc},
                 {"architecture": "sofa", "sloc": sofa_loc},
             ]
@@ -66,7 +74,7 @@ def task_architecture_descriptions_line_counts():
     return {
         "actions": [(_impl, [output_csv_filepath])],
         "targets": [output_csv_filepath],
-        "file_dep": [lattice_file, xilinx_file, intel_file, sofa_file],
+        "file_dep": [lattice_file, xilinx_file, xilinx_7_series_file, intel_file, sofa_file],
     }
 
 
@@ -142,6 +150,11 @@ def task_verilog_file_line_counts():
         / "lakeroad-private"
         / "lattice_ecp5"
         / "MULT18X18D_modified_for_racket_import.v",
+        utils.lakeroad_evaluation_dir()
+        / "lakeroad"
+        / "lakeroad-private"
+        / "DSP48E1"
+        / "DSP48E1_modified_for_racket_import.v",
     ]
 
     def _impl(filepaths, output_csv_filepath):
