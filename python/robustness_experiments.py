@@ -73,8 +73,8 @@ def _timing_table(input_csv, output_csv):
     df[df["tool"] == "vivado"].time_s.max()
 
     out_records = []
-    for arch in ["xilinx-ultrascale-plus", "lattice-ecp5", "intel"]:
-        if arch == "xilinx-ultrascale-plus":
+    for arch in ["xilinx-ultrascale-plus", "xilinx-7-series", "lattice-ecp5", "intel"]:
+        if arch == "xilinx-ultrascale-plus" or arch == "xilinx-7-series":
             tools = ["vivado", "yosys", "lakeroad"]
         elif arch == "lattice-ecp5":
             tools = ["diamond", "yosys", "lakeroad"]
