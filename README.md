@@ -406,7 +406,7 @@ Next, we will run `docker build`,
 docker build . -t lakeroad-evaluation \
   --build-arg VIVADO_BIN_DIR=/path/to/Vivado/2023.1/bin \
   --build-arg QUARTUS_BIN_DIR=/path/to/quartus/bin \
-  --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64
+  --build-arg DIAMOND_BINDIR=/path/to/diamond/3.12/bin/lin64 \
   --build-arg MAKE_JOBS=`nproc`
 ```
 
