@@ -74,7 +74,13 @@ def task_architecture_descriptions_line_counts():
     return {
         "actions": [(_impl, [output_csv_filepath])],
         "targets": [output_csv_filepath],
-        "file_dep": [lattice_file, xilinx_file, xilinx_7_series_file, intel_file, sofa_file],
+        "file_dep": [
+            lattice_file,
+            xilinx_file,
+            xilinx_7_series_file,
+            intel_file,
+            sofa_file,
+        ],
     }
 
 
