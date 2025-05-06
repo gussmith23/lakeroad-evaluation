@@ -1,0 +1,56 @@
+\documentclass{acmart}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{xspace}
+
+\makeatletter
+\newcommand\body[1]
+{\@@input #1}
+\makeatother
+
+% Column type 'H' to simply hide an used column
+\newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
+
+% Consistent type setting of column headers.
+% The first argument (number of columns) is optional (default = 1)
+\newcommand\colH[2]{\multicolumn{#1}{c}{\textbf{#2}}}
+
+% Macros for tools
+\def\lr{Lakeroad\xspace}
+\def\yosys{Yosys\xspace}
+\def\diamond{Diamond\xspace}
+\def\vivado{Vivado\xspace}
+
+% Macro for 0s or otherwise empty data
+\def\zero{--\xspace}
+ 
+\begin{document}
+\begin{table*}
+\caption{Resource utilization of different technology mappers for different
+designs and architectures.}
+\label{tab:resources}
+% Columns in exported table body:
+% identifier & name & lr_lattice_LUT4 & lr_lattice_CCU2C & yosis_lattice_LUT4 & yosis_lattice_CCU2C & yosis_lattice_L6MUX21 & yosis_lattice_PFUMX & yosis_lattice_MULT18X18D & diamond_lattice_num_LUT4 & diamond_lattice_num_CCU2C & diamond_lattice_num_PFUMX & diamond_lattice_num_ALU54B & diamond_lattice_num_MULT18X18D & diamond_lattice_num_L6MUX21 & diamond_lattice_num_MULT9X9D & lr_xilinx_LUT2 & lr_xilinx_LUT6 & lr_xilinx_CARRY8 & lr_xilinx_DSP48E2 & yosys_xilinx_LUT2 & yosys_xilinx_LUT4 & yosys_xilinx_LUT6 & yosys_xilinx_DSP48E2 & vivado_xilinx_clb_luts & vivado_xilinx_clb_regs & vivado_xilinx_carry8s & vivado_xilinx_f7muxes & vivado_xilinx_f8muxes & vivado_xilinx_f9muxes
+%
+\begin{small}
+\begin{tabular}{Hl rr rrrrr rrrrrrr rrrr rrrr rrrrrr}
+\toprule
+& \colH{1}{Design} & \colH{14}{Lattice} & \colH{14}{Xilinx} \\
+\cmidrule(r){3-16}
+\cmidrule(l){17-30}
+&&
+\colH{2}{\lr} & \colH{5}{\yosys} & \colH{7}{\diamond} &
+\colH{4}{\lr} & \colH{4}{\yosys} & \colH{6}{\vivado} \\
+\cmidrule(r){3-4}
+\cmidrule(lr){5-9}
+\cmidrule(lr){10-16}
+\cmidrule(lr){17-20}
+\cmidrule(lr){21-24}
+\cmidrule(l){25-30}
+\midrule
+\body{generated/resources-body.tex}
+\bottomrule
+\end{tabular}
+\end{small}
+\end{table*}
+\end{document}

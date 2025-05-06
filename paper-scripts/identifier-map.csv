@@ -1,0 +1,17 @@
+identifier,name
+uge64_2,Uge64
+not3_1,Not3
+or7_2,Or7
+eq16_2,Eq16
+mux64_3,Mux64
+lshr16_2,Lshr16
+mul64_2,Mul64
+and8_2,And8
+mux16_3,Mux16
+ugt4_2,Ugt4
+ashr32_2,Ashr32
+mul6_2,Mul6
+and5_2,And5
+ule128_2,Ule128
+mul16_2,Mul16
+ule16_2,Ule16
